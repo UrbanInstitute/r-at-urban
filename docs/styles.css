@@ -1,0 +1,26 @@
+* {
+  font-family: Lato;
+}
+
+.navbar {
+  background-color: #1696d2;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+
+.container {
+  color: #ff0000;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #1696d2;
+    background-color: #FFFFFF;
+}
