@@ -1,0 +1,13 @@
+name: "my-website"
+navbar:
+  title: "R AT THE URBAN INSTITUTE"
+  left:
+    - text: "HOME"
+      href: index.html
+    - text: "LUNCH LAB"
+      href: lab.html
+    - text: "VISUALIZATIONS"
+      href: theme.html
+output: 
+  html_document:
+    css: styles.css
