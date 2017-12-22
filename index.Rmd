@@ -1,5 +1,8 @@
 ---
-title: "Home"
+output:
+  html_document:
+    css: styles.css
+    self_contained: TRUE
 ---
 
-R is the best
+This website will house materials useful to R users at the Urban Institute. 

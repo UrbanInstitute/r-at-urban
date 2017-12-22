@@ -1,13 +1,17 @@
-name: "my-website"
+name: R at the Urban Institute
 navbar:
-  title: "R AT THE URBAN INSTITUTE"
+  title: R AT THE URBAN INSTITUTE
   left:
-    - text: "HOME"
-      href: index.html
-    - text: "LUNCH LAB"
-      href: lab.html
-    - text: "VISUALIZATIONS"
-      href: theme.html
-output: 
+  - text: HOME
+    href: index.html
+  - text: MAPPING
+    href: mapping.html
+  - text: PLOTTING
+    href: graphics-guide.html
+output:
   html_document:
     css: styles.css
+    lib_dir: site_libs
+    self_contained: no
+output_dir: _site
+
