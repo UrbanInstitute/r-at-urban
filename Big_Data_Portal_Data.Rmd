@@ -1,0 +1,219 @@
+---
+title: "Urban Institute Big Data Portal"
+author: "Graham MacDonald"
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: none
+---
+
+```{r setup, include=FALSE}
+# Note: Before knitting, install 'rmarkdown', 'extrafont', and fill in AWS access keys in setup2
+library(knitr)
+```
+
+## Welcome
+
+Welcome to the Urban Institute's Big Data Portal, where we house commonly-used large datasets for use by Urban Institute researchers. The following datasets are available within the portal:
+
+1. American Community Survey Microdata, IPUMS USA, 1990, 2000-2016
+2. Home Mortgage Disclosure Act Data, FFIEC, 1997-2016
+3. LEHD Origin-Destination Employment Statistics, Census, 2002-2015
+4. Census and American Community Survey Data and Shapefiles, tidycensus (Census API), 1990, 2000, 2010, 2011 to 2016, 2005-09 to 2012-16
+5. Zillow property record and transaction data (years vary - NOTE: These data are not public and may not be shared outside the Urban Institute)
+
+When using these data, please be sure to read the appropriate sections below and follow all guidelines for confidentialty and citations.
+
+## Read Before You Start
+
+For all datasets on this page, you will need an access key for the Urban Institute's Amazon Web Services (AWS) account that provides access to the s3n://ui-spark-data and s3n://ui-zillow folders for read-only purposes, and to the s3n://ui-research/ec2-sandbox to write data. Please contact Graham MacDonald, Kyle Ueyama, or Manny Divina to obtain the keys.
+
+### How to Analyze the Data
+
+First, you'll need to start up an Apache Spark big data cluster using the [Internal Form](https://shinyapps-stg.urban.org/emr-submission/). This generally takes about 10 to 15 minutes to spin up, connect the machines, and install software. Keeping this up indefinitely would be prohibitively expensive, so be sure to terminate when you are done. You will receive an e-mail when the cluster is ready to use with instructions to access, and reminders throughout the day to terminate if you are done.
+
+The link in the e-mail will open up a (hopefully familiar) RStudio browser environment. For an introduction to using Sparklyr through this interface, see our [Urban Institute Sparklyr Guide](Sparklyr_Intro_ZTRAX.html), which uses the ZTRAX data as an example.
+
+## ACS Microdata
+
+### Citation
+
+See the [IPUMS USA Citation Guidelines](https://usa.ipums.org/usa/cite.shtml) for complete information. For example:
+
+Steven Ruggles, Katie Genadek, Ronald Goeken, Josiah Grover, and Matthew Sobek. Integrated Public Use Microdata Series: Version 7.0 [dataset]. Minneapolis: University of Minnesota, 2017. https://doi.org/10.18128/D010.V7.0.
+
+### Full Documentation
+
+Browse the documentation for all variables on the [IPUMS USA Browse and Select Data](https://usa.ipums.org/usa-action/variables/group) page.
+
+### Data Available
+
+All IPUMS USA variables are available, as described in the IPUMS documentation above. No changes have been made to the data other than to import it into the big data format. The data include the 1990 5% sample, the 2000 5% sample, the 2001 to 2004 1-year ACS "test" samples, and the 2005 to 2016 1-year ACS full samples.
+
+### File Locations
+
+The entire IPUMS USA sample is available as a single file, located at:
+
+- s3n://ui-spark-data/ipums/parquet-data/ipums.parquet
+
+## HMDA
+
+### Citation
+
+No citation required.
+
+### Full Documentation
+
+The definition of variable codes can be found on the [HMDA Loan/Application Register Code Sheet 2012](https://www.ffiec.gov/hmdarawdata/FORMATS/2012HMDACodeSheet.pdf) (which notes changes that aren't available in the 2016 code sheet). The most recent code sheet can be found [here](https://www.ffiec.gov/hmdarawdata/FORMATS/2016HMDACodeSheet.pdf).
+
+### Data Available
+
+All HMDA Loan/Application Register (LAR) variables are available, as described in the HMDA documentation above. No changes have been made to the original flat files provided by FFIEC, except that Applicant Race and Co-Applicant Race were renamed applicantrace1 and coapplicantrace1 for the 1997 to 2003 files to match the variable names in the 2004 and later files. The data include all HMDA LAR data from 1997 to 2016. See the documentation above for caveats.
+
+### File Locations
+
+The entire HMDA LAR data are available as a single file, located at:
+
+- s3n://ui-spark-data/hmda/parquet-data/hmda.parquet
+
+## LODES
+
+### Citation
+
+No citation required.
+
+### Full Documentation
+
+The definition of variable codes, datasets, etc. can be found at the latest [LODES 7.3 Technical Documentation](https://lehd.ces.census.gov/data/lodes/LODES7/LODESTechDoc7.3.pdf).
+
+### Data Available
+
+All LEHD Origin-Destination Employment Statistics (LODES) data are available, as described in the LODES documentation above. No changes have been made to the original CSV files. Data are available from 2002 to 2015. See the documentation above for caveats.
+
+### File Locations
+
+The LODES data can be access by category, Job Type, and Segment of the workforce. The LODES data are separated into three categories, per the documentation above:
+
+- od (origin-Destination)
+- rac (Resident Area Characteristic)
+- wac (Workplace Area Characteristic)
+
+For od (Origin-Destination) data, use the following URL template, replacing {JobType} with one of the options listed below:
+
+- s3n://ui-spark-data/lodes/parquet-data/od/{JobType}.parquet
+
+Job Types:
+
+- JT00 (All Jobs)
+- JT01 (Primary Jobs)
+- JT02 (All Private Jobs)
+- JT03 (Private Primary Jobs)
+- JT04 (All Federal Jobs)
+- JT05 (Federal Primary Jobs)
+
+For rac (Resident Area Characteristic) and wac (Workplace Area Characteristic) data, use the following URL template, replacing {category} with either rac or wac as appropriate, {Segment} with one of the options listed below and {JobType} with one of the options listed above:
+
+- s3n://ui-spark-data/lodes/parquet-data/{category}/{Segment}/{JobType}.parquet
+
+Segments of the workforce:
+
+- S000 (Total number of jobs)
+- SA01 (Number of jobs of workers age 29 or younger)
+- SA02 (Number of jobs for workers age 30 to 54)
+- SA03 (Number of jobs for workers age 55 or older)
+- SE01 (Number of jobs with earnings \$1250/month or less)
+- SE02 (Number of jobs with earnings \$1251/month to \$3333/month)
+- SE03 (Number of jobs with earnings greater than \$3333/month )
+- SI01 (Number of jobs in Goods Producing industry sectors)
+- SI02 (Number of jobs in Trade, Transportation, and Utilities industry sectors)
+- SI03 (Number of jobs in All Other Services industry sectors)
+
+## Census/ACS Data and Shapefiles
+
+### Citation
+
+No citation required.
+
+### Full Documentation
+
+Basic introductions for using the Census API in R, which is fairly straightforward, can be found at the [Basic Usage of tidycensus page](https://walkerke.github.io/tidycensus/articles/basic-usage.html), [Spatial data in tidycensus page](https://walkerke.github.io/tidycensus/articles/spatial-data.html), and [Julia Silge's excellent introduction to interactive mapping in R using the API](https://juliasilge.com/blog/using-tidycensus/).
+
+For data available and variable definitions, read the quick introduction at the [Basic Usage of tidycensus page](https://walkerke.github.io/tidycensus/articles/basic-usage.html), which describes how to look up the variables you need easily within the RStudio interface.
+
+### Data Available
+
+In general, Decennial Census data from 1990, 2000, and 2010, ACS 1-year data from 2011 to 2016, and ACS 5-year data from 2005-09 to 2012-16 are available via the API. Many more datasets are available from the Census API, and a full list can be found at [the Census Available APIs page](https://census.gov/data/developers/data-sets.html). The only limitation to this availability is whether tidycensus has implemented these data within the package yet.
+
+### File Locations
+
+These data are not stored locally at Urban, but are available upon request from the Census API. Please see the documentation above, which make it very easy to access these data.
+
+## ZTRAX
+
+**NOTE: Zillow data are available for use by Urban researchers, but may not be shared with anyone who is not an employee at the Urban Institute. Zillow data contain data such as owner name and address, and therefore any data user must submit an IRB packet for approval on a project-by-project basis.**
+
+### Citation
+
+Publications must provide the following citation on each page where results are published. In addition, any publications should notify Zillow at least 20 days in advance in order to ensure the citation is appropriate:
+
+- Data provided by Zillow through the Zillow Transaction and Assessment Dataset (ZTRAX). More information on accessing the data can be found at http://www.zillow.com/ztrax. The results and opinions are those of the author(s) and do not reflect the position of Zillow Group
+
+Publications must also publish online, or send to Zillow, any code used to manipulate, process, and/or analyze the data to produce published results.
+
+Raw data must be aggregated, anonymized, and transformed so that it is in no way identifiable. Projects must conform to their IRB plan.
+
+### Full Documentation
+
+Full documentation and variable descriptions can be found at Urban's internal [Zillow Documentation Folder](https://urbanorg.box.com/s/pl7v71q1aj5k10byhu59h2lw8b9rhqyp), a Box folder only available to Urban Institute employees.
+
+Examples of simple analysis of ZTRAX data in an Apache Spark environment are available in our [Urban Institute Sparklyr Intro](Sparklyr_Intro_ZTRAX.html).
+
+### Data Available
+
+All Zillow ZTRAX data are available in their original form, per the documentation above. Note that because we found a number of Errors in Zillow's original CA file for Historic/BuildingAreasFixed\_ZAsmt.parquet, not all data was able to be transferred for that state in that file. Available years vary by file, but in general, data are available up to 2016, and can begin at least 15 years before that.
+
+### File Locations
+
+The following is a list of available Zillow datasets. The paths below should be prefixed with s3n://ui-zillow/parquet-data/, so Historic/Value\_ZAsmt.parquet should look like s3n://ui-zillow/parquet-data/Historic/Value\_ZAsmt.parquet.
+
+- Current/BKManagedSpecific\_ZAsmt.parquet
+- Current/BuildingAreas\_ZAsmt.parquet
+- Current/Building\_ZAsmt.parquet
+- Current/CareOfName\_ZAsmt.parquet
+- Current/ExteriorWall\_ZAsmt.parquet
+- Current/ExtraFeature\_ZAsmt.parquet
+- Current/ForeclosureNODNOSDoc\_ZTrans.parquet
+- Current/ForeclosureNameAddress\_ZTrans.parquet
+- Current/ForeclosureOriginalLoan\_ZTrans.parquet
+- Current/Garage\_ZAsmt.parquet
+- Current/InteriorFlooring\_ZAsmt.parquet
+- Current/InteriorWall\_ZAsmt.parquet
+- Current/Legacy\_ZTrans.parquet
+- Current/LotSiteAppeal\_ZAsmt.parquet
+- Current/MailAddress\_ZAsmt.parquet
+- Current/Main\_ZAsmt.parquet
+- Current/Main\_ZTrans.parquet
+- Current/Name\_ZAsmt.parquet
+- Current/Oby\_ZAsmt.parquet
+- Current/Pool\_ZAsmt.parquet
+- Current/PropertyInfo\_ZTrans.parquet
+- Current/RegionSpecific\_ZTrans.parquet
+- Current/SaleData\_ZAsmt.parquet
+- Current/SellerMailAddress\_ZTrans.parquet
+- Current/SellerNameDescriptionCode\_ZTrans.parquet
+- Current/SellerName\_ZTrans.parquet
+- Current/TaxDistrict\_ZAsmt.parquet
+- Current/TaxExemption\_ZAsmt.parquet
+- Current/TypeConstruction\_ZAsmt.parquet
+- Current/Value\_ZAsmt.parquet
+- Current/VestingCodes\_ZAsmt.parquet
+- Historic/Building\_ZAsmt.parquet
+- Historic/BuildingAreasFixed\_ZAsmt.parquet
+- Historic/Garage\_ZAsmt.parquet
+- Historic/LotSiteAppeal\_ZAsmt.parquet
+- Historic/Main\_ZAsmt.parquet
+- Historic/Value\_ZAsmt.parquet
+
+
+

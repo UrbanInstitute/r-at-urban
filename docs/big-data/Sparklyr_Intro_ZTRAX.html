@@ -229,7 +229,7 @@ div.tocify {
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<p>To get started, spin up a Spark cluster in R at <a href="http://adrf-spark.urban.org/">adrf-spark.urban.org</a>. You will need to wait about 8 minutes for the cluster to start up, and then another five minutes when it’s up for it to install sparklyr in the background.</p>
+<p>To get started, spin up a Spark cluster in R at the <a href="https://shinyapps-stg.urban.org/emr-submission/">Internal Form</a>. You will need to wait about 8 minutes for the cluster to start up, and then another five minutes when it’s up for it to install sparklyr in the background.</p>
 <p>If you’d like to play around with the free data available on the site, just click on the Sparklyr tutorial in the bottom right pane and follow the code examples to read in the example data.</p>
 <p>If you’d like to analyze data only available to those at Urban, such as the ZTRAX dataset, contact Graham MacDonald, Kyle Ueyama, or Manny Divina, who can provide you with an access key.</p>
 <p>If you’d like to test on your local computer, keep in mind performance will be slower as you’ll be downloading files, and that it costs Urban $0.10/GB downloaded. So only view/read in data once you’ve subset and filtered, and preferably only very small subsets/filters, otherwise you’ll be waiting around a while.</p>
@@ -272,7 +272,9 @@ library(dplyr)</code></pre>
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>config &lt;- spark_config()</code></pre>
+<pre class="r"><code>library(aws.s3)
+
+config &lt;- spark_config()</code></pre>
 <pre><code>## Warning in yaml.load(readLines(con), error.label = error.label, ...): R
 ## expressions in yaml.load will not be auto-evaluated by default in the near
 ## future
@@ -450,20 +452,20 @@ count(dat1)</code></pre>
             select(FIPS, TotalAssessedValue, AssessmentYear) %&gt;% 
             sdf_sample(fraction = 0.0000001, replacement = FALSE)
 dat1</code></pre>
-<pre><code>## # Source:   table&lt;sparklyr_tmp_16b1655b59aac&gt; [?? x 3]
+<pre><code>## # Source:   table&lt;sparklyr_tmp_14c14370d238c&gt; [?? x 3]
 ## # Database: spark_connection
 ##    FIPS  TotalAssessedValue AssessmentYear
 ##    &lt;chr&gt; &lt;chr&gt;                       &lt;int&gt;
-##  1 06001 117674.0000                  2013
-##  2 12095 298937.0000                  2006
-##  3 40097 9818.0000                    2011
-##  4 40121 220.0000                     2011
-##  5 40031 8753.0000                    2012
-##  6 06059 295501.0000                  2014
-##  7 37097 37520.0000                   2010
-##  8 06037 897600.0000                  2007
-##  9 37129 370014.0000                  2010
-## 10 06037 123581.0000                  2012
+##  1 06037 84288.0000                   2000
+##  2 06057 36365.0000                   2011
+##  3 06059 879900.0000                  2005
+##  4 13051 28440.0000                   2015
+##  5 37019 &lt;NA&gt;                         2013
+##  6 12031 62340.0000                   2000
+##  7 35001 70790.0000                   2008
+##  8 06037 167554.0000                  2007
+##  9 37051 8844.0000                    2008
+## 10 06037 84718.0000                   2005
 ## # ... with more rows</code></pre>
 <p>Note that the operation processed immediately but if you type “dat1” and then press Enter, it takes a few seconds to process. Spark only executes commands when the following happens:</p>
 <ul>
@@ -477,20 +479,20 @@ dat1</code></pre>
             sdf_sample(fraction = 0.0000001, replacement = FALSE) %&gt;% 
             collect()
 dat1</code></pre>
-<pre><code>## # A tibble: 125 x 3
+<pre><code>## # A tibble: 128 x 3
 ##    FIPS  TotalAssessedValue AssessmentYear
 ##    &lt;chr&gt; &lt;chr&gt;                       &lt;int&gt;
-##  1 06013 188167.0000                  2007
-##  2 06081 293150.0000                  2015
-##  3 41059 76310.0000                   2014
-##  4 12033 23494.0000                   2010
-##  5 40113 120.0000                     2003
-##  6 12101 175222.0000                  2006
-##  7 06013 43720.0000                   2015
-##  8 12105 79898.0000                   2012
-##  9 06073 239829.0000                  2006
-## 10 06073 884340.0000                  2002
-## # ... with 115 more rows</code></pre>
+##  1 06059 498121.0000                  2013
+##  2 16085 50246.0000                   2013
+##  3 37153 43811.0000                   2014
+##  4 12069 85056.0000                   2002
+##  5 06013 98000.0000                   2010
+##  6 12103 311000.0000                  2007
+##  7 12073 120021.0000                  2005
+##  8 37063 194278.0000                  2004
+##  9 06059 367095.0000                  2009
+## 10 06037 950000.0000                  2007
+## # ... with 118 more rows</code></pre>
 <p>“dat1” is now a “tibble”, or the tidyverse version of a dataframe, that is in memory in your local computer, or master node.</p>
 </div>
 <div id="analyzing-data" class="section level2">
@@ -561,7 +563,7 @@ reg &lt;- dat4 %&gt;%
 ## 
 ## Deviance Residuals: (approximate):
 ##      Min       1Q   Median       3Q      Max 
-##  -167225  -110556   -62999    30465 60535006 
+##  -163556  -110503   -63458    27601 38547052 
 ## 
 ## Coefficients:
 ##                   Estimate  Std. Error t value  Pr(&gt;|t|)    
@@ -641,20 +643,20 @@ data_joined &lt;- data_summary %&gt;%
                           sdf_sample(fraction = 0.001, replacement = FALSE) %&gt;% 
                           collect()
 data_view</code></pre>
-<pre><code>## # A tibble: 2,005 x 3
-##    RowID                                bedrooms   assess
-##    &lt;chr&gt;                                   &lt;dbl&gt;    &lt;dbl&gt;
-##  1 5497AA5F-93D5-E511-80C1-3863BB43AC67     2.00   211660
-##  2 64ECC446-70D5-E511-80C1-3863BB43AC67   NaN      204490
-##  3 6AA878A6-39D5-E511-80C1-3863BB43AC67   NaN      158881
-##  4 B2969419-52D5-E511-80C1-3863BB43AC67     0    22962300
-##  5 B69B07E2-A1D5-E511-80C1-3863BB43AC67   NaN       48581
-##  6 B82421EC-C4D5-E511-80C1-3863BB43AC67     6.00  1762880
-##  7 BF12E71A-52D5-E511-80C1-3863BB43AC67     3.00   257120
-##  8 CDE214E3-A1D5-E511-80C1-3863BB43AC67   NaN       40883
-##  9 ECEBA5F2-4FD5-E511-80C1-3863BB43AC67     2.00   112940
-## 10 F923CAE3-A1D5-E511-80C1-3863BB43AC67   NaN      135677
-## # ... with 1,995 more rows</code></pre>
+<pre><code>## # A tibble: 1,992 x 3
+##    RowID                                bedrooms assess
+##    &lt;chr&gt;                                   &lt;dbl&gt;  &lt;dbl&gt;
+##  1 0A2E2460-93D5-E511-80C1-3863BB43AC67     3.00 167280
+##  2 52060166-2AD5-E511-80C1-3863BB43AC67     3.00 331630
+##  3 5A3008E4-A1D5-E511-80C1-3863BB43AC67   NaN     99159
+##  4 6FD58965-2AD5-E511-80C1-3863BB43AC67     2.00 512560
+##  5 9A9BC6EB-C4D5-E511-80C1-3863BB43AC67     2.00 275980
+##  6 A1D15B0B-48D5-E511-80C1-3863BB43AC67     3.00 308080
+##  7 BC322D1A-52D5-E511-80C1-3863BB43AC67     4.00 282660
+##  8 C6E75C1A-52D5-E511-80C1-3863BB43AC67     3.00 676030
+##  9 D200121B-52D5-E511-80C1-3863BB43AC67     2.00 145720
+## 10 DF52A65B-40D5-E511-80C1-3863BB43AC67     2.00 541360
+## # ... with 1,982 more rows</code></pre>
 </div>
 <div id="appending-a-dataset-to-the-end-of-another" class="section level2">
 <h2>Appending a dataset to the end of another</h2>
@@ -665,20 +667,46 @@ dat8 &lt;- combined %&gt;%
                   sdf_sample(fraction = 0.0000001, replacement = FALSE) %&gt;% 
                   collect()
 dat8</code></pre>
-<pre><code>## # A tibble: 29 x 1
+<pre><code>## # A tibble: 40 x 1
 ##    FIPS 
 ##    &lt;chr&gt;
-##  1 01083
-##  2 04019
-##  3 06037
-##  4 06001
-##  5 06073
-##  6 28087
-##  7 34009
-##  8 42011
-##  9 48029
-## 10 48415
-## # ... with 19 more rows</code></pre>
+##  1 04003
+##  2 06065
+##  3 12063
+##  4 12105
+##  5 13145
+##  6 26065
+##  7 27035
+##  8 48109
+##  9 51087
+## 10 51810
+## # ... with 30 more rows</code></pre>
+</div>
+<div id="extracting-big-data-to-csv" class="section level2">
+<h2>Extracting Big Data to CSV</h2>
+<p>You may want to take a CSV extract that’s too big to fit into memory, or takes too long to collect and process. Use the following function:</p>
+<pre class="r"><code>write_out &lt;- function(dataset, namein, bucket_path){
+  bucket &lt;- &quot;ui-research&quot;
+  pathin &lt;- paste(&quot;s3n://&quot;,bucket,&quot;/&quot;,bucket_path,namein, sep=&quot;&quot;)
+  pathin2 &lt;- paste(&quot;s3://&quot;,bucket,&quot;/&quot;,bucket_path,namein, sep=&quot;&quot;)
+  spark_write_csv(dataset,pathin,header = FALSE)
+  tempdf &lt;- data.frame(matrix(vector(), 0, length(colnames(dataset)), dimnames=list(c(), colnames(dataset))), stringsAsFactors=F)
+  write.csv(tempdf, 'temp.csv', row.names = FALSE)
+  put_object('temp.csv', bucket = bucket, object = paste(bucket_path,namein,&quot;/&quot;,&quot;0_header.csv&quot;, sep=&quot;&quot;))
+  Sys.setenv(inputpath=paste(pathin,&quot;/&quot;,sep=&quot;&quot;))
+  Sys.setenv(outputpath=paste(pathin,&quot;.csv&quot;,sep=&quot;&quot;))
+  Sys.setenv(localpath=paste(pathin2,&quot;.csv&quot;,sep=&quot;&quot;))
+  print(&quot;Merging multiple files. DO NOT BE ALARMED.&quot;)
+  system('hadoop fs -text ${inputpath}* | hadoop fs -put - ${outputpath}', ignore.stderr = TRUE, ignore.stdout = TRUE)
+  system('aws s3 cp ${localpath} .')
+  system('aws s3 rm ${localpath}')
+  print(&quot;The file is ready to be downloaded from the file browser on the bottom right of your screen. Check the box next to the file, click 'More' and then click 'Export' to download the extract to your confidential folder on SAS1.&quot;)
+}</code></pre>
+<p>And run it using the following code, for example:</p>
+<pre class="r"><code>bucket_p &lt;- &quot;ec2-sandbox/my_extracts/&quot;
+write_out(data_joined, &quot;DC_AssessedValue_Bedrooms&quot;, bucket_p)</code></pre>
+<pre><code>## [1] &quot;Merging multiple files. DO NOT BE ALARMED.&quot;
+## [1] &quot;The file is ready to be downloaded from the file browser on the bottom right of your screen. Check the box next to the file, click 'More' and then click 'Export' to download the extract to your confidential folder on SAS1.&quot;</code></pre>
 </div>
 <div id="if-you-encounter-errors" class="section level2">
 <h2>If you encounter errors</h2>

@@ -1,0 +1,331 @@
+---
+title: "Urban Institute Sparklyr Code and Guide"
+author: "Graham MacDonald"
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: none
+---
+
+```{r setup, include=FALSE}
+# Note: Before knitting, install 'rmarkdown', 'extrafont', and fill in AWS access keys in setup2
+library(knitr)
+```
+
+Sparklyr is an R package built by RStudio to allow R users to take advantage of the dplyr library to analyze big data. This represents a huge step forward for programming in big data, as all other interfaces force social scientists to learn a completely new set of syntax and programming.
+
+## Sparklyr Documentation
+
+You can find the complete documentation for RStudio's sparklyr package at [https://spark.rstudio.com/](https://spark.rstudio.com/).
+
+## Setup
+
+To get started, spin up a Spark cluster in R at the [Internal Form](https://shinyapps-stg.urban.org/emr-submission/). You will need to wait about 8 minutes for the cluster to start up, and then another five minutes when it's up for it to install sparklyr in the background.
+
+If you'd like to play around with the free data available on the site, just click on the Sparklyr tutorial in the bottom right pane and follow the code examples to read in the example data.
+
+If you'd like to analyze data only available to those at Urban, such as the ZTRAX dataset, contact Graham MacDonald, Kyle Ueyama, or Manny Divina, who can provide you with an access key.
+
+If you'd like to test on your local computer, keep in mind performance will be slower as you'll be downloading files, and that it costs Urban $0.10/GB downloaded. So only view/read in data once you've subset and filtered, and preferably only very small subsets/filters, otherwise you'll be waiting around a while. 
+
+Note that performance will be slower because a) you have many fewer processers than a full cluster, and b) the connection speed between Urban and Amazon is slower than the cluster, which is a connection between Amazon and Amazon. 
+
+When running locally, you will need to perform the following before using Sparklyr.
+
+```{r localsetup, eval=FALSE}
+install.packages('sparklyr')
+spark_install(version = "2.2.0")
+```
+
+## Read Before You Start
+
+**NOTE: ZTRAX data are available for use by Urban researchers, but may not be shared with anyone who is not an employee at the Urban Institute. ZTRAX data contain data such as owner name and address, and therefore any data user must submit an IRB packet for approval on a project-by-project basis.**
+
+### Citation
+
+Publications must provide the following citation on each page where results are published. In addition, any publications should notify Zillow at least 20 days in advance in order to ensure the citation is appropriate:
+
+- Data provided by Zillow through the Zillow Transaction and Assessment Dataset (ZTRAX). More information on accessing the data can be found at http://www.zillow.com/ztrax. The results and opinions are those of the author(s) and do not reflect the position of Zillow Group
+
+Publications must also publish online, or send to Zillow, any code used to manipulate, process, and/or analyze the data to produce published results.
+
+Raw data must be aggregated, anonymized, and transformed so that it is in no way identifiable. Projects must conform to their IRB plan.
+
+### Full Documentation
+
+Full documentation and variable descriptions can be found at Urban's internal [ZTRAX Documentation Folder](https://urbanorg.box.com/s/pl7v71q1aj5k10byhu59h2lw8b9rhqyp), a Box folder only available to Urban Institute employees.
+
+### Data Available
+
+All Zillow ZTRAX data are available in their original form, per the documentation above. Note that because we found a number of Errors in Zillow's original CA file for Historic/BuildingAreasFixed\_ZAsmt.parquet, not all data was able to be transferred for that state in that file. Available years vary by file, but in general, data are available up to 2016, and can begin at least 15 years before that.
+
+## Reading in Data
+
+To analyze the ZTRAX data, first load the sparklyr and dplyr libraries, set up the Spark configuration, and provide your access keys.
+
+```{r config}
+library(sparklyr)
+library(dplyr)
+library(aws.s3)
+
+config <- spark_config()
+
+# When running on your local computer, add the following here: 
+# config[["sparklyr.defaultPackages"]] <- "org.apache.hadoop:hadoop-aws:2.7.1"
+
+# When running on a cluster:
+sc <- spark_connect(master = "yarn-client", config = config, version = '2.2.0')
+
+# When running on your local computer:
+# sc <- spark_connect(master = 'local', config = config, version = '2.2.0')
+
+Sys.setenv(AWS_ACCESS_KEY_ID="[Your access key]")
+Sys.setenv(AWS_SECRET_ACCESS_KEY="[Your secret access key]")
+```
+
+
+```{r setup2, include=FALSE}
+Sys.setenv(AWS_ACCESS_KEY_ID="[Your access key]")
+Sys.setenv(AWS_SECRET_ACCESS_KEY="[Your secret access key]")
+```
+
+Now you can read in the data. There are one key consideration when reading in data in Parquet format - whether to read the data into memory or not (memory = TRUE or FALSE). Reading the data into memory means much faster computation on the data, but if your cluster size is not big enough, the operation can hang and you'll end up waiting a long time for no results. Most of the time, it is safe to use memory = FALSE. However, if you know the size of your data and available memory in your cluster, memory = TRUE may make the most sense in some cases.
+
+Here, we'll read in the historic dataset for assessment valuations. For a full list of data paths available, see the end of this document.
+
+```{r readin}
+dat <- spark_read_parquet(sc, "dat", "s3n://ui-zillow/parquet-data/Historic/Value_ZAsmt.parquet", memory = FALSE)
+```
+
+## Column Names and Data Types
+
+Sparklyr reads in metadata about the dataset, but not the data itself, in memory = FALSE, which allows you to display some basic information, like column names and data types. In the newer versions of RStudio, you can view this in the Connections tab on the top right of your screen by clicking the blue arrow next to "dat". But you can also do it from the console.
+
+```{r colnames}
+colnames(dat)
+sdf_schema(dat)
+```
+
+## Number of Rows
+
+Getting the number of rows requires Spark to read the data. Because Parquet is a columnar storage format, this operation will be much faster if we select only one column, which requires Spark to only read in a small subset of the data file. 
+
+```{r nrows}
+dat1 <- dat %>% 
+          select(RowID)
+count(dat1)
+```
+
+## Viewing the Dataset
+
+You could view the dataset in full as you would in a normal R environment, but that would try to read the full dataset into memory on one computer, which is impossible in most big data use cases. Instead, if you'd like to view the dataset, you can subsample a small percentage (using the count function above will help you determine what that is) and display that sample. Again, first we select only the columns we need to significantly speed up data read time.
+
+```{r view}
+dat1 <- dat %>% 
+            select(FIPS, TotalAssessedValue, AssessmentYear) %>% 
+            sdf_sample(fraction = 0.0000001, replacement = FALSE)
+dat1
+```
+
+Note that the operation processed immediately but if you type "dat1" and then press Enter, it takes a few seconds to process. Spark only executes commands when the following happens:
+
+- you enter the name of the dataset into the console and type enter, or 
+- you end your dplyr statements with %>% collect()
+- you execute a machine learning model
+
+Until you do one of those three things, Spark merely stores your commands in order to optimize them under the hood until you actually need a result. So to view the data itself within the first line of the previous code chunk and store it, you might edit the command as follows.
+
+```{r sample}
+dat1 <- dat %>% 
+            select(FIPS, TotalAssessedValue, AssessmentYear) %>% 
+            sdf_sample(fraction = 0.0000001, replacement = FALSE) %>% 
+            collect()
+dat1
+```
+
+"dat1" is now a "tibble", or the tidyverse version of a dataframe, that is in memory in your local computer, or master node.
+
+## Analyzing data
+
+Now that you've gotten a good look at the properties of your dataset, you're likely ready to analyze it. This is the true power of sparklyr: most of the dplyr functions are natively supported in this environment and parallelized under the hood. I won't go over it here, but dplyr is very easy and straightforward, and you can learn the basics via one of the many nice [cheatsheets](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf).
+
+Here's an example of analyzing the mean assessed value of properties by state and year, in the process filtering NA values, creating a new variable, changing data type, subsetting, summarizing, and sorting.
+
+```{r analyze}
+dat2 <- dat %>% 
+          select(FIPS, TotalAssessedValue, AssessmentYear) %>% 
+          filter(!is.na(TotalAssessedValue)) %>% 
+          mutate(State = substr(FIPS, 1, 2), AssessedValue = as.numeric(TotalAssessedValue)) %>% 
+          filter(AssessedValue > 0) %>% 
+          group_by(State, AssessmentYear) %>% 
+          summarise(value = mean(AssessedValue)) %>% 
+          filter(!is.na(State), !is.na(AssessmentYear)) %>% 
+          arrange(State, AssessmentYear) %>% 
+          collect()
+dat2
+```
+
+## Plotting data
+
+First, run an analysis like the one above to subset your data to a manageable size and collect() it to a local computer. Once you've done that, you can plot it using R's standard ggplot2 package. For information on how to use this package, see the [Urban Institute R Graphics Guide](http://urbaninstitute.github.io/urban_R_theme/). One example of plotting the data analyzed above is included here for reference. Note that it could be substantially improved.
+
+```{r plot}
+source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')
+state_assessed <- dat2 %>% 
+                        ggplot(aes(x=AssessmentYear, y=value)) + 
+                          geom_line() + 
+                          facet_wrap(~State) + 
+                          scale_y_continuous(expand = c(0, 0)) + 
+                          theme(axis.text.x = element_text(angle = 90), 
+                                strip.text = element_text(face = "plain", size = rel(0.5)))
+state_assessed
+```
+
+## Writing data locally
+
+Now that you've analyzed the data, perhaps you'd rather look at it in Excel than in RStudio, or you'd like to export the results to keep on your computer. To write data out, simply use standard R's write function.
+
+```{r write}
+write.csv(dat2, "Mean_Assessment_Year_State.csv")
+```
+
+In the bottom right pane of RStudio, under the "Files" tab, you should now have a new csv file. To download to your local computer, click the check box next to the file, click the "More" button at the top of the bottom right pane, and choose Export, then name the file and click Download.
+
+## Run a linear regression
+
+Say you want to run a linear regression on your data. Spark has a number of regression and machine learning libraries available - a complete list is available at [RStudio's sparklyr website](https://spark.rstudio.com/mllib.html). In this case, we first convert a variable to numeric and then remove NA values, then we regress Total Assessed Value of a property on the year in which it is assessed. Because Spark is doing parallel computation, it is using a slightly different method to compute regressions than traditional statistical packages - for a more complete discussion, see [Spark's MLLib documentation](https://spark.apache.org/docs/2.2.0/mllib-optimization.html#implementation-in-mllib).
+
+```{r regression}
+dat4 <- dat %>% 
+            select(TotalAssessedValue, AssessmentYear) %>% 
+            mutate(Total = as.numeric(TotalAssessedValue)) %>% 
+            filter(!is.na(Total), !is.na(AssessmentYear))
+reg <- dat4 %>% 
+            ml_linear_regression(response = "Total", features = c("AssessmentYear"))
+```
+
+To view a summary of the regression output, use the traditional summary() syntax from R. Note that with a dataset with over one billion rows, the p value will always be (very) signficant, even if the R-squared value is quite low.
+
+```{r summarize}
+summary(reg)
+```
+
+## Analyzing Data that requires sorting
+
+If you play around with Sparklyr enough you'll notice a peculiar function missing - the median, and you may notice that things like sorts and rankings take a lot longer than variable creation and filters. This is because sorting in parallel involves a lot of data transfer and re-analysis between each of the processors working separately across multiple machines. 
+
+Still, Spark is much faster than an individual computer than doing these operations, but you have to be more patient - and the general rule is to select() and filter() as much as possible before performing these operations to maximize speed.
+
+## Calculating a Median
+
+To calculate the median, you must first rank your data (by group or overall) and select the data that comes closest to a rank of 0.5. Note that this will not get you the exact median to all decimal places, but in a large dataset, it will get you very, very close. The following is an example of such an implementation.
+
+```{r median}
+dat5 <- dat %>% 
+            select(FIPS, TotalAssessedValue) %>% 
+            filter(!is.na(TotalAssessedValue), FIPS == "11001") %>% 
+            mutate(assess = as.numeric(TotalAssessedValue)) %>% 
+            group_by(FIPS) %>% mutate(rank = percent_rank(assess)) %>% 
+            filter(rank < 0.5001, rank > 0.4999) %>% 
+            summarise(median = mean(assess)) %>% 
+            collect()
+dat5
+```
+
+## Sorting data
+
+You will very likely need to sort data, and this is, luckily, supported by dplyr's native arrange() function.
+
+```{r sort}
+dat6 <- dat %>% 
+            select(FIPS, TotalAssessedValue) %>% 
+            filter(FIPS == "11001") %>% 
+            mutate(assess = as.numeric(TotalAssessedValue)) %>% 
+            arrange(desc(assess)) %>% 
+            collect()
+dat6
+```
+
+## Joining data
+
+You will very likely want to join data from two datasets, and we provide an example of a join with another ZTRAX dataset.
+
+```{r join}
+data_to_join <- spark_read_parquet(sc, "data_to_join", "s3n://ui-zillow/parquet-data/Historic/Building_ZAsmt.parquet", memory = FALSE)
+data_summary <- data_to_join %>% 
+                              select(RowID, TotalBedrooms, FIPS) %>% 
+                              filter(FIPS == "11001") %>% group_by(RowID) %>% 
+                              summarise(bedrooms = sum(TotalBedrooms)) %>% 
+                              select(RowID, bedrooms) # Group by lot to join with lot data
+data_value <- dat %>% 
+                  select(RowID, TotalAssessedValue, FIPS) %>% 
+                  filter(FIPS == "11001") %>% 
+                  mutate(assess = as.numeric(TotalAssessedValue)) %>% 
+                  select(RowID, assess)
+data_joined <- data_summary %>% 
+                            inner_join(data_value)
+data_view <- data_joined %>% 
+                          sdf_sample(fraction = 0.001, replacement = FALSE) %>% 
+                          collect()
+data_view
+```
+
+## Appending a dataset to the end of another
+
+You may have two large datasets that you want to combine one on top of the other. This is supported by an extension to Spark.
+
+```{r append}
+dat7 <- spark_read_parquet(sc, "dat", "s3n://ui-zillow/parquet-data/Current/Value_ZAsmt.parquet", memory = FALSE)
+combined <- sdf_bind_rows(dat7 %>% select(FIPS), dat %>% select(FIPS))
+dat8 <- combined %>% 
+                  sdf_sample(fraction = 0.0000001, replacement = FALSE) %>% 
+                  collect()
+dat8
+```
+
+## Extracting Big Data to CSV
+
+You may want to take a CSV extract that's too big to fit into memory, or takes too long to collect and process. Use the following function:
+
+```{r extract_function}
+write_out <- function(dataset, namein, bucket_path){
+  bucket <- "ui-research"
+  pathin <- paste("s3n://",bucket,"/",bucket_path,namein, sep="")
+  pathin2 <- paste("s3://",bucket,"/",bucket_path,namein, sep="")
+  spark_write_csv(dataset,pathin,header = FALSE)
+  tempdf <- data.frame(matrix(vector(), 0, length(colnames(dataset)), dimnames=list(c(), colnames(dataset))), stringsAsFactors=F)
+  write.csv(tempdf, 'temp.csv', row.names = FALSE)
+  put_object('temp.csv', bucket = bucket, object = paste(bucket_path,namein,"/","0_header.csv", sep=""))
+  Sys.setenv(inputpath=paste(pathin,"/",sep=""))
+  Sys.setenv(outputpath=paste(pathin,".csv",sep=""))
+  Sys.setenv(localpath=paste(pathin2,".csv",sep=""))
+  print("Merging multiple files. DO NOT BE ALARMED.")
+  system('hadoop fs -text ${inputpath}* | hadoop fs -put - ${outputpath}', ignore.stderr = TRUE, ignore.stdout = TRUE)
+  system('aws s3 cp ${localpath} .')
+  system('aws s3 rm ${localpath}')
+  system('aws s3 rm ${inputpath} --recursive')
+  print("The file is ready to be downloaded from the file browser on the bottom right of your screen. Check the box next to the file, click 'More' and then click 'Export' to download the extract to your confidential folder on SAS1.")
+}
+```
+
+And run it using the following code, for example:
+
+```{r run_extract}
+bucket_p <- "ec2-sandbox/my_extracts/"
+write_out(data_joined, "DC_AssessedValue_Bedrooms", bucket_p)
+```
+
+## If you encounter errors
+
+If you ever interrupt a job by pressing the Stop button at the top right of the console (on the bottom left of the screen), or you encounter an error where you know your code is correct, you may need to clear and restart your Spark session, and re-read your data.
+
+```{r errors, eval = FALSE}
+spark_disconnect(sc)
+sc <- spark_connect(master = "yarn-client", config = config, version = '2.1.1')
+dat <- spark_read_parquet(sc, "dat", "s3n://ui-zillow/parquet-data/Historic/Value_ZAsmt.parquet", memory = FALSE)
+```
+
+## ZTRAX table options
+
+For a full list of ZTRAX table options, see [The Urban Institute Big Data Portal Guide](Big_Data_Portal_Data.html).
