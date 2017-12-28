@@ -1,7 +1,7 @@
 ---
 output:
   html_document:
-    css: styles.css
+    css: graphics-guide/www/styles.css
     self_contained: TRUE
     code_folding: hide
     toc: TRUE
@@ -14,7 +14,7 @@ output:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](docs/graphics-guide/images/urban-institute-logo.png)
+![](graphics-guide/www/images/urban-institute-logo.png)
 </div>
 
 ## Urban Institute R Graphics Guide
@@ -90,7 +90,7 @@ This is an `R` script that makes `ggplot2` output align more closely with [the U
 
 * This script does **not produce publication ready graphics**. Visual styles must still be edited using your project/paper's normal editing workflow.
 	*  ***Exporting charts as a pdf will allow them to be more easily edited***
-	*  You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: `r knitr::include_graphics("docs/graphics-guide/images/pdf_export_option.png")`
+	*  You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: `r knitr::include_graphics("graphics-guide/www/images/pdf_export_option.png")`
 
 
 * The theme has been tested against `ggplot2 version 2.2.0`. It will not function properly with older (`< 2.0.0`) versions of `ggplot2`

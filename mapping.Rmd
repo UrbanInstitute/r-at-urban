@@ -14,7 +14,7 @@ output:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](docs/mapping/images/urban-institute-logo.png)
+![](mapping/images/urban-institute-logo.png)
 </div>
 
 ```{r markdown setup, include=FALSE}
@@ -52,7 +52,7 @@ Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mappi
 
 # Mapping
 
-![](docs/mapping/images/amsterdam.JPG)
+![](mapping/images/amsterdam.JPG)
 *[World map, 1689](https://en.wikipedia.org/wiki/Map#/media/File:World_Map_1689.JPG)*
 
 ## Basic Concepts
@@ -108,7 +108,7 @@ library(gridExtra)
 library(fiftystater)
 
 # read the state CHIP data
-chip <- read_csv("docs/mapping/data/chip-enrollment.csv")
+chip <- read_csv("mapping/data/chip-enrollment.csv")
 
 # create data frame with vector boundaries from library(fiftystater)
 data("fifty_states")
@@ -163,7 +163,7 @@ library(mapdata)
 state <- map_data("state")
 
 # read in the CHIP data
-chip <- read_csv("docs/mapping/data/chip-enrollment.csv")
+chip <- read_csv("mapping/data/chip-enrollment.csv")
 
 # tweak the theme for the map
 theme_map <- theme(
@@ -393,7 +393,7 @@ library(viridis)
 library(tidycensus)
 
 # read mortgage data and drop unnecessary variables
-hmda <- read_csv("docs/mapping/data/hmdamap2015_10_purch.csv", 
+hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv", 
   col_types = cols(
     tract = col_character(),
     year1 = col_integer(),
@@ -476,7 +476,7 @@ library(rgdal)
 library(broom)
 
 # read in mortgage data
-hmda <- read_csv("docs/mapping/data/hmdamap2015_10_purch.csv", 
+hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv", 
 								 col_types = cols(
 								 	tract = col_character(),
 								 	year1 = col_integer(),
@@ -495,7 +495,7 @@ hmda <- hmda %>%
 	mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c("0", tract), tract))
 
 # read in shapefile for Washington D.C.
-tracts_dc <- readOGR(dsn = "docs/mapping/shapefiles/tl_2015_11_tract", verbose = FALSE)
+tracts_dc <- readOGR(dsn = "mapping/shapefiles/tl_2015_11_tract", verbose = FALSE)
 
 # create an extra data frame with the tract number and the position from 1 to n
 tract_id <- tibble(tract = as.character(tracts_dc@data$GEOID), 
@@ -570,7 +570,7 @@ library(forcats)
 library(geofacet)
 
 # read CHIP enrollment data
-chip <- read_csv("docs/mapping/data/chip-enrollment.csv",
+chip <- read_csv("mapping/data/chip-enrollment.csv",
 	col_types = cols(
   State = col_character(),
   `CHIP Enrollment` = col_integer(),
@@ -850,7 +850,7 @@ state <- map_data("state")
 
 # drop Alaska and Hawaii
 # this data frame has the latitutde and longitude for each capital
-state_capitals <- read_csv("docs/mapping/data/state-capitals.csv") %>%
+state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
 	filter(!state %in% c("Alaska", "Hawaii"))
 
 # add theme for maps
@@ -890,7 +890,7 @@ library(tidyverse)
 library(ggmap)
 
 # read the mortgage data for DC in 2011
-mortgages <- read_csv("docs/mapping/data/districtofcolumbia2011.csv")
+mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
 
 # quick plot
 qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
@@ -909,7 +909,7 @@ library(tidyverse)
 library(ggmap)
 
 # load mortgage data for DC in 2011
-mortgages <- read_csv("docs/mapping/data/districtofcolumbia2011.csv")
+mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
 
 # quick plot!
 qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
@@ -935,10 +935,10 @@ library(broom)
 library(ggmap)
 
 # load mortgage data for DC in 2011
-mortgages <- read_csv("docs/mapping/data/districtofcolumbia2011.csv")
+mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
 
 # load and tidy the Washington D.C. shapefile
-shapes <- readOGR(dsn = "docs/mapping/shapefiles/tl_2015_11_tract") %>%
+shapes <- readOGR(dsn = "mapping/shapefiles/tl_2015_11_tract") %>%
     tidy()
 
 # map!
@@ -1014,7 +1014,7 @@ state <- map_data("state")
 
 # drop Alaska and hawaii
 # this data frame has the latitutde and longitude for each capital
-state_capitals <- read_csv("docs/mapping/data/state-capitals.csv") %>%
+state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
 	filter(state %in% c("Maryland", "Ohio", "Indiana", "Iowa", "Nebraska", "Wyoming", "Utah", "California", "Arizona", "Oklahoma", "Arkansas", "Tennessee", "Virginia"))
 
 # add theme for maps
@@ -1333,7 +1333,7 @@ IPUMS helps with first issue because it is a good [source](https://usa.ipums.org
 The new version of RStudio helps with the second issue because it boasts a new feature that visualizes the branches of the data and helps select desired variables. Click on the shapefile in RStudio to bring up a map of the data. Mouse over the desired variable and click the little logo that appears to the far right. 
 
 
-![](docs/mapping/images/shapefile.png)
+![](mapping/images/shapefile.png)
 
 
 A line of code that selects the desired variable should appear in the console. For example: `shapes@polygons[[1]]@labpt`. This trick makes hierarchical data much more manageable. 
@@ -1466,7 +1466,7 @@ readR <- function(shapefile) {
   # Output: Tibble with observations for every ten mortgages
   
 	# Read the relevant shapefile
-	tracts_shapefile <<- readOGR(paste0("docs/mapping/shapefiles/", shapefile))
+	tracts_shapefile <<- readOGR(paste0("mapping/shapefiles/", shapefile))
 	
 	# Set the map projection for the shapefile
 	tracts_shapefile <<- spTransform(tracts_shapefile, "+init=epsg:4326")
@@ -1524,7 +1524,7 @@ The above code loads packages and defines functions. Nothing actually happens un
 This code loads the data using `read_csv()` and runs the function `readR()` on the 2012 shapefile for Rhode Island. 
 
 ```{r iterate, eval = FALSE}
-purchase <- read_csv("docs/mapping/data/hmdamap2012_10_purch.csv", 
+purchase <- read_csv("mapping/data/hmdamap2012_10_purch.csv", 
 	col_types = cols(
   tract = col_double(),
   year1 = col_integer(),
@@ -1554,7 +1554,7 @@ library(forcats)
 library(gridExtra)
 library(fiftystater)
 
-chip <- read_csv("docs/mapping/data/chip-enrollment.csv")
+chip <- read_csv("mapping/data/chip-enrollment.csv")
 
 # Create data frame with vector boundaries
 data("fifty_states")

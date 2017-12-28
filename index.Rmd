@@ -1,6 +1,7 @@
 ---
 output:
   html_document:
+    output_dir: "."
     css: styles.css
     self_contained: TRUE
 ---

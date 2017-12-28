@@ -4,14 +4,17 @@ navbar:
   left:
   - text: HOME
     href: index.html
-  - text: MAPPING
-    href: mapping.html
+  - text: INTRODUCTION
+    href: introduction.html    
   - text: PLOTTING
     href: graphics-guide.html
+  - text: MAPPING
+    href: mapping.html      
 output:
   html_document:
+    output_dir: '.'
     css: styles.css
     lib_dir: site_libs
     self_contained: no
-output_dir: _site
+output_dir: '.'
 
