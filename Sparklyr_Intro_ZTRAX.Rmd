@@ -62,12 +62,7 @@ All Zillow ZTRAX data are available in their original form, per the documentatio
 
 ## Reading in Data
 
-To analyze the ZTRAX data, first load the sparklyr and dplyr libraries, set up the Spark configuration, and provide your access keys.
-
-```{r setup2, include=FALSE, eval = FALSE}
-config[["fs.s3a.access.key"]] = "YOUR ACCESS KEY"
-config[["fs.s3a.secret.key"]] = "YOUR SECRET KEY"
-```
+To analyze the ZTRAX data, first load the sparklyr and dplyr libraries and set up the Spark configuration.
 
 ```{r config, eval = FALSE}
 library(sparklyr)
@@ -78,9 +73,6 @@ config <- spark_config()
 
 # When running on your local computer, add the following here: 
 # config[["sparklyr.defaultPackages"]] <- "org.apache.hadoop:hadoop-aws:2.7.1"
-
-config[["fs.s3a.access.key"]] = "YOUR ACCESS KEY"
-config[["fs.s3a.secret.key"]] = "YOUR SECRET KEY"
 
 # When running on a cluster:
 sc <- spark_connect(master = "yarn-client", config = config, version = '2.2.0')
@@ -285,7 +277,14 @@ dat8
 
 ## Extracting Big Data to CSV
 
-You may want to take a CSV extract that's too big to fit into memory, or takes too long to collect and process. Use the following function:
+You may want to take a CSV extract that's too big to fit into memory, or takes too long to collect and process. You'll first need a set of access keys to download the data to your local computer.
+
+```{r setup2, eval = FALSE}
+Sys.setenv(AWS_ACCESS_KEY_ID="YOUR ACCESS KEY")
+Sys.setenv(AWS_SECRET_ACCESS_KEY="YOUR SECRET KEY")
+```
+
+Then use the following function:
 
 ```{r extract_function, eval = FALSE}
 write_out <- function(dataset, namein, bucket_path){

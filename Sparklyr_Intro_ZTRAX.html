@@ -259,7 +259,7 @@ spark_install(version = &quot;2.2.0&quot;)</code></pre>
 </div>
 <div id="reading-in-data" class="section level2">
 <h2>Reading in Data</h2>
-<p>To analyze the ZTRAX data, first load the sparklyr and dplyr libraries, set up the Spark configuration, and provide your access keys.</p>
+<p>To analyze the ZTRAX data, first load the sparklyr and dplyr libraries and set up the Spark configuration.</p>
 <pre class="r"><code>library(sparklyr)
 library(dplyr)
 library(aws.s3)
@@ -273,10 +273,7 @@ config &lt;- spark_config()
 sc &lt;- spark_connect(master = &quot;yarn-client&quot;, config = config, version = '2.2.0')
 
 # When running on your local computer:
-# sc &lt;- spark_connect(master = 'local', config = config, version = '2.2.0')
-
-config[[&quot;fs.s3a.access.key&quot;]] = &quot;YOUR ACCESS KEY&quot;
-config[[&quot;fs.s3a.secret.key&quot;]] = &quot;YOUR SECRET KEY&quot;</code></pre>
+# sc &lt;- spark_connect(master = 'local', config = config, version = '2.2.0')</code></pre>
 <p>Now you can read in the data. There are one key consideration when reading in data in Parquet format - whether to read the data into memory or not (memory = TRUE or FALSE). Reading the data into memory means much faster computation on the data, but if your cluster size is not big enough, the operation can hang and you’ll end up waiting a long time for no results. Most of the time, it is safe to use memory = FALSE. However, if you know the size of your data and available memory in your cluster, memory = TRUE may make the most sense in some cases.</p>
 <p>Here, we’ll read in the historic dataset for assessment valuations. For a full list of data paths available, see the end of this document.</p>
 <pre class="r"><code>dat &lt;- spark_read_parquet(sc, &quot;dat&quot;, &quot;s3n://ui-zillow/parquet-data/Historic/Value_ZAsmt.parquet&quot;, memory = FALSE)</code></pre>
@@ -424,7 +421,10 @@ dat8</code></pre>
 </div>
 <div id="extracting-big-data-to-csv" class="section level2">
 <h2>Extracting Big Data to CSV</h2>
-<p>You may want to take a CSV extract that’s too big to fit into memory, or takes too long to collect and process. Use the following function:</p>
+<p>You may want to take a CSV extract that’s too big to fit into memory, or takes too long to collect and process. You’ll first need a set of access keys to download the data to your local computer.</p>
+<pre class="r"><code>Sys.setenv(AWS_ACCESS_KEY_ID=&quot;YOUR ACCESS KEY&quot;)
+Sys.setenv(AWS_SECRET_ACCESS_KEY=&quot;YOUR SECRET KEY&quot;)</code></pre>
+<p>Then use the following function:</p>
 <pre class="r"><code>write_out &lt;- function(dataset, namein, bucket_path){
   bucket &lt;- &quot;ui-research&quot;
   pathin &lt;- paste(&quot;s3n://&quot;,bucket,&quot;/&quot;,bucket_path,namein, sep=&quot;&quot;)

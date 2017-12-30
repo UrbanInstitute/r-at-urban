@@ -27,7 +27,7 @@ When using these data, please be sure to read the appropriate sections below and
 
 ## Read Before You Start
 
-For all datasets on this page, you will need an access key for the Urban Institute's Amazon Web Services (AWS) account that provides access to the s3n://ui-spark-data and s3n://ui-zillow folders for read-only purposes, and to the s3n://ui-research/ec2-sandbox to write data. Please contact Graham MacDonald, Kyle Ueyama, or Manny Divina to obtain the keys.
+For all datasets on this page, you will need an access key for the Urban Institute's Amazon Web Services (AWS) account that provides access to the s3n://ui-spark-data and s3n://ui-zillow folders for read-only purposes, and to the s3n://ui-research/ec2-sandbox to write data, if you'd like to make extracts of files - otherwise, you can analyze and create tables/graphics directly in the interface and download them as usual. Please contact Graham MacDonald, Kyle Ueyama, or Manny Divina to obtain the keys.
 
 ### How to Analyze the Data
 
