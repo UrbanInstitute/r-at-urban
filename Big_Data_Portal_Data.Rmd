@@ -22,6 +22,7 @@ Welcome to the Urban Institute's Big Data Portal, where we house commonly-used l
 3. LEHD Origin-Destination Employment Statistics, Census, 2002-2015
 4. Census and American Community Survey Data and Shapefiles, tidycensus (Census API), 1990, 2000, 2010, 2011 to 2016, 2005-09 to 2012-16
 5. Zillow property record and transaction data (years vary - NOTE: These data are not public and may not be shared outside the Urban Institute)
+6. Tract to tract driving times and distances (2017)
 
 When using these data, please be sure to read the appropriate sections below and follow all guidelines for confidentialty and citations.
 
@@ -215,5 +216,31 @@ The following is a list of available Zillow datasets. The paths below should be 
 - Historic/Main\_ZAsmt.parquet
 - Historic/Value\_ZAsmt.parquet
 
+## Driving Times and Distances
 
+### Citation
+
+No citation required.
+
+### Full Documentation
+
+The documentation are self-explanatory. Census tracts are 2010 vintage, and the columns are the origin tract, destination travel, travel time in minutes, and travel distance in miles. These data were calculated by the Data Science team at Urban.
+
+We use 2010 Census Tract geographies and select all unique combinations of Census tract pairs in the 50 states and District of Columbia that are located within 150 miles of each other by straight line distance, using the centroid of each Census tract for the "address" of that tract, which results in over 154 million pairs. We generate a routing engine from the Open Street Map Routing Machine (OSRM) using the Open Street Map North America data extract as of June 7, 2017, which allows for the calculation of routing for cars, but not for public transportation, which we do not include in this analysis.
+
+Open Street Map is an open source, crowdsourced dataset, which means it is constantly updated by a group of dedicated volunteers, and therefore may have some errors, be dated in certain locations, and contain omissions.
+
+We use the routing engine to calculate the fastest driving distance and time with no traffic between each of the over 154 million pairs, using the OSRM /route/v1/driving endpoint. For more information on how these routes are calculated, see [OSRM](http://project-osrm.org/docs/v5.7.0/api/#general-options"). 
+
+For the full process to create the data yourself, see the Github repository at [https://github.com/UI-Research/spark-osrm](https://github.com/UI-Research/spark-osrm).
+
+### Data Available
+
+All Census tract pairs within 150 miles of each other by straight line distance are included, using data from 2017 and 2010 Census tracts, per the documentation above.
+
+### File Locations
+
+The entire dataset is available as a single file, at: 
+
+- s3n://ui-spark-data/travel-times/parquet-data/drive_times.parquet
 
