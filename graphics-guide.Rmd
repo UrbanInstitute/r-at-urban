@@ -1,7 +1,7 @@
 ---
 output:
   html_document:
-    css: graphics-guide/www/styles.css
+    css: styles.css
     self_contained: TRUE
     code_folding: hide
     toc: TRUE

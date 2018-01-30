@@ -5,11 +5,11 @@ navbar:
   - text: HOME
     href: index.html
   - text: INTRODUCTION
-    href: introduction.html    
+    href: introduction.html
   - text: PLOTTING
     href: graphics-guide.html
   - text: MAPPING
-    href: mapping.html      
+    href: mapping.html
 output:
   html_document:
     output_dir: '.'
