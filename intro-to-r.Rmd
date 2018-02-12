@@ -29,7 +29,7 @@ options(scipen = 999)
 
 ------
 
-R is one of two premier programming languages for data science and one of the [fastest growing growing programming languages according to Stack Overflow.](https://stackoverflow.blog/2017/10/10/impressive-growth-r/) Created by researchers for researchers (with some help from software engineers), R offers rich, intuitive tools that make it perfect for visualization, public policy analysis, econometrics, geospatial analysis, and statistics. 
+R is one of two premier programming languages for data science and one of the [fastest growing programming languages.](https://stackoverflow.blog/2017/10/10/impressive-growth-r/) Created by researchers for researchers (with some help from software engineers), R offers rich, intuitive tools that make it perfect for visualization, public policy analysis, econometrics, geospatial analysis, and statistics. 
 
 R doesn't come in a box. R was never wrapped in cellophane and it definitely isn't purchased at a store. R's pricelessness and open-source development are two of its greatest strengths, but it can often leave new users without the anchor of the box and booklet often provided with proprietary software. 
 
@@ -144,7 +144,7 @@ starwars %>%
 	head()
 ```
 
-`library(dslabs)` by [Rafael Irizarry](https://simplystatistics.org/2018/01/22/the-dslabs-package-provides-datasets-for-teaching-data-science/) includes varied data sets that are intentionally imperfect that are useful for practice. Students of econometrics will enjoy `library(wooldridge)`. It loads 105 data sets from _Introductory Econometrics: A Modern Approach_ by Jeffrey Wooldridge. Now you can practice your hedonic pricing models in R!
+`library(dslabs)` by [Rafael Irizarry](https://simplystatistics.org/2018/01/22/the-dslabs-package-provides-datasets-for-teaching-data-science/) includes varied data sets that are intentionally imperfect that are useful for practice. Students of econometrics will enjoy `library(wooldridge)`. It loads 105 data sets from _Introductory Econometrics: A Modern Approach_ by Jeffrey Wooldridge. Now you can practice estimating your hedonic pricing models in R!
 
 ```{r psid}
 library(wooldridge)
@@ -206,7 +206,7 @@ state.name
 The are five fundamental pieces of syntax in R.  
 
 * `<-` is the assignment operator. An object created on the right side of an assignment operator is assigned to a name on the left side of an assignment operator. Assignment operators are important for saving the consequences of operations and functions. Operations without assignment operators will typically be printed to the console but not saved. 
-* `#` begins a comment
+* `#` begins a comment. Comments are useful for explaining decisions in scripts. As Haldey Wickham notes in the [Tidyverse styleguide](http://style.tidyverse.org/), ’In code, use comments to explain the “why” not the “what” or “how”.
 * `c()` combines similar vectors into larger vectors. For example, `c(1, 2, 3)` is a numeric vector of length three made up of three numeric vectors of length one. Scalars don't exist in R.  
 * `?` in front of any function name without parentheses returns function documentation. For example, `?mean`.
 * `%>%` from `library(magrittr)` and `library(tidyverse)` is the "pipe operator". It passes the output from one function to another function. This is useful because strings of operations can be "piped" together instead of each individual operation needing to be assigned to an object.
@@ -245,6 +245,8 @@ It is possible, but less common, to install packages from places like GitHub. Th
 
 Packages are loaded once per R session with the function `library()`. It is a good idea to include `library(package-name)` at the top of scripts for each package used in the script. This way it is obvious at the top of the script which packages are installed and loaded. 
 
+**Note:** `install.packages()` uses quoted package names and `library()` uses unquoted package names. 
+
 For practice, submit the following three lines of code to install `RXKCD`, load `library(RXKCD)`, and get a random [XKCD comic](https://www.xkcd.com/). 
 
 ```{r xkcd, eval=FALSE}
@@ -260,8 +262,6 @@ boom <- getXKCD("random")
 ```
 
 Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools > Check for Package Updated in RStudio. 
-
-**Note:** `install.packages()` uses quoted package names and `library()` uses unquoted package names. 
 
 Occasionally, two loaded packages will have functions with identical names. Any conflicts with be announced when loading packages. See how `filter()` and `lag()` from `library(tidyverse)` and `library(stats)` conflict:
 
@@ -314,19 +314,17 @@ R Projects, proper noun, are the best way to organize an analysis. They have sev
 
 Before setting up an R Project, go to Tools > Global Options and uncheck "Restore most recently opened project at startup".
 
-<center>
 ![](intro-to-r/images/restore.png){width=50%}
-</center>
 
 Every new analysis in R should start with an R Project. First, create a directory that holds all data, scripts, and files for the analysis. Storing files and data in a sub-directories is encouraged. For example, data can be stored in a folder called data/.
 
 Next, click "New Project..." in the top right corner. 
 
-![](intro-to-r/images/new-project.png)
+![](intro-to-r/images/new-project.png){width=50%}
 
 When prompted, turn your recently created "Existing Directory" into a project. 
 
-![](intro-to-r/images/existing-directory.png)
+![](intro-to-r/images/existing-directory.png){width=50%}
 
 Upon completion, the name of the R Project should now be displayed in the top right corner of RStudio where it previously displayed "Project: (None)". Once opened, .RProj files do not need to be saved. Double-clicking .Rproj files in the directory is now the best way to open RStudio. This will allow for the concurrent use of multiple R sessions and ensure the portability of file paths. Once an RStudio project is open, scripts can be opened by double-clicking individual files in the computer directory or clicking files in the "Files" tab in the top right of RStudio. 
 
@@ -423,8 +421,9 @@ good coding style is like using correct punctuation you can manage without it bu
 
 The details of a coding style are less important than consistently sticking to that style. Be flexible when working with collaborators so the style doesn't change inside an analysis. 
 
-Here are two good sources for inspiration:
+Here are three good sources for inspiration:
 
+* [Tidyverse Style Guide](http://style.tidyverse.org/)
 * [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml)
 * [Hadley Wickham's R Style Guide](http://adv-r.had.co.nz/Style.html)
 
