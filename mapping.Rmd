@@ -36,6 +36,8 @@ source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/ur
 
 # Introduction
 
+------
+
 Geospatial analysis is the ingestion, manipulation, display, and modeling of geographic and spatial data. The data can be represented explicitly as coordinates (latitude & longitude) or implicitly as addresses, Census tracts, or other identifiers. 
 
 This guide outlines the many tools in R for geospatial analysis and mapping. New tools are always being developed, so this guide will be occasionally updated as better methods emerge. 
@@ -52,10 +54,14 @@ Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mappi
 
 # Mapping
 
+------
+
 ![](mapping/images/amsterdam.JPG)
 *[World map, 1689](https://en.wikipedia.org/wiki/Map#/media/File:World_Map_1689.JPG)*
 
 ## Basic Concepts
+
+------
 
 ### library(ggplot2)
 
@@ -89,10 +95,9 @@ No guide can answer every question. A lot of thought goes in to making a good ma
 * [When Maps Shouldn't be Maps](http://www.ericson.net/content/2011/10/when-maps-shouldnt-be-maps/)
 * [How a map’s “bins” can influence your perception of an important policy issue](https://www.urban.org/urban-wire/how-maps-bins-can-influence-your-perception-important-policy-issue)
 
-
-
-
 ## Choropleth Maps
+
+------
 
 Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts. 
 
@@ -350,7 +355,6 @@ ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +
 ```
 
 ```{r, include=FALSE, eval=FALSE}
-
 library(USAboundaries)
 
 # useful list
@@ -381,7 +385,7 @@ gg
 
 [This post](https://juliasilge.com/blog/using-tidycensus/) by Julia Silge is an excellent introduction to `library(leaflet)` and `library(tidycensus)`.
 
-```{r leaflet}
+```{r leaflet, results="hide"}
 # load necessary packages
 library(tidyverse)
 library(sf)
@@ -428,7 +432,10 @@ mismatches <- anti_join(x = ct_value, y = hmda, by = "tract")
 # create a color palette based on the total number of mortgages variable
 pal <- colorNumeric(palette = c("#cfe8f3", "#062635"), 
 										domain = ct_value$total)
+```
 
+
+```{r build leaflet}
 # create the map
 connecticut <- ct_value %>%
 	st_transform(crs = "+init=epsg:4326") %>%
@@ -559,6 +566,8 @@ tracts_dc_long %>%
 
 ## Tile Grid Maps
 
+------
+
 Choropleths tend to overemphasize low-population density areas because size represents area instead of the statistic of interest. This is especially true for maps of the United States because many western states are large and have low-density populations. Tile grid maps, which give equal size to each state, mitigates this problem. 
 
 This example fills `geom_tile()` from `library(ggplot2)` with five discrete colors based on state CHIP enrollment and then uses `facet_geo()` from `library(geofacet)` to create a tile grid map. 
@@ -623,6 +632,8 @@ chip %>%
 ```
 
 ## Geofaceting
+
+------
 
 `library(geofacet)` adds geofaceting functionality to `library(ggplot2)`. Geofaceting arranges sub-geography-specific plots into a grid that resembles a larger geography. 
 
@@ -835,6 +846,8 @@ usa_drivers %>%
 
 ## Dot Maps
 
+------
+
 Dot maps represent observations or groups of observations at longitudes and latitudes. Most dot maps add dots on top of a recognizable geography such as the Continental United States. It is common to add color or size as aesthetics representing an additional variable like race and ethnicity or income. 
 
 This motivating example loads a map of the United States, adds `geom_point()` for each capital as a layer on top of the map, and then labels the capitals with `geom_text_repel()`. 
@@ -959,6 +972,8 @@ ggmap(get_map(location = "Washington, D.C.", zoom = 12, maptype = "terrain")) +
 
 ## Journey maps 
 
+------
+
 `library(ggmap)` can also be used to create journey maps. This should look familiar to anyone who has used Google maps for navigation.
 
 #### Google maps trek()
@@ -1062,7 +1077,11 @@ head(richmond_dc) %>%
 
 # Analysis
 
+------
+
 ## Geocoding 
+
+------
 
 Geocoding is the process of converting addresses into coordinates. Longitudes and latitudes are often necessary for creating dot maps, calculating distances, and linking addresses to geographies like Census tracts. 
 
@@ -1094,7 +1113,7 @@ library(stringr)
 get_coordinates <- function(address) {
 	
   # geocode the address (returns a complicated data structure)
-	geo_reply <- geocode(location = address, output = 'all', messaging = TRUE)
+	geo_reply <- geocode(location = address, output = 'all', messaging = TRUE, source = "dsk")
 		
 	# create an empty tibble to populate with tidy data
 	answer <- data.frame(
@@ -1213,7 +1232,7 @@ addresses <- c("2100 M Street NW, Washington DC",
 data.frame(institution = institutions, 
 					 address = addresses, 
 					 stringsAsFactors = FALSE) %>%
-	mutate_geocode(address) %>%
+	mutate_geocode(address, source = "dsk") %>%
 	kable(digits = 2, caption = "Output from ggmap::mutate_geocode")
 
 rm(addresses, institutions)
@@ -1299,6 +1318,8 @@ An optimal strategy for geocoding many addresses could be to break the data into
 
 ## Calculating distances and travel times
 
+------
+
 #### mapdist()
 
 `mapdist()` returns the expected travel distance and expected travel time between two locations. The function is vectorized. If a vector of location is passed into the function then it will return a tidy data frame. `mode =` can be set to "driving", "walking", "bicycling", or "transit". 
@@ -1317,6 +1338,8 @@ ggmap::mapdist(from = "Lincoln Monument",
 ```
 
 ## Sampling coordinates
+
+------
 
 Dot maps are often more informative and convincing than choropleth maps, but data with geographic variables are usually defined by geography level (Census tract, county, etc.) instead of longitude and latitude. 
 
@@ -1544,6 +1567,8 @@ Once the coordinates are sampled, it's simple to create a dot density map using 
 
 # Putting it all together
 
+------
+
 This section is a repository of advanced maps made in R. 
 
 This plot uses `grid.arrange()` from `library(gridExtra)` to add a bar plot of the same data below the tile grid map.
@@ -1606,4 +1631,12 @@ chip_bar_plot <- chip %>%
   			plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 
 grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))
+```
+
+## Bibliography and references
+
+------
+
+```{r session info}
+sessionInfo()
 ```
