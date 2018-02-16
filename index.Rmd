@@ -1,6 +1,8 @@
 ---
 output:
   html_document:
+    includes:
+      in_header: analytics.html  	
     output_dir: "."
     css: styles.css
     self_contained: TRUE
