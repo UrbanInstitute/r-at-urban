@@ -16,5 +16,6 @@ output:
     css: styles.css
     lib_dir: site_libs
     self_contained: no
+    includes:
+      in_header: analytics.html
 output_dir: '.'
-
