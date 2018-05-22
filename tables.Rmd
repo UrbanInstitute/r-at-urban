@@ -21,12 +21,11 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
 
-library(tidyverse)
-library(knitr)
-
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_windows.R')
 source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')
 ```
+
+##
 
 ## Getting started
 
@@ -35,7 +34,7 @@ There are two important steps to building a useful table in R:
 1) Get the data frame into the correct shape. 
 2) Decide on the output format. 
 
-The section "Tidy Data" addresses the first step by outlining `library(broom)` and `library(dplyr)`. Both are powerful tools whose use extends beyond making tables.  
+The section "Tidy Data" addresses the first step by outlining `library(broom)` and `library(dplyr)`. Both are powerful tools with uses well beyond making tables.  
 
 The rest of this document is dedicated to outlining the strengths, weaknesses, uses, and methods of different tools for building tables in R. The following subsections link output formats to tools:
 
@@ -56,6 +55,8 @@ Here's an example .html table:
 ```{r optimal-rmarkdown}
 library(formattable)
 library(kableExtra)
+library(tidyverse)
+library(knitr)
 
 diamonds %>%
   top_n(5, price) %>%
@@ -124,6 +125,9 @@ output:
 ```
 
 ```{r kable}
+library(tidyverse)
+library(knitr)
+
 mtcars_subset <- mtcars %>%
 	rownames_to_column(var = "Model") %>%
 	select(Model, MPG = mpg, Cylinders = cyl, Weight = wt) %>%
@@ -149,6 +153,9 @@ Titles can also be added with `##`, `###`, `####`, etc. in R Markdown documents.
 `digits =` controls the maximum number of digits for each number in a table. 
 
 ```{r kable digits}
+library(tidyverse)
+library(knitr)
+
 mtcars_subset %>%
 	kable(digits = 0)
 ```
@@ -160,6 +167,9 @@ The first `kable()` example in the `library(kable)` subsection renamed variables
 Another option is to specify a vector of column names when using `kable()`. `col.names =` specifies a vector with which to replace column names. 
 
 ```{r kable col.names}
+library(tidyverse)
+library(knitr)
+
 mtcars_subset %>%
 	kable(col.names = c("Car model", "Fuel Economy", "Cylinders", "Weight (Tons)"))
 ```
@@ -171,11 +181,13 @@ mtcars_subset %>%
 Alignment options for PDF are `"left"`, `"center"`, and `"right"` and the options for .html are `"l"`, `"c"`, and `"r"`. Individual columns can be formatted by concatenating options into one vector (ex. `align = c("right", "left", "right", "center"`) for PDF and one character string (ex. `align = "rlrc"`) for .html. 
 
 ```{r alignment}
+library(tidyverse)
+library(knitr)
+
 mtcars_subset %>%
 	select(MPG, Cylinders, Weight, Model) %>%
 	kable(align = "rlrr")
 ```
-
 
 ### additional arguments
 
@@ -204,6 +216,8 @@ mtcars_subset %>%
 "kables" stretch to the full width of a document by default. `full_width = FALSE` turns off this default. 
 
 ```{r kableextra full_width}
+library(tidyverse)
+library(knitr)
 library(kableExtra)
 
 kable(x = head(mtcars), format = "html") %>%
@@ -217,6 +231,10 @@ Using `full_width = F` opens up the possibility of changing the alignment of the
 For example, `position = "left"`
 
 ```{r kableextra position left}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 kable(x = head(mtcars), format = "html", caption = "mtcars with position = 'left'") %>%
   kable_styling(full_width = FALSE, position = "left")
 ```
@@ -224,6 +242,10 @@ kable(x = head(mtcars), format = "html", caption = "mtcars with position = 'left
 #### mtcars with float_right
 
 ```{r kableextra position float right}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 kable(x = head(mtcars), format = "html") %>%
   kable_styling(full_width = FALSE, position = "float_right")
 ```
@@ -235,6 +257,10 @@ Body text can be set to the side of a table using `float_right` or `float_left`.
 Individual columns can be formatted with `column_spec()`. The arguments are `width`, `bold`, `italic`, `monospace`, `color` (text color), `background` (column color), `border_left`, and `border_right`. If the paragraph next to a table with `position = "float_right"` is too short, the head and text of the subsequent section will appear next to the table. 
 
 ```{r kableextra column_spec}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 kable(x = head(mtcars), format = "html", caption = "Highlight an important column") %>%
   kable_styling(full_width = FALSE) %>%
 	column_spec(3, background = "#1696d2")
@@ -245,6 +271,10 @@ kable(x = head(mtcars), format = "html", caption = "Highlight an important colum
 Individual rows can be formatted with `row_spec()`. The arguments are `bold`, `italic`, `monospace`, `color` (text color), and `background` (row color). 
 
 ```{r kableextra row_spec}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 kable(x = head(mtcars), format = "html", caption = "Highlight an important row") %>%
   kable_styling(full_width = FALSE, position = "left") %>%
 	row_spec(3, color = "#ffffff", background = "#1696d2", bold = TRUE)
@@ -255,6 +285,10 @@ kable(x = head(mtcars), format = "html", caption = "Highlight an important row")
 `library(kableExtra)` can add a second tier of column labels with `add_header_above`.
 
 ```{r kableextra add_header_above}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 diamonds %>%
 	filter(row_number() < 10) %>%
 	select(price, carat, cut, color, clarity) %>%
@@ -268,6 +302,10 @@ diamonds %>%
 Similarly, `group_rows()` can be used to add an extra tier of row labels. 
 
 ```{r group rows}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 diamonds %>%
 	filter(cut %in% c("Ideal", "Premium")) %>%
 	filter(row_number() <= 10) %>%
@@ -284,6 +322,10 @@ diamonds %>%
 Adding footnotes to tables is simple with `add_footnote()`. `notation =` can be set to "number", "alphabet", or "symbol".
 
 ```{r simple footnote}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
 diamonds %>%
 	filter(cut %in% c("Ideal", "Premium")) %>%
 	filter(row_number() <= 10) %>%
@@ -299,7 +341,10 @@ diamonds %>%
 Footnotes can also reference titles and column headings.   
   
 ```{r complex footnote}  
-  
+library(tidyverse)
+library(knitr)
+library(kableExtra)  
+
 diamonds %>%
 	filter(cut %in% c("Ideal", "Premium")) %>%
 	filter(row_number() <= 10) %>%
@@ -321,6 +366,7 @@ diamonds %>%
 Percentages are usually stored as decimals in R for ease of computation. But it is often desirable to present those decimals as percentages in tables. The function `percent()` quickly converts a vector of decimals like `0.068` into percentages like `6.8%`. The argument `digits =` controls the number of decimal places to be shown.  
 
 ```{r formattable::percent()}
+library(tidyverse)
 library(formattable)
 
 unemployment <- tibble(
@@ -336,6 +382,9 @@ formattable(unemployment)
 `library(formattable)` comes with useful pre-defined formats for `percent()`, `comma()`, `currency()`, `accounting()`, and `scientific()`.
 
 ```{r formattable-formats}
+library(tidyverse)
+library(formattable)
+
 formats <- tibble(
   Percent = percent(c(.068, .05, .05, .04, .09), digits = 1),
 	Comma = comma(c(1000, 10000, 100000, 1000000, 10000000), digits = 0),
@@ -352,6 +401,9 @@ formattable(formats)
 In this example, `currency()` is used with `kable()` to add a dollar sign and two decimals to price.  
 
 ```{r}
+library(tidyverse)
+library(knitr)
+
 diamonds %>%
 	mutate(price = currency(price)) %>%
 	head() %>%
@@ -365,6 +417,7 @@ diamonds %>%
 *Note:* `library(formattable)` creates objects of class `formattable` so it isn't necessary possible to combine all of the features of `library(formattable)` with the packages described elsewhere in this document. 
 
 ```{r}
+library(tidyverse)
 library(formattable)
 
 unemployment <- tibble(
@@ -389,6 +442,9 @@ The following example outlines advanced features:
 * `icontext()` adds glyphs to each observation of variable
 
 ```{r formattable-extended}
+library(tidyverse)
+library(formattable)
+
 employees <- tibble(Tenure = c(27, 8, 6, 5, 4),
 										Performance = c("B", "F", "A", "A", "C"),
 										`IT Training` = c(TRUE, FALSE, TRUE, TRUE, TRUE),
@@ -414,6 +470,7 @@ They can also be exported as .html code, LaTeX code, and formatted ASCII.
 `library(stargazer)` has an abundance of formatting options. [This vignette](https://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf) and [this cheatsheet](https://www.jakeruss.com/cheatsheets/stargazer/) outline most of what can be done with the package. This example shows how a little code can go a long way. Simply build as many models as desired, adjust some of the labels, and add a title. 
 
 ```{r stargazer, results = "asis"}
+library(tidyverse)
 library(stargazer)
 
 linear1 <- lm(price ~ carat + x + y + z + depth, data = diamonds)
@@ -448,6 +505,7 @@ This example displays an augmented data frame used for a regression. That is, it
 The example shows how columns can be renamed using `colnames = c("Price" = "price")`. It's also possible to pass an entire vector of new columns like `colnames = c("Price", "Carat", ...)`.
 
 ```{r library(DT)}
+library(tidyverse)
 library(DT)
 library(broom)
 
@@ -522,6 +580,7 @@ Submit `vignette("Introduction", package = "openxlsx")` in R for a complete intr
 The biggest advantage of `library(openxlsx)` is the ability to specify workbook, sheet number of name, starting row, and starting column. 
 
 ```{r openxlsx, eval=FALSE}
+library(tidyverse)
 library(openxlsx)
 
 writeData(wb, 1, df, startRow = 2, startCol = 2)
@@ -554,6 +613,8 @@ Most tools for building tables in R require tidy data frames or tibbles. [Tidy d
 Not all R output is tidy. For example, regression output isn't tidy by default: 
 
 ```{r untidy regression}
+library(tidyverse)
+
 model1 <- lm(dist ~ speed, data = cars)
 
 summary(model1)
@@ -564,6 +625,7 @@ It's easy to print the above output, as-is, to an R Markdown document or send it
 Fortunately, R has a suite of packages that make easy tidying data. 
 
 ```{r tidy regression}
+library(tidyverse)
 library(broom)
 tidy(model1)
 ```
@@ -577,6 +639,8 @@ Now the regression is in a tidy format with each variable as a column, each obse
 Regressions in R are stored in clunky hierarchical data structures. 
 
 ```{r model 1}
+library(tidyverse)
+
 model1 <- lm(dist~speed, data = cars)
 summary(model1)
 ```
@@ -587,6 +651,7 @@ summary(model1)
 
 ```{r glance}
 library(broom)
+
 glance(model1)
 ```
 
@@ -595,6 +660,8 @@ glance(model1)
 `tidy()` returns a tidy data frame with one observation for each coefficient in a model. Each column gives information about the estimate or its variability.
 
 ```{r tidy}
+library(broom)
+
 tidy(model1)
 ```
 
@@ -603,6 +670,8 @@ tidy(model1)
 `augment()` returns a tidy data frame with one observation for each observation in the input data set. 
 
 ```{r augment}
+library(broom)
+
 augment(model1) %>%
 	top_n(5)
 ```

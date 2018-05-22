@@ -8,6 +8,9 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
+    pandoc_args: [ 
+      "--tab-stop=2" 
+    ]      
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -126,7 +129,6 @@ ggplot(data = mtcars, mapping = aes(factor(cyl))) +
   geom_bar() + 
   scale_y_continuous(expand = c(0, 0), limits = c(0, 20)) +
   labs(title = "Number of Cars By Number of Cylinders",
-       caption = "Urban Institute",
        x = "Number of Cylinders",
        y = "Count")
 ```
@@ -140,7 +142,6 @@ ggplot(data = mtcars, mapping = aes(x = factor(cyl), fill = factor(cyl))) +
   geom_bar() +
   scale_y_continuous(expand = c(0, 0)) +
   labs(title = "Number of Cars By Number of Cylinders",
-       caption = "Urban Institute",
        x = "Number of Cylinders",
        y = "Count"
        ) 
@@ -157,7 +158,6 @@ ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) +
   labs(
     title = "Diamond Clarity",
     subtitle = "Something Informative About Diamonds",
-    caption = "The Source of Diamond Data",
     x = "Clarity",
     y = "Count"
     )
@@ -174,7 +174,6 @@ ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) +
   scale_y_continuous(expand = c(0, 0), labels = scales::percent) +
   labs(title = "Better Cut Diamonds have Better Clarity",
       subtitle = "Share of Diamonds with Different Qualities by Clarity of Cut",
-      caption = "The Source of Diamond Data",
       x = "Clarity",
       y = "Count")
 ```
@@ -190,7 +189,6 @@ ggplot(data = diamonds, mapping = aes(clarity, fill = cut)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 6000), labels = scales::comma) +
   labs(title = "Diamond Clarity",
        subtitle = "Something Informative About Diamonds",
-       caption = "The Source of Diamond Data",
        x = "Clarity",
        y = "Count")
 ```
@@ -213,8 +211,7 @@ mtcars %>%
 		labs(title = "Miles Per Gallon of Popular Cars",
 				 subtitle = "1974 Motor Trend US magazine",
 				 x = NULL, 
-				 y = "Miles Per Gallon",
-				 caption = "Urban Institute") +
+				 y = "Miles Per Gallon") +
 	theme(axis.text.y = element_text(size = 8))
 ```
 
@@ -231,8 +228,7 @@ mtcars %>%
 		labs(title = "Miles Per Gallon of Popular Cars",
 				 subtitle = "1974 Motor Trend US magazine",
 				 x = NULL, 
-				 y = "Miles Per Gallon",
-				 caption = "Urban Institute") +
+				 y = "Miles Per Gallon") +
 	theme(axis.text.y = element_text(size = 8))
 ```
 
@@ -254,7 +250,6 @@ ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   scale_y_continuous(expand = c(0, 0), labels = scales::dollar) +
   labs(title = "Diamond Prices Increase With Size",
        subtitle = "Diamond Prices in Dollars and Sizes in Carats",
-       caption = "Urban Institute",
        x = "Carat",
        y = "Price"
        )
@@ -270,7 +265,6 @@ ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   scale_y_continuous(expand = c(0, 0), labels = scales::dollar) +
   labs(title = "Diamond Prices Increase With Size",
        subtitle = "Diamond Prices in Dollars and Sizes in Carats",
-       caption = "Urban Institute",
        x = "Carat",
        y = "Price"
        )
@@ -305,7 +299,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   scale_y_continuous() +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
-       caption = "Urban Institute",
        x = "Displacement",
        y = "City MPG"
        )
@@ -319,7 +312,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   scale_y_continuous() +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
-       caption = "Urban Institute",
        x = "Displacement",
        y = "City MPG"
        )
@@ -335,7 +327,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   scale_y_continuous() +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
-       caption = "Urban Institute",
        x = "Displacement",
        y = "City MPG"
   )
@@ -351,7 +342,6 @@ mtcars %>%
   ggplot(mapping = aes(x = wt, y = mpg, colour = Cylinders)) + 
   geom_point(size = 3) + 
   labs(title = "Fuel Efficiency Declines as Weight Increases",
-       caption = "Urban Institute",
        x = "Weight (Tons)",
        y = "Miles Per Gallon") +
   theme(legend.title = element_text(hjust = 0))
@@ -367,7 +357,6 @@ mtcars %>%
   ggplot(mapping = aes(x = wt, y = mpg, color = `Automatic Transmission`, size = Cylinders)) + 
   geom_point() + 
   labs(title = "Fuel Efficiency Declines as Weight Increases",
-       caption = "Urban Institute",
        x = "Weight (Tons)",
        y = "Miles Per Gallon") +
   theme(legend.title = element_text(hjust = 0))
@@ -383,7 +372,6 @@ ggplot(data = economics, mapping = aes(x = date, y = unemploy)) +
   scale_y_continuous(labels = scales::comma) +
   labs(title = "Unemployment in the United States",
        subtitle = "Number of Unemployed Americans in the U.S.",
-       caption = "Urban Institute",
        x = "Year", 
        y = "Number Unemployed (1,000s)")
 ```
@@ -403,12 +391,8 @@ gapminder %>%
 										 labels = scales::dollar) +
 	labs(title = "Per Capita GDP in Selected Countries",
 			 subtitle = "From the gapminder data set",
-			 caption = "Urban Institute",
 			 x = "Year",
 			 y = "Per capita GDP")
-
-
-
 ```
 
 Plotting more than one variable can be useful for seeing the relationship of variables over time, but it takes a small amount of data munging. 
@@ -428,7 +412,6 @@ as_tibble(EuStockMarkets) %>%
   									 limits = c(0, 10000)) +
 	labs(title = "Major European Stock Indices",
 			 subtitle = "Based on daily closing prices",
-			 caption = "Urban Institute",
 			 x = "Date",
 			 y = "Value")
 ```
@@ -455,8 +438,7 @@ unemployment %>%
 	ggplot() + 
 		geom_line(aes(time, rate, group = state, color = state)) +
 		geom_point(aes(x = time, y = rate, color = state)) +
-		labs(subtitle = "Unemployment Rate",
-				 caption = "Source: BLS Local Area Unemployment Statistics") +
+		labs(subtitle = "Unemployment Rate") +
 		theme(axis.ticks.x = element_blank(),
 					axis.title.x = element_blank(),
 					axis.ticks.y = element_blank(),
@@ -487,7 +469,6 @@ msleep %>%
   labs(y = NULL) +
   scale_y_discrete(labels = NULL) +
   labs(title = "Total Sleep Time of Different Mammals",
-       caption = "Data from V. M. Savage and G. B. West",
        x = "Total sleep time (hours)",
        y = NULL) +
   theme(axis.ticks.y = element_blank())
@@ -515,7 +496,6 @@ ggplot() +
   labs(y = NULL) +
   scale_y_discrete(labels = NULL) +
   labs(title = "Total Sleep Time of Different Mammals",
-       caption = "Data from V. M. Savage and G. B. West",
        x = "Total sleep time (hours)",
        y = NULL,
        legend) +
@@ -541,7 +521,6 @@ msleep %>%
   ggplot(aes(x = sleep_total, y = vore)) +
   geom_point(alpha = 0.2, size = 5) +
   labs(title = "Total Sleep Time of Different Mammals by Diet",
-       caption = "Data from V. M. Savage and G. B. West",
        x = "Total sleep time (hours)",
        y = NULL) +
   theme(axis.ticks.y = element_blank())
@@ -556,7 +535,6 @@ ggplot(data = diamonds, mapping = aes(x = depth)) +
   geom_histogram(bins = 100) +
   scale_y_continuous(expand = c(0, 0), labels = scales::comma) +
   labs(title = "Distribution of Diamond Depths",
-       caption = "Urban Institute", 
        x = "Depth",
        y = "Count")
 ```
@@ -570,7 +548,6 @@ ggplot(InsectSprays, aes(x = spray, y = count)) +
   geom_boxplot() +
   scale_y_continuous(expand = c(0, 0)) +
   labs(title = "Number of Insects Killed by Insect Sprays",
-       caption = "Urban Institute", 
        x = "Type of Insect Spray",
        y = "Number of Dead Insects")
 ```
@@ -611,7 +588,6 @@ ggplot(diamonds, mapping = aes(x = price, y = cut)) +
 	geom_density_ridges(fill = "#1696d2") +
 	scale_x_continuous(labels = scales::dollar) +
   labs(title = "Distribution of Diamond Prices by Diamond Cut",
-       caption = "Urban Institue",
        x = "Price",
        y = "Cut")
 ```
@@ -625,7 +601,6 @@ ggplot(InsectSprays, aes(x = spray, y = count, fill = spray)) +
   geom_violin() +
   scale_y_continuous(expand = c(0, 0)) +
   labs(title = "Number of Insects Killed by Insect Sprays",
-       caption = "Urban Institute",
        x = "Type of Insect Spray",
        y = "Number of Dead Insects")
 ```
@@ -657,7 +632,6 @@ msleep %>%
               size = 10,
   						color = "grey50") +
     labs(title = "Total Sleep Time of Different Mammals by Diet",
-       caption = "Data from V. M. Savage and G. B. West",
        x = NULL,
        y = "Total sleep time (hours)") +
   theme(legend.position = "none")
@@ -677,7 +651,6 @@ txhousing %>%
     geom_area(position = "stack") +
     scale_y_continuous(expand = c(0, 0), labels = scales::comma) +
     labs(title = "Home Sales in Texas Cities",
-         caption = "Urban Institute",
          x = "Year",
          y = "Home Sales")
 ```
@@ -693,7 +666,6 @@ txhousing %>%
     geom_area(position = "fill") +
     scale_y_continuous(expand = c(0, 0), labels = scales::comma) +
     labs(title = "Home Listings in Texas Cities",
-         caption = "Urban Institute",
          x = "Year",
          y = "Proportion of Home Listings")
 ```
@@ -714,8 +686,7 @@ library(waffle)
 parts <- c(`Virginia\nClinics` = (1000 - 208 - 105), `Maryland\nClinics` = 208, `D.C.\nClinics` = 105)
 waffle(parts, rows = 25, size = 1, colors = c("#1696d2", "#fdbf11", "#000000"), legend_pos = "bottom") +
   labs(title = "Free Clinics in the D.C.-Maryland-Virginia Area",
-       subtitle = "1 Square == 1 Clinic",
-       caption = "Urban Institute") +
+       subtitle = "1 Square == 1 Clinic") +
   theme(text = element_text(family = "Lato"))
 ```
 
@@ -734,8 +705,7 @@ Using glyphs requires downloading fontawesome. That can be done [here](https://g
 parts <- c(`Virginia\nClinics` = (50 - 10 - 5), `Maryland\nClinics` = 10, `D.C.\nClinics` = 5)
 waffle(parts, rows = 5, glyph_size = 12, colors = c("#1696d2", "#fdbf11", "#000000"), legend_pos = "bottom", use_glyph = "medkit") +
   labs(title = "Free Clinics in the D.C.-Maryland-Virginia Area",
-       subtitle = "1 Square == 20 Clinics",
-       caption = "Urban Institute") +
+       subtitle = "1 Square == 20 Clinics") +
   theme(text = element_text(family = "Lato"))
 
 ```
@@ -782,7 +752,6 @@ bad_drivers %>%
     geom_tile(aes(fill = `SD's from Mean`)) +
     labs(title = "Drivers Involved in Fatal Collisions By Behavior",
       subtitle = "As a share of scaled fatal collisions per billion miles, 2009",
-      caption = "Source: fivethirtyeight R package",
       x = NULL,
       y = NULL) + 
     scale_fill_gradientn() +
@@ -831,8 +800,7 @@ mtcars %>%
 		geom_point(alpha = 0.5) +
 		scale_y_continuous(expand = c(0, 0), limits = c(0, 45)) +
   	labs(title = "Determinants of Fuel Efficiency", 
-  			 subtitle = "1974 Motor Trends US magazine data", 
-  		caption = "Urban Institute") +
+  			 subtitle = "1974 Motor Trends US magazine data") +
   	facet_grid(vs ~ am, margins = TRUE) +
 		theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.3))
 ```
@@ -871,7 +839,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
 	geom_smooth() +
 	labs(title = "Engine Displacement and City MPG by Number of Cylinders",
 			 subtitle = "Loess: MPG = Displacement",
-			 caption = "Urban Institute",
 			 x = "Engine Displacement",
 			 y = "Highway MPG")
 
@@ -880,7 +847,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
 	geom_point(alpha = 0.2) +
 	labs(title = "Engine Displacement and City MPG by Drive",
 			 subtitle = "Linear Model: MPG = Displacement",
-			 caption = "Urban Institute",
 			 x = "Engine Displacement",
 			 y = "Highway MPG")
 
@@ -936,7 +902,6 @@ mtcars %>%
 		geom_point() +
 		geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
 	  labs(title = "Fuel Efficiency Declines as Weight Increases",
-       caption = "Urban Institute",
        x = "Weight (Tons)",
        y = "Miles Per Gallon")
 ```
@@ -959,7 +924,6 @@ mtcars %>%
 		                mapping = aes(label = model), 
 		                nudge_x = 0.38) +
 	  labs(title = "Fuel Efficiency Declines as Weight Increases",
-       caption = "Urban Institute",
        x = "Weight (Tons)",
        y = "Miles Per Gallon")
 ```
@@ -1019,8 +983,7 @@ table1 %>%
 		geom_point(aes(color = country)) +
 		scale_y_continuous(labels = scales::comma) +
 		scale_x_continuous(breaks = c(1999, 2000)) +
-		labs(title = "Changes in Tuberculosis Cases in Three Countries",
-					 caption = "Source: World Health Organization Global Tuberculosis Report")
+		labs(title = "Changes in Tuberculosis Cases in Three Countries")
 ```
 
 #### After
@@ -1031,8 +994,7 @@ table1 %>%
 		geom_point(aes(color = country)) +
 		scale_y_continuous(labels = scales::comma) +
 		scale_x_continuous(breaks = c(1999, 2000)) +
-		labs(title = "Changes in Tuberculosis Cases in Three Countries",
-					 caption = "Source: World Health Organization Global Tuberculosis Report")
+		labs(title = "Changes in Tuberculosis Cases in Three Countries")
 ```
 
 Layering geoms is also useful for adding trend lines and centroids to scatter plots. 
@@ -1053,11 +1015,10 @@ mpg_summary <- mpg %>%
 mpg %>%
 	ggplot() +
 		geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
-		geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = "red") +
+		geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = "#ec008b") +
 		geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
 		labs(title = "City MPG, Engine Displacement, and Number of Cylinders", 
 				 subtitle = "Subgroup Means in Red", 
-				 caption = "Source: EPA Fuel Economy Dataset", 
 				 x = "Displacement",
 				 y = "City MPG")
 ```

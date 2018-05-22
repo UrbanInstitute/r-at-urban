@@ -935,43 +935,6 @@ qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite",
 	theme(axis.line = element_blank())
 ```
 
-#### Google Maps
-
-`get_map()` can also be used to pull map images from Google maps. `maptype =` controls the map type and can be set to "terrain", "satellite", and "roadmap". `geom_point()` and `geom_polygon()` can be used to add layers on top of the map. Instead of a bounding box, Google maps uses the argument `zoom =`. Zoom is an integer that can range from 3 (continent) to 21 (building). There is little way to know in advance what works best without trying different combinations. 
-
-**Note:** The Google brand can't be modified according to Google's terms of service. Because of strict branding guidelines, Google Maps can only be used for internal products. They are still useful as a way to see data in the context or recognizable roads, landmarks, and geographies. 
-
-```{r google maps}
-# load the necessary packages
-library(tidyverse)
-library(sp)
-library(rgdal)
-library(broom)
-library(ggmap)
-
-# load mortgage data for DC in 2011
-mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
-
-# load and tidy the Washington D.C. shapefile
-shapes <- readOGR(dsn = "mapping/shapefiles/tl_2015_11_tract") %>%
-    tidy()
-
-# map!
-ggmap(get_map(location = "Washington, D.C.", zoom = 12, maptype = "terrain")) +
-  geom_point(data = mortgages, aes(longitude, latitude), 
-  					 alpha = 0.5, size = 0.8, color = "#ec008b") +
-	geom_polygon(data = shapes, aes(long, lat, group = group), fill = "#d2d2d2", 
-							 color = "black", size = 0.2, alpha = 0.2) +
-	labs(title = "Mortgage Purchases in 2015", 
-			 subtitle = "Washington, D.C.", 
-			 x = NULL,
-			 y = NULL,
-			 caption = "Urban Institute Analysis of HMDA Data") +
-  theme(axis.text = element_blank(),
-        axis.line = element_blank(),
-        axis.ticks = element_blank())
-```
-
 ## Journey maps 
 
 ------
@@ -997,7 +960,7 @@ richmond_dc <- ggmap::trek(from = "Richmond, Virginia",
 #	kableExtra::kable_styling(full_width = FALSE)
 ```
 
-```{r map trek}
+```{r map-trek}
 # map trek data
 qmap("Ashland, Virginia", zoom = 9, override_limit = TRUE) +
   geom_path(data = richmond_dc, mapping = aes(x = lon, y = lat),  
@@ -1115,7 +1078,7 @@ library(stringr)
 get_coordinates <- function(address) {
 	
   # geocode the address (returns a complicated data structure)
-	geo_reply <- geocode(location = address, output = 'all', messaging = TRUE, source = "dsk")
+	geo_reply <- geocode(location = address, output = "all", messaging = TRUE, source = "dsk")
 		
 	# create an empty tibble to populate with tidy data
 	answer <- data.frame(
@@ -1335,7 +1298,8 @@ library(ggmap)
 ggmap::mapdist(from = "Lincoln Monument", 
 				to = "Washington Monument",
 				mode = "walking",
-				output = "simple") %>%
+				output = "simple",
+				source = "dsk") %>%
 	kable(digits = 2, caption = "Output from ggmap::mapdist()")
 ```
 
