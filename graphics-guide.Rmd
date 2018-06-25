@@ -8,9 +8,6 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ]      
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
