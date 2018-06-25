@@ -39,6 +39,11 @@ code {
 	font-family: "Monaco", Helvetica, Arial, sans-serif;	
 }
 
+/* text strings in code box format */
+.span {
+	font-family: "Monaco", Helvetica, Arial, sans-serif;	
+}
+
 /* Button Formatting */
 .btn {
 	border-radius: 0;	

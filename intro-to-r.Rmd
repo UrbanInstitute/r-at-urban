@@ -209,9 +209,73 @@ The are five fundamental pieces of syntax in R.
 
 * `<-` is the assignment operator. An object created on the right side of an assignment operator is assigned to a name on the left side of an assignment operator. Assignment operators are important for saving the consequences of operations and functions. Operations without assignment operators will typically be printed to the console but not saved. 
 * `#` begins a comment. Comments are useful for explaining decisions in scripts. As Haldey Wickham notes in the [Tidyverse styleguide](http://style.tidyverse.org/), ’In code, use comments to explain the “why” not the “what” or “how”.
-* `c()` combines similar vectors into larger vectors. For example, `c(1, 2, 3)` is a numeric vector of length three made up of three numeric vectors of length one. Scalars don't exist in R.  
+* `c()` combines similar vectors into larger vectors. For example, `c(1, 2, 3)` is a numeric vector of length three made up of three numeric vectors of length one. 
 * `?` in front of any function name without parentheses returns function documentation. For example, `?mean`.
 * `%>%` from `library(magrittr)` and `library(tidyverse)` is the "pipe operator". It passes the output from one function to another function. This is useful because strings of operations can be "piped" together instead of each individual operation needing to be assigned to an object.
+
+### Vectors
+
+Vectors are the fundamental piece of data in R. They are one-dimensional 
+
+
+
+Most vectors are one-dimensional collections of logicals, integers, doubles, characters, factors, dates, or date-times. Vectors can't mix types 
+
+
+
+R has six commonl
+
+
+
+
+
+
+Scalars don't exist in R.  
+
+```{r}
+1:10 > 5
+```
+
+todo(aaron): link to Hadley Wickham talk
+
+
+
+### Data frames
+
+Data frames are combinations of equally lengthed vectors. 
+
+
+
+
+Data analysis in R is built around the data fra
+
+
+each observation forms a row
+each variables forms a column
+each observational forms a table
+
+
+### Missing values
+
+R stores missing values as `NA`. A single `NA` in a calculation can cause the entire result to return as `NA`. 
+
+```{r}
+sum(c(2, 2, NA))
+```
+
+The contagiousness of `NA` is good, it makes users explicitly acknowledge dropping missing values with `na.rm = TRUE`.
+
+```{r}
+sum(c(2, 2, NA), na.rm = TRUE)
+```
+
+`== NA` does not test for missing values. Instead, use `is.na()`. 
+
+
+
+* is.na() and math with booleans
+* complete.cases
+
 
 ### Functions
 

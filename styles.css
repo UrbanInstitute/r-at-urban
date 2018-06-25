@@ -1,6 +1,11 @@
-* {
-  font-family: Lato;
+.container-fluid {
+	font-family: Lato;
 }
+
+/* make titles blue */
+	h1 {
+		color: #1696d2;
+	}
 
 .navbar {
   background-color: #1696d2;
