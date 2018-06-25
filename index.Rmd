@@ -5,9 +5,6 @@ output:
       in_header: analytics.html  	
     output_dir: "."
     css: styles.css
-    self_contained: TRUE
-editor_options: 
-  chunk_output_type: console
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />

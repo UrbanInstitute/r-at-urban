@@ -4,12 +4,9 @@ output:
     includes:
       in_header: analytics.html  	
     css: styles.css
-    self_contained: TRUE  
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-editor_options: 
-  chunk_output_type: console
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
