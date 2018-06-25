@@ -8,9 +8,8 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ]  
+editor_options: 
+  chunk_output_type: console
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -19,7 +18,7 @@ output:
 ![](mapping/images/urban-institute-logo.png)
 </div>
 
-```{r markdown setup, include=FALSE}
+```{r markdown-setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -32,8 +31,7 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 
-#source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_windows.R')
-source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')
+source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 # Introduction
@@ -87,7 +85,7 @@ That said, some of the most-convincing data visualizations are maps. The style g
 
 Here are a few things to keep in mind:
 
-* The following maps are styled by the [Urban Institute ggplot2 theme](https://github.com/UrbanInstitute/urban_R_theme) which can be called on Windows with `source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_windows.R')` and on Mac with `source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')`. 
+* The following maps are styled by the [Urban Institute ggplot2 theme](https://github.com/UrbanInstitute/urban_R_theme) which can be called on Windows with `source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")`. 
 * U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection. Tile-based maps like tile grid maps and geofaceting use the Mercator projection. 
 * Maps that show the magnitude of a variable use the blue sequential ramp and maps that display positives and negatives use the diverging color ramp. 
 * In general, the borders between geographies are white. 
@@ -103,27 +101,25 @@ No guide can answer every question. A lot of thought goes in to making a good ma
 
 Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts. 
 
-### library(fiftystater)
+### library(urbnmapr)
 
-`library(fiftystater)` is the best R package for mapping the the entire United States divided into states because it includes Hawaii and Alaska. Be sure to include `coord_map("albers", lat0 = 39, lat1 = 45)` to create an Albers Equal Area projection. 
+`library(urbnmapr)` is an R package created by the Urban Institute. It includes state and county outlines for the entire United States with Hawaii and Alaska next to the Continental U.S. The packages includes a data frame for states called `states` and a data frame for counties called `counties`.
+
+Variables mapped as colors or shades need to be joined using `left_join()` to geographic data loaded by `library(urbnmapr)`. In this example, the variable `"state_name"` is joined to `"State"`. If ever in doubt, use `anti_join()` to test which cases don't join. After joining, use `geom_polygon()`. Be sure to include `coord_map("albers", lat0 = 39, lat1 = 45)` to create an Albers Equal Area projection. 
 
 ```{r library(fiftystater)}
 # load necessary packages
 library(tidyverse)
 library(forcats)
 library(gridExtra)
-library(fiftystater)
+library(urbnmapr)
 
 # read the state CHIP data
 chip <- read_csv("mapping/data/chip-enrollment.csv")
 
-# create data frame with vector boundaries from library(fiftystater)
-data("fifty_states")
-
 # set the state names to lower case and create the five groups based on the order
 # of state CHIP enrollment    
 chip <- chip %>%
-  mutate(state = tolower(State)) %>%
   arrange(`CHIP Enrollment`) %>%
   mutate(enrollment_group = c(rep("Group 1", times = 11), 
                               rep("Group 2", times = 10),
@@ -131,162 +127,73 @@ chip <- chip %>%
                               rep("Group 4", times = 10), 
                               rep("Group 5", times = 10)))
 
+# join chip data and state shapes
+chip <- left_join(chip, states, by = c("State" = "state_name")) 
+
+# test join
+mismatches <- anti_join(chip, states, by = c("State" = "state_name")) 
+
 # create a vector with 5 hexadecimal colors for the 5 groups
 urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
 
 # plot the data with colors based on state CHIP enrollment and white borders 
 # between the states
-ggplot(data = chip, mapping = aes(map_id = state)) +
-  geom_map(mapping = aes(fill = enrollment_group), 
-           map = fifty_states, 
-           color = "#ffffff",
-           size = 0.25) +
-  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+ggplot(data = chip, mapping = aes(long, lat, group = group, fill = enrollment_group)) +
+  geom_polygon(color = "#ffffff", size = 0.25) +
   scale_fill_manual(values = urban_colors) +  
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   labs(title = "State CHIP Enrollment")  +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.grid = element_blank(),
-        axis.line = element_blank(),
-        plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+	urban_map +
+  theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 ```
 
-### library(mapdata)
+`library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called. 
 
-`library(fiftystater)` is a better choice than `library(mapdata)` for mapping the entire United States because it includes Alaska and Hawaii. But `library(mapdata)` is better for mapping individual states or regions because the data are easier to filter. The key is to use `map_data()` to read in geographies and `geom_polygon()` to map the geographies. 
-
-Variables mapped as colors or shades need to be merged using `left_join()` to geographic data loaded by `map_data()`. In this example, the variable `region` in `state` has lower case state names and the variable state in chip has upper case state names. `mutate(state = tolower(State))` fixes this issue before the merge. 
-
-If ever in doubt, use `anti_join()` to test which cases don't merge. 
-
-```{r state map of continental US}
+```{r state-map-northwest}
 # load the necessary packages
 library(tidyverse)
-library(mapdata)
-
-# read the shapefiles for the Continental US
-state <- map_data("state")
-
-# read in the CHIP data
-chip <- read_csv("mapping/data/chip-enrollment.csv")
-
-# tweak the theme for the map
-theme_map <- theme(
-	axis.text = element_blank(),
-	axis.ticks = element_blank(),
-	axis.title = element_blank(),
-	panel.grid = element_blank(),
-	axis.line = element_blank()
-)
-
-# set the state names to lower case and create the five groups     
-chip <- chip %>%
-  mutate(state = tolower(State)) %>%
-  arrange(`CHIP Enrollment`) %>%
-  mutate(enrollment_group = c(rep("Group 1", times = 11), 
-                              rep("Group 2", times = 10), 
-                              rep("Group 3", times = 10), 
-                              rep("Group 4", times = 10), 
-                              rep("Group 5", times = 10)))
-
-# merge the state shapefiles with the state CHIP data
-state <- left_join(x = state, y = chip, by = c("region" = "state"))
-
-# test merge criteria for mismatches
-# hopefully nrow(mismatches) == 0
-mismatches <- anti_join(x = state, y = chip, by = c("region" = "state"))
-
-# create a vector with 5 hexadecimal colors for the 5 groups
-urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
-
-# map!
-ggplot(data = state, mapping = aes(x = long, y = lat, group = group, fill = enrollment_group)) +
-	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
-	geom_polygon(color = "#ffffff", size = 0.25) +
-  scale_fill_manual(values = urban_colors) +	
-	theme_map
-```
-
-`library(mapdata)` makes it is easy to filter to a subset of geographies. Here, `filter(region %in% c("washington", "oregon", "idaho"))` is used to filter to three states before `ggplot()` is called. 
-
-```{r state map northwest}
-# load the necessary packages
-library(tidyverse)
-library(mapdata)
+library(urbnmapr)
 
 # read the shapefiles for the three states
-state <- map_data("state") %>%
-	filter(region %in% c("washington", "oregon", "idaho"))
-
-# create a theme for the maps
-theme_map <- theme(
-	axis.text = element_blank(),
-	axis.ticks = element_blank(),
-	axis.title = element_blank(),
-	panel.grid = element_blank(),
-	axis.line = element_blank()
-)
+state <- states %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
 
 # map!
 ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
-	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) +
+	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
 	labs(title = "Northwest United States") +
-  theme(plot.caption = element_text(size = 12)) +
-	theme_map
+	urban_map
 ```
 
-`map_data()` can be used to select a number of different geographies including the USA, states, counties, France, Italy, New Zealand, the world, and world2. Here, `map_data("county")` is used to map all counties in the Continental United States. 
+`library(urbnmapr)` can be used to map counties. Here, `counties` is used to map all counties in the Continental United States. 
 
-```{r county map of US}
+```{r us-county-map}
 # load the necessary packages
 library(tidyverse)
-library(mapdata)
-
-# read shapefiles for counties
-county <- map_data("county")
-
-# create a theme for the maps
-theme_map <- theme(
-	axis.text = element_blank(),
-	axis.ticks = element_blank(),
-	axis.title = element_blank(),
-	panel.grid = element_blank(),
-	axis.line = element_blank()
-)
+library(urbnmapr)
 
 # map!
-ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) + 
+ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) + 
 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1) +
-	theme_map
+	urban_map
 ```
 
-Geographies can be added on top of each other as layers. In this case, `geom_polygon()` is called once with no fill and a thick border to outline states and then a second time with fill and a thin border to outline counties. 
+Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties. 
 
-```{r county map of northwest}
+```{r northwest-county-map}
 # load the necessary packages
 library(tidyverse)
 library(mapdata)
 
 # read the shapefiles for counties
-county <- map_data("county") %>%
-	filter(region %in% c("washington", "oregon", "idaho"))
+county <- counties %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
 
 # read the shapefiles for states
-state <- map_data("state") %>%
-	filter(region %in% c("washington", "oregon", "idaho"))
-
-# create a theme
-theme_map <- theme(
-	axis.text = element_blank(),
-	axis.ticks = element_blank(),
-	axis.title = element_blank(),
-	panel.grid = element_blank(),
-	axis.line = element_blank()
-)
+state <- states %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
 
 # map
 ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) + 
@@ -298,7 +205,7 @@ ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +
 	  size = 0.4) +	
 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 	
 	labs(title = "Counties in the Northwest United States")	+
-	theme_map
+	urban_map
 ```
 
 ### Mapping individual states
@@ -307,7 +214,7 @@ The groups of states above use the same Albers Equal-Area Conic Projection as th
 
 Use `state_proj` from `library(USAboundaries)` to explore epsg coordinate reference system definitons and `projection <- state_plane("VA", plane_id = NULL, type = "epsg")` to pass the correct epsg coordinate reference system definiton to `spTransform()`. 
 
-```{r Virginia}
+```{r virginia}
 # load necessary libraries
 library(tidyverse)
 library(mapdata)
@@ -356,7 +263,7 @@ ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +
 	theme_map
 ```
 
-```{r, include=FALSE, eval=FALSE}
+```{r projection, include=FALSE, eval=FALSE}
 library(USAboundaries)
 
 # useful list
@@ -437,7 +344,7 @@ pal <- colorNumeric(palette = c("#cfe8f3", "#062635"),
 ```
 
 
-```{r build leaflet}
+```{r build-leaflet}
 # create the map
 connecticut <- ct_value %>%
 	st_transform(crs = "+init=epsg:4326") %>%
@@ -476,7 +383,7 @@ It is often desirable to map geographies that aren't easily available in an R pa
 
 `readOGR()` from `library(rgdal)` is the most used function for reading shapefiles. One challenge of working with shapefiles is the hierarchical data structure. Click on the shapefile in the R Studio environment to explore the tree and see how the data are organized. Another challenge is merges. In the following example, mortgage data need to be merged with the appropriate Census tracts. 
 
-```{r census tract choropleth, fig.height = 3.5}
+```{r census-tract-choropleth, fig.height = 3.5}
 # load necessary packages
 library(tidyverse)
 library(sp)
@@ -649,7 +556,7 @@ Lots of custom formatting in `theme()` is necessary because geofaceted plots are
 
 The first example is a variation on the tile grid map. Here, state labels are moved to the strip and values are added in each square as a text geom. 
 
-```{r modified tile grid map, fig.height=6}
+```{r modified-tile-grid-map, fig.height=6}
 # load the necessary packages
 library(tidyverse)
 library(geofacet)
@@ -711,7 +618,7 @@ usa_drivers %>%
 
 Unlike the tile grid map, geofaceting isn't limited to just text and color in the facets. This geofaceted map uses bar plots. Be careful, it can quickly clutter. 
 
-```{r geo facet bar, fig.height=6}
+```{r geo-facet-bar, fig.height=6}
 # load necessary packages
 library(tidyverse)
 library(fivethirtyeight)
@@ -779,7 +686,7 @@ ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) +
 
 ### geom_line()
 
-```{r geo facet line, fig.height=6}
+```{r geo-facet-line, fig.height=6}
 # load necessary packages
 library(tidyverse)
 library(geofacet)
@@ -955,12 +862,12 @@ richmond_dc <- ggmap::trek(from = "Richmond, Virginia",
 													 structure = "route")
 
 # create table of trek data
-#head(richmond_dc) %>%
-#	kable(digits = 2, caption = "Output from ggmap::trek()", format = "html") %>%
-#	kableExtra::kable_styling(full_width = FALSE)
+head(richmond_dc) %>%
+	kable(digits = 2, caption = "Output from ggmap::trek()", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
-```{r map-trek}
+```{r map-trek, eval=FALSE}
 # map trek data
 qmap("Ashland, Virginia", zoom = 9, override_limit = TRUE) +
   geom_path(data = richmond_dc, mapping = aes(x = lon, y = lat),  
@@ -997,16 +904,6 @@ state <- map_data("state")
 state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
 	filter(state %in% c("Maryland", "Ohio", "Indiana", "Iowa", "Nebraska", "Wyoming", "Utah", "California", "Arizona", "Oklahoma", "Arkansas", "Tennessee", "Virginia"))
 
-# add theme for maps
-theme_map <- theme(
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_blank(),
-    panel.grid = element_blank(),
-    axis.line = element_blank(),
-    plot.margin = margin(t = 0, r = 0, b = 0, l = 0)
-)
-
 # map!
 ggplot() + 
   geom_polygon(data = state, mapping = aes(x = long, y = lat, group = group), 
@@ -1019,7 +916,8 @@ ggplot() +
 	labs(title = "Vacation Roadmap",
 			 x = NULL, 
 			 y = NULL) +
-	theme_map
+	urban_map +
+	theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 ```
 
 #### Google maps route()
@@ -1037,7 +935,8 @@ richmond_dc <- route(from = "Richmond, Virginia",
 										 structure = "route")
 
 head(richmond_dc) %>%
-	kable(digits = 2, caption = "Output from ggmaps::route")
+	kable(digits = 2, caption = "Output from ggmaps::route", align = "l", format = "html") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 # Analysis
@@ -1129,14 +1028,15 @@ get_coordinates <- function(address) {
 
 The above function can be used on a single address or it can be iterated across a vector of addresses. Geocoding one address is as simple as calling any function, like `mean()` or `sum()` in R. 
 
-```{r google geocode single address}
+```{r google geocode single address, eval=FALSE}
 # load the necessary packages
 library(tidyverse)
 library(ggmap)
 
 # use the get_coordinates function
 get_coordinates(address = "1600 Monument Ave. Richmond, Virginia 23220") %>%
-	kable(digits = 2, caption = "Output from geocoding one address")
+	kable(digits = 2, caption = "Output from geocoding one address", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 ##### Multiple addresses
@@ -1145,7 +1045,7 @@ Geocoding multiple addresses is a little more complicated than geocoding one add
 
 **Note:** `map()` from `library(purrr)` often creates conflicts when mapping. Be careful with the order in which packages are loaded and don't be afraid to use double colons like `purrr::map()`. 
 
-```{r google geocode multiple addresses}
+```{r google geocode multiple addresses, eval=FALSE}
 # laod the necessary packages
 library(tidyverse)
 library(purrr)
@@ -1164,7 +1064,8 @@ tibble(institution = institutions,
 				 longitude = map_dbl(coords, 2),
 				 accuracy = map_chr(coords, 3)) %>%
 	select(-coords) %>%
-	kable(digits = 2, caption = "Output from geocoding multiple addresses")
+	kable(digits = 2, caption = "Output from geocoding multiple addresses", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 ##### Exceeding the 2,500 limit
@@ -1198,7 +1099,8 @@ data.frame(institution = institutions,
 					 address = addresses, 
 					 stringsAsFactors = FALSE) %>%
 	mutate_geocode(address, source = "dsk") %>%
-	kable(digits = 2, caption = "Output from ggmap::mutate_geocode")
+	kable(digits = 2, caption = "Output from ggmap::mutate_geocode", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 
 rm(addresses, institutions)
 ```
@@ -1276,7 +1178,8 @@ output %>%
          address = unlist(address),
          latitude = unlist(latitude),
          longitude = unlist(longitude)) %>%
-	kable(digits = 2, caption = "Geocoding with US Census Geocoder API")
+	kable(digits = 2, caption = "Geocoding with US Census Geocoder API", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 An optimal strategy for geocoding many addresses could be to break the data into 1,000 observation chunks and submit each chunk to the US Census Geocoder API. Then, use the Google Maps Geocoding API to geocode observations for which the US Census Geocoder API could not find a match. This could all be accomplished with relatively simple R code. 
@@ -1300,7 +1203,8 @@ ggmap::mapdist(from = "Lincoln Monument",
 				mode = "walking",
 				output = "simple",
 				source = "dsk") %>%
-	kable(digits = 2, caption = "Output from ggmap::mapdist()")
+	kable(digits = 2, caption = "Output from ggmap::mapdist()", format = "html", align = "l") %>%
+	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 ## Sampling coordinates
