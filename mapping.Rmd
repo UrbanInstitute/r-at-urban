@@ -12,7 +12,7 @@ output:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](mapping/images/urban-institute-logo.png)
+![](mapping/www/images/urban-institute-logo.png)
 </div>
 
 ```{r markdown-setup, include=FALSE}
@@ -54,7 +54,7 @@ Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mappi
 
 ------
 
-![](mapping/images/amsterdam.JPG)
+![](mapping/www/images/amsterdam.JPG)
 *[World map, 1689](https://en.wikipedia.org/wiki/Map#/media/File:World_Map_1689.JPG)*
 
 ## Basic Concepts
@@ -1224,7 +1224,7 @@ IPUMS helps with first issue because it is a good [source](https://usa.ipums.org
 The new version of RStudio helps with the second issue because it boasts a new feature that visualizes the branches of the data and helps select desired variables. Click on the shapefile in RStudio to bring up a map of the data. Mouse over the desired variable and click the little logo that appears to the far right. 
 
 
-![](mapping/images/shapefile.png)
+![](mapping/www/images/shapefile.png)
 
 
 A line of code that selects the desired variable should appear in the console. For example: `shapes@polygons[[1]]@labpt`. This trick makes hierarchical data much more manageable. 

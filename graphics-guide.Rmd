@@ -30,8 +30,7 @@ opts_chunk$set(message = FALSE)
 options(scipen = 999)
 
 # Source ggplot2 theme
-#source("graphics-guide/urban_theme_windows.R")
-source("graphics-guide/urban_theme_mac.R")
+source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This .html file made with [R Markdown](http://rmarkdown.rstudio.com/) contains examples and instructions for popular and lesser-known plotting techniques in R. Furthermore, it includes instructions on how to leverage the Urban Institute's ggplot2 theme which will create near-publication-ready plots. If you have any questions, please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org). 

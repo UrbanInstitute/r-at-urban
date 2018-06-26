@@ -36,3 +36,4 @@ vignettes/*.pdf
 
 # large files in directory
 *.zip
+mapping/shapefiles/

@@ -82,7 +82,7 @@ Here's a quick example that reads a .csv, filters the data, and creates a publis
 ```{r quick example}
 # load packages and source the Urban Institute ggplot2 theme
 library(tidyverse) # contains read_csv, library(dplyr), and library(ggplot2)
-source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')
+source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 
 # read bankdata.csv
 bank <- read_csv("intro-to-r/data/bankdata.csv") 
