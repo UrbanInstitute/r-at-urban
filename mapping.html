@@ -451,7 +451,7 @@ ggplot(data = chip, mapping = aes(long, lat, group = group, fill = enrollment_gr
   labs(title = &quot;State CHIP Enrollment&quot;)  +
     urban_map +
   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))</code></pre>
-<p><img src="mapping_files/figure-html/library(fiftystater)-1.png" width="672" /></p>
+<p><img src="mapping/www/images/library(fiftystater)-1.png" width="672" /></p>
 <p><code>library(urbnmapr)</code> makes it is easy to filter to a subset of geographies. Here, <code>filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))</code> is used to filter to three states before <code>ggplot()</code> is called.</p>
 <pre class="r"><code># load the necessary packages
 library(tidyverse)
@@ -467,7 +467,7 @@ ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +
     coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
     labs(title = &quot;Northwest United States&quot;) +
     urban_map</code></pre>
-<p><img src="mapping_files/figure-html/state-map-northwest-1.png" width="672" /></p>
+<p><img src="mapping/www/images/state-map-northwest-1.png" width="672" /></p>
 <p><code>library(urbnmapr)</code> can be used to map counties. Here, <code>counties</code> is used to map all counties in the Continental United States.</p>
 <pre class="r"><code># load the necessary packages
 library(tidyverse)
@@ -478,7 +478,7 @@ ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) +
     coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
     geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.1) +
     urban_map</code></pre>
-<p><img src="mapping_files/figure-html/us-county-map-1.png" width="672" /></p>
+<p><img src="mapping/www/images/us-county-map-1.png" width="672" /></p>
 <p>Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.</p>
 <pre class="r"><code># load the necessary packages
 library(tidyverse)
@@ -503,7 +503,7 @@ ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +
     coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) +    
     labs(title = &quot;Counties in the Northwest United States&quot;) +
     urban_map</code></pre>
-<p><img src="mapping_files/figure-html/northwest-county-map-1.png" width="672" /></p>
+<p><img src="mapping/www/images/northwest-county-map-1.png" width="672" /></p>
 </div>
 <div id="mapping-individual-states" class="section level3">
 <h3>Mapping individual states</h3>
@@ -555,7 +555,7 @@ ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +
     labs(title = &quot;Virginia&quot;)    +
   coord_fixed() +
     theme_map</code></pre>
-<p><img src="mapping_files/figure-html/virginia-1.png" width="672" /></p>
+<p><img src="mapping/www/images/virginia-1.png" width="672" /></p>
 </div>
 <div id="libraryleaflet" class="section level3">
 <h3>library(leaflet)</h3>
@@ -730,7 +730,7 @@ tracts_dc_long %&gt;%
                 strip.text = element_text(size = 11),
                 plot.caption = element_text(size = 11),
                 strip.background = element_rect(fill = &quot;#ffffff&quot;))</code></pre>
-<p><img src="mapping_files/figure-html/census-tract-choropleth-1.png" width="672" /></p>
+<p><img src="mapping/www/images/census-tract-choropleth-1.png" width="672" /></p>
 </div>
 </div>
 <div id="tile-grid-maps" class="section level2">
@@ -794,7 +794,7 @@ chip %&gt;%
           panel.spacing = unit(0L, &quot;pt&quot;),
                 panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())</code></pre>
-<p><img src="mapping_files/figure-html/chip-1.png" width="672" /></p>
+<p><img src="mapping/www/images/chip-1.png" width="672" /></p>
 </div>
 <div id="geofaceting" class="section level2">
 <h2>Geofaceting</h2>
@@ -861,7 +861,7 @@ usa_drivers %&gt;%
         panel.spacing = unit(0L, &quot;pt&quot;),
         legend.position = &quot;none&quot;,
         strip.text.x = element_text(size = 9L))</code></pre>
-<p><img src="mapping_files/figure-html/modified-tile-grid-map-1.png" width="672" /></p>
+<p><img src="mapping/www/images/modified-tile-grid-map-1.png" width="672" /></p>
 </div>
 <div id="geom_bar" class="section level3">
 <h3>geom_bar()</h3>
@@ -929,7 +929,7 @@ ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) +
                                                                         size = 0.3),
                 axis.ticks.length = unit(1L, &quot;pt&quot;),
                 strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
-<p><img src="mapping_files/figure-html/geo-facet-bar-1.png" width="672" /></p>
+<p><img src="mapping/www/images/geo-facet-bar-1.png" width="672" /></p>
 </div>
 <div id="geom_line" class="section level3">
 <h3>geom_line()</h3>
@@ -997,7 +997,7 @@ usa_drivers %&gt;%
                                                                         size = 0.3),
                 axis.ticks.length = unit(1L, &quot;pt&quot;),
                 strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
-<p><img src="mapping_files/figure-html/geo-facet-line-1.png" width="672" /></p>
+<p><img src="mapping/www/images/geo-facet-line-1.png" width="672" /></p>
 </div>
 </div>
 <div id="dot-maps" class="section level2">
@@ -1041,7 +1041,7 @@ ggplot() +
              y = NULL,
              caption = &quot;Urban Institute&quot;) +
     theme_map</code></pre>
-<p><img src="mapping_files/figure-html/state-capitals-1.png" width="672" /></p>
+<p><img src="mapping/www/images/state-capitals-1.png" width="672" /></p>
 <p>The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don’t include Alaska, Hawaii, or territories like Puerto Rico. For this reason, <code>library(fiftystater)</code> is better for mapping geographic areas smaller than the continental United States. (There is potential for this to change with <a href="https://ikashnitsky.github.io/2017/subplots-in-maps/?utm_content=buffer1636e&amp;utm_medium=social&amp;utm_source=twitter.com&amp;utm_campaign=buffer">subplots</a>.)</p>
 <p>Subsets of the above map can be made by adjusting the bounding box. Another option is <code>qmplot()</code>. This function will automatically fit the bounding box to the data. Use <code>I()</code> with <code>color =</code> and <code>alpha =</code> so those variables don’t show up in the legends. Here’s a map of mortgages in Washington, D.C.:</p>
 <p><code>qmplot()</code> has many different map types which can be set with the <code>maptype =</code> argument. <code>&quot;toner-lite&quot;</code> is the only map type that isn’t cluttered.</p>
@@ -1059,7 +1059,7 @@ qmplot(x = longitude, y = latitude, data = mortgages, maptype = &quot;toner-lite
              subtitle = &quot;Washington, D.C.&quot;, 
              caption = &quot;Urban Institute analysis of HMDA data&quot;) +
     theme(axis.line = element_blank())</code></pre>
-<p><img src="mapping_files/figure-html/qmplot%20mortgages-1.png" width="672" /></p>
+<p><img src="mapping/www/images/qmplot%20mortgages-1.png" width="672" /></p>
 <p>Here’s a similar map of mortgages in Washington, D.C. with <code>geom = &quot;density2d&quot;</code>.</p>
 <pre class="r"><code># load the necessary packages
 library(tidyverse)
@@ -1075,7 +1075,7 @@ qmplot(x = longitude, y = latitude, data = mortgages, maptype = &quot;toner-lite
              subtitle = &quot;Washington, D.C.&quot;, 
              caption = &quot;Urban Institute analysis of HMDA data&quot;) +
     theme(axis.line = element_blank())</code></pre>
-<p><img src="mapping_files/figure-html/qmplot%20mortgage%20density-1.png" width="672" /></p>
+<p><img src="mapping/www/images/qmplot%20mortgage%20density-1.png" width="672" /></p>
 </div>
 <div id="journey-maps" class="section level2">
 <h2>Journey maps</h2>
@@ -1229,7 +1229,7 @@ ggplot() +
              y = NULL) +
     urban_map +
     theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))</code></pre>
-<p><img src="mapping_files/figure-html/vacation%20trek-1.png" width="672" /></p>
+<p><img src="mapping/www/images/vacation%20trek-1.png" width="672" /></p>
 </div>
 <div id="google-maps-route" class="section level4">
 <h4>Google maps route()</h4>
@@ -2119,7 +2119,7 @@ chip_bar_plot &lt;- chip %&gt;%
             plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 
 grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))</code></pre>
-<p><img src="mapping_files/figure-html/state%20choropleth%20and%20bar-1.png" width="672" /></p>
+<p><img src="mapping/www/images/state%20choropleth%20and%20bar-1.png" width="672" /></p>
 <div id="bibliography-and-references" class="section level2">
 <h2>Bibliography and references</h2>
 <hr />

@@ -4,7 +4,6 @@ output:
     includes:
       in_header: analytics.html  	
     output_dir: "."
-    css: styles.css
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />

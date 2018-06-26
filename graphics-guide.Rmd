@@ -3,7 +3,6 @@ output:
   html_document:
     includes:
       in_header: analytics.html  	
-    css: styles.css
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
@@ -24,6 +23,7 @@ library(knitr)
 library(datasets)
 library(tidyverse)
 
+opts_chunk$set(fig.path = "graphics-guide/www/images/")
 opts_chunk$set(echo = TRUE)
 opts_chunk$set(warning = FALSE)
 opts_chunk$set(message = FALSE)
