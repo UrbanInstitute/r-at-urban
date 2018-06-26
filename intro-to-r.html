@@ -404,7 +404,7 @@ bank_subset %&gt;%
              caption = &quot;Urban Institute analysis of bank data&quot;,
              x = &quot;Number of children&quot;,
              y = &quot;Income&quot;)</code></pre>
-<p><img src="intro-to-r_files/figure-html/quick%20example-1.png" width="672" /></p>
+<p><img src="intro-to-r/www/images/quick%20example-1.png" width="672" /></p>
 </div>
 <div id="resources-for-learning" class="section level3">
 <h3>Resources for Learning</h3>
@@ -455,7 +455,7 @@ as_tibble(hprice1) %&gt;%
     geom_point() +
     scale_y_continuous(expand = c(0, 0), lim = c(0, 800)) +
     labs(title = &#39;&quot;hprice1&quot; data from Wooldridge&#39;) </code></pre>
-<p><img src="intro-to-r_files/figure-html/psid-1.png" width="672" /></p>
+<p><img src="intro-to-r/www/images/psid-1.png" width="672" /></p>
 </div>
 <div id="getting-help" class="section level3">
 <h3>Getting Help</h3>
@@ -570,7 +570,7 @@ mean(apples)</code></pre>
 <pre class="r"><code>install.packages(&quot;RXKCD&quot;)
 library(RXKCD)
 getXKCD(&quot;random&quot;)</code></pre>
-<p><img src="intro-to-r_files/figure-html/xkcd%20run-1.png" width="672" /></p>
+<p><img src="intro-to-r/www/images/xkcd%20run-1.png" width="672" /></p>
 <p>Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools &gt; Check for Package Updated in RStudio.</p>
 <p>Occasionally, two loaded packages will have functions with identical names. Any conflicts with be announced when loading packages. See how <code>filter()</code> and <code>lag()</code> from <code>library(tidyverse)</code> and <code>library(stats)</code> conflict:</p>
 <p><img src="intro-to-r/images/load-tidyverse.png" /> In this case, the tidyverse functions are usually favored. If there is ever a conflict or any doubt about which function is used, use the package name and <code>::</code> to directly call the function. For example, <code>dplyr::select(apples)</code>. <code>::</code> can also be used to call a function without loading the entire package.</p>

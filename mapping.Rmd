@@ -16,6 +16,7 @@ output:
 </div>
 
 ```{r markdown-setup, include=FALSE}
+knitr::opts_chunk$set(fig.path = "mapping/www/images/")
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(warning = FALSE)
