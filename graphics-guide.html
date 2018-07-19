@@ -422,8 +422,7 @@ loadfonts()</code></pre>
   scale_y_continuous(expand = c(0, 0)) +
   labs(title = &quot;Number of Cars By Number of Cylinders&quot;,
        x = &quot;Number of Cylinders&quot;,
-       y = &quot;Count&quot;
-       ) </code></pre>
+       y = &quot;Count&quot;) </code></pre>
 <p><img src="graphics-guide/www/images/3-color-barplot-1.png" width="672" /></p>
 </div>
 <div id="stacked-bar-plot" class="section level3">
@@ -436,8 +435,7 @@ loadfonts()</code></pre>
     title = &quot;Diamond Clarity&quot;,
     subtitle = &quot;Something Informative About Diamonds&quot;,
     x = &quot;Clarity&quot;,
-    y = &quot;Count&quot;
-    )</code></pre>
+    y = &quot;Count&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/stacked-bar-plot-1.png" width="672" /></p>
 </div>
 <div id="stacked-bar-plot-with-position-fill" class="section level3">
@@ -532,8 +530,7 @@ ggplot(data = diamonds, mapping = aes(clarity, fill = cut)) +
   labs(title = &quot;Diamond Prices Increase With Size&quot;,
        subtitle = &quot;Diamond Prices in Dollars and Sizes in Carats&quot;,
        x = &quot;Carat&quot;,
-       y = &quot;Price&quot;
-       )</code></pre>
+       y = &quot;Price&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/alpha-scatter-plot-1.png" width="672" /></p>
 </div>
 <div id="hex-scatter-plot" class="section level3">
@@ -562,8 +559,7 @@ ggplot(data = diamonds, mapping = aes(clarity, fill = cut)) +
   labs(title = &quot;Displacement and City MPG&quot;,
        subtitle = &quot;Cars With Less Displacement Generally Get Better City MPG&quot;,
        x = &quot;Displacement&quot;,
-       y = &quot;City MPG&quot;
-       )</code></pre>
+       y = &quot;City MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/before-scatter-plot-1.png" width="672" /></p>
 </div>
 <div id="after" class="section level4">
@@ -575,8 +571,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   labs(title = &quot;Displacement and City MPG&quot;,
        subtitle = &quot;Cars With Less Displacement Generally Get Better City MPG&quot;,
        x = &quot;Displacement&quot;,
-       y = &quot;City MPG&quot;
-       )</code></pre>
+       y = &quot;City MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/jitter-plot-1.png" width="672" /></p>
 </div>
 </div>
@@ -589,8 +584,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   labs(title = &quot;Displacement and City MPG&quot;,
        subtitle = &quot;Cars With Less Displacement Generally Get Better City MPG&quot;,
        x = &quot;Displacement&quot;,
-       y = &quot;City MPG&quot;
-  )</code></pre>
+       y = &quot;City MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/geom_count-1.png" width="672" /></p>
 </div>
 <div id="scatter-plots-with-fill" class="section level3">
@@ -1232,7 +1226,7 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.5.0 (2018-04-23)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS High Sierra 10.13.5
+## Running under: macOS High Sierra 10.13.6
 ## 
 ## Matrix products: default
 ## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
@@ -1250,7 +1244,7 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 ##  [7] bindrcpp_0.2.2        ggrepel_0.8.0         extrafont_0.17       
 ## [10] forcats_0.3.0         stringr_1.3.1         dplyr_0.7.5          
 ## [13] purrr_0.2.5           readr_1.1.1           tidyr_0.8.1          
-## [16] tibble_1.4.2          ggplot2_2.2.1         tidyverse_1.2.1      
+## [16] tibble_1.4.2          ggplot2_3.0.0         tidyverse_1.2.1      
 ## [19] knitr_1.20           
 ## 
 ## loaded via a namespace (and not attached):
@@ -1265,14 +1259,15 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 ## [25] munsell_0.5.0      broom_0.4.4        compiler_3.5.0    
 ## [28] modelr_0.1.2       pkgconfig_2.0.1    mnormt_1.5-5      
 ## [31] mgcv_1.8-24        htmltools_0.3.6    tidyselect_0.2.4  
-## [34] gridExtra_2.3      crayon_1.3.4       grid_3.5.0        
-## [37] nlme_3.1-137       jsonlite_1.5       Rttf2pt1_1.3.6    
-## [40] gtable_0.2.0       magrittr_1.5       scales_0.5.0      
-## [43] cli_1.0.0          stringi_1.2.3      reshape2_1.4.3    
-## [46] xml2_1.2.0         RColorBrewer_1.1-2 tools_3.5.0       
-## [49] glue_1.2.0         hms_0.4.2          parallel_3.5.0    
-## [52] yaml_2.1.19        colorspace_1.3-2   rvest_0.3.2       
-## [55] bindr_0.1.1        haven_1.1.1</code></pre>
+## [34] gridExtra_2.3      viridisLite_0.3.0  crayon_1.3.4      
+## [37] withr_2.1.2        grid_3.5.0         nlme_3.1-137      
+## [40] jsonlite_1.5       Rttf2pt1_1.3.6     gtable_0.2.0      
+## [43] magrittr_1.5       scales_0.5.0       cli_1.0.0         
+## [46] stringi_1.2.3      reshape2_1.4.3     xml2_1.2.0        
+## [49] RColorBrewer_1.1-2 tools_3.5.0        glue_1.2.0        
+## [52] hms_0.4.2          parallel_3.5.0     yaml_2.1.19       
+## [55] colorspace_1.3-2   rvest_0.3.2        bindr_0.1.1       
+## [58] haven_1.1.1</code></pre>
 </div>
 <div class="footnotes">
 <hr />
