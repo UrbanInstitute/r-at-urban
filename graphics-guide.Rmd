@@ -37,16 +37,10 @@ R is a powerful, open-source programming language and environment. R excels at d
 
 #### Using the Urban Institute ggplot2 Theme
 
-Depending on your operating system, run one of the following scripts once per R session:
+Run one of the following scripts once per R session:
 
-**Windows**
 ```
-source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_windows.R')
-```
-
-**Mac**
-```
-source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R')
+source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 This is an `R` script that makes `ggplot2` output align more closely with [the Urban Institute's Data Visualization style guide](http://urbaninstitute.github.io/graphics-styleguide/).
@@ -138,8 +132,7 @@ ggplot(data = mtcars, mapping = aes(x = factor(cyl), fill = factor(cyl))) +
   scale_y_continuous(expand = c(0, 0)) +
   labs(title = "Number of Cars By Number of Cylinders",
        x = "Number of Cylinders",
-       y = "Count"
-       ) 
+       y = "Count") 
 ```
 
 ### Stacked Bar Plot
@@ -154,8 +147,7 @@ ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) +
     title = "Diamond Clarity",
     subtitle = "Something Informative About Diamonds",
     x = "Clarity",
-    y = "Count"
-    )
+    y = "Count")
 ```
 
 ### Stacked Bar Plot With Position = Fill
@@ -261,8 +253,7 @@ ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   labs(title = "Diamond Prices Increase With Size",
        subtitle = "Diamond Prices in Dollars and Sizes in Carats",
        x = "Carat",
-       y = "Price"
-       )
+       y = "Price")
 ```
 
 ### Hex Scatter Plot
@@ -295,8 +286,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
        x = "Displacement",
-       y = "City MPG"
-       )
+       y = "City MPG")
 ```
 
 #### After
@@ -308,8 +298,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
        x = "Displacement",
-       y = "City MPG"
-       )
+       y = "City MPG")
 ```
 
 ### Scatter Plot with Counts
@@ -323,8 +312,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
   labs(title = "Displacement and City MPG",
        subtitle = "Cars With Less Displacement Generally Get Better City MPG",
        x = "Displacement",
-       y = "City MPG"
-  )
+       y = "City MPG")
 ```
 
 ### Scatter Plots with Fill
@@ -467,7 +455,6 @@ msleep %>%
        x = "Total sleep time (hours)",
        y = NULL) +
   theme(axis.ticks.y = element_blank())
-
 ```
 
 ### Strip Chart with Highlighting
@@ -754,7 +741,6 @@ bad_drivers %>%
       legend.direction = "vertical",
       axis.text.x = element_text(angle = 45))
 #https://learnr.wordpress.com/2010/01/26/ggplot2-quick-heatmap-plotting/
-
 ```
 
 ## Faceting and Small Multiples
@@ -844,7 +830,6 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
 			 subtitle = "Linear Model: MPG = Displacement",
 			 x = "Engine Displacement",
 			 y = "Highway MPG")
-
 ```
 
 
