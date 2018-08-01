@@ -12,7 +12,7 @@ output:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](mapping/images/urban-institute-logo.png)
+![](mapping/www/images/urban-institute-logo.png)
 </div>
 
 ```{r markdown-setup, include=FALSE}
@@ -28,8 +28,6 @@ options(scipen = 999)
 library(tidyverse)
 library(knitr)
 library(kableExtra)
-
-source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 # Introduction
@@ -54,7 +52,7 @@ Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mappi
 
 ------
 
-![](mapping/images/amsterdam.JPG)
+![](mapping/www/images/amsterdam.JPG)
 *[World map, 1689](https://en.wikipedia.org/wiki/Map#/media/File:World_Map_1689.JPG)*
 
 ## Basic Concepts
@@ -83,7 +81,7 @@ That said, some of the most-convincing data visualizations are maps. The style g
 
 Here are a few things to keep in mind:
 
-* The following maps are styled by the [Urban Institute ggplot2 theme](https://github.com/UrbanInstitute/urban_R_theme) which can be called on Windows with `source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")`. 
+* The following maps are styled by the Urban Institute package [urbnthemes](https://github.com/UI-Research/urbnthemes). 
 * U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection. Tile-based maps like tile grid maps and geofaceting use the Mercator projection. 
 * Maps that show the magnitude of a variable use the blue sequential ramp and maps that display positives and negatives use the diverging color ramp. 
 * In general, the borders between geographies are white. 
@@ -101,16 +99,19 @@ Choropleth maps display geographic areas with shades, colors, or patterns in pro
 
 ### library(urbnmapr)
 
-`library(urbnmapr)` is an R package created by the Urban Institute. It includes state and county outlines for the entire United States with Hawaii and Alaska next to the Continental U.S. The packages includes a data frame for states called `states` and a data frame for counties called `counties`.
+[urbnmapr](https://github.com/UrbanInstitute/urbnmapr) is an R package created by the Urban Institute. It includes state and county outlines for the entire United States with Hawaii and Alaska next to the Continental U.S. The packages includes a data frame for states called `states` and a data frame for counties called `counties`.
 
 Variables mapped as colors or shades need to be joined using `left_join()` to geographic data loaded by `library(urbnmapr)`. In this example, the variable `"state_name"` is joined to `"State"`. If ever in doubt, use `anti_join()` to test which cases don't join. After joining, use `geom_polygon()`. Be sure to include `coord_map("albers", lat0 = 39, lat1 = 45)` to create an Albers Equal Area projection. 
 
-```{r library(fiftystater)}
+```{r}
 # load necessary packages
 library(tidyverse)
 library(forcats)
 library(gridExtra)
 library(urbnmapr)
+library(urbnthemes)
+
+set_urbn_defaults(style = "map")
 
 # read the state CHIP data
 chip <- read_csv("mapping/data/chip-enrollment.csv")
@@ -141,8 +142,9 @@ ggplot(data = chip, mapping = aes(long, lat, group = group, fill = enrollment_gr
   scale_fill_manual(values = urban_colors) +  
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   labs(title = "State CHIP Enrollment")  +
-	urban_map +
   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+
+#source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 `library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called. 
@@ -160,8 +162,7 @@ state <- states %>%
 ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) +
 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
-	labs(title = "Northwest United States") +
-	urban_map
+	labs(title = "Northwest United States")
 ```
 
 `library(urbnmapr)` can be used to map counties. Here, `counties` is used to map all counties in the Continental United States. 
@@ -174,8 +175,7 @@ library(urbnmapr)
 # map!
 ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) + 
 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
-	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1) +
-	urban_map
+	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1)
 ```
 
 Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties. 
@@ -183,7 +183,7 @@ Geographies can be added on top of each other as layers. In this case, states is
 ```{r northwest-county-map}
 # load the necessary packages
 library(tidyverse)
-library(mapdata)
+library(urbnmapr)
 
 # read the shapefiles for counties
 county <- counties %>%
@@ -202,27 +202,26 @@ ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +
 	  fill = NA, 
 	  size = 0.4) +	
 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 	
-	labs(title = "Counties in the Northwest United States")	+
-	urban_map
+	labs(title = "Counties in the Northwest United States")
 ```
 
 ### Mapping individual states
 
-The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(mapdata)` and converting the coordinates to the correct state plane coordinate systems. 
+The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(urbnmapr)` and converting the coordinates to the correct state plane coordinate systems. 
 
 Use `state_proj` from `library(USAboundaries)` to explore epsg coordinate reference system definitons and `projection <- state_plane("VA", plane_id = NULL, type = "epsg")` to pass the correct epsg coordinate reference system definiton to `spTransform()`. 
 
 ```{r virginia}
 # load necessary libraries
 library(tidyverse)
-library(mapdata)
+library(urbnmapr)
 library(rgdal)
 library(sp)
 library(USAboundaries)
 
 # load data and filter it to just Virginia
-state <- map_data("state") %>%
-	filter(region %in% c("virginia"))
+state <- states %>%
+	filter(state_name %in% c("Virginia"))
 
 # this data frame from library(USAboundaries) lists 124 coordinate systems in 
 # the United States and is a good reference
@@ -244,21 +243,12 @@ state <- spTransform(state, CRS(paste0("+init=epsg:", projection)))
 # convert spatial points data frame into a tibble
 state <- as_tibble(state)
 
-# create a theme
-theme_map <- theme(
-	axis.text = element_blank(),
-	axis.ticks = element_blank(),
-	axis.title = element_blank(),
-	panel.grid = element_blank(),
-	axis.line = element_blank()
-)
 
 # map
 ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +	
 	labs(title = "Virginia")	+
-  coord_fixed() +
-	theme_map
+  coord_fixed()
 ```
 
 ```{r projection, include=FALSE, eval=FALSE}
@@ -594,11 +584,11 @@ usa_drivers %>%
   geom_text(aes(label = paste0(as.character(perc_alcohol), "%")), 
   					color = "white", 
   					family = "Lato") +
-	scale_fill_gradientn(colors = c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")) +
+	scale_fill_gradientn() +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
   labs(title = "Don't Drink and Drive",
   		 subtitle = "% of Drivers in Deadly Wrecks Who Were Alcohol-Impaired", 
-  		 caption = "National Highway Traffic Administration \n Data from library(fivethirtyeight)",
+  		 caption = "National Highway Traffic Administration\n Data from library(fivethirtyeight)",
        x = NULL,
        y = NULL) +
   theme(plot.background = element_rect(colour = "white"),
@@ -655,8 +645,7 @@ urban_grid <- tibble(
 ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) +
   geom_col() +
 	coord_flip() +
-	scale_y_continuous(expand = c(0, 0), 
-										 limits = c(0, 100), 
+	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
 										 breaks = c(0, 50, 100),
 										 labels = c("0", ".5", "1")) +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
@@ -730,7 +719,7 @@ usa_drivers %>%
 	ggplot(mapping = aes(x = Year, y = `Share Distracted`, group = abbreviation)) +
   geom_line() +
 	scale_x_discrete(breaks = c(2010, 2015), labels = c("'10", "'15")) +
-	scale_y_continuous(expand = c(0, 0), limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), breaks = c(0, 0.5, 1)) +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
 	labs(title = "Driving is dangerous", 
 			 subtitle = "Simulated Distracted Driving is Increasing",
@@ -762,30 +751,21 @@ This motivating example loads a map of the United States, adds `geom_point()` fo
 ```{r state-capitals}
 # load the necessary packages
 library(tidyverse)
-library(fiftystater)
+library(urbnmapr)
 library(ggrepel)
 
-# load state shapefiles
-state <- map_data("state")
+# drop alaska and hawaii
+states_subset <- states %>%
+	filter(!state_name %in% c("Alaska", "Hawaii"))
 
-# drop Alaska and Hawaii
+# drop alaska and hawaii
 # this data frame has the latitutde and longitude for each capital
 state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
 	filter(!state %in% c("Alaska", "Hawaii"))
 
-# add theme for maps
-theme_map <- theme(
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_blank(),
-    panel.grid = element_blank(),
-    axis.line = element_blank(),
-    plot.margin = margin(t = 0, r = 0, b = 0, l = 0)
-)
-
 # map!
 ggplot() + 
-  geom_polygon(data = state, mapping = aes(x = long, y = lat, group = group), 
+  geom_polygon(data = states_subset, mapping = aes(x = long, y = lat, group = group), 
   						 color = "#ffffff", fill = "#d2d2d2", size = 0.2) +
 	geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
 	geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
@@ -794,11 +774,10 @@ ggplot() +
 	labs(title = "State Capitals",
 			 x = NULL, 
 			 y = NULL,
-			 caption = "Urban Institute") +
-	theme_map
+			 caption = "Urban Institute")
 ```
 
-The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don't include Alaska, Hawaii, or territories like Puerto Rico. For this reason, `library(fiftystater)` is better for mapping geographic areas smaller than the continental United States. (There is potential for this to change with [subplots](https://ikashnitsky.github.io/2017/subplots-in-maps/?utm_content=buffer1636e&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer).)
+The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don't include Alaska, Hawaii, or territories like Puerto Rico. 
 
 Subsets of the above map can be made by adjusting the bounding box. Another option is `qmplot()`. This function will automatically fit the bounding box to the data. Use `I()` with `color =` and `alpha =` so those variables don't show up in the legends. Here's a map of mortgages in Washington, D.C.:
 
@@ -881,7 +860,7 @@ Like dot maps, paths can be layered on top of any ggplot coordinate plane. Here'
 ```{r vacation trek}
 # load the necessary packages
 library(tidyverse)
-library(fiftystater)
+library(urbnmapr)
 library(ggrepel)
 
 # create a tibble with start and end locations for each trip leg
@@ -894,17 +873,14 @@ vacation_route <- map2(.x = vacation$start, .y = vacation$end,
 											 .f = ggmap::trek, structure = "route") %>%
 	reduce(bind_rows)
 
-# load state shapefiles
-state <- map_data("state")
-
 # drop Alaska and hawaii
-# this data frame has the latitutde and longitude for each capital
+# this data frame has the latitude and longitude for each capital
 state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
 	filter(state %in% c("Maryland", "Ohio", "Indiana", "Iowa", "Nebraska", "Wyoming", "Utah", "California", "Arizona", "Oklahoma", "Arkansas", "Tennessee", "Virginia"))
 
 # map!
 ggplot() + 
-  geom_polygon(data = state, mapping = aes(x = long, y = lat, group = group), 
+  geom_polygon(data = states, mapping = aes(x = long, y = lat, group = group), 
   						 color = "#ffffff", fill = "#d2d2d2", size = 0.2) +
 	geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
 	geom_path(data = vacation_route, aes(lon, lat), color = "#fdbf11") +
@@ -914,7 +890,6 @@ ggplot() +
 	labs(title = "Vacation Roadmap",
 			 x = NULL, 
 			 y = NULL) +
-	urban_map +
 	theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 ```
 
@@ -1224,7 +1199,7 @@ IPUMS helps with first issue because it is a good [source](https://usa.ipums.org
 The new version of RStudio helps with the second issue because it boasts a new feature that visualizes the branches of the data and helps select desired variables. Click on the shapefile in RStudio to bring up a map of the data. Mouse over the desired variable and click the little logo that appears to the far right. 
 
 
-![](mapping/images/shapefile.png)
+![](mapping/www/images/shapefile.png)
 
 
 A line of code that selects the desired variable should appear in the console. For example: `shapes@polygons[[1]]@labpt`. This trick makes hierarchical data much more manageable. 
@@ -1445,16 +1420,13 @@ This plot uses `grid.arrange()` from `library(gridExtra)` to add a bar plot of t
 library(tidyverse)
 library(forcats)
 library(gridExtra)
-library(fiftystater)
+library(urbnmapr)
 
 chip <- read_csv("mapping/data/chip-enrollment.csv")
 
-# Create data frame with vector boundaries
-data("fifty_states")
-
 # create groupings for states     
 chip <- chip %>%
-  mutate(state = tolower(State)) %>%
+  mutate(state_name = State) %>%
   arrange(`CHIP Enrollment`) %>%
   mutate(enrollment_group = c(rep("Group 1", 11), 
                               rep("Group 2", 10), 
@@ -1462,23 +1434,20 @@ chip <- chip %>%
                               rep("Group 4", 10), 
                               rep("Group 5", 10)))
 
+
+states_subset <- left_join(states, chip, by = "state_name")
+
 # create a vector with 5 hexadecimal colors for the 5 groups
 urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
 
 # Plot!
-chip_map <- ggplot(chip, aes(map_id = state)) +
-  geom_map(aes(fill = enrollment_group), map = fifty_states, 
-  				 color = "#ffffff", size = 0.25) +
-  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+chip_map <- states_subset %>%
+	ggplot(aes(x = long, y = lat, group = group, fill = enrollment_group)) +
+  geom_polygon(color = "#ffffff", size = 0.25) +
   scale_fill_manual(values = urban_colors) +  
   coord_map("albers", lat0 = 39, lat1 = 45) +	
   labs(title = "State CHIP Enrollment") +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.grid = element_blank(),
-        axis.line = element_blank(),
-        plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+  theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 
 # bar plot
 chip_bar_plot <- chip %>%
