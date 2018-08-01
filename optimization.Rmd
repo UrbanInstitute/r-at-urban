@@ -12,7 +12,7 @@ output:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](mapping/images/urban-institute-logo.png)
+![](optimization/images/urban-institute-logo.png)
 
 ```{r markdown-setup, include=FALSE}
 #knitr::opts_chunk$set(fig.path = "mapping/www/images/")

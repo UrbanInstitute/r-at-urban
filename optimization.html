@@ -103,6 +103,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -319,28 +322,28 @@ div.tocify {
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
 <div class="figure">
-<img src="mapping/images/urban-institute-logo.png" />
+<img src="optimization/images/urban-institute-logo.png" />
 
 </div>
 <hr />
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This guide outlines some of the many tools and tips for improving the speed and execution of your R code.</p>
-<p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of your program. Other issues may take more time to work through but can be a huge benefit to your project in the long term. An important lesson to learn when it comes to optimising your R (or any) program is knowing when to stop. Be sure to consider what “fast enough” is for your project and how much needs to be optimised.</p>
+<p>This guide outlines tools and tips for improving the speed and execution of R code.</p>
+<p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term. An important lesson to learn when it comes to optimising an R (or any) program is knowing when to stop. Be sure to consider what “fast enough” is for a project and how much needs to be optimized.</p>
 <p>For more information, see the CRAN Task View <a href="&#39;https://CRAN.R-project.org/view=HighPerformanceComputing&#39;">High-Performance and Parallel Computing with R</a>.</p>
 <hr />
 </div>
 <div id="update-your-installation" class="section level1">
 <h1>Update Your Installation</h1>
-<p>It is easy to let your version of R lapse and lag behind the release schedule, but this is one of the easiest ways to improve the performance of R! In general, R will have a big annual release (i.e., 3.5.0) in the Spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
+<p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
 <p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-4.png" style="width:75.0%" />
+<img src="optimization/images/data-load-3-4.PNG" style="width:75.0%" />
 
 </div>
 <p>While 3.5.0 took less than half the time:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-5.png" style="width:75.0%" />
+<img src="optimization/images/data-load-3-5.PNG" style="width:75.0%" />
 
 </div>
 <p>To see what the R-core development team is up to, check out the <a href="&#39;https://cran.r-project.org/doc/manuals/r-devel/NEWS.html&#39;">NEWS</a> file from the R project.</p>
@@ -348,11 +351,11 @@ div.tocify {
 </div>
 <div id="parallel-computing" class="section level1">
 <h1>Parallel Computing</h1>
-<p>Often times, time-intensive R code can be sped up by breaking the execution of the job across additional cores of your computer.</p>
+<p>Often, time-intensive R code can be sped up by breaking the execution of the job across additional cores of your computer. This is called parallel computing.</p>
 <div id="learn-lapplypurrrmap" class="section level2">
 <h2>Learn <code>lapply</code>/<code>purrr::map</code></h2>
-<p>The first step in learning to run R code in parallel is learning the <code>lapply</code> (and variants) function from Base R or the <code>map</code> (and variants) function from the <code>purrr</code> package. Once you understand how <code>lapply</code> and <code>map</code> work, running your code in parallel will be simple.</p>
-<p>Say you have a vector of numbers and want to find the square root of each one (ignore for now that <code>sqrt</code> is vectorised, which will be covered later). You could write a for loop and iterate over each element of the vector:</p>
+<p>Learning the <code>lapply</code> (and variants) function from Base R or the <code>map</code> (and variants) function from the <code>purrr</code> package is the first step in learning to run R code in parallel. Once you understand how <code>lapply</code> and <code>map</code> work, running your code in parallel will be simple.</p>
+<p>Say you have a vector of numbers and want to find the square root of each one (ignore for now that <code>sqrt</code> is vectorized, which will be covered later). You could write a for loop and iterate over each element of the vector:</p>
 <pre class="r"><code>x &lt;- c(1, 4, 9, 16)
 
 out &lt;- vector(&#39;list&#39;, length(x))
@@ -404,12 +407,12 @@ microbenchmark::microbenchmark(
     unit = &#39;s&#39;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr        min         lq          mean      median           uq
-##  sequential 0.00000264 0.00000352 0.00000533203 0.000004399 0.0000064525
-##    parallel 0.02238173 0.02285573 0.04217333952 0.023357137 0.0247217980
-##          max neval cld
-##  0.000025217   100  a 
-##  1.845420337   100   b</code></pre>
+##        expr         min           lq         mean      median           uq
+##  sequential 0.000002323 0.0000094375 0.0001596607 0.000013658 0.0000216505
+##    parallel 0.100556920 0.1315866495 0.1370916052 0.135770862 0.1396744805
+##          max neval
+##  0.002104543   100
+##  0.210765929   100</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -426,7 +429,7 @@ system.time(
                  )
     )</code></pre>
 <pre><code>##    user  system elapsed 
-##   45.68    0.39   46.10</code></pre>
+##  49.947   3.195  53.422</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
@@ -437,7 +440,7 @@ system.time(
                                 )
     )</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.07    0.15   27.69</code></pre>
+##   0.191   0.084  38.657</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -476,7 +479,7 @@ stopCluster(cl)</code></pre>
 <div id="big-data" class="section level1">
 <h1>Big Data</h1>
 <p>As data collection and storage becomes easier and cheaper, it is relatively simple to obtain relatively large data files. An important point to keep in mind is that the size of your data will generally expand when it is read from a storage device into R. A general rule of thumb is that a file will take somewhere around 3-4 times more space in memory than it does on disk.</p>
-<p>For instance, compare the size of the <code>iris</code> data set when it is saved as a csv file locally vs the size of the object when it is read in to an R session:</p>
+<p>For instance, compare the size of the <code>iris</code> data set when it is saved as a .csv file locally vs the size of the object when it is read in to an R session:</p>
 <pre class="r"><code>file.size(&#39;optimization/iris.csv&#39;) / 1000</code></pre>
 <pre><code>## [1] 3.716</code></pre>
 <pre class="r"><code>df &lt;- readr::read_csv(&#39;optimization/iris.csv&#39;)
@@ -492,7 +495,7 @@ pryr::object_size(df)</code></pre>
 <li><code>double</code> (also called <code>numeric</code>)</li>
 <li><code>character</code></li>
 </ol>
-<p>Each of these data types occupy a different amount of space in memory - <code>logical</code> and <code>integer</code> vectors use 4 bytes per element, while a <code>double</code> will occupy 8 bytes. R uses a global string pool, so <code>character</code> vectors are hard to estimate, but will generally take up more space for element.</p>
+<p>Each of these data types occupies a different amount of space in memory - <code>logical</code> and <code>integer</code> vectors use 4 bytes per element, while a <code>double</code> will occupy 8 bytes. R uses a global string pool, so <code>character</code> vectors are hard to estimate, but will generally take up more space for element.</p>
 <p>Consider the following example:</p>
 <pre class="r"><code>x &lt;- 1:100
 pryr::object_size(x)</code></pre>
@@ -501,7 +504,7 @@ pryr::object_size(x)</code></pre>
 <pre><code>## 848 B</code></pre>
 <pre class="r"><code>pryr::object_size(as.character(x))</code></pre>
 <pre><code>## 6.45 kB</code></pre>
-<p>An incorrect data type can easily cost you a lot of space in memory, especially at scale. This often happens when reading data from a text or csv file - data may have a format such as <code>c(1.0, 2.0, 3.0)</code> and will be read in as a <code>numeric</code> column, when <code>integer</code> is more appropriate (and compact).</p>
+<p>An incorrect data type can easily cost you a lot of space in memory, especially at scale. This often happens when reading data from a text or csv file - data may have a format such as <code>c(1.0, 2.0, 3.0)</code> and will be read in as a <code>numeric</code> column, when <code>integer</code> is more appropriate and compact.</p>
 <p>You may also be familiar with <code>factor</code> variables within R. Essentially a <code>factor</code> will represent your data as integers, and map them back to their character representation. This can save memory when you have a compact and unique level of factors:</p>
 <pre class="r"><code>x &lt;- sample(letters, 10000, replace = T)
 pryr::object_size(as.character(x))</code></pre>
@@ -567,7 +570,7 @@ pryr::object_size(as.character(x))</code></pre>
 <h1>Common Pitfalls</h1>
 <div id="for-loops-and-vector-allocation" class="section level2">
 <h2>For Loops and Vector Allocation</h2>
-<p>A refrain you will often hear is that for loops in R are slow and need to be avoided at all costs. This is not true! Rather, an improperly formatted loop in R can bring the execution of your program to a near standstill.</p>
+<p>A refrain you will often hear is that for loops in R are slow and need to be avoided at all costs. This is not true! Rather, an improperly constructed loop in R can bring the execution of your program to a near standstill.</p>
 <p>A common for loop structure may look something like:</p>
 <pre class="r"><code>x &lt;- 1:100
 out &lt;- c()
@@ -602,12 +605,12 @@ microbenchmark::microbenchmark(
     good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr     min       lq       mean   median       uq      max neval
-##   bad_loop(x) 940.954 968.0775 1195.85930 976.8745 994.4675 4194.266   100
-##  good_loop(x)  11.438  12.3170   54.36195  13.1955  19.5010 3792.551   100
-##  cld
-##    b
-##   a</code></pre>
+##          expr      min       lq       mean    median       uq       max
+##   bad_loop(x) 1166.838 1574.010 4757.03480 3044.8635 6545.264 36615.745
+##  good_loop(x)   10.969   13.179   80.67087   22.1325   29.500  5488.285
+##  neval
+##    100
+##    100</code></pre>
 <p>And note how performance of the “bad” loop degrades as the loop size grows.</p>
 <pre class="r"><code>y &lt;- 1:250
 
@@ -616,12 +619,12 @@ microbenchmark::microbenchmark(
     good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min        lq        mean     median        uq
-##   bad_loop(y) 14421.013 16362.883 17891.75841 16486.3310 16998.445
-##  good_loop(y)    26.391    27.564    39.60104    46.3305    48.383
-##         max neval cld
-##  117146.200   100   b
-##      68.029   100  a</code></pre>
+##          expr       min        lq        mean    median         uq
+##   bad_loop(y) 44129.361 46917.637 59284.84895 62917.946 65077.9260
+##  good_loop(y)    25.946    27.175    39.35209    41.272    42.6585
+##         max neval
+##  114073.679   100
+##     333.896   100</code></pre>
 </div>
 <div id="vectorized-functions" class="section level2">
 <h2>Vectorized Functions</h2>
@@ -636,9 +639,9 @@ microbenchmark::microbenchmark(
     sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min    lq     mean median    uq   max neval cld
-##  lapply(x, sqrt) 36654 37827 39897.21  38414 39000 73600   100   b
-##          sqrt(x)   880  1174  1476.12   1174  1467 10558   100  a</code></pre>
+##             expr   min      lq     mean median      uq    max neval
+##  lapply(x, sqrt) 32359 32770.0 37622.62  33137 34252.5 319521   100
+##          sqrt(x)   853   913.5  1062.47    979  1114.0   2987   100</code></pre>
 </div>
 </div>
 
