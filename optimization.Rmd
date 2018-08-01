@@ -27,15 +27,14 @@ options(scipen = 999)
 
 # Introduction
 
-This guide outlines some of the many tools and tips for improving the speed and 
-execution of your R code. 
+This guide outlines tools and tips for improving the speed and execution of R code. 
 
 Sometimes, simply tweaking a few lines of code can lead to large performance 
-gains in the execution of your program. Other issues may take more time to work 
-through but can be a huge benefit to your project in the long term. An 
-important lesson to learn when it comes to optimising your R (or any) program 
-is knowing when to stop. Be sure to consider what "fast enough" is for your 
-project and how much needs to be optimised.   
+gains in the execution of a program. Other issues may take more time to work 
+through but can be a huge benefit to a project in the long term. An 
+important lesson to learn when it comes to optimising an R (or any) program 
+is knowing when to stop. Be sure to consider what "fast enough" is for a 
+project and how much needs to be optimized.   
 
 For more information, see the CRAN Task View [High-Performance and Parallel 
 Computing with R]('https://CRAN.R-project.org/view=HighPerformanceComputing').
@@ -44,9 +43,8 @@ Computing with R]('https://CRAN.R-project.org/view=HighPerformanceComputing').
 
 # Update Your Installation
 
-It is easy to let your version of R lapse and lag behind the release schedule, 
-but this is one of the easiest ways to improve the performance of R! In general, 
-R will have a big annual release (i.e., 3.5.0) in the Spring and around 3-4 
+One of the easiest ways to improve the performance of R is to update R. In general, 
+R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 
 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the 
 middle digit of your installation is behind the current release, you should 
 consider updating.
@@ -55,8 +53,6 @@ For instance, R 3.5.0 implemented an improved read from text files. A 5GB file
 took over 5 minutes to read in 3.4.4:
 
 ![](optimization/images/data-load-3-4.png){width=75%}
-
-
 
 While 3.5.0 took less than half the time: 
 
@@ -70,18 +66,15 @@ from the R project.
 
 # Parallel Computing
 
-Often times, time-intensive R code can be sped up by breaking the execution of 
-the job across additional cores of your computer.
+Often, time-intensive R code can be sped up by breaking the execution of 
+the job across additional cores of your computer. This is called parallel computing.
 
 ## Learn `lapply`/`purrr::map`
 
-The first step in learning to run R code in parallel is learning the `lapply` 
-(and variants) function from Base R or the `map` (and variants) function from 
-the `purrr` package. Once you understand how `lapply` and `map` work, running 
-your code in parallel will be simple.
+Learning the `lapply` (and variants) function from Base R or the `map` (and variants) function from the `purrr` package is the first step in learning to run R code in parallel. Once you understand how `lapply` and `map` work, running your code in parallel will be simple.
 
 Say you have a vector of numbers and want to find the square root of each one
-(ignore for now that `sqrt` is vectorised, which will be covered later). 
+(ignore for now that `sqrt` is vectorized, which will be covered later). 
 You could write a for loop and iterate over each element of the vector:
 
 ```{r apply-01}
@@ -111,8 +104,7 @@ out <- lapply(x, sqrt)
 unlist(out)
 ```
 
-Those working within the `tidyverse` may use `map` from the `purrr` package 
-equivalently:
+Those working within the `tidyverse` may use `map` from the `purrr` package equivalently:
 
 ```{r apply-04}
 library(purrr)
@@ -137,7 +129,6 @@ plan(multiprocess)
 out <- future_lapply(x, sqrt)
 unlist(out)
 ```
-
 
 For `purrr` users, the `furrr` (i.e., future purrr) package includes an 
 equivalent `future_map` function:
@@ -260,7 +251,7 @@ from a storage device into R. A general rule of thumb is that a file will take
 somewhere around 3-4 times more space in memory than it does on disk.
 
 For instance, compare the size of the `iris` data set when it is saved as a 
-csv file locally vs the size of the object when it is read in to an R session: 
+.csv file locally vs the size of the object when it is read in to an R session: 
 
 
 ```{r size-01, message=FALSE}
@@ -283,7 +274,7 @@ vectors in R:
 3. `double` (also called `numeric`)
 4. `character`
 
-Each of these data types occupy a different amount of space in memory - 
+Each of these data types occupies a different amount of space in memory - 
 `logical` and `integer` vectors use 4 bytes per element, while a `double` will 
 occupy 8 bytes. R uses a global string pool, so `character` vectors are hard 
 to estimate, but will generally take up more space for element.
@@ -300,7 +291,7 @@ pryr::object_size(as.character(x))
 An incorrect data type can easily cost you a lot of space in memory, especially 
 at scale. This often happens when reading data from a text or csv file - data 
 may have a format such as `c(1.0, 2.0, 3.0)` and will be read in as a `numeric` 
-column, when `integer` is more appropriate (and compact).
+column, when `integer` is more appropriate and compact.
 
 You may also be familiar with `factor` variables within R. Essentially a 
 `factor` will represent your data as integers, and map them back to their 
@@ -354,7 +345,7 @@ for your project.
 ## For Loops and Vector Allocation
 
 A refrain you will often hear is that for loops in R are slow and need to be 
-avoided at all costs. This is not true! Rather, an improperly formatted loop 
+avoided at all costs. This is not true! Rather, an improperly constructed loop 
 in R can bring the execution of your program to a near standstill. 
 
 A common for loop structure may look something like:
@@ -408,7 +399,6 @@ microbenchmark::microbenchmark(
 )
 ```
 
-
 And note how performance of the "bad" loop degrades as the loop size grows.
 
 ```{r loop-05}
@@ -419,7 +409,6 @@ microbenchmark::microbenchmark(
 	good_loop(y)
 )
 ```
-
 
 ## Vectorized Functions
 
