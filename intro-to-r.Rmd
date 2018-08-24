@@ -311,18 +311,18 @@ Packages are loaded once per R session with the function `library()`. It is a go
 
 **Note:** `install.packages()` uses quoted package names and `library()` uses unquoted package names. 
 
-For practice, submit the following three lines of code to install `RXKCD`, load `library(RXKCD)`, and get a random [XKCD comic](https://www.xkcd.com/). 
+For practice, submit the following three lines of code to install `RXKCD`, load `library(RXKCD)`, and get a classic [XKCD comic](https://www.xkcd.com/). 
 
 ```{r xkcd, eval=FALSE}
 install.packages("RXKCD")
 library(RXKCD)
-getXKCD("random")
+getXKCD(552)
 ```
 
 ```{r xkcd run, echo=FALSE}
 library(RXKCD)
 # assignment to hide text output
-boom <- getXKCD("random")
+boom <- getXKCD(552)
 ```
 
 Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools > Check for Package Updated in RStudio. 

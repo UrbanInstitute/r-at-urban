@@ -569,10 +569,10 @@ mean(apples)</code></pre>
 <p>It is possible, but less common, to install packages from places like GitHub. This is less secure and the functionality of the packages is more likely to change over time. <code>install.packages()</code> need only be run once per version of package per machine and should rarely be included in .R scripts.</p>
 <p>Packages are loaded once per R session with the function <code>library()</code>. It is a good idea to include <code>library(package-name)</code> at the top of scripts for each package used in the script. This way it is obvious at the top of the script which packages are installed and loaded.</p>
 <p><strong>Note:</strong> <code>install.packages()</code> uses quoted package names and <code>library()</code> uses unquoted package names.</p>
-<p>For practice, submit the following three lines of code to install <code>RXKCD</code>, load <code>library(RXKCD)</code>, and get a random <a href="https://www.xkcd.com/">XKCD comic</a>.</p>
+<p>For practice, submit the following three lines of code to install <code>RXKCD</code>, load <code>library(RXKCD)</code>, and get a classic <a href="https://www.xkcd.com/">XKCD comic</a>.</p>
 <pre class="r"><code>install.packages(&quot;RXKCD&quot;)
 library(RXKCD)
-getXKCD(&quot;random&quot;)</code></pre>
+getXKCD(552)</code></pre>
 <p><img src="intro-to-r/www/images/xkcd%20run-1.png" width="672" /></p>
 <p>Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools &gt; Check for Package Updated in RStudio.</p>
 <p>Occasionally, two loaded packages will have functions with identical names. Any conflicts with be announced when loading packages. See how <code>filter()</code> and <code>lag()</code> from <code>library(tidyverse)</code> and <code>library(stats)</code> conflict:</p>
