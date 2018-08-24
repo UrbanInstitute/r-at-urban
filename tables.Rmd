@@ -88,6 +88,15 @@ Here's an example of raw LaTeX output by `kable()`:
 knitr::include_graphics("tables/images/latex.png")
 ```
 
+Creating PDFs from LaTeX requires installing a LaTeX distribution. This used to mean using a large and clunky distribution like MiKTeX, MacTeX, or TeX. Fortunately, Yihui Xie’s `tinytex` R package, built with the TinyTex LaTeX distribution, simplifies working with LaTeX. If you don't have a LaTeX distribution, run the following code:
+
+```
+install.packages("tinytex")
+tinytex::install_tinytex()
+```
+
+After installing `tinytex`, you shouldn't need to do anything else to manage your distribution. For more information, read his [introductory blog post](https://yihui.name/tinytex/). 
+
 ### Text
 
 `library(stargazer)` is the only real option for printing ASCII tables. 

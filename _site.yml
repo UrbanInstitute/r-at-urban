@@ -10,6 +10,8 @@ navbar:
     href: graphics-guide.html
   - text: MAPPING
     href: mapping.html
+  - text: TABLES
+    href: tables.html    
 output:
   html_document:
     output_dir: '.'
