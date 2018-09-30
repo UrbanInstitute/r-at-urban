@@ -13,7 +13,7 @@
 
 <title></title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -25,6 +25,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.2/htmlwidgets.js"></script>
+<script src="site_libs/d3-3.5.6/d3.min.js"></script>
+<link href="site_libs/profvis-0.3.5/profvis.css" rel="stylesheet" />
+<script src="site_libs/profvis-0.3.5/profvis.js"></script>
+<link href="site_libs/highlight-6.2.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlight-6.2.0/highlight.js"></script>
+<script src="site_libs/profvis-binding-0.3.5/profvis.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114294141-1"></script>
 <script>
@@ -329,8 +336,9 @@ div.tocify {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>This guide outlines tools and tips for improving the speed and execution of R code.</p>
-<p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term. An important lesson to learn when it comes to optimising an R (or any) program is knowing when to stop. Be sure to consider what “fast enough” is for a project and how much needs to be optimized.</p>
-<p>For more information, see the CRAN Task View <a href="&#39;https://CRAN.R-project.org/view=HighPerformanceComputing&#39;">High-Performance and Parallel Computing with R</a>.</p>
+<p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term.</p>
+<p>An important lesson to learn when it comes to optimising an R (or any) program is knowing both if to start and when to stop. You most likely want to optimize your code because it is “too slow”, but what that means will vary from project to project. Be sure to consider what “fast enough” is for your project and how much needs to be optimized. If your program takes an hour to complete, spending 5 hours trying to make it faster can be time well spent if the script will be run regularly, and a complete waste of time if it’s an ad-hoc analysis.</p>
+<p>For more information, see the CRAN Task View <a href="%22https://CRAN.R-project.org/view=HighPerformanceComputing%22">High-Performance and Parallel Computing with R</a>. The “Performant Code” section of Hadley Wickham’s <a href="%22http://adv-r.had.co.nz/%22">Advanced R</a> is another great resource and provides a deeper dive into what is covered in this guide.</p>
 <hr />
 </div>
 <div id="update-your-installation" class="section level1">
@@ -338,16 +346,51 @@ div.tocify {
 <p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
 <p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-4.PNG" style="width:75.0%" />
+<img src="optimization/images/data-load-3-4.png" style="width:75.0%" />
 
 </div>
 <p>While 3.5.0 took less than half the time:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-5.PNG" style="width:75.0%" />
+<img src="optimization/images/data-load-3-5.png" style="width:75.0%" />
 
 </div>
-<p>To see what the R-core development team is up to, check out the <a href="&#39;https://cran.r-project.org/doc/manuals/r-devel/NEWS.html&#39;">NEWS</a> file from the R project.</p>
+<p>To see what the R-core development team is up to, check out the <a href="%22https://cran.r-project.org/doc/manuals/r-devel/NEWS.html%22">NEWS</a> file from the R project.</p>
 <hr />
+</div>
+<div id="profiling-benchmarking" class="section level1">
+<h1>Profiling &amp; Benchmarking</h1>
+<p>In order to efficiently optimize your code, you’ll first need to know where it’s running slowest. The <code>profvis</code> package provides a nice way of visualizing the execution time and memory useage of your program.</p>
+<pre class="r"><code>library(profvis)
+library(dplyr)
+
+profvis({
+    diamonds &lt;- read.csv(&quot;optimization/data/diamonds.csv&quot;)
+    
+    diamonds_by_cut &lt;- diamonds %&gt;%
+        group_by(cut) %&gt;%
+        summarise_if(is.numeric, mean)
+
+    write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
+
+})</code></pre>
+<div id="htmlwidget-855c237ef58fbc2d77f2" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-855c237ef58fbc2d77f2">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","%in%","is_symbolic","is_callable","call2","lang","FUN","lapply","map","as_fun_list","manip_if","summarise_if","function_list[[k]]","withVisible","freduce","_fseq","eval","eval","withVisible","%>%"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7],"memalloc":[8.84856414794922,8.84856414794922,8.84856414794922,10.0763397216797,10.0763397216797,10.0763397216797,12.533073425293,12.533073425293,12.533073425293,12.5531921386719,12.5531921386719,12.5531921386719,12.5780639648438,12.5780639648438,12.5780639648438,17.4616622924805,17.4616622924805,17.4616622924805,17.4656219482422,17.4656219482422,17.4656219482422,17.4702072143555,17.4702072143555,17.4702072143555,22.0109558105469,22.0109558105469,22.0109558105469,22.0109558105469,22.0109558105469,23.1287078857422,23.1287078857422,23.1287078857422,23.1287078857422,23.1287078857422,27.0109024047852,27.0109024047852,27.0109024047852,27.0109024047852,27.0109024047852,27.2169418334961,27.2169418334961,27.2169418334961,27.2169418334961,27.2169418334961,28.0405502319336,28.0405502319336,28.0405502319336,28.0405502319336,28.0405502319336,28.4523544311523,28.4523544311523,28.4523544311523,28.4523544311523,28.4523544311523,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812],"meminc":[0,0,0,1.22777557373047,0,0,2.45673370361328,0,0,0.0201187133789062,0,0,0.024871826171875,0,0,4.88359832763672,0,0,0.00395965576171875,0,0,0.00458526611328125,0,0,4.54074859619141,0,0,0,0,1.11775207519531,0,0,0,0,3.88219451904297,0,0,0,0,0.206039428710938,0,0,0,0,0.8236083984375,0,0,0,0,0.41180419921875,0,0,0,0,0.895606994628906,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"/tmp/RtmpDuIPtX/file12fb1fe7bdca.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
+<p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
+<pre class="r"><code>library(microbenchmark)
+
+microbenchmark(
+    read.csv(&quot;optimization/data/diamonds.csv&quot;),
+    readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
+)</code></pre>
+<pre><code>## Unit: milliseconds
+##                                               expr       min        lq
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 133.02399 135.95480
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.04399  60.96819
+##      mean    median        uq      max neval
+##  138.2291 137.97533 139.38994 175.8416   100
+##   63.7336  62.03262  64.21218 103.3944   100</code></pre>
+<p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
 <h1>Parallel Computing</h1>
@@ -358,7 +401,7 @@ div.tocify {
 <p>Say you have a vector of numbers and want to find the square root of each one (ignore for now that <code>sqrt</code> is vectorized, which will be covered later). You could write a for loop and iterate over each element of the vector:</p>
 <pre class="r"><code>x &lt;- c(1, 4, 9, 16)
 
-out &lt;- vector(&#39;list&#39;, length(x))
+out &lt;- vector(&quot;list&quot;, length(x))
 for (i in seq_along(x)) {
     out[[i]] &lt;- sqrt(x[[i]])
 }
@@ -382,14 +425,14 @@ unlist(out)</code></pre>
 <h2>Motivating Example</h2>
 <p>Once you are comfortable with <code>lapply</code> and/or <code>map</code>, running the same code in parallel takes just an additional line of code.</p>
 <p>For <code>lapply</code> users, the <code>future.apply</code> package contains an equivalent <code>future_lapply</code> function. Just be sure to call <code>plan(multiprocess)</code> beforehand, which will handle the back-end orchestration needed to run in parallel.</p>
-<pre class="r"><code># install.packages(&#39;future.apply&#39;)
+<pre class="r"><code># install.packages(&quot;future.apply&quot;)
 library(future.apply)
 plan(multiprocess)
 out &lt;- future_lapply(x, sqrt)
 unlist(out)</code></pre>
 <pre><code>## [1] 1 2 3 4</code></pre>
 <p>For <code>purrr</code> users, the <code>furrr</code> (i.e., future purrr) package includes an equivalent <code>future_map</code> function:</p>
-<pre class="r"><code># install.packages(&#39;furrr&#39;)
+<pre class="r"><code># install.packages(&quot;furrr&quot;)
 library(furrr)
 plan(multiprocess)
 y &lt;- future_map(x, sqrt)
@@ -404,15 +447,15 @@ x &lt;- c(1, 4, 9, 16)
 microbenchmark::microbenchmark(
     sequential = lapply(x, sqrt),
     parallel = future_lapply(x, sqrt),
-    unit = &#39;s&#39;
+    unit = &quot;s&quot;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr         min           lq         mean      median           uq
-##  sequential 0.000002323 0.0000094375 0.0001596607 0.000013658 0.0000216505
-##    parallel 0.100556920 0.1315866495 0.1370916052 0.135770862 0.1396744805
+##        expr         min          lq          mean       median          uq
+##  sequential 0.000003172 0.000006353 0.00000913425 0.0000074265 0.000010521
+##    parallel 0.040185641 0.043476397 0.04525192189 0.0444725055 0.046670478
 ##          max neval
-##  0.002104543   100
-##  0.210765929   100</code></pre>
+##  0.000045326   100
+##  0.051765965   100</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -429,7 +472,7 @@ system.time(
                  )
     )</code></pre>
 <pre><code>##    user  system elapsed 
-##  49.947   3.195  53.422</code></pre>
+##  51.151   0.046  51.197</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
@@ -440,7 +483,7 @@ system.time(
                                 )
     )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.191   0.084  38.657</code></pre>
+##   0.105   0.016  26.849</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -471,7 +514,7 @@ model &lt;- train(y ~ ., data = training, method = &quot;rf&quot;)
 
 ## When you are done:
 stopCluster(cl)</code></pre>
-<p>Be sure to check out the full <a href="&#39;http://topepo.github.io/caret/parallel-processing.html&#39;">documentation</a> for more detail.</p>
+<p>Be sure to check out the full <a href="%22http://topepo.github.io/caret/parallel-processing.html%22">documentation</a> for more detail.</p>
 <hr />
 </div>
 </div>
@@ -480,9 +523,9 @@ stopCluster(cl)</code></pre>
 <h1>Big Data</h1>
 <p>As data collection and storage becomes easier and cheaper, it is relatively simple to obtain relatively large data files. An important point to keep in mind is that the size of your data will generally expand when it is read from a storage device into R. A general rule of thumb is that a file will take somewhere around 3-4 times more space in memory than it does on disk.</p>
 <p>For instance, compare the size of the <code>iris</code> data set when it is saved as a .csv file locally vs the size of the object when it is read in to an R session:</p>
-<pre class="r"><code>file.size(&#39;optimization/iris.csv&#39;) / 1000</code></pre>
-<pre><code>## [1] 3.716</code></pre>
-<pre class="r"><code>df &lt;- readr::read_csv(&#39;optimization/iris.csv&#39;)
+<pre class="r"><code>file.size(&quot;optimization/iris.csv&quot;) / 1000</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>df &lt;- readr::read_csv(&quot;optimization/data/iris.csv&quot;)
 pryr::object_size(df)</code></pre>
 <pre><code>## 9.7 kB</code></pre>
 <p>This means that on a standard Urban Institute desktop, you may have issues reading in files that are larger than 4 GB.</p>
@@ -605,9 +648,9 @@ microbenchmark::microbenchmark(
     good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr      min       lq       mean    median       uq       max
-##   bad_loop(x) 1166.838 1574.010 4757.03480 3044.8635 6545.264 36615.745
-##  good_loop(x)   10.969   13.179   80.67087   22.1325   29.500  5488.285
+##          expr      min        lq      mean    median        uq      max
+##   bad_loop(x) 1068.620 1098.5920 1438.2880 1112.8155 1147.5750 5041.019
+##  good_loop(x)   15.376   16.2125   59.0225   19.7095   25.9725 3802.785
 ##  neval
 ##    100
 ##    100</code></pre>
@@ -619,16 +662,16 @@ microbenchmark::microbenchmark(
     good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min        lq        mean    median         uq
-##   bad_loop(y) 44129.361 46917.637 59284.84895 62917.946 65077.9260
-##  good_loop(y)    25.946    27.175    39.35209    41.272    42.6585
-##         max neval
-##  114073.679   100
-##     333.896   100</code></pre>
+##          expr       min        lq        mean     median         uq
+##   bad_loop(y) 18091.439 18312.018 19371.98497 18498.3380 18815.4170
+##  good_loop(y)    35.082    36.473    46.05949    38.7325    55.6145
+##        max neval
+##  68063.715   100
+##     66.315   100</code></pre>
 </div>
 <div id="vectorized-functions" class="section level2">
 <h2>Vectorized Functions</h2>
-<p>Many functions in R are vectorized, meaning they can accept an entire vector (and not just a single value) as input. The <code>sqrt</code> function is one:</p>
+<p>Many functions in R are vectorized, meaning they can accept an entire vector (and not just a single value) as input. The <code>sqrt</code> function from the prior examples is one:</p>
 <pre class="r"><code>x &lt;- c(1, 4, 9, 16)
 sqrt(x)</code></pre>
 <pre><code>## [1] 1 2 3 4</code></pre>
@@ -639,9 +682,9 @@ microbenchmark::microbenchmark(
     sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min      lq     mean median      uq    max neval
-##  lapply(x, sqrt) 32359 32770.0 37622.62  33137 34252.5 319521   100
-##          sqrt(x)   853   913.5  1062.47    979  1114.0   2987   100</code></pre>
+##             expr   min      lq     mean median      uq   max neval
+##  lapply(x, sqrt) 30969 31754.0 33266.61  32568 33461.5 51968   100
+##          sqrt(x)   758  1080.5  1271.41   1189  1269.0 10142   100</code></pre>
 </div>
 </div>
 

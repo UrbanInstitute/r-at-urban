@@ -31,13 +31,21 @@ This guide outlines tools and tips for improving the speed and execution of R co
 
 Sometimes, simply tweaking a few lines of code can lead to large performance 
 gains in the execution of a program. Other issues may take more time to work 
-through but can be a huge benefit to a project in the long term. An 
-important lesson to learn when it comes to optimising an R (or any) program 
-is knowing when to stop. Be sure to consider what "fast enough" is for a 
-project and how much needs to be optimized.   
+through but can be a huge benefit to a project in the long term. 
+
+An important lesson to learn when it comes to optimising an R (or any) program 
+is knowing both if to start and when to stop. You most likely want to optimize 
+your code because it is "too slow", but what that means will vary from 
+project to project. Be sure to consider what "fast enough" is for your project 
+and how much needs to be optimized. If your program takes an hour to complete, 
+spending 5 hours trying to make it faster can be time well spent if the script 
+will be run regularly, and a complete waste of time if it's an ad-hoc analysis.
 
 For more information, see the CRAN Task View [High-Performance and Parallel 
-Computing with R]('https://CRAN.R-project.org/view=HighPerformanceComputing').
+Computing with R]("https://CRAN.R-project.org/view=HighPerformanceComputing").
+The "Performant Code" section of Hadley Wickham's 
+[Advanced R]("http://adv-r.had.co.nz/") is another great resource and provides 
+a deeper dive into what is covered in this guide. 
 
 ------
 
@@ -59,10 +67,53 @@ While 3.5.0 took less than half the time:
 ![](optimization/images/data-load-3-5.png){width=75%}
 
 To see what the R-core development team is up to, check out 
-the [NEWS]('https://cran.r-project.org/doc/manuals/r-devel/NEWS.html') file 
+the [NEWS]("https://cran.r-project.org/doc/manuals/r-devel/NEWS.html") file 
 from the R project.
 
 ------
+
+# Profiling & Benchmarking
+
+In order to efficiently optimize your code, you'll first need to know where 
+it's running slowest. The `profvis` package provides a nice way of visualizing 
+the execution time and memory useage of your program. 
+
+```{r profile-01}
+library(profvis)
+library(dplyr)
+
+profvis({
+	diamonds <- read.csv("optimization/data/diamonds.csv")
+	
+	diamonds_by_cut <- diamonds %>%
+		group_by(cut) %>%
+		summarise_if(is.numeric, mean)
+
+	write.csv(diamonds_by_cut, file = "optimization/data/diamonds_by_cut.csv")	
+
+})
+
+```
+
+In this toy example it looks like the `read.csv` function is the bottleneck, so 
+work on optimizing that first.
+
+Once you find the bottleneck that needs to be optimized, it can be useful to 
+benchmark different potential solutions. The `microbenchmark` package can help 
+you choose between different options. Continuing with the simple example with 
+the `diamonds` dataset, compare the base `read.csv` function with `read_csv` 
+from the `readr` package.
+
+```{r benchmark-01}
+library(microbenchmark)
+
+microbenchmark(
+	read.csv("optimization/data/diamonds.csv"),
+	readr::read_csv("optimization/data/diamonds.csv")
+)
+```
+
+In this case, `read_csv` is about twice as fast as the base R implementations.
 
 # Parallel Computing
 
@@ -80,7 +131,7 @@ You could write a for loop and iterate over each element of the vector:
 ```{r apply-01}
 x <- c(1, 4, 9, 16)
 
-out <- vector('list', length(x))
+out <- vector("list", length(x))
 for (i in seq_along(x)) {
 	out[[i]] <- sqrt(x[[i]])
 }
@@ -123,7 +174,7 @@ For `lapply` users, the `future.apply` package contains an equivalent
 which will handle the back-end orchestration needed to run in parallel.
 
 ```{r parallel-01}
-# install.packages('future.apply')
+# install.packages("future.apply")
 library(future.apply)
 plan(multiprocess)
 out <- future_lapply(x, sqrt)
@@ -134,7 +185,7 @@ For `purrr` users, the `furrr` (i.e., future purrr) package includes an
 equivalent `future_map` function:
 
 ```{r parallel-02}
-# install.packages('furrr')
+# install.packages("furrr")
 library(furrr)
 plan(multiprocess)
 y <- future_map(x, sqrt)
@@ -152,7 +203,7 @@ x <- c(1, 4, 9, 16)
 microbenchmark::microbenchmark(
 	sequential = lapply(x, sqrt),
 	parallel = future_lapply(x, sqrt),
-	unit = 's'
+	unit = "s"
 )
 ```
 
@@ -237,7 +288,7 @@ stopCluster(cl)
 
 
 Be sure to check out the full 
-[documentation]('http://topepo.github.io/caret/parallel-processing.html') 
+[documentation]("http://topepo.github.io/caret/parallel-processing.html") 
 for more detail.
 
 ------
@@ -255,8 +306,8 @@ For instance, compare the size of the `iris` data set when it is saved as a
 
 
 ```{r size-01, message=FALSE}
-file.size('optimization/iris.csv') / 1000
-df <- readr::read_csv('optimization/iris.csv')
+file.size("optimization/iris.csv") / 1000
+df <- readr::read_csv("optimization/data/iris.csv")
 pryr::object_size(df)
 ```
 
@@ -413,7 +464,8 @@ microbenchmark::microbenchmark(
 ## Vectorized Functions
 
 Many functions in R are vectorized, meaning they can accept an entire vector 
-(and not just a single value) as input. The `sqrt` function is one:
+(and not just a single value) as input. The `sqrt` function from the 
+prior examples is one:
 
 ```{r vectorised-01}
 x <- c(1, 4, 9, 16)
