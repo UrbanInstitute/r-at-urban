@@ -7,6 +7,9 @@ output:
     #code_folding: hide
     toc: TRUE
     toc_float: TRUE
+    pandoc_args: [ 
+      "--tab-stop=2" 
+    ] 
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -15,7 +18,6 @@ output:
 ![](optimization/images/urban-institute-logo.png)
 
 ```{r markdown-setup, include=FALSE}
-#knitr::opts_chunk$set(fig.path = "mapping/www/images/")
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -142,7 +144,7 @@ unlist(out)
 The `lapply` function essentially handles the overhead of constructing a for 
 loop for you. The syntax is:
 
-```{r apply-02, eval=FALSE}
+```{r apply-02, eval = FALSE}
 lapply(X, FUN, ...)
 ```
 
@@ -274,7 +276,7 @@ For those running machine learning models, the `caret` package can easily
 leverage `doParallel` to speed up the execution of multiple models. Lifting 
 the example from the package documentation:
 
-```{r caret-01, eval=FALSE}
+```{r caret-01, eval = FALSE}
 library(doParallel)
 cl <- makePSOCKcluster(5) # number of cores to use
 registerDoParallel(cl)
@@ -305,8 +307,8 @@ For instance, compare the size of the `iris` data set when it is saved as a
 .csv file locally vs the size of the object when it is read in to an R session: 
 
 
-```{r size-01, message=FALSE}
-file.size("optimization/iris.csv") / 1000
+```{r size-01, message = FALSE}
+file.size("optimization/data/iris.csv") / 1000
 df <- readr::read_csv("optimization/data/iris.csv")
 pryr::object_size(df)
 ```
@@ -350,7 +352,7 @@ character representation. This can save memory when you have a compact and
 unique level of factors:
 
 ```{r size-03}
-x <- sample(letters, 10000, replace = T)
+x <- sample(letters, 10000, replace = TRUE)
 pryr::object_size(as.character(x))
 pryr::object_size(as.factor(x))
 ```
@@ -359,7 +361,7 @@ However if each element is unique, or if there is not a lot of overlap among
 elements, than the overhead will make a factor larger than its character
 representation:
 
-```{r}
+```{r size-04}
 pryr::object_size(as.factor(letters))
 pryr::object_size(as.character(letters))
 ```
@@ -401,7 +403,7 @@ in R can bring the execution of your program to a near standstill.
 
 A common for loop structure may look something like:
 
-```{r loop-01, eval=FALSE}
+```{r loop-01, eval = FALSE}
 x <- 1:100
 out <- c()
 for (i in x) {
@@ -417,7 +419,7 @@ will take longer and longer to run.
 A better practice is to pre-allocate `out` to be the correct length, and then 
 insert the results as the loop runs.
 
-```{r loop-03, eval=FALSE}
+```{r loop-03, eval = FALSE}
 x <- 1:100
 out <- rep(NA, length(x))
 for (i in seq_along(x)) {

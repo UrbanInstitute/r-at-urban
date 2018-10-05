@@ -346,12 +346,12 @@ div.tocify {
 <p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
 <p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-4.png" style="width:75.0%" />
+<img src="optimization/images/data-load-3-4.PNG" style="width:75.0%" />
 
 </div>
 <p>While 3.5.0 took less than half the time:</p>
 <div class="figure">
-<img src="optimization/images/data-load-3-5.png" style="width:75.0%" />
+<img src="optimization/images/data-load-3-5.PNG" style="width:75.0%" />
 
 </div>
 <p>To see what the R-core development team is up to, check out the <a href="%22https://cran.r-project.org/doc/manuals/r-devel/NEWS.html%22">NEWS</a> file from the R project.</p>
@@ -364,32 +364,32 @@ div.tocify {
 library(dplyr)
 
 profvis({
-    diamonds &lt;- read.csv(&quot;optimization/data/diamonds.csv&quot;)
-    
-    diamonds_by_cut &lt;- diamonds %&gt;%
-        group_by(cut) %&gt;%
-        summarise_if(is.numeric, mean)
+  diamonds &lt;- read.csv(&quot;optimization/data/diamonds.csv&quot;)
+  
+  diamonds_by_cut &lt;- diamonds %&gt;%
+    group_by(cut) %&gt;%
+    summarise_if(is.numeric, mean)
 
-    write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
+  write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
 
 })</code></pre>
-<div id="htmlwidget-855c237ef58fbc2d77f2" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-855c237ef58fbc2d77f2">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","%in%","is_symbolic","is_callable","call2","lang","FUN","lapply","map","as_fun_list","manip_if","summarise_if","function_list[[k]]","withVisible","freduce","_fseq","eval","eval","withVisible","%>%"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7],"memalloc":[8.84856414794922,8.84856414794922,8.84856414794922,10.0763397216797,10.0763397216797,10.0763397216797,12.533073425293,12.533073425293,12.533073425293,12.5531921386719,12.5531921386719,12.5531921386719,12.5780639648438,12.5780639648438,12.5780639648438,17.4616622924805,17.4616622924805,17.4616622924805,17.4656219482422,17.4656219482422,17.4656219482422,17.4702072143555,17.4702072143555,17.4702072143555,22.0109558105469,22.0109558105469,22.0109558105469,22.0109558105469,22.0109558105469,23.1287078857422,23.1287078857422,23.1287078857422,23.1287078857422,23.1287078857422,27.0109024047852,27.0109024047852,27.0109024047852,27.0109024047852,27.0109024047852,27.2169418334961,27.2169418334961,27.2169418334961,27.2169418334961,27.2169418334961,28.0405502319336,28.0405502319336,28.0405502319336,28.0405502319336,28.0405502319336,28.4523544311523,28.4523544311523,28.4523544311523,28.4523544311523,28.4523544311523,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812,29.3479614257812],"meminc":[0,0,0,1.22777557373047,0,0,2.45673370361328,0,0,0.0201187133789062,0,0,0.024871826171875,0,0,4.88359832763672,0,0,0.00395965576171875,0,0,0.00458526611328125,0,0,4.54074859619141,0,0,0,0,1.11775207519531,0,0,0,0,3.88219451904297,0,0,0,0,0.206039428710938,0,0,0,0,0.8236083984375,0,0,0,0,0.41180419921875,0,0,0,0,0.895606994628906,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"/tmp/RtmpDuIPtX/file12fb1fe7bdca.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-aeb1826a88aa9951cbbe" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-aeb1826a88aa9951cbbe">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,14,14,14,14,14,15,15,15,15,15,16,16,16,16,16,17,17,17,17,17,18,18,18,18,18,19,19,19,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,11,10,9,8,7,6,5,4,3,2,1,7,6,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","grouped_df_impl","grouped_df","group_by.data.frame","group_by","function_list[[i]]","freduce","_fseq","eval","eval","withVisible","%>%","getOption","file","write.table","eval","eval","eval.parent","write.csv"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,1,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,11],"memalloc":[8.8349609375,8.8349609375,8.8349609375,10.0664901733398,10.0664901733398,10.0664901733398,12.5238647460938,12.5238647460938,12.5238647460938,12.5519256591797,12.5519256591797,12.5519256591797,13.5411911010742,13.5411911010742,13.5411911010742,17.4493865966797,17.4493865966797,17.4493865966797,17.4538803100586,17.4538803100586,17.4538803100586,17.4603881835938,17.4603881835938,17.4603881835938,21.9973220825195,21.9973220825195,21.9973220825195,21.9973220825195,21.9973220825195,22.7033615112305,22.7033615112305,22.7033615112305,22.7033615112305,22.7033615112305,26.3796997070312,26.3796997070312,26.3796997070312,26.3796997070312,26.3796997070312,26.9972686767578,26.9972686767578,26.9972686767578,26.9972686767578,26.9972686767578,27.2033081054688,27.2033081054688,27.2033081054688,27.2033081054688,27.2033081054688,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,27.6151123046875,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.0269165039062,28.438720703125,28.438720703125,28.438720703125,28.438720703125,28.438720703125,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,28.9139175415039,31.0554122924805,31.0554122924805,31.0554122924805,31.0554122924805,31.0554122924805,31.0554122924805,31.0554122924805],"meminc":[0,0,0,1.23152923583984,0,0,2.45737457275391,0,0,0.0280609130859375,0,0,0.989265441894531,0,0,3.90819549560547,0,0,0.00449371337890625,0,0,0.00650787353515625,0,0,4.53693389892578,0,0,0,0,0.706039428710938,0,0,0,0,3.67633819580078,0,0,0,0,0.617568969726562,0,0,0,0,0.206039428710938,0,0,0,0,0.41180419921875,0,0,0,0,0,0,0,0,0,0.41180419921875,0,0,0,0,0,0,0,0,0,0.41180419921875,0,0,0,0,0.475196838378906,0,0,0,0,0,0,0,0,0,0,2.14149475097656,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"/var/folders/r3/3w_52nz53v71pw1srn6nmxdr0000gn/T//RtmpkqwvEa/filee65e2d68d0e2.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
 <p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
 <pre class="r"><code>library(microbenchmark)
 
 microbenchmark(
-    read.csv(&quot;optimization/data/diamonds.csv&quot;),
-    readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
+  read.csv(&quot;optimization/data/diamonds.csv&quot;),
+  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
 )</code></pre>
 <pre><code>## Unit: milliseconds
 ##                                               expr       min        lq
-##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 133.02399 135.95480
-##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.04399  60.96819
-##      mean    median        uq      max neval
-##  138.2291 137.97533 139.38994 175.8416   100
-##   63.7336  62.03262  64.21218 103.3944   100</code></pre>
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 172.48112 175.68515
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  74.51706  77.22967
+##       mean    median        uq      max neval
+##  181.81313 179.13197 181.99616 225.9102   100
+##   81.22653  79.11934  81.73556 161.9955   100</code></pre>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -403,7 +403,7 @@ microbenchmark(
 
 out &lt;- vector(&quot;list&quot;, length(x))
 for (i in seq_along(x)) {
-    out[[i]] &lt;- sqrt(x[[i]])
+  out[[i]] &lt;- sqrt(x[[i]])
 }
 unlist(out)</code></pre>
 <pre><code>## [1] 1 2 3 4</code></pre>
@@ -445,17 +445,17 @@ plan(multiprocess)
 x &lt;- c(1, 4, 9, 16)
 
 microbenchmark::microbenchmark(
-    sequential = lapply(x, sqrt),
-    parallel = future_lapply(x, sqrt),
-    unit = &quot;s&quot;
+  sequential = lapply(x, sqrt),
+  parallel = future_lapply(x, sqrt),
+  unit = &quot;s&quot;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr         min          lq          mean       median          uq
-##  sequential 0.000003172 0.000006353 0.00000913425 0.0000074265 0.000010521
-##    parallel 0.040185641 0.043476397 0.04525192189 0.0444725055 0.046670478
+##        expr        min           lq         mean      median          uq
+##  sequential 0.00000279 0.0000083235 0.0001163979 0.000012938 0.000020489
+##    parallel 0.05367924 0.0696213500 0.0734207716 0.072080636 0.075900806
 ##          max neval
-##  0.000045326   100
-##  0.051765965   100</code></pre>
+##  0.001748501   100
+##  0.101781930   100</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -467,23 +467,23 @@ df &lt;- dplyr::select(df, -c(cut, color, clarity))
 centers = 2:5
 
 system.time(
-    lapply(centers, 
-                 function(x) kmeans(df, centers = x, nstart = 500)
-                 )
-    )</code></pre>
+  lapply(centers, 
+         function(x) kmeans(df, centers = x, nstart = 500)
+         )
+  )</code></pre>
 <pre><code>##    user  system elapsed 
-##  51.151   0.046  51.197</code></pre>
+##  48.924   2.368  51.509</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
 
 system.time(
-    future_lapply(centers, 
-                                function(x) kmeans(df, centers = x, nstart = 500)
-                                )
-    )</code></pre>
+  future_lapply(centers, 
+                function(x) kmeans(df, centers = x, nstart = 500)
+                )
+  )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.105   0.016  26.849</code></pre>
+##   0.122   0.052  32.892</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -618,39 +618,39 @@ pryr::object_size(as.character(x))</code></pre>
 <pre class="r"><code>x &lt;- 1:100
 out &lt;- c()
 for (i in x) {
-    out &lt;- c(out, sqrt(x))
-    }</code></pre>
+  out &lt;- c(out, sqrt(x))
+  }</code></pre>
 <p>The bottleneck in this loop is with the allocation of the vector <code>out</code>. Every time we iterate over an item in <code>x</code> and append it to <code>out</code>, R makes a copy of all the items already in <code>out</code>. As the size of the loop grows, your code will take longer and longer to run.</p>
 <p>A better practice is to pre-allocate <code>out</code> to be the correct length, and then insert the results as the loop runs.</p>
 <pre class="r"><code>x &lt;- 1:100
 out &lt;- rep(NA, length(x))
 for (i in seq_along(x)) {
-        out[i] &lt;- sqrt(x[i])
+    out[i] &lt;- sqrt(x[i])
 }</code></pre>
 <p>A quick benchmark shows how much more efficient a loop with a pre-allocated results vector is:</p>
 <pre class="r"><code>bad_loop &lt;- function(x) {
-    out &lt;- c()
-    for (i in x) {
-        out &lt;- c(out, sqrt(x))
-    }
+  out &lt;- c()
+  for (i in x) {
+    out &lt;- c(out, sqrt(x))
+  }
 }
 
 good_loop &lt;- function(x) {
-    out &lt;- rep(NA, length(x))
-    for (i in seq_along(x)) {
-        out[i] &lt;- sqrt(x[i])
-    }
+  out &lt;- rep(NA, length(x))
+  for (i in seq_along(x)) {
+    out[i] &lt;- sqrt(x[i])
+  }
 }
 
 x &lt;- 1:100
 microbenchmark::microbenchmark(
-    bad_loop(x),
-    good_loop(x)
+  bad_loop(x),
+  good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr      min        lq      mean    median        uq      max
-##   bad_loop(x) 1068.620 1098.5920 1438.2880 1112.8155 1147.5750 5041.019
-##  good_loop(x)   15.376   16.2125   59.0225   19.7095   25.9725 3802.785
+##          expr      min       lq       mean   median       uq       max
+##   bad_loop(x) 1155.727 1382.235 2463.72239 1742.537 2528.570 11719.027
+##  good_loop(x)   11.136   11.719   52.72802   15.541   22.142  3549.095
 ##  neval
 ##    100
 ##    100</code></pre>
@@ -658,16 +658,16 @@ microbenchmark::microbenchmark(
 <pre class="r"><code>y &lt;- 1:250
 
 microbenchmark::microbenchmark(
-    bad_loop(y),
-    good_loop(y)
+  bad_loop(y),
+  good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min        lq        mean     median         uq
-##   bad_loop(y) 18091.439 18312.018 19371.98497 18498.3380 18815.4170
-##  good_loop(y)    35.082    36.473    46.05949    38.7325    55.6145
+##          expr       min        lq        mean    median        uq
+##   bad_loop(y) 49011.292 50273.489 52494.10989 50940.083 52815.690
+##  good_loop(y)    25.629    27.093    36.68195    42.183    43.098
 ##        max neval
-##  68063.715   100
-##     66.315   100</code></pre>
+##  121806.25   100
+##      71.38   100</code></pre>
 </div>
 <div id="vectorized-functions" class="section level2">
 <h2>Vectorized Functions</h2>
@@ -678,13 +678,13 @@ sqrt(x)</code></pre>
 <p>This removes the need to use <code>lapply</code> or a for loop. Vectorized functions in R are generally written in a compiled language like C, C++, or FORTRAN, which makes their implementation faster.</p>
 <pre class="r"><code>x &lt;- 1:100
 microbenchmark::microbenchmark(
-    lapply(x, sqrt),
-    sqrt(x)
+  lapply(x, sqrt),
+  sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min      lq     mean median      uq   max neval
-##  lapply(x, sqrt) 30969 31754.0 33266.61  32568 33461.5 51968   100
-##          sqrt(x)   758  1080.5  1271.41   1189  1269.0 10142   100</code></pre>
+##             expr   min    lq     mean  median      uq   max neval
+##  lapply(x, sqrt) 32249 32738 35495.74 33268.5 38697.0 66932   100
+##          sqrt(x)   820   891  1031.16   936.0  1065.5  3960   100</code></pre>
 </div>
 </div>
 
