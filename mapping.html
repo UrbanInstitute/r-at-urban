@@ -320,6 +320,9 @@ div.tocify {
 <li>
   <a href="mapping.html">MAPPING</a>
 </li>
+<li>
+  <a href="optimization.html">OPTIMIZATION</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -462,13 +465,13 @@ library(urbnmapr)
 
 # read the shapefiles for the three states
 state &lt;- states %&gt;%
-    filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
 
 # map!
 ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
-    geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.25) +
-    coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
-    labs(title = &quot;Northwest United States&quot;)</code></pre>
+  geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.25) +
+  coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
+  labs(title = &quot;Northwest United States&quot;)</code></pre>
 <p><img src="mapping/www/images/state-map-northwest-1.png" width="672" /></p>
 <p><code>library(urbnmapr)</code> can be used to map counties. Here, <code>counties</code> is used to map all counties in the Continental United States.</p>
 <pre class="r"><code># load the necessary packages
@@ -477,8 +480,8 @@ library(urbnmapr)
 
 # map!
 ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) + 
-    coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
-    geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.1)</code></pre>
+  coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) + 
+  geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.1)</code></pre>
 <p><img src="mapping/www/images/us-county-map-1.png" width="672" /></p>
 <p>Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.</p>
 <pre class="r"><code># load the necessary packages
@@ -487,22 +490,22 @@ library(urbnmapr)
 
 # read the shapefiles for counties
 county &lt;- counties %&gt;%
-    filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
 
 # read the shapefiles for states
 state &lt;- states %&gt;%
-    filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))
 
 # map
 ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) + 
-    geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.2) +    
-    geom_polygon(data = state,
-      mapping = aes(x = long, y = lat, group = group), 
-      color = &quot;#ffffff&quot;, 
-      fill = NA, 
-      size = 0.4) + 
-    coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) +    
-    labs(title = &quot;Counties in the Northwest United States&quot;)</code></pre>
+  geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.2) +  
+  geom_polygon(data = state,
+    mapping = aes(x = long, y = lat, group = group), 
+    color = &quot;#ffffff&quot;, 
+    fill = NA, 
+    size = 0.4) + 
+  coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) +  
+  labs(title = &quot;Counties in the Northwest United States&quot;)</code></pre>
 <p><img src="mapping/www/images/northwest-county-map-1.png" width="672" /></p>
 </div>
 <div id="mapping-individual-states" class="section level3">
@@ -518,7 +521,7 @@ library(USAboundaries)
 
 # load data and filter it to just Virginia
 state &lt;- states %&gt;%
-    filter(state_name %in% c(&quot;Virginia&quot;))
+  filter(state_name %in% c(&quot;Virginia&quot;))
 
 # this data frame from library(USAboundaries) lists 124 coordinate systems in 
 # the United States and is a good reference
@@ -543,8 +546,8 @@ state &lt;- as_tibble(state)
 
 # map
 ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
-    geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.2) +    
-    labs(title = &quot;Virginia&quot;)    +
+  geom_polygon(color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.2) +  
+  labs(title = &quot;Virginia&quot;)  +
   coord_fixed()</code></pre>
 <p><img src="mapping/www/images/virginia-1.png" width="672" /></p>
 </div>
@@ -573,21 +576,21 @@ hmda &lt;- read_csv(&quot;mapping/data/hmdamap2015_10_purch.csv&quot;,
     nhw = col_integer(),
     asian = col_integer(),
     total = col_integer())) %&gt;% 
-    select(-year1, -tract_T)
+  select(-year1, -tract_T)
 
 # The Census tract IDs in the hmda data do not perfectly match the Census tract
 # IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts 
 # so the IDs match before using left_join()
 hmda &lt;- hmda %&gt;%
-    mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c(&quot;0&quot;, tract), tract))
+  mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c(&quot;0&quot;, tract), tract))
 
 # Pull data from the ACS using library(tidycensus). Rename GEOID to tract so the
 # tract ID has the same variable name as on the mortgage data. 
 ct_value &lt;- get_acs(geography = &quot;tract&quot;, 
-                                         variables = &quot;B25077_001&quot;, 
-                                         state = &quot;CT&quot;,
-                                         geometry = TRUE) %&gt;%
-    rename(tract = GEOID)
+                     variables = &quot;B25077_001&quot;, 
+                     state = &quot;CT&quot;,
+                     geometry = TRUE) %&gt;%
+  rename(tract = GEOID)
 
 # join housing data to the shapefiles
 ct_value &lt;- left_join(x = ct_value, y = hmda, by = &quot;tract&quot;)
@@ -597,22 +600,22 @@ mismatches &lt;- anti_join(x = ct_value, y = hmda, by = &quot;tract&quot;)
 
 # create a color palette based on the total number of mortgages variable
 pal &lt;- colorNumeric(palette = c(&quot;#cfe8f3&quot;, &quot;#062635&quot;), 
-                                        domain = ct_value$total)</code></pre>
+                    domain = ct_value$total)</code></pre>
 <pre class="r"><code># create the map
 connecticut &lt;- ct_value %&gt;%
-    st_transform(crs = &quot;+init=epsg:4326&quot;) %&gt;%
-    leaflet(width = &quot;100%&quot;) %&gt;%
-    addProviderTiles(provider = &quot;CartoDB.Positron&quot;) %&gt;%
-    addPolygons(popup = ~ str_extract(NAME, &quot;^([^,]*)&quot;),
-                            stroke = FALSE,
-                            smoothFactor = 0,
-                            fillOpacity = 1,
-                            color = ~ pal(total)) %&gt;%
-    addLegend(position = &quot;bottomright&quot;, 
-                        pal = pal, 
-                        values = ~ total,
-                        title = &quot;Mortgage Purchases&quot;,
-                        opacity = 1)
+  st_transform(crs = &quot;+init=epsg:4326&quot;) %&gt;%
+  leaflet(width = &quot;100%&quot;) %&gt;%
+  addProviderTiles(provider = &quot;CartoDB.Positron&quot;) %&gt;%
+  addPolygons(popup = ~ str_extract(NAME, &quot;^([^,]*)&quot;),
+              stroke = FALSE,
+              smoothFactor = 0,
+              fillOpacity = 1,
+              color = ~ pal(total)) %&gt;%
+  addLegend(position = &quot;bottomright&quot;, 
+            pal = pal, 
+            values = ~ total,
+            title = &quot;Mortgage Purchases&quot;,
+            opacity = 1)
 
 library(htmltools)
 browsable(
@@ -643,36 +646,36 @@ library(broom)
 
 # read in mortgage data
 hmda &lt;- read_csv(&quot;mapping/data/hmdamap2015_10_purch.csv&quot;, 
-                                 col_types = cols(
-                                    tract = col_character(),
-                                    year1 = col_integer(),
-                                    tract_T = col_character(),
-                                    aa = col_integer(),
-                                    his = col_integer(),
-                                    nhw = col_integer(),
-                                    asian = col_integer(),
-                                    total = col_integer())) %&gt;% 
-    select(-year1, -tract_T)
+                 col_types = cols(
+                  tract = col_character(),
+                  year1 = col_integer(),
+                  tract_T = col_character(),
+                  aa = col_integer(),
+                  his = col_integer(),
+                  nhw = col_integer(),
+                  asian = col_integer(),
+                  total = col_integer())) %&gt;% 
+  select(-year1, -tract_T)
 
 # The Census tract IDs in the hmda data do not perfectly match the Census tract
 # IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts 
 # so the IDs match before using left_join()
 hmda &lt;- hmda %&gt;%
-    mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c(&quot;0&quot;, tract), tract))
+  mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c(&quot;0&quot;, tract), tract))
 
 # read in shapefile for Washington D.C.
 tracts_dc &lt;- readOGR(dsn = &quot;mapping/shapefiles/tl_2015_11_tract&quot;, verbose = FALSE)
 
 # create an extra data frame with the tract number and the position from 1 to n
 tract_id &lt;- tibble(tract = as.character(tracts_dc@data$GEOID), 
-                                     position = 1:length(tracts_dc@data$GEOID))
+                   position = 1:length(tracts_dc@data$GEOID))
 
 # convert shapefile to tibble. Add a vector for position that will be used to 
 # merge the Census tract 
 tracts_dc &lt;- tidy(tracts_dc) %&gt;%
-    rename(position = id) %&gt;%
-    mutate(position = as.numeric(position)) %&gt;%
-    mutate(position = position + 1)
+  rename(position = id) %&gt;%
+  mutate(position = as.numeric(position)) %&gt;%
+  mutate(position = position + 1)
 
 # merge on tract number
 tracts_dc &lt;- left_join(x = tracts_dc, y = tract_id, by = &quot;position&quot;)
@@ -688,39 +691,39 @@ mismatches2 &lt;- anti_join(x = tracts_dc, y = hmda, by = &quot;tract&quot;)
 
 # munge the data and transform it into a long data frame
 tracts_dc_long &lt;- tracts_dc %&gt;%
-    gather(key = &quot;race&quot;, value = &quot;Mortgages&quot;, 
-                 -long, -lat, -order, -hole, -piece, 
-                 -group, -position, -tract, -total) %&gt;%
-    mutate(race = factor(race, 
-                                             levels = c(&quot;aa&quot;, &quot;asian&quot;, &quot;his&quot;, &quot;nhw&quot;), 
-                                             labels = c(&quot;African American&quot;, &quot;Asian&quot;, &quot;Hispanic&quot;, &quot;Non-Hispanic White&quot;))) %&gt;%
-    mutate(Mortgages = ifelse(Mortgages == 0, NA, Mortgages)) %&gt;%
-    mutate(Mortgages = Mortgages * 10)
+  gather(key = &quot;race&quot;, value = &quot;Mortgages&quot;, 
+         -long, -lat, -order, -hole, -piece, 
+         -group, -position, -tract, -total) %&gt;%
+  mutate(race = factor(race, 
+                       levels = c(&quot;aa&quot;, &quot;asian&quot;, &quot;his&quot;, &quot;nhw&quot;), 
+                       labels = c(&quot;African American&quot;, &quot;Asian&quot;, &quot;Hispanic&quot;, &quot;Non-Hispanic White&quot;))) %&gt;%
+  mutate(Mortgages = ifelse(Mortgages == 0, NA, Mortgages)) %&gt;%
+  mutate(Mortgages = Mortgages * 10)
 
 # plot!
 tracts_dc_long %&gt;%
-    ggplot(mapping = aes(x = long, y = lat, group = group, fill = Mortgages)) +
-    geom_polygon(size = 0.3) +
-    coord_map() +
-    facet_wrap(facets = ~race, nrow = 1) +
-    scale_fill_continuous(low = &quot;#CEE8F3&quot;, 
-                                                high = &quot;#094C6B&quot;,
-                                                breaks = c(0, 20, 40, 60, 80)) +
-    labs(x = NULL,
-             y = NULL) +
-    labs(title = &quot;Mortgage Originations&quot;,
-             subtitle = &quot;Home purchase loans in 2015 by race and ethnicity&quot;,
-             caption = &quot;Urban Institute analysis of HMDA data&quot;) +
-    theme(axis.text = element_blank(),
-                axis.line = element_blank(),
-                axis.ticks = element_blank(), 
-                panel.grid.major = element_blank(),
-                legend.position = &quot;right&quot;,
-                legend.direction = &quot;vertical&quot;,
-                legend.title = element_text(face = &quot;bold&quot;, size = 11),
-                strip.text = element_text(size = 11),
-                plot.caption = element_text(size = 11),
-                strip.background = element_rect(fill = &quot;#ffffff&quot;))</code></pre>
+  ggplot(mapping = aes(x = long, y = lat, group = group, fill = Mortgages)) +
+  geom_polygon(size = 0.3) +
+  coord_map() +
+  facet_wrap(facets = ~race, nrow = 1) +
+  scale_fill_continuous(low = &quot;#CEE8F3&quot;, 
+                        high = &quot;#094C6B&quot;,
+                        breaks = c(0, 20, 40, 60, 80)) +
+  labs(x = NULL,
+       y = NULL) +
+  labs(title = &quot;Mortgage Originations&quot;,
+       subtitle = &quot;Home purchase loans in 2015 by race and ethnicity&quot;,
+       caption = &quot;Urban Institute analysis of HMDA data&quot;) +
+  theme(axis.text = element_blank(),
+        axis.line = element_blank(),
+        axis.ticks = element_blank(), 
+        panel.grid.major = element_blank(),
+        legend.position = &quot;right&quot;,
+        legend.direction = &quot;vertical&quot;,
+        legend.title = element_text(face = &quot;bold&quot;, size = 11),
+        strip.text = element_text(size = 11),
+        plot.caption = element_text(size = 11),
+        strip.background = element_rect(fill = &quot;#ffffff&quot;))</code></pre>
 <p><img src="mapping/www/images/census-tract-choropleth-1.png" width="672" /></p>
 </div>
 </div>
@@ -736,7 +739,7 @@ library(geofacet)
 
 # read CHIP enrollment data
 chip &lt;- read_csv(&quot;mapping/data/chip-enrollment.csv&quot;,
-    col_types = cols(
+  col_types = cols(
   State = col_character(),
   `CHIP Enrollment` = col_integer(),
   state_abbreviation = col_character()))
@@ -773,17 +776,17 @@ chip %&gt;%
     geom_text(aes(label = state_abbreviation), color = &quot;white&quot;) +
     facet_geo(facets = ~state_abbreviation, grid = urban_grid) +
     labs(title = &quot;State CHIP Enrollment&quot;, 
-             x = NULL,
+         x = NULL,
          y = NULL) +
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.line = element_blank(),
-                strip.text = element_blank(),
-                plot.background = element_rect(color = &quot;white&quot;),    
-                panel.background = element_blank(),     
+          strip.text = element_blank(),
+          plot.background = element_rect(color = &quot;white&quot;),    
+          panel.background = element_blank(),     
           panel.grid = element_blank(),
           panel.spacing = unit(0L, &quot;pt&quot;),
-                panel.grid.major = element_blank(),
+          panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())</code></pre>
 <p><img src="mapping/www/images/chip-1.png" width="672" /></p>
 </div>
@@ -811,7 +814,7 @@ state_abbreviations &lt;- tibble(state = c(state.name, &quot;District of Columbi
 # integers as long as x == y
 usa_drivers &lt;- bad_drivers %&gt;% 
   mutate(xdimension = 1, 
-             ydimension = 1)
+         ydimension = 1)
 
 # merge state abbreviations on to bad_drivers based on state
 usa_drivers &lt;- left_join(x = usa_drivers, y = state_abbreviations, by = &quot;state&quot;)
@@ -834,13 +837,13 @@ usa_drivers %&gt;%
   ggplot(aes(x = xdimension, y = ydimension, fill = perc_alcohol)) +
   geom_tile() +
   geom_text(aes(label = paste0(as.character(perc_alcohol), &quot;%&quot;)), 
-                    color = &quot;white&quot;, 
-                    family = &quot;Lato&quot;) +
-    scale_fill_gradientn() +
+            color = &quot;white&quot;, 
+            family = &quot;Lato&quot;) +
+  scale_fill_gradientn() +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
   labs(title = &quot;Don&#39;t Drink and Drive&quot;,
-         subtitle = &quot;% of Drivers in Deadly Wrecks Who Were Alcohol-Impaired&quot;, 
-         caption = &quot;National Highway Traffic Administration\n Data from library(fivethirtyeight)&quot;,
+       subtitle = &quot;% of Drivers in Deadly Wrecks Who Were Alcohol-Impaired&quot;, 
+       caption = &quot;National Highway Traffic Administration\n Data from library(fivethirtyeight)&quot;,
        x = NULL,
        y = NULL) +
   theme(plot.background = element_rect(colour = &quot;white&quot;),
@@ -864,16 +867,16 @@ library(geofacet)
 
 # create data frame with state driving data
 usa_drivers &lt;- bad_drivers %&gt;%
-    mutate(perc_distracted = 100 - perc_not_distracted) %&gt;%
-    select(state, perc_speeding, perc_alcohol, perc_distracted) %&gt;%
-    gather(key = issue, value = value, - state) %&gt;%
-    mutate(issue = ifelse(issue == &quot;perc_speeding&quot;, &quot;Speeding&quot;, issue),
-                 issue = ifelse(issue == &quot;perc_alcohol&quot;, &quot;Alcohol-Impaired&quot;, issue),
-                 issue = ifelse(issue == &quot;perc_distracted&quot;, &quot;Distracted&quot;, issue))
+  mutate(perc_distracted = 100 - perc_not_distracted) %&gt;%
+  select(state, perc_speeding, perc_alcohol, perc_distracted) %&gt;%
+  gather(key = issue, value = value, - state) %&gt;%
+  mutate(issue = ifelse(issue == &quot;perc_speeding&quot;, &quot;Speeding&quot;, issue),
+         issue = ifelse(issue == &quot;perc_alcohol&quot;, &quot;Alcohol-Impaired&quot;, issue),
+         issue = ifelse(issue == &quot;perc_distracted&quot;, &quot;Distracted&quot;, issue))
 
 # create a tibble with state name abbreviations
 state_abbreviations &lt;- tibble(state = c(state.name, &quot;District of Columbia&quot;),
-                                                            abbreviation = c(state.abb, &quot;DC&quot;))
+                              abbreviation = c(state.abb, &quot;DC&quot;))
 
 # merge state abbreviations on to bad_drivers based on state
 usa_drivers &lt;- left_join(x = usa_drivers, y = state_abbreviations, by = &quot;state&quot;)
@@ -894,31 +897,31 @@ urban_grid &lt;- tibble(
 # plot!
 ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) +
   geom_col() +
-    coord_flip() +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
-                                         breaks = c(0, 50, 100),
-                                         labels = c(&quot;0&quot;, &quot;.5&quot;, &quot;1&quot;)) +
+  coord_flip() +
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
+                     breaks = c(0, 50, 100),
+                     labels = c(&quot;0&quot;, &quot;.5&quot;, &quot;1&quot;)) +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
-    labs(title = &quot;Driving is dangerous&quot;, 
-             subtitle = &quot;Proportion of drivers in fatal collisions who were...&quot;,
-             x = NULL,
-             y = NULL,
-             caption = &quot;National Highway Traffic Administration \n Data from library(fivethirtyeight)&quot;) +
-    theme(plot.background = element_rect(colour = &quot;white&quot;),
-                panel.grid = element_blank(),
-                panel.grid.major = element_blank(),
-                axis.text.x = element_text(margin = margin(t = 2)),
-                axis.text.y = element_blank(),
-            axis.text = element_text(size = 8L),
-            axis.line = element_blank(),
-                panel.border = element_rect(colour = &quot;black&quot;, 
-                                                                        fill = NA, 
-                                                                        size = 0.3),
+  labs(title = &quot;Driving is dangerous&quot;, 
+       subtitle = &quot;Proportion of drivers in fatal collisions who were...&quot;,
+       x = NULL,
+       y = NULL,
+       caption = &quot;National Highway Traffic Administration \n Data from library(fivethirtyeight)&quot;) +
+  theme(plot.background = element_rect(colour = &quot;white&quot;),
+        panel.grid = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text.x = element_text(margin = margin(t = 2)),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size = 8L),
+        axis.line = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, 
+                                    fill = NA, 
+                                    size = 0.3),
         strip.background = element_rect(fill = &quot;grey85&quot;, 
-                                                                        colour = &quot;black&quot;, 
-                                                                        size = 0.3),
-                axis.ticks.length = unit(1L, &quot;pt&quot;),
-                strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
+                                        colour = &quot;black&quot;, 
+                                        size = 0.3),
+        axis.ticks.length = unit(1L, &quot;pt&quot;),
+        strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
 <p><img src="mapping/www/images/geo-facet-bar-1.png" width="672" /></p>
 </div>
 <div id="geom_line" class="section level3">
@@ -931,7 +934,7 @@ library(purrr)
 
 # add random noise to create simulated longitudinal data
 usa_drivers &lt;- bad_drivers %&gt;%
-    mutate(`2010` = (100 - perc_not_distracted) / 100) 
+  mutate(`2010` = (100 - perc_not_distracted) / 100) 
   
 usa_drivers$`2011` &lt;- usa_drivers$`2010` * rnorm(51, mean = 1.05, sd = 0.05)
 usa_drivers$`2012` &lt;- usa_drivers$`2011` * rnorm(51, mean = 1.05, sd = 0.05)
@@ -941,11 +944,11 @@ usa_drivers$`2015` &lt;- usa_drivers$`2014` * rnorm(51, mean = 1.05, sd = 0.05)
 
 # gather data from wide-format to long-format
 usa_drivers &lt;- usa_drivers %&gt;%
-    gather(`2010`:`2015`, key = &quot;Year&quot;, value = &quot;Share Distracted&quot;)
+  gather(`2010`:`2015`, key = &quot;Year&quot;, value = &quot;Share Distracted&quot;)
 
 # create a tibble with state abbreviations
 state_abbreviations &lt;- tibble(state = c(state.name, &quot;District of Columbia&quot;),
-                                                            abbreviation = c(state.abb, &quot;DC&quot;))
+                              abbreviation = c(state.abb, &quot;DC&quot;))
 
 # merge state abbreviations on to bad_drivers based on state
 usa_drivers &lt;- left_join(x = usa_drivers, y = state_abbreviations, by = &quot;state&quot;)
@@ -965,28 +968,28 @@ urban_grid &lt;- tibble(
 
 # plot!
 usa_drivers %&gt;%
-    ggplot(mapping = aes(x = Year, y = `Share Distracted`, group = abbreviation)) +
+  ggplot(mapping = aes(x = Year, y = `Share Distracted`, group = abbreviation)) +
   geom_line() +
-    scale_x_discrete(breaks = c(2010, 2015), labels = c(&quot;&#39;10&quot;, &quot;&#39;15&quot;)) +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), breaks = c(0, 0.5, 1)) +
+  scale_x_discrete(breaks = c(2010, 2015), labels = c(&quot;&#39;10&quot;, &quot;&#39;15&quot;)) +
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), breaks = c(0, 0.5, 1)) +
   facet_geo(facets = ~abbreviation, grid = urban_grid) +
-    labs(title = &quot;Driving is dangerous&quot;, 
-             subtitle = &quot;Simulated Distracted Driving is Increasing&quot;,
-             x = NULL,
-             y = NULL,
-             caption = &quot;National Highway Traffic Administration \n Data from library(fivethirtyeight) + Random Noise&quot;) +
-    theme(plot.background = element_rect(colour = &quot;white&quot;),
-                axis.text.x = element_text(margin = margin(t = 2)),
-            axis.text = element_text(size = 8L),
-            axis.line = element_blank(),
-                panel.border = element_rect(colour = &quot;black&quot;, 
-                                                                        fill = NA, 
-                                                                        size = 0.3),
+  labs(title = &quot;Driving is dangerous&quot;, 
+       subtitle = &quot;Simulated Distracted Driving is Increasing&quot;,
+       x = NULL,
+       y = NULL,
+       caption = &quot;National Highway Traffic Administration \n Data from library(fivethirtyeight) + Random Noise&quot;) +
+  theme(plot.background = element_rect(colour = &quot;white&quot;),
+        axis.text.x = element_text(margin = margin(t = 2)),
+        axis.text = element_text(size = 8L),
+        axis.line = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, 
+                                    fill = NA, 
+                                    size = 0.3),
         strip.background = element_rect(fill = &quot;grey85&quot;, 
-                                                                        colour = &quot;black&quot;, 
-                                                                        size = 0.3),
-                axis.ticks.length = unit(1L, &quot;pt&quot;),
-                strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
+                                        colour = &quot;black&quot;, 
+                                        size = 0.3),
+        axis.ticks.length = unit(1L, &quot;pt&quot;),
+        strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))</code></pre>
 <p><img src="mapping/www/images/geo-facet-line-1.png" width="672" /></p>
 </div>
 </div>
@@ -1002,25 +1005,25 @@ library(ggrepel)
 
 # drop alaska and hawaii
 states_subset &lt;- states %&gt;%
-    filter(!state_name %in% c(&quot;Alaska&quot;, &quot;Hawaii&quot;))
+  filter(!state_name %in% c(&quot;Alaska&quot;, &quot;Hawaii&quot;))
 
 # drop alaska and hawaii
 # this data frame has the latitutde and longitude for each capital
 state_capitals &lt;- read_csv(&quot;mapping/data/state-capitals.csv&quot;) %&gt;%
-    filter(!state %in% c(&quot;Alaska&quot;, &quot;Hawaii&quot;))
+  filter(!state %in% c(&quot;Alaska&quot;, &quot;Hawaii&quot;))
 
 # map!
 ggplot() + 
   geom_polygon(data = states_subset, mapping = aes(x = long, y = lat, group = group), 
-                         color = &quot;#ffffff&quot;, fill = &quot;#d2d2d2&quot;, size = 0.2) +
-    geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
-    geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
-                        size = 3, color = &quot;#000000&quot;, family = &quot;Lato&quot;) +
+               color = &quot;#ffffff&quot;, fill = &quot;#d2d2d2&quot;, size = 0.2) +
+  geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
+  geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
+            size = 3, color = &quot;#000000&quot;, family = &quot;Lato&quot;) +
   coord_map(projection = &quot;albers&quot;, lat0 = 39, lat1 = 45) +  
-    labs(title = &quot;State Capitals&quot;,
-             x = NULL, 
-             y = NULL,
-             caption = &quot;Urban Institute&quot;)</code></pre>
+  labs(title = &quot;State Capitals&quot;,
+       x = NULL, 
+       y = NULL,
+       caption = &quot;Urban Institute&quot;)</code></pre>
 <p><img src="mapping/www/images/state-capitals-1.png" width="672" /></p>
 <p>The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don’t include Alaska, Hawaii, or territories like Puerto Rico.</p>
 <p>Subsets of the above map can be made by adjusting the bounding box. Another option is <code>qmplot()</code>. This function will automatically fit the bounding box to the data. Use <code>I()</code> with <code>color =</code> and <code>alpha =</code> so those variables don’t show up in the legends. Here’s a map of mortgages in Washington, D.C.:</p>
@@ -1034,11 +1037,11 @@ mortgages &lt;- read_csv(&quot;mapping/data/districtofcolumbia2011.csv&quot;)
 
 # quick plot
 qmplot(x = longitude, y = latitude, data = mortgages, maptype = &quot;toner-lite&quot;, 
-             color = I(&quot;#1696d2&quot;), alpha = I(0.2)) +
-    labs(title = &quot;Mortgage purchases in 2011&quot;,
-             subtitle = &quot;Washington, D.C.&quot;, 
-             caption = &quot;Urban Institute analysis of HMDA data&quot;) +
-    theme(axis.line = element_blank())</code></pre>
+       color = I(&quot;#1696d2&quot;), alpha = I(0.2)) +
+  labs(title = &quot;Mortgage purchases in 2011&quot;,
+       subtitle = &quot;Washington, D.C.&quot;, 
+       caption = &quot;Urban Institute analysis of HMDA data&quot;) +
+  theme(axis.line = element_blank())</code></pre>
 <p><img src="mapping/www/images/qmplot%20mortgages-1.png" width="672" /></p>
 <p>Here’s a similar map of mortgages in Washington, D.C. with <code>geom = &quot;density2d&quot;</code>.</p>
 <pre class="r"><code># load the necessary packages
@@ -1050,11 +1053,11 @@ mortgages &lt;- read_csv(&quot;mapping/data/districtofcolumbia2011.csv&quot;)
 
 # quick plot!
 qmplot(x = longitude, y = latitude, data = mortgages, maptype = &quot;toner-lite&quot;, 
-             geom = &quot;density2d&quot;, color = I(&quot;#1696d2&quot;)) +
-    labs(title = &quot;Mortgage purchases in 2011&quot;,
-             subtitle = &quot;Washington, D.C.&quot;, 
-             caption = &quot;Urban Institute analysis of HMDA data&quot;) +
-    theme(axis.line = element_blank())</code></pre>
+       geom = &quot;density2d&quot;, color = I(&quot;#1696d2&quot;)) +
+  labs(title = &quot;Mortgage purchases in 2011&quot;,
+       subtitle = &quot;Washington, D.C.&quot;, 
+       caption = &quot;Urban Institute analysis of HMDA data&quot;) +
+  theme(axis.line = element_blank())</code></pre>
 <p><img src="mapping/www/images/qmplot%20mortgage%20density-1.png" width="672" /></p>
 </div>
 <div id="journey-maps" class="section level2">
@@ -1070,97 +1073,21 @@ library(kableExtra)
 
 # get trek data
 richmond_dc &lt;- ggmap::trek(from = &quot;Richmond, Virginia&quot;, 
-                                                     to = &quot;Fredericksburg, Virginia&quot;, 
-                                                     structure = &quot;route&quot;)
+                           to = &quot;Fredericksburg, Virginia&quot;, 
+                           structure = &quot;route&quot;)
 
 # create table of trek data
 head(richmond_dc) %&gt;%
-    kable(digits = 2, caption = &quot;Output from ggmap::trek()&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
+  kable(digits = 2, caption = &quot;Output from ggmap::trek()&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 <table class="table" style="width: auto !important; ">
 <caption>
 Output from ggmap::trek()
 </caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-lat
-</th>
-<th style="text-align:left;">
-lon
-</th>
-<th style="text-align:left;">
-route
-</th>
-</tr>
-</thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.43
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-37.54
-</td>
-<td style="text-align:left;">
--77.43
-</td>
-<td style="text-align:left;">
-A
-</td>
-</tr>
+<pre><code>&lt;tr&gt;
+
+&lt;/tr&gt;</code></pre>
 </tbody>
 </table>
 <pre class="r"><code># map trek data
@@ -1170,7 +1097,7 @@ qmap(&quot;Ashland, Virginia&quot;, zoom = 9, override_limit = TRUE) +
     size = 1.5, 
     alpha = .5,
     lineend = &quot;round&quot;) +
-    labs(title = &quot;Recreating Google Maps in R&quot;)</code></pre>
+  labs(title = &quot;Recreating Google Maps in R&quot;)</code></pre>
 <p>Like dot maps, paths can be layered on top of any ggplot coordinate plane. Here’s a journey map of an imaginary vacation.</p>
 <pre class="r"><code># load the necessary packages
 library(tidyverse)
@@ -1179,33 +1106,32 @@ library(ggrepel)
 
 # create a tibble with start and end locations for each trip leg
 vacation &lt;- tibble(start = c(&quot;Richmond, Virginia&quot;, &quot;Annapolis, Maryland&quot;, &quot;Columbus, Ohio&quot;, &quot;Sacramento, California&quot;, &quot;Phoenix, Arizona&quot;)) %&gt;%
-    mutate(end = lead(start)) %&gt;%
-    mutate(end = ifelse(is.na(end), &quot;Richmond, Virginia&quot;, end))
+  mutate(end = lead(start)) %&gt;%
+  mutate(end = ifelse(is.na(end), &quot;Richmond, Virginia&quot;, end))
 
 # map the coordinates from each start and end location for each trip leg
 vacation_route &lt;- map2(.x = vacation$start, .y = vacation$end, 
-                                             .f = ggmap::trek, structure = &quot;route&quot;) %&gt;%
-    reduce(bind_rows)
+                       .f = ggmap::trek, structure = &quot;route&quot;) %&gt;%
+  reduce(bind_rows)
 
 # drop Alaska and hawaii
 # this data frame has the latitude and longitude for each capital
 state_capitals &lt;- read_csv(&quot;mapping/data/state-capitals.csv&quot;) %&gt;%
-    filter(state %in% c(&quot;Maryland&quot;, &quot;Ohio&quot;, &quot;Indiana&quot;, &quot;Iowa&quot;, &quot;Nebraska&quot;, &quot;Wyoming&quot;, &quot;Utah&quot;, &quot;California&quot;, &quot;Arizona&quot;, &quot;Oklahoma&quot;, &quot;Arkansas&quot;, &quot;Tennessee&quot;, &quot;Virginia&quot;))
+  filter(state %in% c(&quot;Maryland&quot;, &quot;Ohio&quot;, &quot;Indiana&quot;, &quot;Iowa&quot;, &quot;Nebraska&quot;, &quot;Wyoming&quot;, &quot;Utah&quot;, &quot;California&quot;, &quot;Arizona&quot;, &quot;Oklahoma&quot;, &quot;Arkansas&quot;, &quot;Tennessee&quot;, &quot;Virginia&quot;))
 
 # map!
 ggplot() + 
   geom_polygon(data = states, mapping = aes(x = long, y = lat, group = group), 
-                         color = &quot;#ffffff&quot;, fill = &quot;#d2d2d2&quot;, size = 0.2) +
-    geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
-    geom_path(data = vacation_route, aes(lon, lat), color = &quot;#fdbf11&quot;) +
-    geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
-                        size = 3, color = &quot;#000000&quot;, family = &quot;Lato&quot;) +
-  coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +   
-    labs(title = &quot;Vacation Roadmap&quot;,
-             x = NULL, 
-             y = NULL) +
-    theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))</code></pre>
-<p><img src="mapping/www/images/vacation%20trek-1.png" width="672" /></p>
+               color = &quot;#ffffff&quot;, fill = &quot;#d2d2d2&quot;, size = 0.2) +
+  geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
+  geom_path(data = vacation_route, aes(lon, lat), color = &quot;#fdbf11&quot;) +
+  geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
+            size = 3, color = &quot;#000000&quot;, family = &quot;Lato&quot;) +
+  coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) + 
+  labs(title = &quot;Vacation Roadmap&quot;,
+       x = NULL, 
+       y = NULL) +
+  theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))</code></pre>
 </div>
 <div id="google-maps-route" class="section level4">
 <h4>Google maps route()</h4>
@@ -1216,224 +1142,12 @@ library(ggmap)
 
 # map on google maps
 richmond_dc &lt;- route(from = &quot;Richmond, Virginia&quot;, 
-                                         to = &quot;Urban Institute&quot;, 
-                                         structure = &quot;route&quot;)
+                     to = &quot;Urban Institute&quot;, 
+                     structure = &quot;route&quot;)
 
 head(richmond_dc) %&gt;%
-    kable(digits = 2, caption = &quot;Output from ggmaps::route&quot;, align = &quot;l&quot;, format = &quot;html&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
-<table class="table" style="width: auto !important; ">
-<caption>
-Output from ggmaps::route
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-m
-</th>
-<th style="text-align:left;">
-km
-</th>
-<th style="text-align:left;">
-miles
-</th>
-<th style="text-align:left;">
-seconds
-</th>
-<th style="text-align:left;">
-minutes
-</th>
-<th style="text-align:left;">
-hours
-</th>
-<th style="text-align:left;">
-leg
-</th>
-<th style="text-align:left;">
-lon
-</th>
-<th style="text-align:left;">
-lat
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-49
-</td>
-<td style="text-align:left;">
-0.05
-</td>
-<td style="text-align:left;">
-0.03
-</td>
-<td style="text-align:left;">
-15
-</td>
-<td style="text-align:left;">
-0.25
-</td>
-<td style="text-align:left;">
-0.00
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-37.54
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-946
-</td>
-<td style="text-align:left;">
-0.95
-</td>
-<td style="text-align:left;">
-0.59
-</td>
-<td style="text-align:left;">
-143
-</td>
-<td style="text-align:left;">
-2.38
-</td>
-<td style="text-align:left;">
-0.04
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
--77.44
-</td>
-<td style="text-align:left;">
-37.54
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-33
-</td>
-<td style="text-align:left;">
-0.03
-</td>
-<td style="text-align:left;">
-0.02
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-0.05
-</td>
-<td style="text-align:left;">
-0.00
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
--77.43
-</td>
-<td style="text-align:left;">
-37.55
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-5807
-</td>
-<td style="text-align:left;">
-5.81
-</td>
-<td style="text-align:left;">
-3.61
-</td>
-<td style="text-align:left;">
-247
-</td>
-<td style="text-align:left;">
-4.12
-</td>
-<td style="text-align:left;">
-0.07
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
--77.43
-</td>
-<td style="text-align:left;">
-37.55
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-103597
-</td>
-<td style="text-align:left;">
-103.60
-</td>
-<td style="text-align:left;">
-64.38
-</td>
-<td style="text-align:left;">
-3311
-</td>
-<td style="text-align:left;">
-55.18
-</td>
-<td style="text-align:left;">
-0.92
-</td>
-<td style="text-align:left;">
-5
-</td>
-<td style="text-align:left;">
--77.47
-</td>
-<td style="text-align:left;">
-37.58
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-14548
-</td>
-<td style="text-align:left;">
-14.55
-</td>
-<td style="text-align:left;">
-9.04
-</td>
-<td style="text-align:left;">
-476
-</td>
-<td style="text-align:left;">
-7.93
-</td>
-<td style="text-align:left;">
-0.13
-</td>
-<td style="text-align:left;">
-6
-</td>
-<td style="text-align:left;">
--77.41
-</td>
-<td style="text-align:left;">
-38.46
-</td>
-</tr>
-</tbody>
-</table>
+  kable(digits = 2, caption = &quot;Output from ggmaps::route&quot;, align = &quot;l&quot;, format = &quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 </div>
 </div>
 </div>
@@ -1465,52 +1179,52 @@ library(stringr)
 
 # create coordinates function
 get_coordinates &lt;- function(address) {
-    
+  
   # geocode the address (returns a complicated data structure)
-    geo_reply &lt;- geocode(location = address, output = &quot;all&quot;, messaging = TRUE, source = &quot;dsk&quot;)
-        
-    # create an empty tibble to populate with tidy data
-    answer &lt;- data.frame(
-        latitude = NA, 
-        longitude = NA, 
-        accuracy = NA, 
-        formatted_address = NA, 
-        address_type = NA, 
-        status = NA
-    )
-        
-    # store the status of the geo code
-    answer$status &lt;- geo_reply$status
+  geo_reply &lt;- geocode(location = address, output = &quot;all&quot;, messaging = TRUE, source = &quot;dsk&quot;)
     
-    # store the number of remaining geocodes
+  # create an empty tibble to populate with tidy data
+  answer &lt;- data.frame(
+    latitude = NA, 
+    longitude = NA, 
+    accuracy = NA, 
+    formatted_address = NA, 
+    address_type = NA, 
+    status = NA
+  )
+    
+  # store the status of the geo code
+  answer$status &lt;- geo_reply$status
+  
+  # store the number of remaining geocodes
+  remaining_queries &lt;- geocodeQueryCheck()
+  
+  # if the R session is over the Google geocode query limit, the pause for 1 minute
+  while (remaining_queries &lt;= 5) {
+    print(paste(&quot;over query limit,&quot;, remaining_queries, &quot; queries remaining. Pausing for 1 minute&quot;)) 
+    time &lt;- Sys.time()
+    print(as.character(time))
+    Sys.sleep(60)
     remaining_queries &lt;- geocodeQueryCheck()
-    
-    # if the R session is over the Google geocode query limit, the pause for 1 minute
-    while (remaining_queries &lt;= 5) {
-        print(paste(&quot;over query limit,&quot;, remaining_queries, &quot; queries remaining. Pausing for 1 minute&quot;)) 
-        time &lt;- Sys.time()
-        print(as.character(time))
-        Sys.sleep(60)
-        remaining_queries &lt;- geocodeQueryCheck()
-    }
-    
-    # if the geocode was bad, return the empty data frame
-    if (geo_reply$status != &quot;OK&quot;) {
-        return(answer)
-    }  
-    
-    # else, extract what we need from the Google server reply into the tibble
-    answer$latitude &lt;- geo_reply$results[[1]]$geometry$location$lat
-    answer$longitude &lt;- geo_reply$results[[1]]$geometry$location$lng   
-    
-    if (length(geo_reply$results[[1]]$types) &gt; 0){
-        answer$accuracy &lt;- geo_reply$results[[1]]$types[[1]]
-    }
-    
-    answer$address_type &lt;- paste(geo_reply$results[[1]]$types, collapse=&#39;,&#39;)
-    answer$formatted_address &lt;- geo_reply$results[[1]]$formatted_address
-    
+  }
+  
+  # if the geocode was bad, return the empty data frame
+  if (geo_reply$status != &quot;OK&quot;) {
     return(answer)
+  }  
+  
+  # else, extract what we need from the Google server reply into the tibble
+  answer$latitude &lt;- geo_reply$results[[1]]$geometry$location$lat
+  answer$longitude &lt;- geo_reply$results[[1]]$geometry$location$lng   
+  
+  if (length(geo_reply$results[[1]]$types) &gt; 0){
+    answer$accuracy &lt;- geo_reply$results[[1]]$types[[1]]
+  }
+  
+  answer$address_type &lt;- paste(geo_reply$results[[1]]$types, collapse=&#39;,&#39;)
+  answer$formatted_address &lt;- geo_reply$results[[1]]$formatted_address
+  
+  return(answer)
 }</code></pre>
 <div id="single-address" class="section level5">
 <h5>Single address</h5>
@@ -1521,8 +1235,8 @@ library(ggmap)
 
 # use the get_coordinates function
 get_coordinates(address = &quot;1600 Monument Ave. Richmond, Virginia 23220&quot;) %&gt;%
-    kable(digits = 2, caption = &quot;Output from geocoding one address&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
+  kable(digits = 2, caption = &quot;Output from geocoding one address&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 </div>
 <div id="multiple-addresses" class="section level5">
 <h5>Multiple addresses</h5>
@@ -1536,18 +1250,18 @@ library(ggmap)
 # creates vectors of institution names and addresses
 institutions &lt;- c(&quot;Urban Institute&quot;, &quot;Brookings Institution&quot;)
 addresses &lt;- c(&quot;2100 M Street NW, Washington DC&quot;, 
-                             &quot;1775 Massachusetts Ave NW, Washington, DC 20036&quot;)
+               &quot;1775 Massachusetts Ave NW, Washington, DC 20036&quot;)
 
 # iterate the function over the tibble and return the answer
 tibble(institution = institutions,
-             address = addresses) %&gt;%
-    mutate(coords = purrr::map(address, get_coordinates)) %&gt;%
-    mutate(latitude = map_dbl(coords, 1),
-                 longitude = map_dbl(coords, 2),
-                 accuracy = map_chr(coords, 3)) %&gt;%
-    select(-coords) %&gt;%
-    kable(digits = 2, caption = &quot;Output from geocoding multiple addresses&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
+       address = addresses) %&gt;%
+  mutate(coords = purrr::map(address, get_coordinates)) %&gt;%
+  mutate(latitude = map_dbl(coords, 1),
+         longitude = map_dbl(coords, 2),
+         accuracy = map_chr(coords, 3)) %&gt;%
+  select(-coords) %&gt;%
+  kable(digits = 2, caption = &quot;Output from geocoding multiple addresses&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 </div>
 <div id="exceeding-the-2500-limit" class="section level5">
 <h5>Exceeding the 2,500 limit</h5>
@@ -1573,63 +1287,39 @@ library(ggmap)
 
 institutions &lt;- c(&quot;Urban Institute&quot;, &quot;Brookings Institution&quot;)
 addresses &lt;- c(&quot;2100 M Street NW, Washington DC&quot;, 
-                             &quot;1775 Massachusetts Ave NW, Washington, DC 20036&quot;)
+               &quot;1775 Massachusetts Ave NW, Washington, DC 20036&quot;)
 
 data.frame(institution = institutions, 
-                     address = addresses, 
-                     stringsAsFactors = FALSE) %&gt;%
-    mutate_geocode(address, source = &quot;dsk&quot;) %&gt;%
-    kable(digits = 2, caption = &quot;Output from ggmap::mutate_geocode&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
+           address = addresses, 
+           stringsAsFactors = FALSE) %&gt;%
+  mutate_geocode(address, source = &quot;dsk&quot;) %&gt;%
+  kable(digits = 2, caption = &quot;Output from ggmap::mutate_geocode&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 <table class="table" style="width: auto !important; ">
 <caption>
 Output from ggmap::mutate_geocode
 </caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-institution
-</th>
-<th style="text-align:left;">
-address
-</th>
-<th style="text-align:left;">
-lon
-</th>
-<th style="text-align:left;">
-lat
-</th>
-</tr>
+<pre><code>&lt;tr&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; institution &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; address &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; lon &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; lat &lt;/th&gt;
+&lt;/tr&gt;</code></pre>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Urban Institute
-</td>
-<td style="text-align:left;">
-2100 M Street NW, Washington DC
-</td>
-<td style="text-align:left;">
--77.05
-</td>
-<td style="text-align:left;">
-38.91
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Brookings Institution
-</td>
-<td style="text-align:left;">
-1775 Massachusetts Ave NW, Washington, DC 20036
-</td>
-<td style="text-align:left;">
--77.04
-</td>
-<td style="text-align:left;">
-38.91
-</td>
-</tr>
+<pre><code>&lt;tr&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; Urban Institute &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 2100 M Street NW, Washington DC &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; -77.05 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 38.91 &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; Brookings Institution &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 1775 Massachusetts Ave NW, Washington, DC 20036 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; -77.04 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 38.91 &lt;/td&gt;
+&lt;/tr&gt;</code></pre>
 </tbody>
 </table>
 <pre class="r"><code>rm(addresses, institutions)</code></pre>
@@ -1646,10 +1336,10 @@ library(stringr)
 
 # create a tibble with an address
 addresses &lt;- tibble(
-    street = c(&quot;1940 Corner Rock Rd.&quot;),
-    city = c(&quot;Midlothian&quot;),
-    state = c(&quot;Virginia&quot;),
-    zip = c(&quot;23113&quot;)
+  street = c(&quot;1940 Corner Rock Rd.&quot;),
+  city = c(&quot;Midlothian&quot;),
+  state = c(&quot;Virginia&quot;),
+  zip = c(&quot;23113&quot;)
 )
 
 # save the API URL
@@ -1704,49 +1394,29 @@ output %&gt;%
          address = unlist(address),
          latitude = unlist(latitude),
          longitude = unlist(longitude)) %&gt;%
-    kable(digits = 2, caption = &quot;Geocoding with US Census Geocoder API&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
+  kable(digits = 2, caption = &quot;Geocoding with US Census Geocoder API&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 <table class="table" style="width: auto !important; ">
 <caption>
 Geocoding with US Census Geocoder API
 </caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-row_number
-</th>
-<th style="text-align:left;">
-address
-</th>
-<th style="text-align:left;">
-latitude
-</th>
-<th style="text-align:left;">
-longitude
-</th>
-<th style="text-align:left;">
-accuracy
-</th>
-</tr>
+<pre><code>&lt;tr&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; row_number &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; address &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; latitude &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; longitude &lt;/th&gt;
+ &lt;th style=&quot;text-align:left;&quot;&gt; accuracy &lt;/th&gt;
+&lt;/tr&gt;</code></pre>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-1940 CORNER ROCK RD, MIDLOTHIAN, VA, 23113
-</td>
-<td style="text-align:left;">
--77.633194
-</td>
-<td style="text-align:left;">
-37.519318
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
+<pre><code>&lt;tr&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 1 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 1940 CORNER ROCK RD, MIDLOTHIAN, VA, 23113 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; -77.633194 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; 37.519318 &lt;/td&gt;
+ &lt;td style=&quot;text-align:left;&quot;&gt; NA &lt;/td&gt;
+&lt;/tr&gt;</code></pre>
 </tbody>
 </table>
 <p>An optimal strategy for geocoding many addresses could be to break the data into 1,000 observation chunks and submit each chunk to the US Census Geocoder API. Then, use the Google Maps Geocoding API to geocode observations for which the US Census Geocoder API could not find a match. This could all be accomplished with relatively simple R code.</p>
@@ -1763,73 +1433,12 @@ NA
 library(ggmap)
 
 ggmap::mapdist(from = &quot;Lincoln Monument&quot;, 
-                to = &quot;Washington Monument&quot;,
-                mode = &quot;walking&quot;,
-                output = &quot;simple&quot;,
-                source = &quot;dsk&quot;) %&gt;%
-    kable(digits = 2, caption = &quot;Output from ggmap::mapdist()&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
-    kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
-<table class="table" style="width: auto !important; ">
-<caption>
-Output from ggmap::mapdist()
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-from
-</th>
-<th style="text-align:left;">
-to
-</th>
-<th style="text-align:left;">
-m
-</th>
-<th style="text-align:left;">
-km
-</th>
-<th style="text-align:left;">
-miles
-</th>
-<th style="text-align:left;">
-seconds
-</th>
-<th style="text-align:left;">
-minutes
-</th>
-<th style="text-align:left;">
-hours
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Lincoln Monument
-</td>
-<td style="text-align:left;">
-Washington Monument
-</td>
-<td style="text-align:left;">
-1397
-</td>
-<td style="text-align:left;">
-1.4
-</td>
-<td style="text-align:left;">
-0.87
-</td>
-<td style="text-align:left;">
-1058
-</td>
-<td style="text-align:left;">
-17.63
-</td>
-<td style="text-align:left;">
-0.29
-</td>
-</tr>
-</tbody>
-</table>
+        to = &quot;Washington Monument&quot;,
+        mode = &quot;walking&quot;,
+        output = &quot;simple&quot;,
+        source = &quot;dsk&quot;) %&gt;%
+  kable(digits = 2, caption = &quot;Output from ggmap::mapdist()&quot;, format = &quot;html&quot;, align = &quot;l&quot;) %&gt;%
+  kableExtra::kable_styling(full_width = FALSE, position = &quot;left&quot;)</code></pre>
 </div>
 </div>
 <div id="sampling-coordinates" class="section level2">
@@ -1868,17 +1477,17 @@ sample_number &lt;- 0</code></pre>
   #   number.of.mortgages: number of mortgages in Census tract
   # Output: list with longitudes and latitudes for mortgages in each ward
 
-    # Create unique seed number for each random sample
-    sample_number &lt;&lt;- sample_number + 1
-    
-    # Set seeds so pseudo-random sampling is reproducible
-    set.seed(max(sample_number, 1))
-    
-    # Create a temporary data frame with the sampled coordinates
+  # Create unique seed number for each random sample
+  sample_number &lt;&lt;- sample_number + 1
+  
+  # Set seeds so pseudo-random sampling is reproducible
+  set.seed(max(sample_number, 1))
+  
+  # Create a temporary data frame with the sampled coordinates
   temp &lt;- spsample(x = tracts_shapefile@polygons[[census.tract]], 
-                                 n = number.of.mortgages, 
-                                 type = &quot;random&quot;, 
-                                 iter = 100)
+                   n = number.of.mortgages, 
+                   type = &quot;random&quot;, 
+                   iter = 100)
 
   # If temp has sampled coordinates, then split into longitude and latitude and return
   # Else, assign and return NAs
@@ -1911,7 +1520,7 @@ sample_number &lt;- 0</code></pre>
   #   loan.type:
   # Output: one of ten combinations of race and mortgage type
   
-    # Create quasi-quoted arguments 
+  # Create quasi-quoted arguments 
   race_ethnicity &lt;- enquo(race_ethnicity)
   formula &lt;- enquo(formula)
   
@@ -1924,7 +1533,7 @@ sample_number &lt;- 0</code></pre>
   temp &lt;- loan_type %&gt;%
     group_by(tract) %&gt;%
     mutate(position = match(tract,
-                                                    as.numeric(as.character(tracts_shapefile@data$GEOID)))) %&gt;%
+                            as.numeric(as.character(tracts_shapefile@data$GEOID)))) %&gt;%
     filter(!!formula) %&gt;%
     arrange(position) 
   
@@ -1933,12 +1542,12 @@ sample_number &lt;- 0</code></pre>
   if (nrow(temp) &gt; 0) {
     
     temp &lt;- temp %&gt;%
-        mutate(coordinates = map2(.x = unique(position), 
-                                                            .y = !!race_ethnicity, 
-                                                            .f = get_coordinates)) %&gt;%
-        mutate(raceethnicity = race.ethnicity, 
-                     loantype = loan.type) %&gt;%
-        unnest()
+      mutate(coordinates = map2(.x = unique(position), 
+                                .y = !!race_ethnicity, 
+                                .f = get_coordinates)) %&gt;%
+      mutate(raceethnicity = race.ethnicity, 
+             loantype = loan.type) %&gt;%
+      unnest()
     
     return(temp)
   
@@ -1956,50 +1565,50 @@ sample_number &lt;- 0</code></pre>
 <pre class="r"><code>readR &lt;- function(shapefile) {
   
   # Purpose: Reads the state shapefile, set the map projection, and sample
-  #                  for total plus the four race/ethnicity groups
+  #          for total plus the four race/ethnicity groups
   # Args: 
   #   shapefile: Name of the shapefile for sampling
   # Output: Tibble with observations for every ten mortgages
   
-    # Read the relevant shapefile
-    tracts_shapefile &lt;&lt;- readOGR(paste0(&quot;mapping/shapefiles/&quot;, shapefile))
-    
-    # Set the map projection for the shapefile
-    tracts_shapefile &lt;&lt;- spTransform(tracts_shapefile, &quot;+init=epsg:4326&quot;)
-    
-    # Confirm the shapefile exists
-    print(exists(&quot;tracts_shapefile&quot;))
+  # Read the relevant shapefile
+  tracts_shapefile &lt;&lt;- readOGR(paste0(&quot;mapping/shapefiles/&quot;, shapefile))
+  
+  # Set the map projection for the shapefile
+  tracts_shapefile &lt;&lt;- spTransform(tracts_shapefile, &quot;+init=epsg:4326&quot;)
+  
+  # Confirm the shapefile exists
+  print(exists(&quot;tracts_shapefile&quot;))
 
-    # Create data frames for each race/ethnicity
+  # Create data frames for each race/ethnicity
   purchase_total &lt;- latlong_function(loan_type = purchase, 
-                                                                     race_ethnicity = total, 
-                                                                     formula = total &gt; 0, 
-                                                                     race.ethnicity = &quot;total&quot;, 
-                                                                     loan.type = &quot;purchase&quot;)
+                                     race_ethnicity = total, 
+                                     formula = total &gt; 0, 
+                                     race.ethnicity = &quot;total&quot;, 
+                                     loan.type = &quot;purchase&quot;)
   
   purchase_aa &lt;-    latlong_function(loan_type = purchase, 
-                                                                     race_ethnicity = aa, 
-                                                                     formula = aa &gt; 0, 
-                                                                     race.ethnicity = &quot;aa&quot;, 
-                                                                     loan.type = &quot;purchase&quot;)
+                                     race_ethnicity = aa, 
+                                     formula = aa &gt; 0, 
+                                     race.ethnicity = &quot;aa&quot;, 
+                                     loan.type = &quot;purchase&quot;)
   
   purchase_his &lt;-   latlong_function(loan_type = purchase, 
-                                                                     race_ethnicity = his, 
-                                                                     formula = his &gt; 0, 
-                                                                     race.ethnicity = &quot;his&quot;, 
-                                                                     loan.type = &quot;purchase&quot;)
+                                     race_ethnicity = his, 
+                                     formula = his &gt; 0, 
+                                     race.ethnicity = &quot;his&quot;, 
+                                     loan.type = &quot;purchase&quot;)
   
   purchase_asian &lt;- latlong_function(loan_type = purchase, 
-                                                                     race_ethnicity = asian, 
-                                                                     formula = asian &gt; 0, 
-                                                                     race.ethnicity = &quot;asian&quot;, 
-                                                                     loan.type = &quot;purchase&quot;)
+                                     race_ethnicity = asian, 
+                                     formula = asian &gt; 0, 
+                                     race.ethnicity = &quot;asian&quot;, 
+                                     loan.type = &quot;purchase&quot;)
   
   purchase_nhw &lt;-   latlong_function(loan_type = purchase, 
-                                                                     race_ethnicity = nhw, 
-                                                                     formula = nhw &gt; 0, 
-                                                                     race.ethnicity = &quot;nhw&quot;, 
-                                                                     loan.type = &quot;purchase&quot;)
+                                     race_ethnicity = nhw, 
+                                     formula = nhw &gt; 0, 
+                                     race.ethnicity = &quot;nhw&quot;, 
+                                     loan.type = &quot;purchase&quot;)
 
   # combine the five data frames into one data fram
   full_dataset &lt;- bind_rows(purchase_aa, purchase_asian, purchase_his, purchase_nhw, purchase_total)
@@ -2016,7 +1625,7 @@ sample_number &lt;- 0</code></pre>
 <p><code>readR()</code> can be run on just one shapefile like <code>readR(&quot;tl_2012&quot;)</code> or it can be iterated across a vector of shapefile names using <code>map()</code> from <code>library(purrr)</code>. This example uses the former. The actual program used the latter and iterated across shapefiles and data from 2000 to 2016. Each observation had a data frame for the given year and three unique shapefiles were used because Census tracts change over time.</p>
 <p>This code loads the data using <code>read_csv()</code> and runs the function <code>readR()</code> on the 2012 shapefile for Rhode Island.</p>
 <pre class="r"><code>purchase &lt;- read_csv(&quot;mapping/data/hmdamap2012_10_purch.csv&quot;, 
-    col_types = cols(
+  col_types = cols(
   tract = col_double(),
   year1 = col_integer(),
   tract_T = col_character(),
@@ -2025,8 +1634,8 @@ sample_number &lt;- 0</code></pre>
   nhw = col_integer(),
   asian = col_integer(),
   total = col_integer())) %&gt;% 
-    filter(str_detect(tract, &quot;^44&quot;)) %&gt;%
-    filter(asian &gt; 0)
+  filter(str_detect(tract, &quot;^44&quot;)) %&gt;%
+  filter(asian &gt; 0)
 
 rhode_island &lt;- readR(&quot;tl_2012&quot;)</code></pre>
 <p>Once the coordinates are sampled, it’s simple to create a dot density map using the methods from above.</p>
@@ -2063,17 +1672,17 @@ urban_colors &lt;- c(&quot;#cfe8f3&quot;, &quot;#a2d4ec&quot;, &quot;#46abdb&quo
 
 # Plot!
 chip_map &lt;- states_subset %&gt;%
-    ggplot(aes(x = long, y = lat, group = group, fill = enrollment_group)) +
+  ggplot(aes(x = long, y = lat, group = group, fill = enrollment_group)) +
   geom_polygon(color = &quot;#ffffff&quot;, size = 0.25) +
   scale_fill_manual(values = urban_colors) +  
-  coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +   
+  coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) + 
   labs(title = &quot;State CHIP Enrollment&quot;) +
   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 
 # bar plot
 chip_bar_plot &lt;- chip %&gt;%
   ggplot(aes(x = fct_reorder(state_abbreviation, `CHIP Enrollment`), 
-                     y = `CHIP Enrollment`, fill = enrollment_group)) +
+             y = `CHIP Enrollment`, fill = enrollment_group)) +
   geom_bar(stat = &quot;identity&quot;) +
   scale_fill_manual(values = urban_colors) +
   scale_y_continuous(expand = c(0, 0)) +
@@ -2086,7 +1695,7 @@ chip_bar_plot &lt;- chip %&gt;%
         axis.line = element_blank(),
         axis.text = element_text(size = 6L),
         legend.position = &quot;none&quot;,
-            plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+        plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
 
 grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))</code></pre>
 <p><img src="mapping/www/images/state%20choropleth%20and%20bar-1.png" width="672" /></p>
@@ -2113,7 +1722,7 @@ grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))</code></pre>
 ##  [4] geofacet_0.1.9        broom_0.4.4           htmltools_0.3.6      
 ##  [7] tidycensus_0.4.6      viridis_0.5.1         viridisLite_0.3.0    
 ## [10] leaflet_2.0.1         sf_0.6-3              USAboundaries_0.3.1  
-## [13] rgdal_1.3-3           sp_1.3-1              urbnmapr_0.0.0.9000  
+## [13] rgdal_1.3-3           sp_1.3-1              urbnmapr_0.0.0.9001  
 ## [16] gridExtra_2.3         kableExtra_0.9.0      RXKCD_1.8-2          
 ## [19] wooldridge_1.3.0      extrafont_0.17        AmesHousing_0.0.3    
 ## [22] fivethirtyeight_0.4.0 waffle_0.7.0          ggridges_0.5.0       
@@ -2151,7 +1760,7 @@ grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))</code></pre>
 ## [73] modelr_0.1.2        crayon_1.3.4        uuid_0.1-2         
 ## [76] utf8_1.1.4          rmarkdown_1.10      jpeg_0.1-8         
 ## [79] rnaturalearth_0.1.0 grid_3.5.0          readxl_1.1.0       
-## [82] digest_0.6.15       classInt_0.2-3      xtable_1.8-2       
+## [82] digest_0.6.16       classInt_0.2-3      xtable_1.8-2       
 ## [85] httpuv_1.4.4.1      munsell_0.5.0</code></pre>
 </div>
 </div>
