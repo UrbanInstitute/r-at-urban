@@ -7,6 +7,9 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
+    pandoc_args: [ 
+      "--tab-stop=2" 
+    ] 
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -857,7 +860,7 @@ qmap("Ashland, Virginia", zoom = 9, override_limit = TRUE) +
 
 Like dot maps, paths can be layered on top of any ggplot coordinate plane. Here's a journey map of an imaginary vacation. 
 
-```{r vacation trek}
+```{r vacation trek, eval = FALSE}
 # load the necessary packages
 library(tidyverse)
 library(urbnmapr)
@@ -897,7 +900,7 @@ ggplot() +
 
 `route()` is an alternative to `trek()` that returns similar results. `trek()` sticks closer to the roads according to the package's [GitHub repository](https://github.com/dkahle/ggmap).
 
-```{r route}
+```{r route, eval = FALSE}
 # load the necessary packages
 library(tidyverse)
 library(ggmap)
@@ -1167,7 +1170,7 @@ An optimal strategy for geocoding many addresses could be to break the data into
 
 The `library(ggmap)` GitHub page is a good [resource](https://github.com/dkahle/ggmap) for this type of analysis. 
 
-```{r mapdist}
+```{r mapdist, eval = FALSE}
 # load the necessary packages
 library(ggmap)
 

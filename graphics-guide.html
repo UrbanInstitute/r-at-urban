@@ -470,34 +470,34 @@ urbnthemes::lato_install()</code></pre>
 <div id="lollipop-plot" class="section level4">
 <h4>Lollipop plot</h4>
 <pre class="r"><code>mtcars %&gt;%
-    rownames_to_column(&quot;model&quot;) %&gt;%
-    arrange(mpg) %&gt;%
-    mutate(model = factor(model, levels = .$model)) %&gt;%
-    ggplot(aes(mpg, model)) +
-        geom_segment(aes(x = 0, xend = mpg, y = model, yend = model)) + 
-        geom_point() +
-        scale_x_continuous(expand = c(0, 0), limits = c(0, max(mtcars$mpg) * 1.1)) +
-        labs(title = &quot;Miles Per Gallon of Popular Cars&quot;,
-                 subtitle = &quot;1974 Motor Trend US magazine&quot;,
-                 x = NULL, 
-                 y = &quot;Miles Per Gallon&quot;) +
-    theme(axis.text.y = element_text(size = 8))</code></pre>
+  rownames_to_column(&quot;model&quot;) %&gt;%
+  arrange(mpg) %&gt;%
+  mutate(model = factor(model, levels = .$model)) %&gt;%
+  ggplot(aes(mpg, model)) +
+    geom_segment(aes(x = 0, xend = mpg, y = model, yend = model)) + 
+    geom_point() +
+    scale_x_continuous(expand = c(0, 0), limits = c(0, max(mtcars$mpg) * 1.1)) +
+    labs(title = &quot;Miles Per Gallon of Popular Cars&quot;,
+         subtitle = &quot;1974 Motor Trend US magazine&quot;,
+         x = NULL, 
+         y = &quot;Miles Per Gallon&quot;) +
+  theme(axis.text.y = element_text(size = 8))</code></pre>
 <p><img src="graphics-guide/www/images/lollipop-plot-1.png" width="672" /></p>
 </div>
 <div id="cleveland-dot-plot" class="section level4">
 <h4>Cleveland dot plot</h4>
 <pre class="r"><code>mtcars %&gt;%
-    rownames_to_column(&quot;model&quot;) %&gt;%
-    arrange(mpg) %&gt;%
-    mutate(model = factor(model, levels = .$model)) %&gt;%
-    ggplot(aes(mpg, model)) +
-        geom_point() +
-        scale_x_continuous(expand = c(0, 0), limits = c(0, max(mtcars$mpg) * 1.1)) +
-        labs(title = &quot;Miles Per Gallon of Popular Cars&quot;,
-                 subtitle = &quot;1974 Motor Trend US magazine&quot;,
-                 x = NULL, 
-                 y = &quot;Miles Per Gallon&quot;) +
-    theme(axis.text.y = element_text(size = 8))</code></pre>
+  rownames_to_column(&quot;model&quot;) %&gt;%
+  arrange(mpg) %&gt;%
+  mutate(model = factor(model, levels = .$model)) %&gt;%
+  ggplot(aes(mpg, model)) +
+    geom_point() +
+    scale_x_continuous(expand = c(0, 0), limits = c(0, max(mtcars$mpg) * 1.1)) +
+    labs(title = &quot;Miles Per Gallon of Popular Cars&quot;,
+         subtitle = &quot;1974 Motor Trend US magazine&quot;,
+         x = NULL, 
+         y = &quot;Miles Per Gallon&quot;) +
+  theme(axis.text.y = element_text(size = 8))</code></pre>
 <p><img src="graphics-guide/www/images/cleveland-dot-plot-1.png" width="672" /></p>
 </div>
 </div>
@@ -538,7 +538,7 @@ urbnthemes::lato_install()</code></pre>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) + 
   geom_hex(mapping = aes(fill = ..count..)) + 
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.1)), labels = scales::dollar) +
-    scale_fill_gradientn(labels = scales::comma) +
+  scale_fill_gradientn(labels = scales::comma) +
   labs(title = &quot;Title&quot;,
        subtitle = &quot;geom_hex adds clarity to overlapping points&quot;,
        x = &quot;Carat&quot;,
@@ -632,33 +632,33 @@ ggplot(data = mpg, mapping = aes(x = displ, y = cty)) +
 library(gapminder)
 
 gapminder %&gt;%
-    filter(country %in% c(&quot;Australia&quot;, &quot;Canada&quot;, &quot;New Zealand&quot;, &quot;Japan&quot;)) %&gt;%
-    ggplot(aes(year, gdpPercap, color = country)) +
-    geom_line() +
+  filter(country %in% c(&quot;Australia&quot;, &quot;Canada&quot;, &quot;New Zealand&quot;, &quot;Japan&quot;)) %&gt;%
+  ggplot(aes(year, gdpPercap, color = country)) +
+  geom_line() +
   scale_x_continuous(expand = c(0, 0), breaks = c(1950, 1960, 1970, 1980, 1990, 2000, 2010), limits = c(1945, 2011)) +
-    scale_y_continuous(expand = c(0, 0), labels = scales::dollar, limits = c(0, 40000)) +
-    labs(title = &quot;Per Capita GDP in Selected Countries&quot;,
-             subtitle = &quot;From the gapminder data set&quot;,
-             x = &quot;Year&quot;,
-             y = &quot;Per capita GDP&quot;)</code></pre>
+  scale_y_continuous(expand = c(0, 0), labels = scales::dollar, limits = c(0, 40000)) +
+  labs(title = &quot;Per Capita GDP in Selected Countries&quot;,
+       subtitle = &quot;From the gapminder data set&quot;,
+       x = &quot;Year&quot;,
+       y = &quot;Per capita GDP&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/multiple-line-charts1-1.png" width="672" /></p>
 <p>Plotting more than one variable can be useful for seeing the relationship of variables over time, but it takes a small amount of data munging.</p>
 <p>This is because <code>ggplot2</code> wants data in a “long” format instead of a “wide” format for line plots with multiple lines. <code>gather()</code> and <code>spread()</code> from the <code>tidyr</code> package make switching back-and-forth between “long” and “wide” painless. Essentially, variable titles go into “key” and variable values go into “value”. Then ggplot2, turns the different levels of the key variable (population, unemployment) into colors.</p>
 <pre class="r"><code>library(tidyverse)
 
 as_tibble(EuStockMarkets) %&gt;%
-    mutate(date = time(EuStockMarkets)) %&gt;%
-    gather(key = &quot;key&quot;, value = &quot;value&quot;, -date) %&gt;%
-    ggplot(aes(date, value, color = key)) +
-    geom_line() +
+  mutate(date = time(EuStockMarkets)) %&gt;%
+  gather(key = &quot;key&quot;, value = &quot;value&quot;, -date) %&gt;%
+  ggplot(aes(date, value, color = key)) +
+  geom_line() +
   scale_x_continuous(expand = c(0, 0), limits = c(1991, 1999.5), breaks = c(1991, 1993, 1995, 1997, 1999)) +
   scale_y_continuous(expand = c(0, 0), 
-                                     labels = scales::dollar,
-                                     limits = c(0, 10000)) +
-    labs(title = &quot;Major European Stock Indices&quot;,
-             subtitle = &quot;Based on daily closing prices&quot;,
-             x = &quot;Date&quot;,
-             y = &quot;Value&quot;)</code></pre>
+                     labels = scales::dollar,
+                     limits = c(0, 10000)) +
+  labs(title = &quot;Major European Stock Indices&quot;,
+       subtitle = &quot;Based on daily closing prices&quot;,
+       x = &quot;Date&quot;,
+       y = &quot;Value&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/multiple-line-charts2-1.png" width="672" /></p>
 </div>
 <div id="slope-plots" class="section level3">
@@ -668,9 +668,9 @@ as_tibble(EuStockMarkets) %&gt;%
 library(ggrepel)
 
 unemployment &lt;- tibble(
-    time = c(&quot;October 2009&quot;, &quot;October 2009&quot;, &quot;October 2009&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;),
-    rate = c(7.4, 7.1, 10.0, 3.9, 3.8, 6.4),
-    state = c(&quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington D.C.&quot;)
+  time = c(&quot;October 2009&quot;, &quot;October 2009&quot;, &quot;October 2009&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;),
+  rate = c(7.4, 7.1, 10.0, 3.9, 3.8, 6.4),
+  state = c(&quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington D.C.&quot;)
 )
 
 label &lt;- tibble(label = c(&quot;October 2009&quot;, &quot;August 2017&quot;))
@@ -678,22 +678,22 @@ october &lt;- filter(unemployment, time == &quot;October 2009&quot;)
 august &lt;- filter(unemployment, time == &quot;August 2017&quot;)
 
 unemployment %&gt;%
-    mutate(time = factor(time, levels = c(&quot;October 2009&quot;, &quot;August 2017&quot;))) %&gt;%
-    ggplot() + 
-        geom_line(aes(time, rate, group = state, color = state)) +
-        geom_point(aes(x = time, y = rate, color = state)) +
-        labs(subtitle = &quot;Unemployment Rate&quot;) +
-        theme(axis.ticks.x = element_blank(),
-                    axis.title.x = element_blank(),
-                    axis.ticks.y = element_blank(),
+  mutate(time = factor(time, levels = c(&quot;October 2009&quot;, &quot;August 2017&quot;))) %&gt;%
+  ggplot() + 
+    geom_line(aes(time, rate, group = state, color = state)) +
+    geom_point(aes(x = time, y = rate, color = state)) +
+    labs(subtitle = &quot;Unemployment Rate&quot;) +
+    theme(axis.ticks.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.y = element_blank(),
           axis.title.y = element_blank(), 
           axis.text.y = element_blank(),
-                    panel.grid.major.y = element_blank(),
+          panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank(),
           panel.grid.major.x = element_blank(),
-                    axis.line = element_blank()) +
-        geom_text_repel(data = october, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = -0.06) + 
-        geom_text_repel(data = august, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = 0.06)</code></pre>
+          axis.line = element_blank()) +
+    geom_text_repel(data = october, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = -0.06) + 
+    geom_text_repel(data = august, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = 0.06)</code></pre>
 <p><img src="graphics-guide/www/images/slope-plot-1.png" width="672" /></p>
 </div>
 </div>
@@ -724,7 +724,7 @@ unemployment %&gt;%
                         y = factor(1)),
              alpha = 0.2, 
              size = 5,
-                     color = &quot;grey50&quot;) +
+             color = &quot;grey50&quot;) +
   geom_point(data = filter(msleep, name == &quot;Red fox&quot;),
              aes(x = sleep_total, 
                  y = factor(1), 
@@ -790,7 +790,7 @@ msleep %&gt;%
 <pre class="r"><code>diamonds %&gt;%
   ggplot(aes(carat)) +
   geom_density() +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
   labs(title = &quot;Distribution of Carats&quot;,
        x = &quot;Carat&quot;,
        y = &quot;Density&quot;)</code></pre>
@@ -799,7 +799,7 @@ msleep %&gt;%
   mutate(cost = ifelse(price &gt; 5500, &quot;More than $5,500 +&quot;, &quot;$0 to $5,500&quot;)) %&gt;%
   ggplot(aes(carat, fill = cost)) +
   geom_density(alpha = 0.25) +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
   labs(title = &quot;Distribution of Carats&quot;,
        x = &quot;Carat&quot;,
        y = &quot;Density&quot;)</code></pre>
@@ -811,8 +811,8 @@ msleep %&gt;%
 <pre class="r"><code>library(ggridges)
 
 ggplot(diamonds, mapping = aes(x = price, y = cut)) +
-    geom_density_ridges(fill = &quot;#1696d2&quot;) +
-    scale_x_continuous(labels = scales::dollar) +
+  geom_density_ridges(fill = &quot;#1696d2&quot;) +
+  scale_x_continuous(labels = scales::dollar) +
   labs(title = &quot;Distribution of Diamond Prices by Diamond Cut&quot;,
        x = &quot;Price&quot;,
        y = &quot;Cut&quot;)</code></pre>
@@ -853,7 +853,7 @@ ggplot(diamonds, mapping = aes(x = price, y = cut)) +
               alpha = 0.4,
               shape = &quot;-&quot;,
               size = 10,
-                        color = &quot;grey50&quot;) +
+              color = &quot;grey50&quot;) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +  
     labs(title = &quot;Total Sleep Time of Different Mammals by Diet&quot;,
        x = NULL,
@@ -1017,32 +1017,32 @@ bad_drivers %&gt;%
 <hr />
 <p><code>geom_smooth()</code> fits and plots models to data with two or more dimensions.</p>
 <pre class="r"><code>ggplot(data = mpg) +
-    geom_smooth(mapping = aes(x = displ, y = hwy))</code></pre>
+  geom_smooth(mapping = aes(x = displ, y = hwy))</code></pre>
 <p><img src="graphics-guide/www/images/geom_smooth-1.png" width="672" /></p>
 <p>Understanding and manipulating defaults is more important for <code>geom_smooth()</code> than other geoms because it contains a number of assumptions. <code>geom_smooth()</code> automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with <code>formula = y ~ s(x, bs = &quot;cs&quot;)</code> for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.</p>
 <p>Models are chosen with <code>method =</code> and can be set to lm(), glm(), gam(), loess(), rlm(), and more. Formulas can be specified with <code>formula =</code> and <code>y ~ x</code> syntax. Plotting the standard error is toggled with <code>se = TRUE</code> and <code>se = FALSE</code>, and level is specificed with <code>level =</code>. As always, more information can be seen in RStudio with <code>?geom_smooth()</code>.</p>
 <p><code>geom_point()</code> adds a scatterplot to <code>geom_smooth()</code>. The order of the function calls is important. The function called second will be layed on top of the function called first.</p>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
-    geom_point(alpha = 0.1) +
-    geom_smooth(color =  &quot;#ec008b&quot;) +
-    scale_y_continuous(expand = c(0, 0), labels = scales::dollar)</code></pre>
+  geom_point(alpha = 0.1) +
+  geom_smooth(color =  &quot;#ec008b&quot;) +
+  scale_y_continuous(expand = c(0, 0), labels = scales::dollar)</code></pre>
 <p><img src="graphics-guide/www/images/geom_smooth2-1.png" width="672" /></p>
 <p><code>geom_smooth</code> can be subset by categorical and factor variables. This requires subgroups to have a decent number of observations and and a fair amount of variability across the x-axis. Confidence intervals often widen at the ends so special care is needed for the chart to be meaningful and readable.</p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
-    geom_point(alpha = 0.2) +
-    geom_smooth() +
-    labs(title = &quot;Engine Displacement and City MPG by Number of Cylinders&quot;,
-             subtitle = &quot;Loess: MPG = Displacement&quot;,
-             x = &quot;Engine Displacement&quot;,
-             y = &quot;Highway MPG&quot;)</code></pre>
+  geom_point(alpha = 0.2) +
+  geom_smooth() +
+  labs(title = &quot;Engine Displacement and City MPG by Number of Cylinders&quot;,
+       subtitle = &quot;Loess: MPG = Displacement&quot;,
+       x = &quot;Engine Displacement&quot;,
+       y = &quot;Highway MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/subset-geom_smooth-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
-    geom_smooth(method = &quot;lm&quot;) +
-    geom_point(alpha = 0.2) +
-    labs(title = &quot;Engine Displacement and City MPG by Drive&quot;,
-             subtitle = &quot;Linear Model: MPG = Displacement&quot;,
-             x = &quot;Engine Displacement&quot;,
-             y = &quot;Highway MPG&quot;)</code></pre>
+  geom_smooth(method = &quot;lm&quot;) +
+  geom_point(alpha = 0.2) +
+  labs(title = &quot;Engine Displacement and City MPG by Drive&quot;,
+       subtitle = &quot;Linear Model: MPG = Displacement&quot;,
+       x = &quot;Engine Displacement&quot;,
+       y = &quot;Highway MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/subset-geom_smooth-2.png" width="672" /></p>
 </div>
 <div id="highlighting" class="section level2">
@@ -1065,7 +1065,7 @@ bad_drivers %&gt;%
   geom_bar(stat = &quot;identity&quot;) +
   geom_text(aes(label = scales::dollar(price)), vjust = -1) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
-                                     labels = scales::dollar) +
+                     labels = scales::dollar) +
   labs(title = &quot;Average Diamond Price by Diamond Cut&quot;,
        x = &quot;Cut&quot;,
        y = &quot;Price&quot;) +
@@ -1074,14 +1074,14 @@ bad_drivers %&gt;%
 <p>It can also be used to label points in a scatter plot.</p>
 <p>It’s rarely useful to label every point in a scatter plot. Use <code>filter()</code> to create a second data set that is subsetted and pass it into the labelling function.</p>
 <pre class="r"><code>labels &lt;- mtcars %&gt;%
-    rownames_to_column(&quot;model&quot;) %&gt;%
-    filter(model %in% c(&quot;Toyota Corolla&quot;, &quot;Merc 240D&quot;, &quot;Datsun 710&quot;))
+  rownames_to_column(&quot;model&quot;) %&gt;%
+  filter(model %in% c(&quot;Toyota Corolla&quot;, &quot;Merc 240D&quot;, &quot;Datsun 710&quot;))
 
 mtcars %&gt;%
-    ggplot(mapping = aes(x = wt, y = mpg)) +
-        geom_point() +
-        geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
-      labs(title = &quot;Fuel Efficiency Declines as Weight Increases&quot;,
+  ggplot(mapping = aes(x = wt, y = mpg)) +
+    geom_point() +
+    geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
+    labs(title = &quot;Fuel Efficiency Declines as Weight Increases&quot;,
        x = &quot;Weight (Tons)&quot;,
        y = &quot;Miles Per Gallon&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/scatterplot-geom_text-1.png" width="672" /></p>
@@ -1092,17 +1092,17 @@ mtcars %&gt;%
 <pre class="r"><code>library(ggrepel)
 
 labels &lt;- mtcars %&gt;%
-    rownames_to_column(&quot;model&quot;) %&gt;%
-    top_n(5, mpg)
+  rownames_to_column(&quot;model&quot;) %&gt;%
+  top_n(5, mpg)
 
 mtcars %&gt;%
-    ggplot(mapping = aes(x = wt, y = mpg)) +
-        geom_point() +
-        geom_text_repel(data = labels, 
-                        mapping = aes(label = model), 
-                        nudge_x = 0.38) +
+  ggplot(mapping = aes(x = wt, y = mpg)) +
+    geom_point() +
+    geom_text_repel(data = labels, 
+                    mapping = aes(label = model), 
+                    nudge_x = 0.38) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 40)) +
-      labs(title = &quot;Fuel Efficiency Declines as Weight Increases&quot;,
+    labs(title = &quot;Fuel Efficiency Declines as Weight Increases&quot;,
        x = &quot;Weight (Tons)&quot;,
        y = &quot;Miles Per Gallon&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/scatterplot-geom_text_repel-1.png" width="672" /></p>
@@ -1152,23 +1152,23 @@ ames %&gt;%
 <div id="before-1" class="section level4">
 <h4>Before</h4>
 <pre class="r"><code>table1 %&gt;%
-    ggplot(aes(x = year, y = cases)) +
-        geom_line(aes(color = country)) +
-        geom_point(aes(color = country)) +
-        scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), labels = scales::comma) +
-        scale_x_continuous(breaks = c(1999, 2000)) +
-        labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
+  ggplot(aes(x = year, y = cases)) +
+    geom_line(aes(color = country)) +
+    geom_point(aes(color = country)) +
+    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), labels = scales::comma) +
+    scale_x_continuous(breaks = c(1999, 2000)) +
+    labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/layering-geoms-design-1.png" width="672" /></p>
 </div>
 <div id="after-1" class="section level4">
 <h4>After</h4>
 <pre class="r"><code>table1 %&gt;%
-    ggplot(aes(year, cases)) +
-        geom_line(aes(group = country), color = &quot;grey50&quot;) +
-        geom_point(aes(color = country)) +
-        scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), labels = scales::comma) +
-        scale_x_continuous(breaks = c(1999, 2000)) +
-        labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
+  ggplot(aes(year, cases)) +
+    geom_line(aes(group = country), color = &quot;grey50&quot;) +
+    geom_point(aes(color = country)) +
+    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), labels = scales::comma) +
+    scale_x_continuous(breaks = c(1999, 2000)) +
+    labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/layering-geoms-design-gray-1.png" width="672" /></p>
 <p>Layering geoms is also useful for adding trend lines and centroids to scatter plots.</p>
 <pre class="r"><code># Simple line
@@ -1179,19 +1179,19 @@ ames %&gt;%
 <div id="centroids" class="section level3">
 <h3>Centroids</h3>
 <pre class="r"><code>mpg_summary &lt;- mpg %&gt;%
-    group_by(cyl) %&gt;%
-    summarize(displ = mean(displ), cty = mean(cty))
+  group_by(cyl) %&gt;%
+  summarize(displ = mean(displ), cty = mean(cty))
 
 mpg %&gt;%
-    ggplot() +
-        geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
-        geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = &quot;#ec008b&quot;) +
-        geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
+  ggplot() +
+    geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
+    geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = &quot;#ec008b&quot;) +
+    geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
     scale_y_continuous(expand = c(0, 0), limits = c(0, 40)) +
-        labs(title = &quot;City MPG, Engine Displacement, and Number of Cylinders&quot;, 
-                 subtitle = &quot;Subgroup Means in Red&quot;, 
-                 x = &quot;Displacement&quot;,
-                 y = &quot;City MPG&quot;)</code></pre>
+    labs(title = &quot;City MPG, Engine Displacement, and Number of Cylinders&quot;, 
+         subtitle = &quot;Subgroup Means in Red&quot;, 
+         x = &quot;Displacement&quot;,
+         y = &quot;City MPG&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/centroids-1.png" width="672" /></p>
 </div>
 </div>
@@ -1256,7 +1256,7 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.17       lubridate_1.7.4    lattice_0.20-35   
 ##  [4] png_0.1-7          assertthat_0.2.0   rprojroot_1.3-2   
-##  [7] conflicted_0.1.0   digest_0.6.15      psych_1.8.4       
+##  [7] conflicted_0.1.0   digest_0.6.16      psych_1.8.4       
 ## [10] R6_2.2.2           cellranger_1.1.0   plyr_1.8.4        
 ## [13] backports_1.1.2    evaluate_0.10.1    httr_1.3.1        
 ## [16] pillar_1.2.3       rlang_0.2.1        lazyeval_0.2.1    

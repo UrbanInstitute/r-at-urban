@@ -392,21 +392,21 @@ source(&quot;https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/mast
 bank &lt;- read_csv(&quot;intro-to-r/data/bankdata.csv&quot;) 
 
 bank_subset &lt;- bank %&gt;%
-    # filter to observations of unmarried mothers less than age 30
-    filter(married == &quot;NO&quot; &amp; age &lt; 30) %&gt;%  
-    # drop all variables except children and income
-    select(children, income)                                
+  # filter to observations of unmarried mothers less than age 30
+  filter(married == &quot;NO&quot; &amp; age &lt; 30) %&gt;%  
+  # drop all variables except children and income
+  select(children, income)                
 
 # plot!
 bank_subset %&gt;%
-    ggplot(mapping = aes(x = children, y = income)) +
-    geom_bar(stat = &quot;summary&quot;, fun.y = &quot;mean&quot;) +
-    scale_y_continuous(expand = c(0, 0), labels = scales::dollar) +
-    labs(title = &quot;Mean income&quot;,
-             subtitle = &quot;Unmarried mothers less than age 30&quot;,
-             caption = &quot;Urban Institute analysis of bank data&quot;,
-             x = &quot;Number of children&quot;,
-             y = &quot;Income&quot;)</code></pre>
+  ggplot(mapping = aes(x = children, y = income)) +
+  geom_bar(stat = &quot;summary&quot;, fun.y = &quot;mean&quot;) +
+  scale_y_continuous(expand = c(0, 0), labels = scales::dollar) +
+  labs(title = &quot;Mean income&quot;,
+       subtitle = &quot;Unmarried mothers less than age 30&quot;,
+       caption = &quot;Urban Institute analysis of bank data&quot;,
+       x = &quot;Number of children&quot;,
+       y = &quot;Income&quot;)</code></pre>
 <p><img src="intro-to-r/www/images/quick%20example-1.png" width="672" /></p>
 </div>
 <div id="resources-for-learning" class="section level3">
@@ -436,9 +436,9 @@ bank_subset %&gt;%
 <p><code>library(tidyverse)</code> loads many more “tidy” data sets including <code>diamonds</code> and <code>starwars</code>.</p>
 <pre class="r"><code>library(tidyverse)
 starwars %&gt;%
-    count(species) %&gt;%
-    arrange(desc(n)) %&gt;%
-    head()</code></pre>
+  count(species) %&gt;%
+  arrange(desc(n)) %&gt;%
+  head()</code></pre>
 <pre><code>## # A tibble: 6 x 2
 ##   species      n
 ##   &lt;chr&gt;    &lt;int&gt;
@@ -454,10 +454,10 @@ library(tidyverse)
 source(&#39;https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R&#39;)
 
 as_tibble(hprice1) %&gt;%
-    ggplot(aes(x = sqrft, y = price)) +
-    geom_point() +
-    scale_y_continuous(expand = c(0, 0), lim = c(0, 800)) +
-    labs(title = &#39;&quot;hprice1&quot; data from Wooldridge&#39;) </code></pre>
+  ggplot(aes(x = sqrft, y = price)) +
+  geom_point() +
+  scale_y_continuous(expand = c(0, 0), lim = c(0, 800)) +
+  labs(title = &#39;&quot;hprice1&quot; data from Wooldridge&#39;) </code></pre>
 <p><img src="intro-to-r/www/images/psid-1.png" width="672" /></p>
 </div>
 <div id="getting-help" class="section level3">
@@ -798,7 +798,7 @@ Project-oriented workflow <a href="https://www.tidyverse.org/articles/2017/12/wo
 ##  [4] assertthat_0.2.0   conflicted_0.1.0   cellranger_1.1.0  
 ##  [7] yaml_2.1.19        Rttf2pt1_1.3.6     pillar_1.2.3      
 ## [10] backports_1.1.2    lattice_0.20-35    glue_1.2.0        
-## [13] extrafontdb_1.0    digest_0.6.15      RColorBrewer_1.1-2
+## [13] extrafontdb_1.0    digest_0.6.16      RColorBrewer_1.1-2
 ## [16] rvest_0.3.2        colorspace_1.3-2   htmltools_0.3.6   
 ## [19] Matrix_1.2-14      plyr_1.8.4         psych_1.8.4       
 ## [22] pkgconfig_2.0.1    broom_0.4.4        haven_1.1.1       
