@@ -2,6 +2,11 @@
 	font-family: Lato;
 }
 
+/* increase space between paragraphs */
+p {
+    margin: 15px 0 15px 0;
+}
+
 /* make titles blue */
 	h1 {
 		color: #1696d2;
