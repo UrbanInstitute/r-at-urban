@@ -123,11 +123,11 @@ chip <- read_csv("mapping/data/chip-enrollment.csv")
 # of state CHIP enrollment    
 chip <- chip %>%
   arrange(`CHIP Enrollment`) %>%
-  mutate(enrollment_group = c(rep("Group 1", times = 11), 
-                              rep("Group 2", times = 10),
-                              rep("Group 3", times = 10), 
-                              rep("Group 4", times = 10), 
-                              rep("Group 5", times = 10)))
+  mutate(Enrollment = c(rep("Group 1", times = 11), 
+                            rep("Group 2", times = 10),
+                            rep("Group 3", times = 10), 
+                            rep("Group 4", times = 10), 
+                            rep("Group 5", times = 10)))
 
 # join chip data and state shapes
 chip <- left_join(chip, states, by = c("State" = "state_name")) 
@@ -140,14 +140,12 @@ urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
 
 # plot the data with colors based on state CHIP enrollment and white borders 
 # between the states
-ggplot(data = chip, mapping = aes(long, lat, group = group, fill = enrollment_group)) +
+ggplot(data = chip, mapping = aes(long, lat, group = group, fill = Enrollment)) +
   geom_polygon(color = "#ffffff", size = 0.25) +
   scale_fill_manual(values = urban_colors) +  
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   labs(title = "State CHIP Enrollment")  +
   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
-
-#source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")
 ```
 
 `library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called. 
@@ -210,73 +208,21 @@ ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +
 
 ### Mapping individual states
 
-The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(urbnmapr)` and converting the coordinates to the correct state plane coordinate systems. 
-
-Use `state_proj` from `library(USAboundaries)` to explore epsg coordinate reference system definitons and `projection <- state_plane("VA", plane_id = NULL, type = "epsg")` to pass the correct epsg coordinate reference system definiton to `spTransform()`. 
+The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(tidycensus)` and using special features. tidycensus has quality documentation. This [GitHub](https://github.com/walkerke/tidycensus) page and this [vignette](https://walkerke.github.io/tidycensus/articles/spatial-data.html) are good places to start. 
 
 ```{r virginia}
-# load necessary libraries
+library(tidycensus)
 library(tidyverse)
-library(urbnmapr)
-library(rgdal)
-library(sp)
-library(USAboundaries)
+library(urbnthemes)
 
-# load data and filter it to just Virginia
-state <- states %>%
-	filter(state_name %in% c("Virginia"))
-
-# this data frame from library(USAboundaries) lists 124 coordinate systems in 
-# the United States and is a good reference
-#state_proj
-
-# pick the state plan coordinate system for Virginia
-projection <- state_plane("VA", plane_id = NULL, type = "epsg")
-
-# turn long and lat into spatial coordinates
-coordinates(state) <- ~ long + lat
-
-# convert projection to 
-# http://spatialreference.org/ref/epsg/wgs-84/
-proj4string(state) <- CRS("+init=epsg:4326")
-
-# convert coordinates to the state plane coordinate system for Virginia
-state <- spTransform(state, CRS(paste0("+init=epsg:", projection)))
-
-# convert spatial points data frame into a tibble
-state <- as_tibble(state)
-
-
-# map
-ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
-	geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +	
-	labs(title = "Virginia")	+
-  coord_fixed()
-```
-
-```{r projection, include=FALSE, eval=FALSE}
-library(USAboundaries)
-
-# useful list
-state_proj
-
-state_plane("VA", plane_id = NULL, type = "proj4")
-
-library(ggalt)
-
-coord_proj(state_plane("VA", plane_id = NULL, type = "proj4"))
-
-
-world <- map_data("world")
-usa <- world[world$region == "USA",]
-usa <- usa[!(usa$subregion %in% c("Alaska", "Hawaii")),]
-gg <- ggplot()
-gg <- gg + geom_cartogram(data=usa, map=usa,
-                    aes(x=long, y=lat, map_id=region))
-gg <- gg + coord_proj(
-             paste0("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96",
-                    " +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"))
-gg
+get_acs(geography = "state", variables = "B19013_001", 
+				shift_geo = TRUE, geometry = TRUE) %>%
+	filter(NAME == "Virginia") %>%
+	ggplot() + 
+	geom_sf(color = "#ffffff", fill = "gray", size = 0.2) + 
+	coord_sf(crs = 32047) +
+	theme_void() +
+	theme(panel.grid = element_line(colour = "transparent"))
 ```
 
 ### library(leaflet)
@@ -519,6 +465,7 @@ chip %>%
     labs(title = "State CHIP Enrollment", 
     		 x = NULL,
          y = NULL) +
+		coord_equal() +
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.line = element_blank(),
@@ -820,99 +767,6 @@ qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite",
 			 subtitle = "Washington, D.C.", 
 			 caption = "Urban Institute analysis of HMDA data") +
 	theme(axis.line = element_blank())
-```
-
-## Journey maps 
-
-------
-
-`library(ggmap)` can also be used to create journey maps. This should look familiar to anyone who has used Google maps for navigation.
-
-#### Google maps trek()
-
-```{r trek}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-library(kableExtra)
-
-# get trek data
-richmond_dc <- ggmap::trek(from = "Richmond, Virginia", 
-													 to = "Fredericksburg, Virginia", 
-													 structure = "route")
-
-# create table of trek data
-head(richmond_dc) %>%
-	kable(digits = 2, caption = "Output from ggmap::trek()", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
-
-```{r map-trek, eval=FALSE}
-# map trek data
-qmap("Ashland, Virginia", zoom = 9, override_limit = TRUE) +
-  geom_path(data = richmond_dc, mapping = aes(x = lon, y = lat),  
-    colour = "#fdbf11",
-    size = 1.5, 
-    alpha = .5,
-    lineend = "round") +
-	labs(title = "Recreating Google Maps in R")
-```
-
-Like dot maps, paths can be layered on top of any ggplot coordinate plane. Here's a journey map of an imaginary vacation. 
-
-```{r vacation trek, eval = FALSE}
-# load the necessary packages
-library(tidyverse)
-library(urbnmapr)
-library(ggrepel)
-
-# create a tibble with start and end locations for each trip leg
-vacation <- tibble(start = c("Richmond, Virginia", "Annapolis, Maryland", "Columbus, Ohio", "Sacramento, California", "Phoenix, Arizona")) %>%
-	mutate(end = lead(start)) %>%
-	mutate(end = ifelse(is.na(end), "Richmond, Virginia", end))
-
-# map the coordinates from each start and end location for each trip leg
-vacation_route <- map2(.x = vacation$start, .y = vacation$end, 
-											 .f = ggmap::trek, structure = "route") %>%
-	reduce(bind_rows)
-
-# drop Alaska and hawaii
-# this data frame has the latitude and longitude for each capital
-state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
-	filter(state %in% c("Maryland", "Ohio", "Indiana", "Iowa", "Nebraska", "Wyoming", "Utah", "California", "Arizona", "Oklahoma", "Arkansas", "Tennessee", "Virginia"))
-
-# map!
-ggplot() + 
-  geom_polygon(data = states, mapping = aes(x = long, y = lat, group = group), 
-  						 color = "#ffffff", fill = "#d2d2d2", size = 0.2) +
-	geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
-	geom_path(data = vacation_route, aes(lon, lat), color = "#fdbf11") +
-	geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
-						size = 3, color = "#000000", family = "Lato") +
-  coord_map("albers", lat0 = 39, lat1 = 45) +	
-	labs(title = "Vacation Roadmap",
-			 x = NULL, 
-			 y = NULL) +
-	theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
-```
-
-#### Google maps route()
-
-`route()` is an alternative to `trek()` that returns similar results. `trek()` sticks closer to the roads according to the package's [GitHub repository](https://github.com/dkahle/ggmap).
-
-```{r route, eval = FALSE}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# map on google maps
-richmond_dc <- route(from = "Richmond, Virginia", 
-										 to = "Urban Institute", 
-										 structure = "route")
-
-head(richmond_dc) %>%
-	kable(digits = 2, caption = "Output from ggmaps::route", align = "l", format = "html") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
 ```
 
 # Analysis
