@@ -43,15 +43,15 @@ options(scipen = 999)
 
 R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using `urbnthemes`, the Urban Institute's R package for creating near-publication-ready plots with `ggplot2`. If you have any questions, please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org). 
 
-#### Background
+### Background
 
 `library(urbnthemes)` makes `ggplot2` output align more closely with [the Urban Institute's Data Visualization style guide](http://urbaninstitute.github.io/graphics-styleguide/). This package does **not produce publication ready graphics**. Visual styles must still be edited using your project/paper's normal editing workflow.
 
-Exporting charts as a pdf will allow them to be more easily edited. You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: `r knitr::include_graphics("graphics-guide/www/images/pdf_export_option.png")`
+Exporting charts as a pdf will allow them to be more easily edited. See the Saving Plots section for more information. 
 
 The theme has been tested against `ggplot2 version 3.0.0`. It will not function properly with older versions of `ggplot2`
 
-#### Using library(urbnthemes)
+### Using library(urbnthemes)
 
 Run the following code to install or update `urbnthemes`:
 
@@ -84,7 +84,7 @@ urbnthemes::lato_install()
 
 Loading and importing fonts may take a few minutes.
 
-#### Grammar of Graphics and Conventions
+### Grammar of Graphics and Conventions
 
 Hadley Wickham's ggplot2 is based on Leland Wilkinson's [*The Grammar of Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448) and Wickham's [*A Layered Grammar of Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2. 
 
@@ -98,17 +98,13 @@ Hadley Wickham's ggplot2 is based on Leland Wilkinson's [*The Grammar of Graphic
 
 More information: [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) 
 
-#### Tips and Tricks
+### Tips and Tricks
 
 * `ggplot2` expects data to be in data frames or tibbles. It is preferable for the data frames to be "tidy" with each variable as a column, each obseravtion as a row, and each observational unit as a separate table. `dplyr` and `tidyr` contain concise and effective tools for "tidying" data.
 
 * R allows function arguments to be called explicitly by name and implicitly by position. The coding examples in this guide only contain named arguments for clarity.
 
-* Continuous legends should be switched to vertical using `theme(legend.direction = "vertical")`.
-
 * Graphics will sometimes render differently on different operating systems. This is because anti-aliasing is activated in R on Mac and Linux but not activated in R on Windows. This won't be an issue once graphics are saved. 
-
-* Most features of plots can be adjusted by adding `theme()` to the end of a ggplot call. For example, a plot with a continuous legend would look like this:
 
 * Continuous x-axes have ticks. Discrete x-axes do not have ticks. Use `remove_ticks()` to remove ticks.
 
@@ -342,7 +338,7 @@ mpg %>%
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_point() +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
+                     limits = c(0, 8),
                      breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
                      limits = c(0, 40),
@@ -359,7 +355,7 @@ mpg %>%
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_jitter() +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
+                     limits = c(0, 8),
                      breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
                      limits = c(0, 40),
@@ -390,7 +386,8 @@ urbnmapr::statedata %>%
                labels = scales::comma) +
   labs(x = "Household income",
        y = "Homeownership rate") +
-  scatter_grid()
+  scatter_grid() +
+	theme(plot.margin = margin(r = 20))
 ```
 
 ### Scatter Plots with Fill
@@ -1334,7 +1331,7 @@ mpg %>%
 
 `ggsave()` exports ggplot2 plots. The function can be used in two ways. If `plot =` isn't specified in the function call, then `ggsave()` automatically saves the plot that was last displayed in the Viewer window. Second, if `plot =` is specified, then `ggsave()` saves the specified plot. `ggsave()` guesses the type of graphics device to use in export (.png, .pdf, .svg, etc.) from the file extension in the filename. 
 
-```{r ggsave, eval=FALSE}
+```
 mtcars %>%
   ggplot(aes(x = wt, y = mpg)) +
   geom_point()
@@ -1350,7 +1347,16 @@ ggsave(filename = "cars.png", plot = plot2)
 
 Exported plots rarely look identical to the plots that show up in the Viewer window in RStudio because the overall size and aspect ratio of the Viewer is often different than the defaults for `ggsave()`. Specific sizes, aspect ratios, and resolutions can be controlled with arguments in `ggsave()`. RStudio has a useful [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) called "How Big is Your Graph?" that should help with choosing the best size, aspect ratio, and resolution. 
 
-In general, .svg files appear crisper than .png or .pdf files. However, .png and .pdf are more stable in web browsers. 
+Fonts are not embedded in PDFs by default. To embed fonts in PDFs, include `device = cairo_pdf` in `ggsave()`. 
+
+
+```
+plot <- mtcars %>%
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point()
+
+ggsave(filename = "cars.png", plot = plot2, width = 10, height = 6, device = cairo_pdf)
+```
 
 ## Bibliography and Session Information
 

@@ -445,14 +445,14 @@ div.tocify {
 <h2>Urban Institute R Graphics Guide</h2>
 <hr />
 <p>R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using <code>urbnthemes</code>, the Urban Institute’s R package for creating near-publication-ready plots with <code>ggplot2</code>. If you have any questions, please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org">awilliams@urban.org</a>) or Kyle Ueyama (<a href="mailto:kueyama@urban.org">kueyama@urban.org</a>).</p>
-<div id="background" class="section level4">
-<h4>Background</h4>
+<div id="background" class="section level3">
+<h3>Background</h3>
 <p><code>library(urbnthemes)</code> makes <code>ggplot2</code> output align more closely with <a href="http://urbaninstitute.github.io/graphics-styleguide/">the Urban Institute’s Data Visualization style guide</a>. This package does <strong>not produce publication ready graphics</strong>. Visual styles must still be edited using your project/paper’s normal editing workflow.</p>
-<p>Exporting charts as a pdf will allow them to be more easily edited. You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: <img src="graphics-guide/www/images/pdf_export_option.png" width="241" /></p>
+<p>Exporting charts as a pdf will allow them to be more easily edited. See the Saving Plots section for more information.</p>
 <p>The theme has been tested against <code>ggplot2 version 3.0.0</code>. It will not function properly with older versions of <code>ggplot2</code></p>
 </div>
-<div id="using-libraryurbnthemes" class="section level4">
-<h4>Using library(urbnthemes)</h4>
+<div id="using-libraryurbnthemes" class="section level3">
+<h3>Using library(urbnthemes)</h3>
 <p>Run the following code to install or update <code>urbnthemes</code>:</p>
 <pre><code>install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;UI-Research/urbnthemes&quot;)</code></pre>
@@ -469,8 +469,8 @@ set_urbn_defaults(style = &quot;print&quot;)</code></pre>
 urbnthemes::lato_install()</code></pre>
 <p>Loading and importing fonts may take a few minutes.</p>
 </div>
-<div id="grammar-of-graphics-and-conventions" class="section level4">
-<h4>Grammar of Graphics and Conventions</h4>
+<div id="grammar-of-graphics-and-conventions" class="section level3">
+<h3>Grammar of Graphics and Conventions</h3>
 <p>Hadley Wickham’s ggplot2 is based on Leland Wilkinson’s <a href="https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448"><em>The Grammar of Graphics</em></a> and Wickham’s <a href="http://vita.had.co.nz/papers/layered-grammar.html"><em>A Layered Grammar of Graphics</em></a>. The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2.</p>
 <ul>
 <li><strong>Data</strong> are what are visualizaed in a plot and <strong>mappings</strong> are directions for how data are mapped in a plot in a way that can be perceived by humans.<br />
@@ -485,14 +485,12 @@ urbnthemes::lato_install()</code></pre>
 </ul>
 <p>More information: <a href="https://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403">ggplot2: Elegant Graphics for Data Analysis</a></p>
 </div>
-<div id="tips-and-tricks" class="section level4">
-<h4>Tips and Tricks</h4>
+<div id="tips-and-tricks" class="section level3">
+<h3>Tips and Tricks</h3>
 <ul>
 <li><p><code>ggplot2</code> expects data to be in data frames or tibbles. It is preferable for the data frames to be “tidy” with each variable as a column, each obseravtion as a row, and each observational unit as a separate table. <code>dplyr</code> and <code>tidyr</code> contain concise and effective tools for “tidying” data.</p></li>
 <li><p>R allows function arguments to be called explicitly by name and implicitly by position. The coding examples in this guide only contain named arguments for clarity.</p></li>
-<li><p>Continuous legends should be switched to vertical using <code>theme(legend.direction = &quot;vertical&quot;)</code>.</p></li>
 <li><p>Graphics will sometimes render differently on different operating systems. This is because anti-aliasing is activated in R on Mac and Linux but not activated in R on Windows. This won’t be an issue once graphics are saved.</p></li>
-<li><p>Most features of plots can be adjusted by adding <code>theme()</code> to the end of a ggplot call. For example, a plot with a continuous legend would look like this:</p></li>
 <li><p>Continuous x-axes have ticks. Discrete x-axes do not have ticks. Use <code>remove_ticks()</code> to remove ticks.</p></li>
 </ul>
 </div>
@@ -512,7 +510,7 @@ urbnthemes::lato_install()</code></pre>
        y = NULL) +
   remove_ticks() +
   remove_axis() </code></pre>
-<p><img src="graphics-guide/www/images/barplots-2.png" width="624" /></p>
+<p><img src="graphics-guide/www/images/barplots-1.png" width="624" /></p>
 </div>
 <div id="one-color-rotated" class="section level3">
 <h3>One Color (Rotated)</h3>
@@ -704,7 +702,7 @@ urbnthemes::lato_install()</code></pre>
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_point() +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
+                     limits = c(0, 8),
                      breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
                      limits = c(0, 40),
@@ -721,7 +719,7 @@ mpg %&gt;%
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_jitter() +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
+                     limits = c(0, 8),
                      breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
                      limits = c(0, 40),
@@ -750,7 +748,8 @@ mpg %&gt;%
                labels = scales::comma) +
   labs(x = &quot;Household income&quot;,
        y = &quot;Homeownership rate&quot;) +
-  scatter_grid()</code></pre>
+  scatter_grid() +
+  theme(plot.margin = margin(r = 20))</code></pre>
 <p><img src="graphics-guide/www/images/geom_point-size-1.png" width="624" /></p>
 </div>
 <div id="scatter-plots-with-fill" class="section level3">
@@ -1598,7 +1597,7 @@ mpg %&gt;%
 <h2>Saving Plots</h2>
 <hr />
 <p><code>ggsave()</code> exports ggplot2 plots. The function can be used in two ways. If <code>plot =</code> isn’t specified in the function call, then <code>ggsave()</code> automatically saves the plot that was last displayed in the Viewer window. Second, if <code>plot =</code> is specified, then <code>ggsave()</code> saves the specified plot. <code>ggsave()</code> guesses the type of graphics device to use in export (.png, .pdf, .svg, etc.) from the file extension in the filename.</p>
-<pre class="r"><code>mtcars %&gt;%
+<pre><code>mtcars %&gt;%
   ggplot(aes(x = wt, y = mpg)) +
   geom_point()
 
@@ -1610,7 +1609,12 @@ plot2 &lt;- mtcars %&gt;%
 
 ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 <p>Exported plots rarely look identical to the plots that show up in the Viewer window in RStudio because the overall size and aspect ratio of the Viewer is often different than the defaults for <code>ggsave()</code>. Specific sizes, aspect ratios, and resolutions can be controlled with arguments in <code>ggsave()</code>. RStudio has a useful <a href="https://www.rstudio.com/resources/cheatsheets/">cheatsheet</a> called “How Big is Your Graph?” that should help with choosing the best size, aspect ratio, and resolution.</p>
-<p>In general, .svg files appear crisper than .png or .pdf files. However, .png and .pdf are more stable in web browsers.</p>
+<p>Fonts are not embedded in PDFs by default. To embed fonts in PDFs, include <code>device = cairo_pdf</code> in <code>ggsave()</code>.</p>
+<pre><code>plot &lt;- mtcars %&gt;%
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point()
+
+ggsave(filename = &quot;cars.png&quot;, plot = plot2, width = 10, height = 6, device = cairo_pdf)</code></pre>
 </div>
 <div id="bibliography-and-session-information" class="section level2">
 <h2>Bibliography and Session Information</h2>
@@ -1656,24 +1660,24 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.0          lubridate_1.7.4     lattice_0.20-38    
-##  [4] png_0.1-7           assertthat_0.2.0    digest_0.6.18      
-##  [7] R6_2.3.0            cellranger_1.1.0    plyr_1.8.4         
-## [10] backports_1.1.3     evaluate_0.12       httr_1.4.0         
-## [13] pillar_1.3.1        rlang_0.3.1         lazyeval_0.2.1     
-## [16] readxl_1.2.0        rstudioapi_0.9.0    extrafontdb_1.0    
-## [19] Matrix_1.2-15       rmarkdown_1.11      labeling_0.3       
-## [22] extrafont_0.17      munsell_0.5.0       broom_0.5.1        
-## [25] compiler_3.5.1      modelr_0.1.2        xfun_0.4           
-## [28] pkgconfig_2.0.2     mgcv_1.8-26         htmltools_0.3.6    
-## [31] tidyselect_0.2.5    gridExtra_2.3       crayon_1.3.4       
-## [34] withr_2.1.2         grid_3.5.1          nlme_3.1-137       
-## [37] jsonlite_1.6        Rttf2pt1_1.3.7      gtable_0.2.0       
-## [40] magrittr_1.5        scales_1.0.0        cli_1.0.1          
-## [43] stringi_1.2.4       reshape2_1.4.3      xml2_1.2.0         
-## [46] generics_0.0.2      RColorBrewer_1.1-2  tools_3.5.1        
-## [49] glue_1.3.0          urbnmapr_0.0.0.9001 hms_0.4.2          
-## [52] yaml_2.2.0          colorspace_1.4-0    rvest_0.3.2        
-## [55] bindr_0.1.1         haven_2.0.0</code></pre>
+##  [4] assertthat_0.2.0    digest_0.6.18       R6_2.3.0           
+##  [7] cellranger_1.1.0    plyr_1.8.4          backports_1.1.3    
+## [10] evaluate_0.12       httr_1.4.0          pillar_1.3.1       
+## [13] rlang_0.3.1         lazyeval_0.2.1      readxl_1.2.0       
+## [16] rstudioapi_0.9.0    extrafontdb_1.0     Matrix_1.2-15      
+## [19] rmarkdown_1.11      labeling_0.3        extrafont_0.17     
+## [22] munsell_0.5.0       broom_0.5.1         compiler_3.5.1     
+## [25] modelr_0.1.2        xfun_0.4            pkgconfig_2.0.2    
+## [28] mgcv_1.8-26         htmltools_0.3.6     tidyselect_0.2.5   
+## [31] gridExtra_2.3       crayon_1.3.4        withr_2.1.2        
+## [34] grid_3.5.1          nlme_3.1-137        jsonlite_1.6       
+## [37] Rttf2pt1_1.3.7      gtable_0.2.0        magrittr_1.5       
+## [40] scales_1.0.0        cli_1.0.1           stringi_1.2.4      
+## [43] reshape2_1.4.3      xml2_1.2.0          generics_0.0.2     
+## [46] RColorBrewer_1.1-2  tools_3.5.1         glue_1.3.0         
+## [49] urbnmapr_0.0.0.9001 hms_0.4.2           yaml_2.2.0         
+## [52] colorspace_1.4-0    rvest_0.3.2         bindr_0.1.1        
+## [55] haven_2.0.0</code></pre>
 </div>
 <div class="footnotes">
 <hr />
