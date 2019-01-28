@@ -16,7 +16,7 @@ editor_options:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](www/images/urban-institute-logo.png)
+![](graphics-guide/www/images/urban-institute-logo.png)
 </div>
 
 ## Urban Institute R Graphics Guide
@@ -31,7 +31,7 @@ library(urbnthemes)
 
 set_urbn_defaults(style = "print")
 
-opts_chunk$set(fig.path = "www/images/")
+opts_chunk$set(fig.path = "graphics-guide/www/images/")
 opts_chunk$set(echo = TRUE)
 opts_chunk$set(warning = FALSE)
 opts_chunk$set(message = FALSE)
@@ -47,7 +47,7 @@ R is a powerful, open-source programming language and environment. R excels at d
 
 `library(urbnthemes)` makes `ggplot2` output align more closely with [the Urban Institute's Data Visualization style guide](http://urbaninstitute.github.io/graphics-styleguide/). This package does **not produce publication ready graphics**. Visual styles must still be edited using your project/paper's normal editing workflow.
 
-Exporting charts as a pdf will allow them to be more easily edited. You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: `r knitr::include_graphics("www/images/pdf_export_option.png")`
+Exporting charts as a pdf will allow them to be more easily edited. You may need to tweak pdf export options to preserve fonts. For example, in RStudio on OSX, check this option in the export pdf window: `r knitr::include_graphics("graphics-guide/www/images/pdf_export_option.png")`
 
 The theme has been tested against `ggplot2 version 3.0.0`. It will not function properly with older versions of `ggplot2`
 
