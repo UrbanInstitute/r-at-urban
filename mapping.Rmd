@@ -231,6 +231,8 @@ get_acs(geography = "state", variables = "B19013_001",
 
 [This post](https://juliasilge.com/blog/using-tidycensus/) by Julia Silge is an excellent introduction to `library(leaflet)` and `library(tidycensus)`.
 
+Certain geographies require a [Census API key](https://api.census.gov/data/key_signup.html). Add the API key with `tidycensus::census_api_key()`. The argument `install = TRUE` will permanently install the key on a computer. 
+
 ```{r leaflet, results="hide"}
 # load necessary packages
 library(tidyverse)
@@ -241,6 +243,9 @@ library(leaflet)
 library(stringr)
 library(viridis)
 library(tidycensus)
+
+# certain geographies require a Census API key
+# census_api_key("")
 
 # read mortgage data and drop unnecessary variables
 hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv", 
@@ -902,7 +907,7 @@ tibble(institution = institutions,
 
 It is possible to pay for additional queries. The current rate is $0.50 per additional 1,000 requests with a daily limit of 100,000 requests. This requires a more advanced version of `library(ggmap)` that is only accessible through `library(devtools)`. devtools sources the package from GitHub instead of CRAN. This version of ggmap is less stable but it includes `register_google()`. Adding an [API Key](https://developers.google.com/maps/documentation/geocoding/get-api-key) can increase the daily quota to 100,000.  
 
-```{r credential check}
+```{r credential check, eval = FALSE}
 ggmap_credentials()
 ```
 
@@ -916,7 +921,7 @@ register_google(key = "[your key here]", account_type = "premium", day_limit = 1
 
 `mutate_geocode()` has the same query limit and characteristics as `geocode` (above).
 
-```{r mutate_geocode}
+```{r mutate_geocode, eval = FALSE}
 # load the necessary packages
 library(tidycensus)
 library(ggmap)
@@ -928,7 +933,7 @@ addresses <- c("2100 M Street NW, Washington DC",
 data.frame(institution = institutions, 
 					 address = addresses, 
 					 stringsAsFactors = FALSE) %>%
-	mutate_geocode(address, source = "dsk") %>%
+	mutate_geocode(address,) %>%
 	kable(digits = 2, caption = "Output from ggmap::mutate_geocode", format = "html", align = "l") %>%
 	kableExtra::kable_styling(full_width = FALSE, position = "left")
 
