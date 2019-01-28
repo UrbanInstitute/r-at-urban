@@ -62,10 +62,15 @@ p {
 }
 
 .tocify {
-	border-radius: 0px;
+	border-radius: 0;
 }
 
 /* Button Formatting */
 .btn {
 	border-radius: 0;	
+}
+
+/* tabs formatting */
+.nav-tabs>li>a {
+	border-radius: 0;
 }
