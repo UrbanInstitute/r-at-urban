@@ -47,7 +47,7 @@ R can have a steeper learning curve than point-and-click tools for geospatial an
 * Point-and-click tools are not reproducible. The audience, other researchers, and the analyst/mapper 6 months after the analysis is completed will have little idea what happened in a stream of undocumented right- and left-clicks. R is a scripting language that if used properly, creates a reproducible script that can be read and rerun many years later.
 * Most point-and-click tools for geospatial analysis are proprietary and expensive. R is free opensource software. The software and most of its packages can be used for free by anyone for almost anything. 
 
-I hope this guide is a useful resource that helps you accomplish your existing research ideas or helps you come up with entirely new research ideas. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) if you have any questions about this guide or need any assistance with R. 
+I hope this guide is a useful resource that helps you accomplish your existing research ideas or helps you come up with entirely new research ideas. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Sarah Strochak (sstrochak@urban.org) if you have any questions about this guide or need any assistance with R. 
 
 Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mapping Users Group are excellent resources for mapping and geospatial analysis. 
 
@@ -124,10 +124,10 @@ chip <- read_csv("mapping/data/chip-enrollment.csv")
 chip <- chip %>%
   arrange(`CHIP Enrollment`) %>%
   mutate(Enrollment = c(rep("Group 1", times = 11), 
-                            rep("Group 2", times = 10),
-                            rep("Group 3", times = 10), 
-                            rep("Group 4", times = 10), 
-                            rep("Group 5", times = 10)))
+                        rep("Group 2", times = 10),
+                        rep("Group 3", times = 10), 
+                        rep("Group 4", times = 10), 
+                        rep("Group 5", times = 10)))
 
 # join chip data and state shapes
 chip <- left_join(chip, states, by = c("State" = "state_name")) 
@@ -166,7 +166,7 @@ ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +
 	labs(title = "Northwest United States")
 ```
 
-`library(urbnmapr)` can be used to map counties. Here, `counties` is used to map all counties in the Continental United States. 
+`library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States. 
 
 ```{r us-county-map}
 # load the necessary packages
