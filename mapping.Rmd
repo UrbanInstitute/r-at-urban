@@ -85,14 +85,34 @@ That said, some of the most-convincing data visualizations are maps. The style g
 Here are a few things to keep in mind:
 
 * The following maps are styled by the Urban Institute package [urbnthemes](https://github.com/UI-Research/urbnthemes). 
-* U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection. Tile-based maps like tile grid maps and geofaceting use the Mercator projection. 
-* Maps that show the magnitude of a variable use the blue sequential ramp and maps that display positives and negatives use the diverging color ramp. 
+* U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection.
+* Maps that show the magnitude of a variable use a sequential ramp and maps that display positives and negatives use the diverging color ramp. 
 * In general, the borders between geographies are white. 
 
 No guide can answer every question. A lot of thought goes in to making a good map. These blog posts are good sources of inspiration for answering those deeper questions:
 
 * [When Maps Shouldn't be Maps](http://www.ericson.net/content/2011/10/when-maps-shouldnt-be-maps/)
 * [How a map’s “bins” can influence your perception of an important policy issue](https://www.urban.org/urban-wire/how-maps-bins-can-influence-your-perception-important-policy-issue)
+
+## Working with geospatial data in R
+
+### Simple features
+
+Simple features are data frame that contain a column with geographic information. Special features work well with `tidyverse` data manipulation tools and `ggplot2` plotting. 
+
+`library(sf)` includes tools for reading, writing, and manipulating spatial data. Many common tasks done in ArcGIS, QGIS, or other geospatial analysis software can be easily replicated.
+
+#### Reading in data
+
+There are several packages that can help load common shapefiles. The function `st_read()` can be used to read in your own shapefiles.
+
+##### `library(tigris)`
+
+##### `st_read()`
+
+#### Quality checking
+
+## Plotting 
 
 ## Choropleth Maps
 
