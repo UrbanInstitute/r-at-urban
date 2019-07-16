@@ -72,13 +72,6 @@ Simple features work well with `tidyverse` functions, including `ggplot2`. This 
 
 `sf` dataframes in R generally include both spatial and non-spatial data. In the example below, the dataframe contains state identifiers, and a column called `geometry`, which contains a nested list of coordinates. Each coordinate contains a vertex of the shape of the state; when combined and appropriately grouped, this is what allows the shape to render corectly.
 
-```{r sf-example}
-
-urbnmapr::get_urbn_map("states", sf = TRUE) %>% 
-	head(5)
-
-```
-
 `library(sf)` is a key tool for working with spatial data in R. Functions included in the package provide easy and reproducable ways to replicate many tasks commonly done in ArcGIS and other GIS software. The dataframe structure makes it easy to combine, filter, join, and manipulate geospatial data.
 
 
@@ -92,9 +85,9 @@ So you want to make a map in R- the first thing you need to do is get spatial da
 
 #### `library(urbnmapr)`
 
-`urbnmapr` provides sf objects for mapping US states and counties. The `get_urbn_map()` function allows you to load both states and counties, with options for including territories.
+`urbnmapr` provides sf objects for mapping US states and counties. The `get_urbn_map()` function allows you to load both states and counties, with options for including territories. For more information on urbnmapr, see the [GitHub repository](https://github.com/UrbanInstitute/urbnmapr).
 
-```{r urbnmapr-1}
+```{r urbnmapr-1, eval=FALSE}
 
 library(urbnmapr)
 
@@ -104,7 +97,7 @@ states <- get_urbn_map("states", sf = TRUE)
 
 #### `library(tigris)`
 
-`library(tigris)` allows you to easily download TIGER and cartographic boundaries from the US Census Bureaus. In order to read in the boundaries as `sf` objects, run `r options(tigris_class = "sf")` once per session. 
+`library(tigris)` allows you to easily download TIGER and cartographic boundaries from the US Census Bureaus. In order to load in the boundaries as `sf` objects, run `r options(tigris_class = "sf")` once per session. 
 
 `tigris` has all standard census geographies, including census tracts, counties, CBSAs, ZCTAs, congressional districts, and more. It also includes other elements such as water, roads, and military bases. 
 
@@ -114,7 +107,8 @@ You can also load boudaries for past years; `tigris` will default to the most re
 
 Unlike `urbnmapr`, different functions are used for different geographic levels- for instance, the `blocks()` function will load census block groups, and the `states()` function will load states. For the full list of functions, see the [package vignette](https://cran.r-project.org/web/packages/tigris/tigris.pdf).
 
-```{r tigris-1}
+
+```{r tigris-1, eval=FALSE}
 
 library(tigris)
 
@@ -123,19 +117,35 @@ options(tigris_class = "sf")
 md_zctas <- zctas(state = "MD",
 									cb = TRUE)
 
-
 ```
-
-
 
 #### `library(rnaturalearth)`
 
+`library(rnaturalearth)` is similar to tigris, but allows you to download and use boundaries beyond the US. Instead of setting class to `sf` one time per session, the `returnclass = SF` argument can be used each time you use a function from the package.
+
+```{r natural-earth}
+library(rnaturalearth)
+
+world <- ne_countries(returnclass = "sf")
+
+ggplot() +
+	geom_sf(data = world, mapping = aes())
+
+```
 
 ### Converting data to `sf`
 
+`library(sf)` contains functions for converting existing data that has columns for latitude and longitude into an `sf` object. This is most easily done with point data.
 
 ### Reading in shapefiles
 
+`library(sf)` also contains functions that allow you to read in shapefiles. Most shapefiles are traditionally stored as 6 different files. `st_read()` has two required arguments: the directory where the shapefile is located (`dsn = `) and the name of the layer (`layer = `). Note that you do not need a file extension on the layer, since R will be looking for all 6 files, each of which have different extensions.
+
+```{r st-read}
+
+
+
+```
 
 ## Mapping
 
@@ -215,673 +225,673 @@ Choropleth maps display geographic areas with shades, colors, or patterns in pro
 
 Variables mapped as colors or shades need to be joined using `left_join()` to geographic data loaded by `library(urbnmapr)`. In this example, the variable `"state_name"` is joined to `"State"`. If ever in doubt, use `anti_join()` to test which cases don't join. After joining, use `geom_polygon()`. Be sure to include `coord_map("albers", lat0 = 39, lat1 = 45)` to create an Albers Equal Area projection. 
 
-```{r}
-# load necessary packages
-library(tidyverse)
-library(forcats)
-library(gridExtra)
-library(urbnmapr)
-library(urbnthemes)
-
-set_urbn_defaults(style = "map")
-
-# read the state CHIP data
-chip <- read_csv("mapping/data/chip-enrollment.csv")
-
-# set the state names to lower case and create the five groups based on the order
-# of state CHIP enrollment    
-chip <- chip %>%
-  arrange(`CHIP Enrollment`) %>%
-  mutate(Enrollment = c(rep("Group 1", times = 11), 
-                        rep("Group 2", times = 10),
-                        rep("Group 3", times = 10), 
-                        rep("Group 4", times = 10), 
-                        rep("Group 5", times = 10)))
-
-# join chip data and state shapes
-chip <- left_join(chip, states, by = c("State" = "state_name")) 
-
-# test join
-mismatches <- anti_join(chip, states, by = c("State" = "state_name")) 
-
-# create a vector with 5 hexadecimal colors for the 5 groups
-urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
-
-# plot the data with colors based on state CHIP enrollment and white borders 
-# between the states
-ggplot(data = chip, mapping = aes(long, lat, group = group, fill = Enrollment)) +
-  geom_polygon(color = "#ffffff", size = 0.25) +
-  scale_fill_manual(values = urban_colors) +  
-  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
-  labs(title = "State CHIP Enrollment")  +
-  theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
-```
-
-`library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called. 
-
-```{r state-map-northwest}
-# load the necessary packages
-library(tidyverse)
-library(urbnmapr)
-
-# read the shapefiles for the three states
-state <- states %>%
-	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
-
-# map!
-ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) + 
-	geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) +
-	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
-	labs(title = "Northwest United States")
-```
-
-`library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States. 
-
-```{r us-county-map}
-# load the necessary packages
-library(tidyverse)
-library(urbnmapr)
-
-# map!
-ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) + 
-	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 
-	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1)
-```
-
-Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties. 
-
-```{r northwest-county-map}
-# load the necessary packages
-library(tidyverse)
-library(urbnmapr)
-
-# read the shapefiles for counties
-county <- counties %>%
-	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
-
-# read the shapefiles for states
-state <- states %>%
-	filter(state_name %in% c("Washington", "Oregon", "Idaho"))
-
-# map
-ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) + 
-	geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +	
-	geom_polygon(data = state,
-	  mapping = aes(x = long, y = lat, group = group), 
-	  color = "#ffffff", 
-	  fill = NA, 
-	  size = 0.4) +	
-	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 	
-	labs(title = "Counties in the Northwest United States")
-```
-
-### Mapping individual states
-
-The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(tidycensus)` and using special features. tidycensus has quality documentation. This [GitHub](https://github.com/walkerke/tidycensus) page and this [vignette](https://walkerke.github.io/tidycensus/articles/spatial-data.html) are good places to start. 
-
-```{r virginia}
-library(tidycensus)
-library(tidyverse)
-library(urbnthemes)
-
-get_acs(geography = "state", variables = "B19013_001", 
-				shift_geo = TRUE, geometry = TRUE) %>%
-	filter(NAME == "Virginia") %>%
-	ggplot() + 
-	geom_sf(color = "#ffffff", fill = "gray", size = 0.2) + 
-	coord_sf(crs = 32047) +
-	theme_void() +
-	theme(panel.grid = element_line(colour = "transparent"))
-```
-
-### library(leaflet)
-
-[Leaflet](http://leafletjs.com/) is a JavaScript library for building interactive maps. The syntax is different than ggplot2, but `library(leaflet)` makes easy building interactive maps in R. 
-
-[This post](https://juliasilge.com/blog/using-tidycensus/) by Julia Silge is an excellent introduction to `library(leaflet)` and `library(tidycensus)`.
-
-Certain geographies require a [Census API key](https://api.census.gov/data/key_signup.html). Add the API key with `tidycensus::census_api_key()`. The argument `install = TRUE` will permanently install the key on a computer. 
-
-```{r leaflet, results="hide"}
-# load necessary packages
-library(tidyverse)
-library(sf)
-library(stringr)
-library(rgdal)
-library(leaflet)
-library(stringr)
-library(viridis)
-library(tidycensus)
-
-# certain geographies require a Census API key
-# census_api_key("")
-
-# read mortgage data and drop unnecessary variables
-hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv", 
-  col_types = cols(
-    tract = col_character(),
-    year1 = col_integer(),
-    tract_T = col_character(),
-    aa = col_integer(),
-    his = col_integer(),
-    nhw = col_integer(),
-    asian = col_integer(),
-    total = col_integer())) %>% 
-	select(-year1, -tract_T)
-
-# The Census tract IDs in the hmda data do not perfectly match the Census tract
-# IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts 
-# so the IDs match before using left_join()
-hmda <- hmda %>%
-	mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c("0", tract), tract))
-
-# Pull data from the ACS using library(tidycensus). Rename GEOID to tract so the
-# tract ID has the same variable name as on the mortgage data. 
-ct_value <- get_acs(geography = "tract", 
-										 variables = "B25077_001", 
-										 state = "CT",
-										 geometry = TRUE) %>%
-	rename(tract = GEOID)
-
-# join housing data to the shapefiles
-ct_value <- left_join(x = ct_value, y = hmda, by = "tract")
-
-# check for mismatches using anti_join. Hopefully nrow(mismatches) == 0
-mismatches <- anti_join(x = ct_value, y = hmda, by = "tract")
-
-# create a color palette based on the total number of mortgages variable
-pal <- colorNumeric(palette = c("#cfe8f3", "#062635"), 
-										domain = ct_value$total)
-```
-
-
-```{r build-leaflet}
-# create the map
-connecticut <- ct_value %>%
-	st_transform(crs = "+init=epsg:4326") %>%
-	leaflet(width = "100%") %>%
-	addProviderTiles(provider = "CartoDB.Positron") %>%
-	addPolygons(popup = ~ str_extract(NAME, "^([^,]*)"),
-							stroke = FALSE,
-							smoothFactor = 0,
-							fillOpacity = 1,
-							color = ~ pal(total)) %>%
-	addLegend(position = "bottomright", 
-						pal = pal, 
-						values = ~ total,
-						title = "Mortgage Purchases",
-						opacity = 1)
-
-library(htmltools)
-browsable(
-  tagList(list(
-    tags$head(
-      # you'll need to be very specific
-      tags$style("* {font-family:Lato !important;}")
-      # could also use url
-      #tags$link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css",rel="stylesheet")
-    ),
-    connecticut
-  ))
-)
-
-# https://stackoverflow.com/questions/35720698/is-it-possible-to-include-custom-css-in-htmlwidgets-for-r-and-or-leafletr
-```
-
-### Census tract shapefiles
-
-It is often desirable to map geographies that aren't easily available in an R package. Like any GIS, R can work with shapefiles, which are a vector data storage format created by Esri to store location, shape, and attributes of geographic features. Shapefiles are available for most geographies. 
-
-`readOGR()` from `library(rgdal)` is the most used function for reading shapefiles. One challenge of working with shapefiles is the hierarchical data structure. Click on the shapefile in the R Studio environment to explore the tree and see how the data are organized. Another challenge is merges. In the following example, mortgage data need to be merged with the appropriate Census tracts. 
-
-```{r census-tract-choropleth, fig.height = 3.5}
-# load necessary packages
-library(tidyverse)
-library(sp)
-library(stringr)
-library(rgdal)
-library(broom)
-
-# read in mortgage data
-hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv", 
-								 col_types = cols(
-								 	tract = col_character(),
-								 	year1 = col_integer(),
-								 	tract_T = col_character(),
-								 	aa = col_integer(),
-								 	his = col_integer(),
-								 	nhw = col_integer(),
-								 	asian = col_integer(),
-								 	total = col_integer())) %>% 
-	select(-year1, -tract_T)
-
-# The Census tract IDs in the hmda data do not perfectly match the Census tract
-# IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts 
-# so the IDs match before using left_join()
-hmda <- hmda %>%
-	mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c("0", tract), tract))
-
-# read in shapefile for Washington D.C.
-tracts_dc <- readOGR(dsn = "mapping/shapefiles/tl_2015_11_tract", verbose = FALSE)
-
-# create an extra data frame with the tract number and the position from 1 to n
-tract_id <- tibble(tract = as.character(tracts_dc@data$GEOID), 
-									 position = 1:length(tracts_dc@data$GEOID))
-
-# convert shapefile to tibble. Add a vector for position that will be used to 
-# merge the Census tract 
-tracts_dc <- tidy(tracts_dc) %>%
-	rename(position = id) %>%
-	mutate(position = as.numeric(position)) %>%
-	mutate(position = position + 1)
-
-# merge on tract number
-tracts_dc <- left_join(x = tracts_dc, y = tract_id, by = "position")
-
-# check for mismatches using anti_join. Hopefully nrow(mismatches) == 0
-mismatches1 <- anti_join(x = tracts_dc, y = tract_id, by = "position")
-
-# With the new tract number, merge on the mortgage data
-tracts_dc <- left_join(x = tracts_dc, y = hmda, by = "tract")
-
-# check for mismatches using anti_join. Hopefully nrow(mismatches) == 0
-mismatches2 <- anti_join(x = tracts_dc, y = hmda, by = "tract")
-
-# munge the data and transform it into a long data frame
-tracts_dc_long <- tracts_dc %>%
-	gather(key = "race", value = "Mortgages", 
-				 -long, -lat, -order, -hole, -piece, 
-				 -group, -position, -tract, -total) %>%
-	mutate(race = factor(race, 
-											 levels = c("aa", "asian", "his", "nhw"), 
-											 labels = c("African American", "Asian", "Hispanic", "Non-Hispanic White"))) %>%
-	mutate(Mortgages = ifelse(Mortgages == 0, NA, Mortgages)) %>%
-	mutate(Mortgages = Mortgages * 10)
-
-# plot!
-tracts_dc_long %>%
-	ggplot(mapping = aes(x = long, y = lat, group = group, fill = Mortgages)) +
-	geom_polygon(size = 0.3) +
-	coord_map() +
-	facet_wrap(facets = ~race, nrow = 1) +
-	scale_fill_continuous(low = "#CEE8F3", 
-												high = "#094C6B",
-												breaks = c(0, 20, 40, 60, 80)) +
-	labs(x = NULL,
-			 y = NULL) +
-	labs(title = "Mortgage Originations",
-			 subtitle = "Home purchase loans in 2015 by race and ethnicity",
-			 caption = "Urban Institute analysis of HMDA data") +
-	theme(axis.text = element_blank(),
-				axis.line = element_blank(),
-				axis.ticks = element_blank(), 
-				panel.grid.major = element_blank(),
-				legend.position = "right",
-				legend.direction = "vertical",
-				legend.title = element_text(face = "bold", size = 11),
-				strip.text = element_text(size = 11),
-				plot.caption = element_text(size = 11),
-				strip.background = element_rect(fill = "#ffffff"))
-```
-
-## Tile Grid Maps
-
-------
-
-Choropleths tend to overemphasize low-population density areas because size represents area instead of the statistic of interest. This is especially true for maps of the United States because many western states are large and have low-density populations. Tile grid maps, which give equal size to each state, mitigates this problem. 
-
-This example fills `geom_tile()` from `library(ggplot2)` with five discrete colors based on state CHIP enrollment and then uses `facet_geo()` from `library(geofacet)` to create a tile grid map. 
-
-```{r chip}
-# load the necessary packages
-library(tidyverse)
-library(forcats)
-library(geofacet)
-
-# read CHIP enrollment data
-chip <- read_csv("mapping/data/chip-enrollment.csv",
-	col_types = cols(
-  State = col_character(),
-  `CHIP Enrollment` = col_integer(),
-  state_abbreviation = col_character()))
-
-# Add xdimension = 1 and ydimension = 1 for dimensions of geom_tile. x and y  can be any arbitrary numbers greater than zero as long as xdimesion == ydimension.  Arrange the observations by state enrollment and add groups for the colors of the tiles 
-chip <- chip %>%
-  mutate(xdimension = 1, 
-         ydimension = 1) %>%
-  arrange(desc(`CHIP Enrollment`)) %>%
-  mutate(enrollment_group = c(rep("Group 1", times = 11), 
-                              rep("Group 2", times = 10), 
-                              rep("Group 3", times = 10), 
-                              rep("Group 4", times = 10), 
-                              rep("Group 5", times = 10)))
-
-# create a vector with 5 hexadecimal colors for the 5 groups
-urban_colors <- c("#062635", "#12719e", "#46abdb", "#a2d4ec", "#cfe8f3")
-
-# create a custom geofacet grid
-urban_grid <- tibble(
-  row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
-          4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 
-          7, 7, 8, 8, 8),
-  col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9),
-  code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"),
-  name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida")
-)
-
-# create tile grid map
-chip %>%
-  ggplot(aes(x = xdimension, y = ydimension, fill = enrollment_group)) +
-    geom_tile() +
-    scale_fill_manual(values = urban_colors) +  
-    geom_text(aes(label = state_abbreviation), color = "white") +
-    facet_geo(facets = ~state_abbreviation, grid = urban_grid) +
-    labs(title = "State CHIP Enrollment", 
-    		 x = NULL,
-         y = NULL) +
-		coord_equal() +
-    theme(axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          axis.line = element_blank(),
-    			strip.text = element_blank(),
-    			plot.background = element_rect(color = "white"),   	
-     			panel.background = element_blank(),   	
-          panel.grid = element_blank(),
-          panel.spacing = unit(0L, "pt"),
-    			panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank())
-```
-
-## Geofaceting
-
-------
-
-`library(geofacet)` adds geofaceting functionality to `library(ggplot2)`. Geofaceting arranges sub-geography-specific plots into a grid that resembles a larger geography. 
-
-Interactive geofacets of the United States have been used by the Urban Institute in the features section. For example, ["A Matter of Time"](http://apps.urban.org/features/long-prison-terms/trends.html) included geofaceted line charts showing trends in incarceration by state. Static geofacets of the United States were included in ["Barriers to Accessing Homeownership Down Payment, Credit, and Affordability"](https://www.urban.org/sites/default/files/publication/94801/barriers-to-homeownership-down-payments-credit-access-and-affordability_2.pdf) by the Housing Finance Policy Center. 
-
-`library(geofacet)` comes with two default United States grids, but the Urban Institute uses a custom layout for United States geofacets. The code for that layout is included in each of the following examples. Creating custom grids is simple and is outlined in the [vignette](https://hafen.github.io/geofacet/) for `library(geofacet)`. This [grid designer](https://hafen.github.io/grid-designer/) is useful for testing custom layouts. Custom geofacet grids can be made for any sized geography and any set of geographies. 
-
-Lots of custom formatting in `theme()` is necessary because geofaceted plots are different than the plots for which the theme was optimized. Copying-and-pasting the code in `theme()` is a good start. 
-
-### geom_tile()
-
-The first example is a variation on the tile grid map. Here, state labels are moved to the strip and values are added in each square as a text geom. 
-
-```{r modified-tile-grid-map, fig.height=6}
-# load the necessary packages
-library(tidyverse)
-library(geofacet)
-library(fivethirtyeight)
-
-# create a tibble with state name abbreviations
-state_abbreviations <- tibble(state = c(state.name, "District of Columbia"),
-                              abbreviation = c(state.abb, "DC"))
-
-# read the bad_drivers data from library(fivethirtyeight) and add maximum
-# x- and y- dimensions for each geom_tile. The dimension could be any positive 
-# integers as long as x == y
-usa_drivers <- bad_drivers %>% 
-  mutate(xdimension = 1, 
-  			 ydimension = 1)
-
-# merge state abbreviations on to bad_drivers based on state
-usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# test merge criteria for mismatches. hopefully nrow(mismatches) == 0
-mismatches <- left_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# create a custom geofacet grid
-urban_grid <- tibble(
-  row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
-          4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 
-          7, 7, 8, 8, 8),
-  col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9),
-  code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"),
-  name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida")
-)
-
-# create tile grid map
-usa_drivers %>%
-  ggplot(aes(x = xdimension, y = ydimension, fill = perc_alcohol)) +
-  geom_tile() +
-  geom_text(aes(label = paste0(as.character(perc_alcohol), "%")), 
-  					color = "white", 
-  					family = "Lato") +
-	scale_fill_gradientn() +
-  facet_geo(facets = ~abbreviation, grid = urban_grid) +
-  labs(title = "Don't Drink and Drive",
-  		 subtitle = "% of Drivers in Deadly Wrecks Who Were Alcohol-Impaired", 
-  		 caption = "National Highway Traffic Administration\n Data from library(fivethirtyeight)",
-       x = NULL,
-       y = NULL) +
-  theme(plot.background = element_rect(colour = "white"),
-        panel.grid = element_blank(),
-        panel.grid.major = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.line = element_blank(),
-        panel.spacing = unit(0L, "pt"),
-        legend.position = "none",
-        strip.text.x = element_text(size = 9L))
-```
-
-### geom_bar() 
-
-Unlike the tile grid map, geofaceting isn't limited to just text and color in the facets. This geofaceted map uses bar plots. Be careful, it can quickly clutter. 
-
-```{r geo-facet-bar, fig.height=6}
-# load necessary packages
-library(tidyverse)
-library(fivethirtyeight)
-library(geofacet)
-
-# create data frame with state driving data
-usa_drivers <- bad_drivers %>%
-	mutate(perc_distracted = 100 - perc_not_distracted) %>%
-	select(state, perc_speeding, perc_alcohol, perc_distracted) %>%
-	gather(key = issue, value = value, - state) %>%
-	mutate(issue = ifelse(issue == "perc_speeding", "Speeding", issue),
-				 issue = ifelse(issue == "perc_alcohol", "Alcohol-Impaired", issue),
-				 issue = ifelse(issue == "perc_distracted", "Distracted", issue))
-
-# create a tibble with state name abbreviations
-state_abbreviations <- tibble(state = c(state.name, "District of Columbia"),
-															abbreviation = c(state.abb, "DC"))
-
-# merge state abbreviations on to bad_drivers based on state
-usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# test merge criteria for mismatches. hopefully nrow(mismatches) == 0
-mismatches <- anti_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# create a custom geofacet grid
-urban_grid <- tibble(
-  row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
-          4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 
-          7, 7, 8, 8, 8),
-  col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9),
-  code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"),
-  name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida")
-)
-
-# plot!
-ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) +
-  geom_col() +
-	coord_flip() +
-	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
-										 breaks = c(0, 50, 100),
-										 labels = c("0", ".5", "1")) +
-  facet_geo(facets = ~abbreviation, grid = urban_grid) +
-	labs(title = "Driving is dangerous", 
-			 subtitle = "Proportion of drivers in fatal collisions who were...",
-			 x = NULL,
-			 y = NULL,
-			 caption = "National Highway Traffic Administration \n Data from library(fivethirtyeight)") +
-	theme(plot.background = element_rect(colour = "white"),
-				panel.grid = element_blank(),
-				panel.grid.major = element_blank(),
-				axis.text.x = element_text(margin = margin(t = 2)),
-				axis.text.y = element_blank(),
-  			axis.text = element_text(size = 8L),
-  			axis.line = element_blank(),
-				panel.border = element_rect(colour = "black", 
-																		fill = NA, 
-																		size = 0.3),
-        strip.background = element_rect(fill = "grey85", 
-        																colour = "black", 
-        																size = 0.3),
-				axis.ticks.length = unit(1L, "pt"),
-				strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))
-```
-
-### geom_line()
-
-```{r geo-facet-line, fig.height=6}
-# load necessary packages
-library(tidyverse)
-library(geofacet)
-library(fivethirtyeight)
-library(purrr)
-
-# add random noise to create simulated longitudinal data
-usa_drivers <- bad_drivers %>%
-	mutate(`2010` = (100 - perc_not_distracted) / 100) 
-  
-usa_drivers$`2011` <- usa_drivers$`2010` * rnorm(51, mean = 1.05, sd = 0.05)
-usa_drivers$`2012` <- usa_drivers$`2011` * rnorm(51, mean = 1.05, sd = 0.05)
-usa_drivers$`2013` <- usa_drivers$`2012` * rnorm(51, mean = 1.05, sd = 0.05)
-usa_drivers$`2014` <- usa_drivers$`2013` * rnorm(51, mean = 1.05, sd = 0.05)
-usa_drivers$`2015` <- usa_drivers$`2014` * rnorm(51, mean = 1.05, sd = 0.05)
-
-# gather data from wide-format to long-format
-usa_drivers <- usa_drivers %>%
-	gather(`2010`:`2015`, key = "Year", value = "Share Distracted")
-
-# create a tibble with state abbreviations
-state_abbreviations <- tibble(state = c(state.name, "District of Columbia"),
-															abbreviation = c(state.abb, "DC"))
-
-# merge state abbreviations on to bad_drivers based on state
-usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# test merge criteria for mismatches. hopefully nrow(mismatches) == 0
-mismatches <- anti_join(x = usa_drivers, y = state_abbreviations, by = "state")
-
-# create a custom geofacet grid
-urban_grid <- tibble(
-  row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
-          4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 
-          7, 7, 8, 8, 8),
-  col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9),
-  code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"),
-  name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida")
-)
-
-# plot!
-usa_drivers %>%
-	ggplot(mapping = aes(x = Year, y = `Share Distracted`, group = abbreviation)) +
-  geom_line() +
-	scale_x_discrete(breaks = c(2010, 2015), labels = c("'10", "'15")) +
-	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), breaks = c(0, 0.5, 1)) +
-  facet_geo(facets = ~abbreviation, grid = urban_grid) +
-	labs(title = "Driving is dangerous", 
-			 subtitle = "Simulated Distracted Driving is Increasing",
-			 x = NULL,
-			 y = NULL,
-			 caption = "National Highway Traffic Administration \n Data from library(fivethirtyeight) + Random Noise") +
-	theme(plot.background = element_rect(colour = "white"),
-				axis.text.x = element_text(margin = margin(t = 2)),
-  			axis.text = element_text(size = 8L),
-  			axis.line = element_blank(),
-				panel.border = element_rect(colour = "black", 
-																		fill = NA, 
-																		size = 0.3),
-        strip.background = element_rect(fill = "grey85", 
-        																colour = "black", 
-        																size = 0.3),
-				axis.ticks.length = unit(1L, "pt"),
-				strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11))
-```
-
-## Dot Maps
-
-------
-
-Dot maps represent observations or groups of observations at longitudes and latitudes. Most dot maps add dots on top of a recognizable geography such as the Continental United States. It is common to add color or size as aesthetics representing an additional variable like race and ethnicity or income. 
-
-This motivating example loads a map of the United States, adds `geom_point()` for each capital as a layer on top of the map, and then labels the capitals with `geom_text_repel()`. 
-
-```{r state-capitals}
-# load the necessary packages
-library(tidyverse)
-library(urbnmapr)
-library(ggrepel)
-
-# drop alaska and hawaii
-states_subset <- states %>%
-	filter(!state_name %in% c("Alaska", "Hawaii"))
-
-# drop alaska and hawaii
-# this data frame has the latitutde and longitude for each capital
-state_capitals <- read_csv("mapping/data/state-capitals.csv") %>%
-	filter(!state %in% c("Alaska", "Hawaii"))
-
-# map!
-ggplot() + 
-  geom_polygon(data = states_subset, mapping = aes(x = long, y = lat, group = group), 
-  						 color = "#ffffff", fill = "#d2d2d2", size = 0.2) +
-	geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) +
-	geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city), 
-						size = 3, color = "#000000", family = "Lato") +
-  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +	
-	labs(title = "State Capitals",
-			 x = NULL, 
-			 y = NULL,
-			 caption = "Urban Institute")
-```
-
-The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don't include Alaska, Hawaii, or territories like Puerto Rico. 
-
-Subsets of the above map can be made by adjusting the bounding box. Another option is `qmplot()`. This function will automatically fit the bounding box to the data. Use `I()` with `color =` and `alpha =` so those variables don't show up in the legends. Here's a map of mortgages in Washington, D.C.:
-
-`qmplot()` has many different map types which can be set with the `maptype =` argument. `"toner-lite"` is the only map type that isn't cluttered. 
-
-```{r qmplot mortgages}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# read the mortgage data for DC in 2011
-mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
-
-# quick plot
-qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
-			 color = I("#1696d2"), alpha = I(0.2)) +
-	labs(title = "Mortgage purchases in 2011",
-			 subtitle = "Washington, D.C.", 
-			 caption = "Urban Institute analysis of HMDA data") +
-	theme(axis.line = element_blank())
-```
-
-Here's a similar map of mortgages in Washington, D.C. with `geom = "density2d"`.
-
-```{r qmplot mortgage density}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# load mortgage data for DC in 2011
-mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
-
-# quick plot!
-qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
-			 geom = "density2d", color = I("#1696d2")) +
-	labs(title = "Mortgage purchases in 2011",
-			 subtitle = "Washington, D.C.", 
-			 caption = "Urban Institute analysis of HMDA data") +
-	theme(axis.line = element_blank())
-```
+<!-- ```{r} -->
+<!-- # load necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(forcats) -->
+<!-- library(gridExtra) -->
+<!-- library(urbnmapr) -->
+<!-- library(urbnthemes) -->
+
+<!-- set_urbn_defaults(style = "map") -->
+
+<!-- # read the state CHIP data -->
+<!-- chip <- read_csv("mapping/data/chip-enrollment.csv") -->
+
+<!-- # set the state names to lower case and create the five groups based on the order -->
+<!-- # of state CHIP enrollment     -->
+<!-- chip <- chip %>% -->
+<!--   arrange(`CHIP Enrollment`) %>% -->
+<!--   mutate(Enrollment = c(rep("Group 1", times = 11),  -->
+<!--                         rep("Group 2", times = 10), -->
+<!--                         rep("Group 3", times = 10),  -->
+<!--                         rep("Group 4", times = 10),  -->
+<!--                         rep("Group 5", times = 10))) -->
+
+<!-- # join chip data and state shapes -->
+<!-- chip <- left_join(chip, states, by = c("State" = "state_name"))  -->
+
+<!-- # test join -->
+<!-- mismatches <- anti_join(chip, states, by = c("State" = "state_name"))  -->
+
+<!-- # create a vector with 5 hexadecimal colors for the 5 groups -->
+<!-- urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635") -->
+
+<!-- # plot the data with colors based on state CHIP enrollment and white borders  -->
+<!-- # between the states -->
+<!-- ggplot(data = chip, mapping = aes(long, lat, group = group, fill = Enrollment)) + -->
+<!--   geom_polygon(color = "#ffffff", size = 0.25) + -->
+<!--   scale_fill_manual(values = urban_colors) +   -->
+<!--   coord_map(projection = "albers", lat0 = 39, lat1 = 45) + -->
+<!--   labs(title = "State CHIP Enrollment")  + -->
+<!--   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0)) -->
+<!-- ``` -->
+
+<!-- `library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called.  -->
+
+<!-- ```{r state-map-northwest} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(urbnmapr) -->
+
+<!-- # read the shapefiles for the three states -->
+<!-- state <- states %>% -->
+<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
+
+<!-- # map! -->
+<!-- ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +  -->
+<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) + -->
+<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
+<!-- 	labs(title = "Northwest United States") -->
+<!-- ``` -->
+
+<!-- `library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States.  -->
+
+<!-- ```{r us-county-map} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(urbnmapr) -->
+
+<!-- # map! -->
+<!-- ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) +  -->
+<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
+<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1) -->
+<!-- ``` -->
+
+<!-- Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.  -->
+
+<!-- ```{r northwest-county-map} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(urbnmapr) -->
+
+<!-- # read the shapefiles for counties -->
+<!-- county <- counties %>% -->
+<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
+
+<!-- # read the shapefiles for states -->
+<!-- state <- states %>% -->
+<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
+
+<!-- # map -->
+<!-- ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +  -->
+<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +	 -->
+<!-- 	geom_polygon(data = state, -->
+<!-- 	  mapping = aes(x = long, y = lat, group = group),  -->
+<!-- 	  color = "#ffffff",  -->
+<!-- 	  fill = NA,  -->
+<!-- 	  size = 0.4) +	 -->
+<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 	 -->
+<!-- 	labs(title = "Counties in the Northwest United States") -->
+<!-- ``` -->
+
+<!-- ### Mapping individual states -->
+
+<!-- The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(tidycensus)` and using special features. tidycensus has quality documentation. This [GitHub](https://github.com/walkerke/tidycensus) page and this [vignette](https://walkerke.github.io/tidycensus/articles/spatial-data.html) are good places to start.  -->
+
+<!-- ```{r virginia} -->
+<!-- library(tidycensus) -->
+<!-- library(tidyverse) -->
+<!-- library(urbnthemes) -->
+
+<!-- get_acs(geography = "state", variables = "B19013_001",  -->
+<!-- 				shift_geo = TRUE, geometry = TRUE) %>% -->
+<!-- 	filter(NAME == "Virginia") %>% -->
+<!-- 	ggplot() +  -->
+<!-- 	geom_sf(color = "#ffffff", fill = "gray", size = 0.2) +  -->
+<!-- 	coord_sf(crs = 32047) + -->
+<!-- 	theme_void() + -->
+<!-- 	theme(panel.grid = element_line(colour = "transparent")) -->
+<!-- ``` -->
+
+<!-- ### library(leaflet) -->
+
+<!-- [Leaflet](http://leafletjs.com/) is a JavaScript library for building interactive maps. The syntax is different than ggplot2, but `library(leaflet)` makes easy building interactive maps in R.  -->
+
+<!-- [This post](https://juliasilge.com/blog/using-tidycensus/) by Julia Silge is an excellent introduction to `library(leaflet)` and `library(tidycensus)`. -->
+
+<!-- Certain geographies require a [Census API key](https://api.census.gov/data/key_signup.html). Add the API key with `tidycensus::census_api_key()`. The argument `install = TRUE` will permanently install the key on a computer.  -->
+
+<!-- ```{r leaflet, results="hide"} -->
+<!-- # load necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(sf) -->
+<!-- library(stringr) -->
+<!-- library(rgdal) -->
+<!-- library(leaflet) -->
+<!-- library(stringr) -->
+<!-- library(viridis) -->
+<!-- library(tidycensus) -->
+
+<!-- # certain geographies require a Census API key -->
+<!-- # census_api_key("") -->
+
+<!-- # read mortgage data and drop unnecessary variables -->
+<!-- hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv",  -->
+<!--   col_types = cols( -->
+<!--     tract = col_character(), -->
+<!--     year1 = col_integer(), -->
+<!--     tract_T = col_character(), -->
+<!--     aa = col_integer(), -->
+<!--     his = col_integer(), -->
+<!--     nhw = col_integer(), -->
+<!--     asian = col_integer(), -->
+<!--     total = col_integer())) %>%  -->
+<!-- 	select(-year1, -tract_T) -->
+
+<!-- # The Census tract IDs in the hmda data do not perfectly match the Census tract -->
+<!-- # IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts  -->
+<!-- # so the IDs match before using left_join() -->
+<!-- hmda <- hmda %>% -->
+<!-- 	mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c("0", tract), tract)) -->
+
+<!-- # Pull data from the ACS using library(tidycensus). Rename GEOID to tract so the -->
+<!-- # tract ID has the same variable name as on the mortgage data.  -->
+<!-- ct_value <- get_acs(geography = "tract",  -->
+<!-- 										 variables = "B25077_001",  -->
+<!-- 										 state = "CT", -->
+<!-- 										 geometry = TRUE) %>% -->
+<!-- 	rename(tract = GEOID) -->
+
+<!-- # join housing data to the shapefiles -->
+<!-- ct_value <- left_join(x = ct_value, y = hmda, by = "tract") -->
+
+<!-- # check for mismatches using anti_join. Hopefully nrow(mismatches) == 0 -->
+<!-- mismatches <- anti_join(x = ct_value, y = hmda, by = "tract") -->
+
+<!-- # create a color palette based on the total number of mortgages variable -->
+<!-- pal <- colorNumeric(palette = c("#cfe8f3", "#062635"),  -->
+<!-- 										domain = ct_value$total) -->
+<!-- ``` -->
+
+
+<!-- ```{r build-leaflet} -->
+<!-- # create the map -->
+<!-- connecticut <- ct_value %>% -->
+<!-- 	st_transform(crs = "+init=epsg:4326") %>% -->
+<!-- 	leaflet(width = "100%") %>% -->
+<!-- 	addProviderTiles(provider = "CartoDB.Positron") %>% -->
+<!-- 	addPolygons(popup = ~ str_extract(NAME, "^([^,]*)"), -->
+<!-- 							stroke = FALSE, -->
+<!-- 							smoothFactor = 0, -->
+<!-- 							fillOpacity = 1, -->
+<!-- 							color = ~ pal(total)) %>% -->
+<!-- 	addLegend(position = "bottomright",  -->
+<!-- 						pal = pal,  -->
+<!-- 						values = ~ total, -->
+<!-- 						title = "Mortgage Purchases", -->
+<!-- 						opacity = 1) -->
+
+<!-- library(htmltools) -->
+<!-- browsable( -->
+<!--   tagList(list( -->
+<!--     tags$head( -->
+<!--       # you'll need to be very specific -->
+<!--       tags$style("* {font-family:Lato !important;}") -->
+<!--       # could also use url -->
+<!--       #tags$link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css",rel="stylesheet") -->
+<!--     ), -->
+<!--     connecticut -->
+<!--   )) -->
+<!-- ) -->
+
+<!-- # https://stackoverflow.com/questions/35720698/is-it-possible-to-include-custom-css-in-htmlwidgets-for-r-and-or-leafletr -->
+<!-- ``` -->
+
+<!-- ### Census tract shapefiles -->
+
+<!-- It is often desirable to map geographies that aren't easily available in an R package. Like any GIS, R can work with shapefiles, which are a vector data storage format created by Esri to store location, shape, and attributes of geographic features. Shapefiles are available for most geographies.  -->
+
+<!-- `readOGR()` from `library(rgdal)` is the most used function for reading shapefiles. One challenge of working with shapefiles is the hierarchical data structure. Click on the shapefile in the R Studio environment to explore the tree and see how the data are organized. Another challenge is merges. In the following example, mortgage data need to be merged with the appropriate Census tracts.  -->
+
+<!-- ```{r census-tract-choropleth, fig.height = 3.5} -->
+<!-- # load necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(sp) -->
+<!-- library(stringr) -->
+<!-- library(rgdal) -->
+<!-- library(broom) -->
+
+<!-- # read in mortgage data -->
+<!-- hmda <- read_csv("mapping/data/hmdamap2015_10_purch.csv",  -->
+<!-- 								 col_types = cols( -->
+<!-- 								 	tract = col_character(), -->
+<!-- 								 	year1 = col_integer(), -->
+<!-- 								 	tract_T = col_character(), -->
+<!-- 								 	aa = col_integer(), -->
+<!-- 								 	his = col_integer(), -->
+<!-- 								 	nhw = col_integer(), -->
+<!-- 								 	asian = col_integer(), -->
+<!-- 								 	total = col_integer())) %>%  -->
+<!-- 	select(-year1, -tract_T) -->
+
+<!-- # The Census tract IDs in the hmda data do not perfectly match the Census tract -->
+<!-- # IDS in the shapefiles. Add zeros to the front of the  10-digit census tracts  -->
+<!-- # so the IDs match before using left_join() -->
+<!-- hmda <- hmda %>% -->
+<!-- 	mutate(tract = ifelse(!str_length(hmda$tract) == 11, str_c("0", tract), tract)) -->
+
+<!-- # read in shapefile for Washington D.C. -->
+<!-- tracts_dc <- readOGR(dsn = "mapping/shapefiles/tl_2015_11_tract", verbose = FALSE) -->
+
+<!-- # create an extra data frame with the tract number and the position from 1 to n -->
+<!-- tract_id <- tibble(tract = as.character(tracts_dc@data$GEOID),  -->
+<!-- 									 position = 1:length(tracts_dc@data$GEOID)) -->
+
+<!-- # convert shapefile to tibble. Add a vector for position that will be used to  -->
+<!-- # merge the Census tract  -->
+<!-- tracts_dc <- tidy(tracts_dc) %>% -->
+<!-- 	rename(position = id) %>% -->
+<!-- 	mutate(position = as.numeric(position)) %>% -->
+<!-- 	mutate(position = position + 1) -->
+
+<!-- # merge on tract number -->
+<!-- tracts_dc <- left_join(x = tracts_dc, y = tract_id, by = "position") -->
+
+<!-- # check for mismatches using anti_join. Hopefully nrow(mismatches) == 0 -->
+<!-- mismatches1 <- anti_join(x = tracts_dc, y = tract_id, by = "position") -->
+
+<!-- # With the new tract number, merge on the mortgage data -->
+<!-- tracts_dc <- left_join(x = tracts_dc, y = hmda, by = "tract") -->
+
+<!-- # check for mismatches using anti_join. Hopefully nrow(mismatches) == 0 -->
+<!-- mismatches2 <- anti_join(x = tracts_dc, y = hmda, by = "tract") -->
+
+<!-- # munge the data and transform it into a long data frame -->
+<!-- tracts_dc_long <- tracts_dc %>% -->
+<!-- 	gather(key = "race", value = "Mortgages",  -->
+<!-- 				 -long, -lat, -order, -hole, -piece,  -->
+<!-- 				 -group, -position, -tract, -total) %>% -->
+<!-- 	mutate(race = factor(race,  -->
+<!-- 											 levels = c("aa", "asian", "his", "nhw"),  -->
+<!-- 											 labels = c("African American", "Asian", "Hispanic", "Non-Hispanic White"))) %>% -->
+<!-- 	mutate(Mortgages = ifelse(Mortgages == 0, NA, Mortgages)) %>% -->
+<!-- 	mutate(Mortgages = Mortgages * 10) -->
+
+<!-- # plot! -->
+<!-- tracts_dc_long %>% -->
+<!-- 	ggplot(mapping = aes(x = long, y = lat, group = group, fill = Mortgages)) + -->
+<!-- 	geom_polygon(size = 0.3) + -->
+<!-- 	coord_map() + -->
+<!-- 	facet_wrap(facets = ~race, nrow = 1) + -->
+<!-- 	scale_fill_continuous(low = "#CEE8F3",  -->
+<!-- 												high = "#094C6B", -->
+<!-- 												breaks = c(0, 20, 40, 60, 80)) + -->
+<!-- 	labs(x = NULL, -->
+<!-- 			 y = NULL) + -->
+<!-- 	labs(title = "Mortgage Originations", -->
+<!-- 			 subtitle = "Home purchase loans in 2015 by race and ethnicity", -->
+<!-- 			 caption = "Urban Institute analysis of HMDA data") + -->
+<!-- 	theme(axis.text = element_blank(), -->
+<!-- 				axis.line = element_blank(), -->
+<!-- 				axis.ticks = element_blank(),  -->
+<!-- 				panel.grid.major = element_blank(), -->
+<!-- 				legend.position = "right", -->
+<!-- 				legend.direction = "vertical", -->
+<!-- 				legend.title = element_text(face = "bold", size = 11), -->
+<!-- 				strip.text = element_text(size = 11), -->
+<!-- 				plot.caption = element_text(size = 11), -->
+<!-- 				strip.background = element_rect(fill = "#ffffff")) -->
+<!-- ``` -->
+
+<!-- ## Tile Grid Maps -->
+
+<!-- ------ -->
+
+<!-- Choropleths tend to overemphasize low-population density areas because size represents area instead of the statistic of interest. This is especially true for maps of the United States because many western states are large and have low-density populations. Tile grid maps, which give equal size to each state, mitigates this problem.  -->
+
+<!-- This example fills `geom_tile()` from `library(ggplot2)` with five discrete colors based on state CHIP enrollment and then uses `facet_geo()` from `library(geofacet)` to create a tile grid map.  -->
+
+<!-- ```{r chip} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(forcats) -->
+<!-- library(geofacet) -->
+
+<!-- # read CHIP enrollment data -->
+<!-- chip <- read_csv("mapping/data/chip-enrollment.csv", -->
+<!-- 	col_types = cols( -->
+<!--   State = col_character(), -->
+<!--   `CHIP Enrollment` = col_integer(), -->
+<!--   state_abbreviation = col_character())) -->
+
+<!-- # Add xdimension = 1 and ydimension = 1 for dimensions of geom_tile. x and y  can be any arbitrary numbers greater than zero as long as xdimesion == ydimension.  Arrange the observations by state enrollment and add groups for the colors of the tiles  -->
+<!-- chip <- chip %>% -->
+<!--   mutate(xdimension = 1,  -->
+<!--          ydimension = 1) %>% -->
+<!--   arrange(desc(`CHIP Enrollment`)) %>% -->
+<!--   mutate(enrollment_group = c(rep("Group 1", times = 11),  -->
+<!--                               rep("Group 2", times = 10),  -->
+<!--                               rep("Group 3", times = 10),  -->
+<!--                               rep("Group 4", times = 10),  -->
+<!--                               rep("Group 5", times = 10))) -->
+
+<!-- # create a vector with 5 hexadecimal colors for the 5 groups -->
+<!-- urban_colors <- c("#062635", "#12719e", "#46abdb", "#a2d4ec", "#cfe8f3") -->
+
+<!-- # create a custom geofacet grid -->
+<!-- urban_grid <- tibble( -->
+<!--   row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4,  -->
+<!--           4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7,  -->
+<!--           7, 7, 8, 8, 8), -->
+<!--   col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9), -->
+<!--   code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"), -->
+<!--   name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida") -->
+<!-- ) -->
+
+<!-- # create tile grid map -->
+<!-- chip %>% -->
+<!--   ggplot(aes(x = xdimension, y = ydimension, fill = enrollment_group)) + -->
+<!--     geom_tile() + -->
+<!--     scale_fill_manual(values = urban_colors) +   -->
+<!--     geom_text(aes(label = state_abbreviation), color = "white") + -->
+<!--     facet_geo(facets = ~state_abbreviation, grid = urban_grid) + -->
+<!--     labs(title = "State CHIP Enrollment",  -->
+<!--     		 x = NULL, -->
+<!--          y = NULL) + -->
+<!-- 		coord_equal() + -->
+<!--     theme(axis.text = element_blank(), -->
+<!--           axis.ticks = element_blank(), -->
+<!--           axis.line = element_blank(), -->
+<!--     			strip.text = element_blank(), -->
+<!--     			plot.background = element_rect(color = "white"),   	 -->
+<!--      			panel.background = element_blank(),   	 -->
+<!--           panel.grid = element_blank(), -->
+<!--           panel.spacing = unit(0L, "pt"), -->
+<!--     			panel.grid.major = element_blank(), -->
+<!--           panel.grid.minor = element_blank()) -->
+<!-- ``` -->
+
+<!-- ## Geofaceting -->
+
+<!-- ------ -->
+
+<!-- `library(geofacet)` adds geofaceting functionality to `library(ggplot2)`. Geofaceting arranges sub-geography-specific plots into a grid that resembles a larger geography.  -->
+
+<!-- Interactive geofacets of the United States have been used by the Urban Institute in the features section. For example, ["A Matter of Time"](http://apps.urban.org/features/long-prison-terms/trends.html) included geofaceted line charts showing trends in incarceration by state. Static geofacets of the United States were included in ["Barriers to Accessing Homeownership Down Payment, Credit, and Affordability"](https://www.urban.org/sites/default/files/publication/94801/barriers-to-homeownership-down-payments-credit-access-and-affordability_2.pdf) by the Housing Finance Policy Center.  -->
+
+<!-- `library(geofacet)` comes with two default United States grids, but the Urban Institute uses a custom layout for United States geofacets. The code for that layout is included in each of the following examples. Creating custom grids is simple and is outlined in the [vignette](https://hafen.github.io/geofacet/) for `library(geofacet)`. This [grid designer](https://hafen.github.io/grid-designer/) is useful for testing custom layouts. Custom geofacet grids can be made for any sized geography and any set of geographies.  -->
+
+<!-- Lots of custom formatting in `theme()` is necessary because geofaceted plots are different than the plots for which the theme was optimized. Copying-and-pasting the code in `theme()` is a good start.  -->
+
+<!-- ### geom_tile() -->
+
+<!-- The first example is a variation on the tile grid map. Here, state labels are moved to the strip and values are added in each square as a text geom.  -->
+
+<!-- ```{r modified-tile-grid-map, fig.height=6} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(geofacet) -->
+<!-- library(fivethirtyeight) -->
+
+<!-- # create a tibble with state name abbreviations -->
+<!-- state_abbreviations <- tibble(state = c(state.name, "District of Columbia"), -->
+<!--                               abbreviation = c(state.abb, "DC")) -->
+
+<!-- # read the bad_drivers data from library(fivethirtyeight) and add maximum -->
+<!-- # x- and y- dimensions for each geom_tile. The dimension could be any positive  -->
+<!-- # integers as long as x == y -->
+<!-- usa_drivers <- bad_drivers %>%  -->
+<!--   mutate(xdimension = 1,  -->
+<!--   			 ydimension = 1) -->
+
+<!-- # merge state abbreviations on to bad_drivers based on state -->
+<!-- usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # test merge criteria for mismatches. hopefully nrow(mismatches) == 0 -->
+<!-- mismatches <- left_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # create a custom geofacet grid -->
+<!-- urban_grid <- tibble( -->
+<!--   row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4,  -->
+<!--           4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7,  -->
+<!--           7, 7, 8, 8, 8), -->
+<!--   col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9), -->
+<!--   code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"), -->
+<!--   name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida") -->
+<!-- ) -->
+
+<!-- # create tile grid map -->
+<!-- usa_drivers %>% -->
+<!--   ggplot(aes(x = xdimension, y = ydimension, fill = perc_alcohol)) + -->
+<!--   geom_tile() + -->
+<!--   geom_text(aes(label = paste0(as.character(perc_alcohol), "%")),  -->
+<!--   					color = "white",  -->
+<!--   					family = "Lato") + -->
+<!-- 	scale_fill_gradientn() + -->
+<!--   facet_geo(facets = ~abbreviation, grid = urban_grid) + -->
+<!--   labs(title = "Don't Drink and Drive", -->
+<!--   		 subtitle = "% of Drivers in Deadly Wrecks Who Were Alcohol-Impaired",  -->
+<!--   		 caption = "National Highway Traffic Administration\n Data from library(fivethirtyeight)", -->
+<!--        x = NULL, -->
+<!--        y = NULL) + -->
+<!--   theme(plot.background = element_rect(colour = "white"), -->
+<!--         panel.grid = element_blank(), -->
+<!--         panel.grid.major = element_blank(), -->
+<!--         axis.text = element_blank(), -->
+<!--         axis.ticks = element_blank(), -->
+<!--         axis.line = element_blank(), -->
+<!--         panel.spacing = unit(0L, "pt"), -->
+<!--         legend.position = "none", -->
+<!--         strip.text.x = element_text(size = 9L)) -->
+<!-- ``` -->
+
+<!-- ### geom_bar()  -->
+
+<!-- Unlike the tile grid map, geofaceting isn't limited to just text and color in the facets. This geofaceted map uses bar plots. Be careful, it can quickly clutter.  -->
+
+<!-- ```{r geo-facet-bar, fig.height=6} -->
+<!-- # load necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(fivethirtyeight) -->
+<!-- library(geofacet) -->
+
+<!-- # create data frame with state driving data -->
+<!-- usa_drivers <- bad_drivers %>% -->
+<!-- 	mutate(perc_distracted = 100 - perc_not_distracted) %>% -->
+<!-- 	select(state, perc_speeding, perc_alcohol, perc_distracted) %>% -->
+<!-- 	gather(key = issue, value = value, - state) %>% -->
+<!-- 	mutate(issue = ifelse(issue == "perc_speeding", "Speeding", issue), -->
+<!-- 				 issue = ifelse(issue == "perc_alcohol", "Alcohol-Impaired", issue), -->
+<!-- 				 issue = ifelse(issue == "perc_distracted", "Distracted", issue)) -->
+
+<!-- # create a tibble with state name abbreviations -->
+<!-- state_abbreviations <- tibble(state = c(state.name, "District of Columbia"), -->
+<!-- 															abbreviation = c(state.abb, "DC")) -->
+
+<!-- # merge state abbreviations on to bad_drivers based on state -->
+<!-- usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # test merge criteria for mismatches. hopefully nrow(mismatches) == 0 -->
+<!-- mismatches <- anti_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # create a custom geofacet grid -->
+<!-- urban_grid <- tibble( -->
+<!--   row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4,  -->
+<!--           4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7,  -->
+<!--           7, 7, 8, 8, 8), -->
+<!--   col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9), -->
+<!--   code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"), -->
+<!--   name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida") -->
+<!-- ) -->
+
+<!-- # plot! -->
+<!-- ggplot(data = usa_drivers, aes(x = issue, y = value, fill = issue)) + -->
+<!--   geom_col() + -->
+<!-- 	coord_flip() + -->
+<!-- 	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), -->
+<!-- 										 breaks = c(0, 50, 100), -->
+<!-- 										 labels = c("0", ".5", "1")) + -->
+<!--   facet_geo(facets = ~abbreviation, grid = urban_grid) + -->
+<!-- 	labs(title = "Driving is dangerous",  -->
+<!-- 			 subtitle = "Proportion of drivers in fatal collisions who were...", -->
+<!-- 			 x = NULL, -->
+<!-- 			 y = NULL, -->
+<!-- 			 caption = "National Highway Traffic Administration \n Data from library(fivethirtyeight)") + -->
+<!-- 	theme(plot.background = element_rect(colour = "white"), -->
+<!-- 				panel.grid = element_blank(), -->
+<!-- 				panel.grid.major = element_blank(), -->
+<!-- 				axis.text.x = element_text(margin = margin(t = 2)), -->
+<!-- 				axis.text.y = element_blank(), -->
+<!--   			axis.text = element_text(size = 8L), -->
+<!--   			axis.line = element_blank(), -->
+<!-- 				panel.border = element_rect(colour = "black",  -->
+<!-- 																		fill = NA,  -->
+<!-- 																		size = 0.3), -->
+<!--         strip.background = element_rect(fill = "grey85",  -->
+<!--         																colour = "black",  -->
+<!--         																size = 0.3), -->
+<!-- 				axis.ticks.length = unit(1L, "pt"), -->
+<!-- 				strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11)) -->
+<!-- ``` -->
+
+<!-- ### geom_line() -->
+
+<!-- ```{r geo-facet-line, fig.height=6} -->
+<!-- # load necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(geofacet) -->
+<!-- library(fivethirtyeight) -->
+<!-- library(purrr) -->
+
+<!-- # add random noise to create simulated longitudinal data -->
+<!-- usa_drivers <- bad_drivers %>% -->
+<!-- 	mutate(`2010` = (100 - perc_not_distracted) / 100)  -->
+
+<!-- usa_drivers$`2011` <- usa_drivers$`2010` * rnorm(51, mean = 1.05, sd = 0.05) -->
+<!-- usa_drivers$`2012` <- usa_drivers$`2011` * rnorm(51, mean = 1.05, sd = 0.05) -->
+<!-- usa_drivers$`2013` <- usa_drivers$`2012` * rnorm(51, mean = 1.05, sd = 0.05) -->
+<!-- usa_drivers$`2014` <- usa_drivers$`2013` * rnorm(51, mean = 1.05, sd = 0.05) -->
+<!-- usa_drivers$`2015` <- usa_drivers$`2014` * rnorm(51, mean = 1.05, sd = 0.05) -->
+
+<!-- # gather data from wide-format to long-format -->
+<!-- usa_drivers <- usa_drivers %>% -->
+<!-- 	gather(`2010`:`2015`, key = "Year", value = "Share Distracted") -->
+
+<!-- # create a tibble with state abbreviations -->
+<!-- state_abbreviations <- tibble(state = c(state.name, "District of Columbia"), -->
+<!-- 															abbreviation = c(state.abb, "DC")) -->
+
+<!-- # merge state abbreviations on to bad_drivers based on state -->
+<!-- usa_drivers <- left_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # test merge criteria for mismatches. hopefully nrow(mismatches) == 0 -->
+<!-- mismatches <- anti_join(x = usa_drivers, y = state_abbreviations, by = "state") -->
+
+<!-- # create a custom geofacet grid -->
+<!-- urban_grid <- tibble( -->
+<!--   row = c(1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4,  -->
+<!--           4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7,  -->
+<!--           7, 7, 8, 8, 8), -->
+<!--   col = c(1, 11, 6, 10, 11, 1, 2, 3, 4, 5, 6, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 4, 5, 6, 7, 8, 1, 4, 9), -->
+<!--   code = c("AK", "ME", "WI", "VT", "NH", "WA", "ID", "MT", "ND", "MN", "IL", "MI", "NY", "MA", "OR", "NV", "WY", "SD", "IA", "IN", "OH", "PA", "NJ", "CT", "RI", "CA", "UT", "CO", "NE", "MO", "KY", "WV", "VA", "MD", "DE", "AZ", "NM", "KS", "AR", "TN", "NC", "SC", "DC", "OK", "LA", "MS", "AL", "GA", "HI", "TX", "FL"), -->
+<!--   name = c("Alaska", "Maine", "Wisconsin", "Vermont", "New Hampshire", "Washington", "Idaho", "Montana", "North Dakota", "Minnesota", "Illinois", "Michigan", "New York", "Massachusetts", "Oregon", "Nevada", "Wyoming", "South Dakota", "Iowa", "Indiana", "Ohio", "Pennsylvania", "New Jersey", "Connecticut", "Rhode Island", "California", "Utah", "Colorado", "Nebraska", "Missouri", "Kentucky", "West Virginia", "Virginia", "Maryland", "Delaware", "Arizona", "New Mexico", "Kansas", "Arkansas", "Tennessee", " North Carolina", "South Carolina", " District of Columbia", "Oklahoma", "Louisiana", "Mississippi", "Alabama", "Georgia", "Hawaii", "Texas", "Florida") -->
+<!-- ) -->
+
+<!-- # plot! -->
+<!-- usa_drivers %>% -->
+<!-- 	ggplot(mapping = aes(x = Year, y = `Share Distracted`, group = abbreviation)) + -->
+<!--   geom_line() + -->
+<!-- 	scale_x_discrete(breaks = c(2010, 2015), labels = c("'10", "'15")) + -->
+<!-- 	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), breaks = c(0, 0.5, 1)) + -->
+<!--   facet_geo(facets = ~abbreviation, grid = urban_grid) + -->
+<!-- 	labs(title = "Driving is dangerous",  -->
+<!-- 			 subtitle = "Simulated Distracted Driving is Increasing", -->
+<!-- 			 x = NULL, -->
+<!-- 			 y = NULL, -->
+<!-- 			 caption = "National Highway Traffic Administration \n Data from library(fivethirtyeight) + Random Noise") + -->
+<!-- 	theme(plot.background = element_rect(colour = "white"), -->
+<!-- 				axis.text.x = element_text(margin = margin(t = 2)), -->
+<!--   			axis.text = element_text(size = 8L), -->
+<!--   			axis.line = element_blank(), -->
+<!-- 				panel.border = element_rect(colour = "black",  -->
+<!-- 																		fill = NA,  -->
+<!-- 																		size = 0.3), -->
+<!--         strip.background = element_rect(fill = "grey85",  -->
+<!--         																colour = "black",  -->
+<!--         																size = 0.3), -->
+<!-- 				axis.ticks.length = unit(1L, "pt"), -->
+<!-- 				strip.text.x = element_text(margin = margin(t = 1, b = 1), size = 11)) -->
+<!-- ``` -->
+
+<!-- ## Dot Maps -->
+
+<!-- ------ -->
+
+<!-- Dot maps represent observations or groups of observations at longitudes and latitudes. Most dot maps add dots on top of a recognizable geography such as the Continental United States. It is common to add color or size as aesthetics representing an additional variable like race and ethnicity or income.  -->
+
+<!-- This motivating example loads a map of the United States, adds `geom_point()` for each capital as a layer on top of the map, and then labels the capitals with `geom_text_repel()`.  -->
+
+<!-- ```{r state-capitals} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(urbnmapr) -->
+<!-- library(ggrepel) -->
+
+<!-- # drop alaska and hawaii -->
+<!-- states_subset <- states %>% -->
+<!-- 	filter(!state_name %in% c("Alaska", "Hawaii")) -->
+
+<!-- # drop alaska and hawaii -->
+<!-- # this data frame has the latitutde and longitude for each capital -->
+<!-- state_capitals <- read_csv("mapping/data/state-capitals.csv") %>% -->
+<!-- 	filter(!state %in% c("Alaska", "Hawaii")) -->
+
+<!-- # map! -->
+<!-- ggplot() +  -->
+<!--   geom_polygon(data = states_subset, mapping = aes(x = long, y = lat, group = group),  -->
+<!--   						 color = "#ffffff", fill = "#d2d2d2", size = 0.2) + -->
+<!-- 	geom_point(data = state_capitals, aes(longitude, latitude), alpha = 0.5) + -->
+<!-- 	geom_text_repel(data = state_capitals, aes(longitude, latitude, label = city),  -->
+<!-- 						size = 3, color = "#000000", family = "Lato") + -->
+<!--   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +	 -->
+<!-- 	labs(title = "State Capitals", -->
+<!-- 			 x = NULL,  -->
+<!-- 			 y = NULL, -->
+<!-- 			 caption = "Urban Institute") -->
+<!-- ``` -->
+
+<!-- The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don't include Alaska, Hawaii, or territories like Puerto Rico.  -->
+
+<!-- Subsets of the above map can be made by adjusting the bounding box. Another option is `qmplot()`. This function will automatically fit the bounding box to the data. Use `I()` with `color =` and `alpha =` so those variables don't show up in the legends. Here's a map of mortgages in Washington, D.C.: -->
+
+<!-- `qmplot()` has many different map types which can be set with the `maptype =` argument. `"toner-lite"` is the only map type that isn't cluttered.  -->
+
+<!-- ```{r qmplot mortgages} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(ggmap) -->
+
+<!-- # read the mortgage data for DC in 2011 -->
+<!-- mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv") -->
+
+<!-- # quick plot -->
+<!-- qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite",  -->
+<!-- 			 color = I("#1696d2"), alpha = I(0.2)) + -->
+<!-- 	labs(title = "Mortgage purchases in 2011", -->
+<!-- 			 subtitle = "Washington, D.C.",  -->
+<!-- 			 caption = "Urban Institute analysis of HMDA data") + -->
+<!-- 	theme(axis.line = element_blank()) -->
+<!-- ``` -->
+
+<!-- Here's a similar map of mortgages in Washington, D.C. with `geom = "density2d"`. -->
+
+<!-- ```{r qmplot mortgage density} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(ggmap) -->
+
+<!-- # load mortgage data for DC in 2011 -->
+<!-- mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv") -->
+
+<!-- # quick plot! -->
+<!-- qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite",  -->
+<!-- 			 geom = "density2d", color = I("#1696d2")) + -->
+<!-- 	labs(title = "Mortgage purchases in 2011", -->
+<!-- 			 subtitle = "Washington, D.C.",  -->
+<!-- 			 caption = "Urban Institute analysis of HMDA data") + -->
+<!-- 	theme(axis.line = element_blank()) -->
+<!-- ``` -->
 
 # Analysis
 
@@ -897,105 +907,105 @@ For a thorough outline of geocoding methods, read the National Neighborhood Indi
 
 #### US Census Geocoder API
 
-The [US Census Geocoder API](https://geocoding.geo.census.gov/geocoder/) is another option for geocoding. It lacks a fuzzy match so it is less forgiving of address imperfections and it is slower than the Google Maps Geocoding API, but its quota is based on number of observations per batch submission instead of a rate of observations per time. This is easier to accommodate grammatically by calling the function on data sets containing fewer than 1,000 observations. 
+<!-- The [US Census Geocoder API](https://geocoding.geo.census.gov/geocoder/) is another option for geocoding. It lacks a fuzzy match so it is less forgiving of address imperfections and it is slower than the Google Maps Geocoding API, but its quota is based on number of observations per batch submission instead of a rate of observations per time. This is easier to accommodate grammatically by calling the function on data sets containing fewer than 1,000 observations.  -->
 
-[Here's](https://andrewpwheeler.wordpress.com/2017/08/03/geocoding-with-census-data-and-the-census-api/) a useful blog post by Andrew Wheeler that inspired some of the following code. 
+<!-- [Here's](https://andrewpwheeler.wordpress.com/2017/08/03/geocoding-with-census-data-and-the-census-api/) a useful blog post by Andrew Wheeler that inspired some of the following code.  -->
 
-```{r census geocoder}
-# load the necessary packages
-library(tidyverse)
-library(httr)
-library(jsonlite)
-library(stringr)
+<!-- ```{r census geocoder} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(httr) -->
+<!-- library(jsonlite) -->
+<!-- library(stringr) -->
 
-# create a tibble with an address
-addresses <- tibble(
-	street = c("1940 Corner Rock Rd."),
-	city = c("Midlothian"),
-	state = c("Virginia"),
-	zip = c("23113")
-)
+<!-- # create a tibble with an address -->
+<!-- addresses <- tibble( -->
+<!-- 	street = c("1940 Corner Rock Rd."), -->
+<!-- 	city = c("Midlothian"), -->
+<!-- 	state = c("Virginia"), -->
+<!-- 	zip = c("23113") -->
+<!-- ) -->
 
-# save the API URL
-api_url <- "https://geocoding.geo.census.gov/geocoder/locations/address?"
+<!-- # save the API URL -->
+<!-- api_url <- "https://geocoding.geo.census.gov/geocoder/locations/address?" -->
 
-# function
-get_census_address <- function(street, city, state, zip) {
-  
-  # use GET() to retrieve JSON from the API based on street, city, state, 
-  # zip, and the API benchmark
-  unretrieved_json <- GET(url = api_url, 
-              query = list(street = street,
-                           city = city,
-                           state = state,
-                           zip = zip,
-                           format = 'json',
-                           benchmark = 4))
+<!-- # function -->
+<!-- get_census_address <- function(street, city, state, zip) { -->
 
-  # retrieve the contents of the API request as text with a UTF-8 encoding
-  retrieved_json <- content(unretrieved_json, as = 'text', encoding = "UTF-8")  
-  
-  # simplify JSON into an r object
-  parsed_json <- fromJSON(retrieved_json, simplifyVector = TRUE)
-  
-  # extract the complete matched addresses from the r object
-  matched_addresses <- parsed_json$result$addressMatches
+<!--   # use GET() to retrieve JSON from the API based on street, city, state,  -->
+<!--   # zip, and the API benchmark -->
+<!--   unretrieved_json <- GET(url = api_url,  -->
+<!--               query = list(street = street, -->
+<!--                            city = city, -->
+<!--                            state = state, -->
+<!--                            zip = zip, -->
+<!--                            format = 'json', -->
+<!--                            benchmark = 4)) -->
 
-  # if there is at least one matcg, return it
-  if (length(matched_addresses) > 1) {
-    
-    temp <- c(matched_addresses['matchedAddress'], matched_addresses['coordinates'][[1]])
-    return(c(temp[[1]], temp[[2]], temp[[3]]))
-    
-    }
-  
-  # if there is no match, return missing values
-  else {return(c('', NA, NA))}
+<!--   # retrieve the contents of the API request as text with a UTF-8 encoding -->
+<!--   retrieved_json <- content(unretrieved_json, as = 'text', encoding = "UTF-8")   -->
 
-}
+<!--   # simplify JSON into an r object -->
+<!--   parsed_json <- fromJSON(retrieved_json, simplifyVector = TRUE) -->
 
-# iterate the function over the list of addresses
-output <- addresses %>%
-  mutate(geocode = pmap(list(street, city, state, zip), get_census_address)) %>%
-  mutate(new_street = purrr::map(geocode, 1),
-         latitude = purrr::map(geocode, 2),
-         longitude = purrr::map(geocode, 3))
+<!--   # extract the complete matched addresses from the r object -->
+<!--   matched_addresses <- parsed_json$result$addressMatches -->
 
-output %>%
-  mutate(row_number = row_number()) %>%
-  select(row_number, address = new_street, latitude, longitude) %>%
-  mutate(accuracy = NA,
-         address = unlist(address),
-         latitude = unlist(latitude),
-         longitude = unlist(longitude)) %>%
-	kable(digits = 2, caption = "Geocoding with US Census Geocoder API", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
+<!--   # if there is at least one matcg, return it -->
+<!--   if (length(matched_addresses) > 1) { -->
 
-An optimal strategy for geocoding many addresses could be to break the data into 1,000 observation chunks and submit each chunk to the US Census Geocoder API. Then, use the Google Maps Geocoding API to geocode observations for which the US Census Geocoder API could not find a match. This could all be accomplished with relatively simple R code. 
+<!--     temp <- c(matched_addresses['matchedAddress'], matched_addresses['coordinates'][[1]]) -->
+<!--     return(c(temp[[1]], temp[[2]], temp[[3]])) -->
 
-## Calculating distances and travel times
+<!--     } -->
 
-------
+<!--   # if there is no match, return missing values -->
+<!--   else {return(c('', NA, NA))} -->
 
-#### mapdist()
+<!-- } -->
 
-`mapdist()` returns the expected travel distance and expected travel time between two locations. The function is vectorized. If a vector of location is passed into the function then it will return a tidy data frame. `mode =` can be set to "driving", "walking", "bicycling", or "transit". 
+<!-- # iterate the function over the list of addresses -->
+<!-- output <- addresses %>% -->
+<!--   mutate(geocode = pmap(list(street, city, state, zip), get_census_address)) %>% -->
+<!--   mutate(new_street = purrr::map(geocode, 1), -->
+<!--          latitude = purrr::map(geocode, 2), -->
+<!--          longitude = purrr::map(geocode, 3)) -->
 
-The `library(ggmap)` GitHub page is a good [resource](https://github.com/dkahle/ggmap) for this type of analysis. 
+<!-- output %>% -->
+<!--   mutate(row_number = row_number()) %>% -->
+<!--   select(row_number, address = new_street, latitude, longitude) %>% -->
+<!--   mutate(accuracy = NA, -->
+<!--          address = unlist(address), -->
+<!--          latitude = unlist(latitude), -->
+<!--          longitude = unlist(longitude)) %>% -->
+<!-- 	kable(digits = 2, caption = "Geocoding with US Census Geocoder API", format = "html", align = "l") %>% -->
+<!-- 	kableExtra::kable_styling(full_width = FALSE, position = "left") -->
+<!-- ``` -->
 
-```{r mapdist, eval = FALSE}
-# load the necessary packages
-library(ggmap)
+<!-- An optimal strategy for geocoding many addresses could be to break the data into 1,000 observation chunks and submit each chunk to the US Census Geocoder API. Then, use the Google Maps Geocoding API to geocode observations for which the US Census Geocoder API could not find a match. This could all be accomplished with relatively simple R code.  -->
 
-ggmap::mapdist(from = "Lincoln Monument", 
-				to = "Washington Monument",
-				mode = "walking",
-				output = "simple",
-				source = "dsk") %>%
-	kable(digits = 2, caption = "Output from ggmap::mapdist()", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
+<!-- ## Calculating distances and travel times -->
+
+<!-- ------ -->
+
+<!-- #### mapdist() -->
+
+<!-- `mapdist()` returns the expected travel distance and expected travel time between two locations. The function is vectorized. If a vector of location is passed into the function then it will return a tidy data frame. `mode =` can be set to "driving", "walking", "bicycling", or "transit".  -->
+
+<!-- The `library(ggmap)` GitHub page is a good [resource](https://github.com/dkahle/ggmap) for this type of analysis.  -->
+
+<!-- ```{r mapdist, eval = FALSE} -->
+<!-- # load the necessary packages -->
+<!-- library(ggmap) -->
+
+<!-- ggmap::mapdist(from = "Lincoln Monument",  -->
+<!-- 				to = "Washington Monument", -->
+<!-- 				mode = "walking", -->
+<!-- 				output = "simple", -->
+<!-- 				source = "dsk") %>% -->
+<!-- 	kable(digits = 2, caption = "Output from ggmap::mapdist()", format = "html", align = "l") %>% -->
+<!-- 	kableExtra::kable_styling(full_width = FALSE, position = "left") -->
+<!-- ``` -->
 
 ## Sampling coordinates
 
@@ -1025,267 +1035,267 @@ The following example samples coordinates for mortgage purchase originations by 
 
 ##### Set up
 
-```{r sample points, eval = FALSE}
-# load the necessary packages
-library(tidyverse)
-library(sp)
-library(rgdal)
-library(stringr)
+<!-- ```{r sample points, eval = FALSE} -->
+<!-- # load the necessary packages -->
+<!-- library(tidyverse) -->
+<!-- library(sp) -->
+<!-- library(rgdal) -->
+<!-- library(stringr) -->
 
-sample_number <- 0
-```
+<!-- sample_number <- 0 -->
+<!-- ``` -->
 
-##### get_coordinates
+<!-- ##### get_coordinates -->
 
-The first function takes one observation with a Census tract number and the number of mortgages in the Census tract and returns a data frame with an observation for each mortgage with longitude and latitude. `spsample()` from `library(sp)` does the random sampling and has a number of options for the type of sampling. All of the function options can be seen by submitting `?spsample`.
+<!-- The first function takes one observation with a Census tract number and the number of mortgages in the Census tract and returns a data frame with an observation for each mortgage with longitude and latitude. `spsample()` from `library(sp)` does the random sampling and has a number of options for the type of sampling. All of the function options can be seen by submitting `?spsample`. -->
 
-```{r get_coordinates, eval = FALSE}
-get_coordinates <- function(census.tract, number.of.mortgages) {
- 
-  # Purpose: takes shapefile and randomly sample longitudes and latitudes in census tracts
-  # Args: 
-  #   census.tract: Census tract ID
-  #   number.of.mortgages: number of mortgages in Census tract
-  # Output: list with longitudes and latitudes for mortgages in each ward
+<!-- ```{r get_coordinates, eval = FALSE} -->
+<!-- get_coordinates <- function(census.tract, number.of.mortgages) { -->
 
-	# Create unique seed number for each random sample
-	sample_number <<- sample_number + 1
-	
-	# Set seeds so pseudo-random sampling is reproducible
-	set.seed(max(sample_number, 1))
-	
-	# Create a temporary data frame with the sampled coordinates
-  temp <- spsample(x = tracts_shapefile@polygons[[census.tract]], 
-  								 n = number.of.mortgages, 
-  								 type = "random", 
-  								 iter = 100)
+<!--   # Purpose: takes shapefile and randomly sample longitudes and latitudes in census tracts -->
+<!--   # Args:  -->
+<!--   #   census.tract: Census tract ID -->
+<!--   #   number.of.mortgages: number of mortgages in Census tract -->
+<!--   # Output: list with longitudes and latitudes for mortgages in each ward -->
 
-  # If temp has sampled coordinates, then split into longitude and latitude and return
-  # Else, assign and return NAs
-  if (!is.null(temp)) {
-  
-    longitude <- temp@coords[, 1]
-    latitude <- temp@coords[, 2]
-  
-    return(tibble(longitude = longitude, latitude = latitude))
-    
-  } else {
-  	
-    return(tibble(longitude = NA, latitude = NA))
-  
-  }
-}
-```
+<!-- 	# Create unique seed number for each random sample -->
+<!-- 	sample_number <<- sample_number + 1 -->
 
-##### latlong_function
+<!-- 	# Set seeds so pseudo-random sampling is reproducible -->
+<!-- 	set.seed(max(sample_number, 1)) -->
 
-The second function subsets the full data set by loan type and race/ethnicity and then iterates `get_coordinates()`, the function from above, across the subset. 
+<!-- 	# Create a temporary data frame with the sampled coordinates -->
+<!--   temp <- spsample(x = tracts_shapefile@polygons[[census.tract]],  -->
+<!--   								 n = number.of.mortgages,  -->
+<!--   								 type = "random",  -->
+<!--   								 iter = 100) -->
 
-The code looks more complicated than it really is. First, the quasi-quotation is necessary because of tidy evaluation. Second, the function created nested vectors that need to be unnested with `unnest()`.
+<!--   # If temp has sampled coordinates, then split into longitude and latitude and return -->
+<!--   # Else, assign and return NAs -->
+<!--   if (!is.null(temp)) { -->
 
-```{r latlong_function, eval = FALSE}
-latlong_function <- function(loan_type, race_ethnicity, formula, race.ethnicity, loan.type) {
- 
-  # Purpose: Take df with one observation per Census tract and return df with one observation per 10 mortgages with coordinates
-  # Args: 
-  #   loan_type: purchase or refinance
-  #   race_ethnicity: total, aa, his, asian, nhw
-  #   formula: total > 0, aa > 0, his > 0, asian > 0, nhw > 0
-  #   race.ehtnicity:
-  #   loan.type:
-  # Output: one of ten combinations of race and mortgage type
-  
-	# Create quasi-quoted arguments 
-  race_ethnicity <- enquo(race_ethnicity)
-  formula <- enquo(formula)
-  
-  # Print statements to keep track of progress
-  print(formula)
-  print(race_ethnicity)
-  print(exists("tracts_shapefile"))
+<!--     longitude <- temp@coords[, 1] -->
+<!--     latitude <- temp@coords[, 2] -->
 
-  # Match the positions of the Census tracts and subset by race/ethnicity
-  temp <- loan_type %>%
-  	group_by(tract) %>%
-  	mutate(position = match(tract,
-  													as.numeric(as.character(tracts_shapefile@data$GEOID)))) %>%
-  	filter(!!formula) %>%
-  	arrange(position) 
-  
-  # If the subsetted data frame has > zero rows, then run get_coordinates
-  # Else, don't run get_coordinates and go to the next observation
-  if (nrow(temp) > 0) {
-  	
-  	temp <- temp %>%
-  		mutate(coordinates = map2(.x = unique(position), 
-  															.y = !!race_ethnicity, 
-  															.f = get_coordinates)) %>%
-  		mutate(raceethnicity = race.ethnicity, 
-  					 loantype = loan.type) %>%
-    	unnest()
-  	
-  	return(temp)
-  
-  } else {
-  	
-  	rm(temp)
-  
-  }
+<!--     return(tibble(longitude = longitude, latitude = latitude)) -->
 
-}
-```
+<!--   } else { -->
 
-##### readR()
+<!--     return(tibble(longitude = NA, latitude = NA)) -->
 
-The third function reads shapefiles, changes the map projection of the shapefiles, and runs `latlong_function()` on each race/ethnicity. It takes a shapefile name and returns a tidy tibble with observations for every ~10 mortgages. 
+<!--   } -->
+<!-- } -->
+<!-- ``` -->
 
-```{r readR, eval = FALSE}
-readR <- function(shapefile) {
-  
-  # Purpose: Reads the state shapefile, set the map projection, and sample
-  # 				 for total plus the four race/ethnicity groups
-  # Args: 
-  #   shapefile: Name of the shapefile for sampling
-  # Output: Tibble with observations for every ten mortgages
-  
-	# Read the relevant shapefile
-	tracts_shapefile <<- readOGR(paste0("mapping/shapefiles/", shapefile))
-	
-	# Set the map projection for the shapefile
-	tracts_shapefile <<- spTransform(tracts_shapefile, "+init=epsg:4326")
-	
-	# Confirm the shapefile exists
-	print(exists("tracts_shapefile"))
+<!-- ##### latlong_function -->
 
-	# Create data frames for each race/ethnicity
-  purchase_total <- latlong_function(loan_type = purchase, 
-  																	 race_ethnicity = total, 
-  																	 formula = total > 0, 
-  																	 race.ethnicity = "total", 
-  																	 loan.type = "purchase")
-  
-  purchase_aa <-    latlong_function(loan_type = purchase, 
-  																	 race_ethnicity = aa, 
-  																	 formula = aa > 0, 
-  																	 race.ethnicity = "aa", 
-  																	 loan.type = "purchase")
-  
-  purchase_his <-   latlong_function(loan_type = purchase, 
-  																	 race_ethnicity = his, 
-  																	 formula = his > 0, 
-  																	 race.ethnicity = "his", 
-  																	 loan.type = "purchase")
-  
-  purchase_asian <- latlong_function(loan_type = purchase, 
-  																	 race_ethnicity = asian, 
-  																	 formula = asian > 0, 
-  																	 race.ethnicity = "asian", 
-  																	 loan.type = "purchase")
-  
-  purchase_nhw <-   latlong_function(loan_type = purchase, 
-  																	 race_ethnicity = nhw, 
-  																	 formula = nhw > 0, 
-  																	 race.ethnicity = "nhw", 
-  																	 loan.type = "purchase")
+<!-- The second function subsets the full data set by loan type and race/ethnicity and then iterates `get_coordinates()`, the function from above, across the subset.  -->
 
-  # combine the five data frames into one data fram
-  full_dataset <- bind_rows(purchase_aa, purchase_asian, purchase_his, purchase_nhw, purchase_total)
-  
-  rm(purchase_aa, purchase_asian, purchase_his, purchase_nhw, purchase_total)
-  
-  return(full_dataset)
+<!-- The code looks more complicated than it really is. First, the quasi-quotation is necessary because of tidy evaluation. Second, the function created nested vectors that need to be unnested with `unnest()`. -->
 
-}
-```
+<!-- ```{r latlong_function, eval = FALSE} -->
+<!-- latlong_function <- function(loan_type, race_ethnicity, formula, race.ethnicity, loan.type) { -->
 
-##### iterate()
+<!--   # Purpose: Take df with one observation per Census tract and return df with one observation per 10 mortgages with coordinates -->
+<!--   # Args:  -->
+<!--   #   loan_type: purchase or refinance -->
+<!--   #   race_ethnicity: total, aa, his, asian, nhw -->
+<!--   #   formula: total > 0, aa > 0, his > 0, asian > 0, nhw > 0 -->
+<!--   #   race.ehtnicity: -->
+<!--   #   loan.type: -->
+<!--   # Output: one of ten combinations of race and mortgage type -->
 
-The above code loads packages and defines functions. Nothing actually happens until the functions are called. The following code chunk actually calls the function. 
+<!-- 	# Create quasi-quoted arguments  -->
+<!--   race_ethnicity <- enquo(race_ethnicity) -->
+<!--   formula <- enquo(formula) -->
 
-`readR()` can be run on just one shapefile like `readR("tl_2012")` or it can be iterated across a vector of shapefile names using `map()` from `library(purrr)`. This example uses the former. The actual program used the latter and iterated across shapefiles and data from 2000 to 2016. Each observation had a data frame for the given year and three unique shapefiles were used because Census tracts change over time. 
+<!--   # Print statements to keep track of progress -->
+<!--   print(formula) -->
+<!--   print(race_ethnicity) -->
+<!--   print(exists("tracts_shapefile")) -->
 
-This code loads the data using `read_csv()` and runs the function `readR()` on the 2012 shapefile for Rhode Island. 
+<!--   # Match the positions of the Census tracts and subset by race/ethnicity -->
+<!--   temp <- loan_type %>% -->
+<!--   	group_by(tract) %>% -->
+<!--   	mutate(position = match(tract, -->
+<!--   													as.numeric(as.character(tracts_shapefile@data$GEOID)))) %>% -->
+<!--   	filter(!!formula) %>% -->
+<!--   	arrange(position)  -->
 
-```{r iterate, eval = FALSE}
-purchase <- read_csv("mapping/data/hmdamap2012_10_purch.csv", 
-	col_types = cols(
-  tract = col_double(),
-  year1 = col_integer(),
-  tract_T = col_character(),
-  aa = col_integer(),
-  his = col_integer(),
-  nhw = col_integer(),
-  asian = col_integer(),
-  total = col_integer())) %>% 
-	filter(str_detect(tract, "^44")) %>%
-	filter(asian > 0)
+<!--   # If the subsetted data frame has > zero rows, then run get_coordinates -->
+<!--   # Else, don't run get_coordinates and go to the next observation -->
+<!--   if (nrow(temp) > 0) { -->
 
-rhode_island <- readR("tl_2012")
-```
+<!--   	temp <- temp %>% -->
+<!--   		mutate(coordinates = map2(.x = unique(position),  -->
+<!--   															.y = !!race_ethnicity,  -->
+<!--   															.f = get_coordinates)) %>% -->
+<!--   		mutate(raceethnicity = race.ethnicity,  -->
+<!--   					 loantype = loan.type) %>% -->
+<!--     	unnest() -->
 
-Once the coordinates are sampled, it's simple to create a dot density map using the methods from above. 
+<!--   	return(temp) -->
 
-# Putting it all together
+<!--   } else { -->
 
-------
+<!--   	rm(temp) -->
 
-This section is a repository of advanced maps made in R. 
+<!--   } -->
 
-This plot uses `grid.arrange()` from `library(gridExtra)` to add a bar plot of the same data below the tile grid map.
+<!-- } -->
+<!-- ``` -->
 
-```{r state choropleth and bar, fig.height=6}
-library(tidyverse)
-library(forcats)
-library(gridExtra)
-library(urbnmapr)
+<!-- ##### readR() -->
 
-chip <- read_csv("mapping/data/chip-enrollment.csv")
+<!-- The third function reads shapefiles, changes the map projection of the shapefiles, and runs `latlong_function()` on each race/ethnicity. It takes a shapefile name and returns a tidy tibble with observations for every ~10 mortgages.  -->
 
-# create groupings for states     
-chip <- chip %>%
-  mutate(state_name = State) %>%
-  arrange(`CHIP Enrollment`) %>%
-  mutate(enrollment_group = c(rep("Group 1", 11), 
-                              rep("Group 2", 10), 
-                              rep("Group 3", 10), 
-                              rep("Group 4", 10), 
-                              rep("Group 5", 10)))
+<!-- ```{r readR, eval = FALSE} -->
+<!-- readR <- function(shapefile) { -->
+
+<!--   # Purpose: Reads the state shapefile, set the map projection, and sample -->
+<!--   # 				 for total plus the four race/ethnicity groups -->
+<!--   # Args:  -->
+<!--   #   shapefile: Name of the shapefile for sampling -->
+<!--   # Output: Tibble with observations for every ten mortgages -->
+
+<!-- 	# Read the relevant shapefile -->
+<!-- 	tracts_shapefile <<- readOGR(paste0("mapping/shapefiles/", shapefile)) -->
+
+<!-- 	# Set the map projection for the shapefile -->
+<!-- 	tracts_shapefile <<- spTransform(tracts_shapefile, "+init=epsg:4326") -->
+
+<!-- 	# Confirm the shapefile exists -->
+<!-- 	print(exists("tracts_shapefile")) -->
+
+<!-- 	# Create data frames for each race/ethnicity -->
+<!--   purchase_total <- latlong_function(loan_type = purchase,  -->
+<!--   																	 race_ethnicity = total,  -->
+<!--   																	 formula = total > 0,  -->
+<!--   																	 race.ethnicity = "total",  -->
+<!--   																	 loan.type = "purchase") -->
+
+<!--   purchase_aa <-    latlong_function(loan_type = purchase,  -->
+<!--   																	 race_ethnicity = aa,  -->
+<!--   																	 formula = aa > 0,  -->
+<!--   																	 race.ethnicity = "aa",  -->
+<!--   																	 loan.type = "purchase") -->
+
+<!--   purchase_his <-   latlong_function(loan_type = purchase,  -->
+<!--   																	 race_ethnicity = his,  -->
+<!--   																	 formula = his > 0,  -->
+<!--   																	 race.ethnicity = "his",  -->
+<!--   																	 loan.type = "purchase") -->
+
+<!--   purchase_asian <- latlong_function(loan_type = purchase,  -->
+<!--   																	 race_ethnicity = asian,  -->
+<!--   																	 formula = asian > 0,  -->
+<!--   																	 race.ethnicity = "asian",  -->
+<!--   																	 loan.type = "purchase") -->
+
+<!--   purchase_nhw <-   latlong_function(loan_type = purchase,  -->
+<!--   																	 race_ethnicity = nhw,  -->
+<!--   																	 formula = nhw > 0,  -->
+<!--   																	 race.ethnicity = "nhw",  -->
+<!--   																	 loan.type = "purchase") -->
+
+<!--   # combine the five data frames into one data fram -->
+<!--   full_dataset <- bind_rows(purchase_aa, purchase_asian, purchase_his, purchase_nhw, purchase_total) -->
+
+<!--   rm(purchase_aa, purchase_asian, purchase_his, purchase_nhw, purchase_total) -->
+
+<!--   return(full_dataset) -->
+
+<!-- } -->
+<!-- ``` -->
+
+<!-- ##### iterate() -->
+
+<!-- The above code loads packages and defines functions. Nothing actually happens until the functions are called. The following code chunk actually calls the function.  -->
+
+<!-- `readR()` can be run on just one shapefile like `readR("tl_2012")` or it can be iterated across a vector of shapefile names using `map()` from `library(purrr)`. This example uses the former. The actual program used the latter and iterated across shapefiles and data from 2000 to 2016. Each observation had a data frame for the given year and three unique shapefiles were used because Census tracts change over time.  -->
+
+<!-- This code loads the data using `read_csv()` and runs the function `readR()` on the 2012 shapefile for Rhode Island.  -->
+
+<!-- ```{r iterate, eval = FALSE} -->
+<!-- purchase <- read_csv("mapping/data/hmdamap2012_10_purch.csv",  -->
+<!-- 	col_types = cols( -->
+<!--   tract = col_double(), -->
+<!--   year1 = col_integer(), -->
+<!--   tract_T = col_character(), -->
+<!--   aa = col_integer(), -->
+<!--   his = col_integer(), -->
+<!--   nhw = col_integer(), -->
+<!--   asian = col_integer(), -->
+<!--   total = col_integer())) %>%  -->
+<!-- 	filter(str_detect(tract, "^44")) %>% -->
+<!-- 	filter(asian > 0) -->
+
+<!-- rhode_island <- readR("tl_2012") -->
+<!-- ``` -->
+
+<!-- Once the coordinates are sampled, it's simple to create a dot density map using the methods from above.  -->
+
+<!-- # Putting it all together -->
+
+<!-- ------ -->
+
+<!-- This section is a repository of advanced maps made in R.  -->
+
+<!-- This plot uses `grid.arrange()` from `library(gridExtra)` to add a bar plot of the same data below the tile grid map. -->
+
+<!-- ```{r state choropleth and bar, fig.height=6} -->
+<!-- library(tidyverse) -->
+<!-- library(forcats) -->
+<!-- library(gridExtra) -->
+<!-- library(urbnmapr) -->
+
+<!-- chip <- read_csv("mapping/data/chip-enrollment.csv") -->
+
+<!-- # create groupings for states      -->
+<!-- chip <- chip %>% -->
+<!--   mutate(state_name = State) %>% -->
+<!--   arrange(`CHIP Enrollment`) %>% -->
+<!--   mutate(enrollment_group = c(rep("Group 1", 11),  -->
+<!--                               rep("Group 2", 10),  -->
+<!--                               rep("Group 3", 10),  -->
+<!--                               rep("Group 4", 10),  -->
+<!--                               rep("Group 5", 10))) -->
 
 
-states_subset <- left_join(states, chip, by = "state_name")
+<!-- states_subset <- left_join(states, chip, by = "state_name") -->
 
-# create a vector with 5 hexadecimal colors for the 5 groups
-urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635")
+<!-- # create a vector with 5 hexadecimal colors for the 5 groups -->
+<!-- urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635") -->
 
-# Plot!
-chip_map <- states_subset %>%
-	ggplot(aes(x = long, y = lat, group = group, fill = enrollment_group)) +
-  geom_polygon(color = "#ffffff", size = 0.25) +
-  scale_fill_manual(values = urban_colors) +  
-  coord_map("albers", lat0 = 39, lat1 = 45) +	
-  labs(title = "State CHIP Enrollment") +
-  theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+<!-- # Plot! -->
+<!-- chip_map <- states_subset %>% -->
+<!-- 	ggplot(aes(x = long, y = lat, group = group, fill = enrollment_group)) + -->
+<!--   geom_polygon(color = "#ffffff", size = 0.25) + -->
+<!--   scale_fill_manual(values = urban_colors) +   -->
+<!--   coord_map("albers", lat0 = 39, lat1 = 45) +	 -->
+<!--   labs(title = "State CHIP Enrollment") + -->
+<!--   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0)) -->
 
-# bar plot
-chip_bar_plot <- chip %>%
-  ggplot(aes(x = fct_reorder(state_abbreviation, `CHIP Enrollment`), 
-  					 y = `CHIP Enrollment`, fill = enrollment_group)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = urban_colors) +
-  scale_y_continuous(expand = c(0, 0)) +
-  labs(x = NULL,
-       y = NULL,
-       caption = "Urban Institute") +
-  theme(panel.grid = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank(),
-        axis.line = element_blank(),
-        axis.text = element_text(size = 6L),
-        legend.position = "none",
-  			plot.margin = margin(t = 0, r = 0, b = 0, l = 0))
+<!-- # bar plot -->
+<!-- chip_bar_plot <- chip %>% -->
+<!--   ggplot(aes(x = fct_reorder(state_abbreviation, `CHIP Enrollment`),  -->
+<!--   					 y = `CHIP Enrollment`, fill = enrollment_group)) + -->
+<!--   geom_bar(stat = "identity") + -->
+<!--   scale_fill_manual(values = urban_colors) + -->
+<!--   scale_y_continuous(expand = c(0, 0)) + -->
+<!--   labs(x = NULL, -->
+<!--        y = NULL, -->
+<!--        caption = "Urban Institute") + -->
+<!--   theme(panel.grid = element_blank(), -->
+<!--         axis.text.y = element_blank(), -->
+<!--         axis.ticks = element_blank(), -->
+<!--         axis.line = element_blank(), -->
+<!--         axis.text = element_text(size = 6L), -->
+<!--         legend.position = "none", -->
+<!--   			plot.margin = margin(t = 0, r = 0, b = 0, l = 0)) -->
 
-grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1))
-```
+<!-- grid.arrange(chip_map, chip_bar_plot, ncol = 1, heights = c(2, 1)) -->
+<!-- ``` -->
 
 ## Bibliography and references
 
