@@ -47,7 +47,7 @@ R can have a steeper learning curve than point-and-click tools for geospatial an
 * Point-and-click tools are not reproducible. The audience, other researchers, and the analyst/mapper 6 months after the analysis is completed will have little idea what happened in a stream of undocumented right- and left-clicks. R is a scripting language that if used properly, creates a reproducible script that can be read and rerun many years later.
 * Most point-and-click tools for geospatial analysis are proprietary and expensive. R is free opensource software. The software and most of its packages can be used for free by anyone for almost anything. 
 
-I hope this guide is a useful resource that helps you accomplish your existing research ideas or helps you come up with entirely new research ideas. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Sarah Strochak (sstrochak@urban.org) if you have any questions about this guide or need any assistance with R. 
+Please don't hesitate to contact Sarah Strochak (sstrochak@urban.org) or Aaron Williams (awilliams@urban.org) if you have any questions about this guide or need any assistance with R. 
 
 Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mapping Users Group are excellent resources for mapping and geospatial analysis. 
 
@@ -61,6 +61,95 @@ Additionally, Rob Pitingolo (rpitingolo@urban.org) and the Urban Institute Mappi
 ## Basic Concepts
 
 ------
+
+
+### Simple features
+
+
+Simple features are a way to describe the spatial attributes of real life objects. In R, this is implemented as a data frame that contains a column of geographic information. Geographic information is made up of points, and can be represented as points, lines, polygons, multipolygons, and more.
+
+Simple features work well with `tidyverse` functions, including `ggplot2`. This means that we can use a lot of the same data wranling tools when we are working with spatial data.
+
+`sf` dataframes in R generally include both spatial and non-spatial data. In the example below, the dataframe contains state identifiers, and a column called `geometry`, which contains a nested list of coordinates. Each coordinate contains a vertex of the shape of the state; when combined and appropriately grouped, this is what allows the shape to render corectly.
+
+```{r sf-example}
+
+urbnmapr::get_urbn_map("states", sf = TRUE) %>% 
+	head(5)
+
+```
+
+`library(sf)` is a key tool for working with spatial data in R. Functions included in the package provide easy and reproducable ways to replicate many tasks commonly done in ArcGIS and other GIS software. The dataframe structure makes it easy to combine, filter, join, and manipulate geospatial data.
+
+
+## Getting geospatial data
+
+So you want to make a map in R- the first thing you need to do is get spatial data. There are many strategies to convert or obtain `sf` objects that can then be mapped.
+
+------
+
+### R packages with geographic data
+
+#### `library(urbnmapr)`
+
+`urbnmapr` provides sf objects for mapping US states and counties. The `get_urbn_map()` function allows you to load both states and counties, with options for including territories.
+
+```{r urbnmapr-1}
+
+library(urbnmapr)
+
+states <- get_urbn_map("states", sf = TRUE)
+
+```
+
+#### `library(tigris)`
+
+`library(tigris)` allows you to easily download TIGER and cartographic boundaries from the US Census Bureaus. In order to read in the boundaries as `sf` objects, run `r options(tigris_class = "sf")` once per session. 
+
+`tigris` has all standard census geographies, including census tracts, counties, CBSAs, ZCTAs, congressional districts, and more. It also includes other elements such as water, roads, and military bases. 
+
+By default, `tigris` will download TIGER line boundaries. TIGER line shapefiles contain detailed, full boundaries. This means that the boundaries are not clipped to the shoreline. For thematic mapping, cartographic boundaries are a better choice, as they are clipped to the shoreline and generalized. To load catrographic boundaries, include the `r cb = TRUE` argument.
+
+You can also load boudaries for past years; `tigris` will default to the most recent year.
+
+Unlike `urbnmapr`, different functions are used for different geographic levels- for instance, the `blocks()` function will load census block groups, and the `states()` function will load states. For the full list of functions, see the [package vignette](https://cran.r-project.org/web/packages/tigris/tigris.pdf).
+
+```{r tigris-1}
+
+library(tigris)
+
+options(tigris_class = "sf")
+
+md_zctas <- zctas(state = "MD",
+									cb = TRUE)
+
+
+```
+
+
+
+#### `library(rnaturalearth)`
+
+
+### Converting data to `sf`
+
+
+### Reading in shapefiles
+
+
+## Mapping
+
+Once you have geospatial data, you have everything you ne
+
+------
+
+
+
+
+
+
+
+
 
 ### library(ggplot2)
 
