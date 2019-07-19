@@ -2,7 +2,7 @@
 output:
   html_document:
     includes:
-      in_header: analytics.html  	
+      in_header: analytics.html
     output_dir: "."
 ---
 

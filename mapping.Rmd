@@ -84,7 +84,7 @@ That said, some of the most-convincing data visualizations are maps. The style g
 
 Here are a few things to keep in mind:
 
-* The following maps are styled by the Urban Institute package [urbnthemes](https://github.com/UI-Research/urbnthemes). 
+* The following maps are styled by the Urban Institute package [urbnthemes](https://github.com/UrbanInstitute/urbnthemes). 
 * U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection. Tile-based maps like tile grid maps and geofaceting use the Mercator projection. 
 * Maps that show the magnitude of a variable use the blue sequential ramp and maps that display positives and negatives use the diverging color ramp. 
 * In general, the borders between geographies are white. 
