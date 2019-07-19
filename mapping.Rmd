@@ -85,7 +85,7 @@ So you want to make a map in R- the first thing you need to do is get spatial da
 
 #### `library(urbnmapr)`
 
-`urbnmapr` provides sf objects for mapping US states and counties. The `get_urbn_map()` function allows you to load both states and counties, with options for including territories. For more information on urbnmapr, see the [GitHub repository](https://github.com/UrbanInstitute/urbnmapr).
+`urbnmapr` provides sf objects for mapping US states and counties. The `get_urbn_map()` function allows you to load both states and counties, with options for including territories. For information on how to install urbnmapr, see the [GitHub repository](https://github.com/UrbanInstitute/urbnmapr).
 
 ```{r urbnmapr-1, eval=FALSE}
 
@@ -124,6 +124,7 @@ md_zctas <- zctas(state = "MD",
 `library(rnaturalearth)` is similar to tigris, but allows you to download and use boundaries beyond the US. Instead of setting class to `sf` one time per session, the `returnclass = SF` argument can be used each time you use a function from the package.
 
 ```{r natural-earth}
+
 library(rnaturalearth)
 
 world <- ne_countries(returnclass = "sf")
@@ -135,7 +136,20 @@ ggplot() +
 
 ### Converting data to `sf`
 
-`library(sf)` contains functions for converting existing data that has columns for latitude and longitude into an `sf` object. This is most easily done with point data.
+`library(sf)` contains functions for converting existing data that has columns for latitude and longitude into an `sf` object. This is most easily done with point data. It is important to assign the correct CRS when converting- otherwise, your points might end up in a different map projection, and it will be difficult to reproject them. 
+
+```{r make-sf}
+
+library(sf)
+
+state_capitals <- read_csv("mapping/data/state-capitals.csv")
+
+state_capitals_sf <- state_capitals %>% 
+	st_as_sf(coords = c("longitude", "latitude"),
+					 crs = 4326)
+
+```
+
 
 ### Reading in shapefiles
 
@@ -143,25 +157,17 @@ ggplot() +
 
 ```{r st-read}
 
+list.files("mapping/shapefiles")
 
+dc <- st_read(dsn = "mapping/shapefiles",
+							layer = "Basemap_of_DC_in_Dark_Gray")
+
+ggplot() +
+	geom_sf(dc, mapping = aes())
 
 ```
 
 ## Mapping
-
-Once you have geospatial data, you have everything you ne
-
-------
-
-
-
-
-
-
-
-
-
-### library(ggplot2)
 
 Most mapping in R fits the same theoretical framework as plotting in R using `library(ggplot2)`. Hadley Wickham’s ggplot2 is based on Leland Wilkinson’s [*The Grammar of Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448) and Wickham’s [*A Layered Grammar of Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2 and ultimately mapping.
 
@@ -173,51 +179,107 @@ Most mapping in R fits the same theoretical framework as plotting in R using `li
 * **Facets** break the data into meaningful subsets like small multiples.
 * **Themes** control the finer points of a plot such as fonts, font sizes, and background colors.
 
-### Urban Institute style
+`geom_sf()` is used for mapping in `ggplot()`. Since `sf` objects by default have a column called `geography` that contains a nested list of coordinates, you do not usually need to specify `aes()`. 
 
-The [Urban Institute Data Visualization Style Guide](http://urbaninstitute.github.io/graphics-styleguide/) is the best place to start when making any visualization. The guide offers some blunt suggestions for maps:
+Make sure you load `library(tidyverse)` or `library(ggplot2)` each time you make a map with `ggplot2`.
 
-> Just because you've got geographic data, doesn't mean that you have to make a map. Many times, there are more efficient storyforms that will get your point across more clearly. If your data shows a very clear geographic trend or if the absolute location of a place or event matters, maps might be the best  approach, but sometimes the reflexive impulse to map the data can make you forget that showing the data in another form might answer other—and sometimes more important—questions.
+### The basics
 
-That said, some of the most-convincing data visualizations are maps. The style guide has well-defined guidelines for standard chart and graph types, but some of the more complex or novel visualizations below will need to be styled and tweaked on a case-by-case basis. For external-facing products (presentations, publications, web interactives, etc.) you will likely need to collaborate with Urban's Communications team. Please contact Ben Chartoff (bchartoff@urban.org) with questions or thoughts related to visual presentation, or discuss with the editorial team in the course of editing your publication/product.  
+When using `library(ggplot2)`, you need to specify the `sf` dataframe you are using. If your geographic boundaries are stored in a column other than `geometry`, you will need to specify that too. 
 
-Here are a few things to keep in mind:
+Starting with an example from the `urbnmapr` package, we can load in an `sf` object and then display it using `ggplot()`.
 
-* The following maps are styled by the Urban Institute package [urbnthemes](https://github.com/UI-Research/urbnthemes). 
-* U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic Projection.
-* Maps that show the magnitude of a variable use a sequential ramp and maps that display positives and negatives use the diverging color ramp. 
-* In general, the borders between geographies are white. 
+```{r first-map}
 
-No guide can answer every question. A lot of thought goes in to making a good map. These blog posts are good sources of inspiration for answering those deeper questions:
+library(urbnmapr)
 
-* [When Maps Shouldn't be Maps](http://www.ericson.net/content/2011/10/when-maps-shouldnt-be-maps/)
-* [How a map’s “bins” can influence your perception of an important policy issue](https://www.urban.org/urban-wire/how-maps-bins-can-influence-your-perception-important-policy-issue)
+states <- get_urbn_map("states", sf = TRUE)
 
-## Working with geospatial data in R
+ggplot() +
+	geom_sf(data = states, mapping = aes())
 
-### Simple features
+```
 
-Simple features are data frame that contain a column with geographic information. Special features work well with `tidyverse` data manipulation tools and `ggplot2` plotting. 
 
-`library(sf)` includes tools for reading, writing, and manipulating spatial data. Many common tasks done in ArcGIS, QGIS, or other geospatial analysis software can be easily replicated.
+### Styling maps
 
-#### Reading in data
+#### `urbnthemes`
 
-There are several packages that can help load common shapefiles. The function `st_read()` can be used to read in your own shapefiles.
+`library(urbnthemes)` has functions that are built for mapping with `ggplot2`. 
 
-##### `library(tigris)`
+To install `urbnthemes`, visit the [GitHub repository](https://github.com/UrbanInstitute/urbnthemes).
 
-##### `st_read()`
+You can use the mapping functions in two ways: setting the map defaults, or adding `theme_urbn_map()` to the end of your map. These functions will get rid of the axes, labels, and gridlines that are useful for charts, but not needed for maps.
 
-#### Quality checking
+For more information on creating Urban-styled maps, see the [Urban Institute Data Visualization Style Guide](http://urbaninstitute.github.io/graphics-styleguide/).
 
-## Plotting 
+```{r urbnthemes}
+
+library(urbnthemes)
+
+set_urbn_defaults(style = "map")
+
+ggplot() +
+	geom_sf(states, mapping = aes()) +
+	theme_urbn_map()
+
+```
+
+#### Map design
+
+The same commands used to change colors, opacity, lines, size, etc. in charts can be used for maps too. For instance, if I wanted to change the colors of the map above, I would simply use the `fill = ` and `color = ` parameters in `geom_sf()`. `fill` will change the color of the polygon; `color` will change the color of polygon outlines, lines, and points. 
+
+```{r urbnthemes- pink}
+
+ggplot() +
+	geom_sf(states, mapping = aes(),
+					fill = "#ec008b", color = "#ffffff") +
+	theme_urbn_map()
+
+```
+
+#### Layering 
+
+Just like in other GIS software, you can layer multiple `sf` objects. The shapes will appear from bottom to top in the order they are called. It is important that all layers are in the same projection.
+
+```{r layers}
+
+state_capitals <- read_csv("mapping/data/state-capitals.csv") %>% 
+	filter(!state %in% c("Alaska", "Hawaii")) %>% 
+	st_as_sf(coords = c("longitude", "latitude"),
+					 crs = 4326) %>% 
+	st_transform(crs = 2163)
+
+ggplot() +
+	geom_sf(data = filter(states, !state_abbv %in% c("AK", "HI")), 
+					mapping = aes()) +
+	geom_sf(data = state_capitals, mapping = aes(),
+					color = "#1696d2", size = 2.0) +
+	theme_urbn_map()
+
+
+```
+
+
+### Choropleth maps
+
+Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts. 
+
+
+
+------
+
+
+
+
+
+
 
 ## Choropleth Maps
 
 ------
 
-Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts. 
+
 
 ### library(urbnmapr)
 
