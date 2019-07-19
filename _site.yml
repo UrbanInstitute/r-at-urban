@@ -1,12 +1,12 @@
-name: R Programming at the Urban Institute
+name: R@URBAN
 navbar:
-  title: R PROGRAMMING AT THE URBAN INSTITUTE
+  title: R@URBAN
   left:
   - text: HOME
     href: index.html
   - text: INTRO TO R
     href: intro-to-r.html
-  - text: PLOTTING
+  - text: DATA VIZ
     href: graphics-guide.html
   - text: MAPPING
     href: mapping.html

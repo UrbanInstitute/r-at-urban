@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>graphics-guide.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -83,9 +83,7 @@ h6 {
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -203,8 +201,6 @@ $(document).ready(function () {
   menuAnchor.closest('li.dropdown').addClass('active');
 });
 </script>
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -371,6 +367,16 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
 <div class="col-xs-12 col-sm-4 col-md-3">
@@ -391,7 +397,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">R PROGRAMMING AT THE URBAN INSTITUTE</a>
+      <a class="navbar-brand" href="index.html">R@URBAN</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -402,7 +408,7 @@ div.tocify {
   <a href="intro-to-r.html">INTRO TO R</a>
 </li>
 <li>
-  <a href="graphics-guide.html">PLOTTING</a>
+  <a href="graphics-guide.html">DATA VIZ</a>
 </li>
 <li>
   <a href="mapping.html">MAPPING</a>
@@ -436,15 +442,12 @@ div.tocify {
 
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
-<div class="figure">
-<img src="graphics-guide/www/images/urban-institute-logo.png" />
-
-</div>
+<p><img src="graphics-guide/www/images/urban-institute-logo.png" /></p>
 </div>
 <div id="urban-institute-r-graphics-guide" class="section level2">
 <h2>Urban Institute R Graphics Guide</h2>
 <hr />
-<p>R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using <code>urbnthemes</code>, the Urban Institute’s R package for creating near-publication-ready plots with <code>ggplot2</code>. If you have any questions, please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org">awilliams@urban.org</a>) or Kyle Ueyama (<a href="mailto:kueyama@urban.org">kueyama@urban.org</a>).</p>
+<p>R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using <code>urbnthemes</code>, the Urban Institute’s R package for creating near-publication-ready plots with <code>ggplot2</code>. If you have any questions, please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org" class="email">awilliams@urban.org</a>) or Kyle Ueyama (<a href="mailto:kueyama@urban.org" class="email">kueyama@urban.org</a>).</p>
 <div id="background" class="section level3">
 <h3>Background</h3>
 <p><code>library(urbnthemes)</code> makes <code>ggplot2</code> output align more closely with <a href="http://urbaninstitute.github.io/graphics-styleguide/">the Urban Institute’s Data Visualization style guide</a>. This package does <strong>not produce publication ready graphics</strong>. Visual styles must still be edited using your project/paper’s normal editing workflow.</p>
@@ -514,7 +517,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="one-color-rotated" class="section level3">
 <h3>One Color (Rotated)</h3>
-<p>This example introduces <code>coord_flip()</code> and <code>remove_axis(axis = &quot;x&quot;, flip = TRUE)</code>. <code>remove_axis()</code> is from <code>library(urbnthemes)</code> and creates a custom theme for rotated bar plots.</p>
+<p>This example introduces <code>coord_flip()</code> and <code>remove_axis(axis = "x", flip = TRUE)</code>. <code>remove_axis()</code> is from <code>library(urbnthemes)</code> and creates a custom theme for rotated bar plots.</p>
 <pre class="r"><code>mtcars %&gt;%
   count(cyl) %&gt;%
   ggplot(mapping = aes(x = factor(cyl), y = n)) +
@@ -568,7 +571,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="stacked-bar-plot-with-position-fill" class="section level3">
 <h3>Stacked Bar Plot With Position = Fill</h3>
-<p>The previous examples used <code>geom_col()</code>, which takes a y value for bar height. This example uses <code>geom_bar()</code> which sums the values and generates a value for bar heights. In this example, <code>position = &quot;fill&quot;</code> in <code>geom_bar()</code> changes the y-axis from count to the proportion of each bar.</p>
+<p>The previous examples used <code>geom_col()</code>, which takes a y value for bar height. This example uses <code>geom_bar()</code> which sums the values and generates a value for bar heights. In this example, <code>position = "fill"</code> in <code>geom_bar()</code> changes the y-axis from count to the proportion of each bar.</p>
 <pre class="r"><code>mtcars %&gt;%
   mutate(am = factor(am, labels = c(&quot;Automatic&quot;, &quot;Manual&quot;)),
          cyl = factor(cyl)) %&gt;%  
@@ -583,7 +586,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="dodged-bar-plot" class="section level3">
 <h3>Dodged Bar Plot</h3>
-<p>Subsetted bar charts in ggplot2 are stacked by default. <code>position = &quot;dodge&quot;</code> in <code>geom_col()</code> expands the bar chart so the bars appear next to each other.</p>
+<p>Subsetted bar charts in ggplot2 are stacked by default. <code>position = "dodge"</code> in <code>geom_col()</code> expands the bar chart so the bars appear next to each other.</p>
 <pre class="r"><code>mtcars %&gt;%
   mutate(am = factor(am, labels = c(&quot;Automatic&quot;, &quot;Manual&quot;)),
          cyl = factor(cyl)) %&gt;%
@@ -1064,7 +1067,7 @@ msleep %&gt;%
 </div>
 <div id="boxplots" class="section level3">
 <h3>Boxplots</h3>
-<p>Boxplots were invented in the 1970s by John Tukey<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Instead of showing the underlying data or binned counts of the underlying data, they focus on important values like the 25th percentile, median, and 75th percentile.</p>
+<p>Boxplots were invented in the 1970s by John Tukey<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Instead of showing the underlying data or binned counts of the underlying data, they focus on important values like the 25th percentile, median, and 75th percentile.</p>
 <pre class="r"><code>InsectSprays %&gt;%
   ggplot(mapping =  aes(x = spray, y = count)) +
   geom_boxplot() +
@@ -1195,7 +1198,7 @@ ggplot(diamonds, mapping = aes(x = price, y = cut)) +
 <h2>Waffle Chart / Square Pie Chart</h2>
 <hr />
 <p>The waffle package {<a href="https://cran.r-project.org/web/packages/waffle/waffle.pdf">CRAN</a> and <a href="https://github.com/hrbrmstr/waffle">Github</a>} creates suare pie charts. It can also be combined with <a href="http://fontawesome.io/">glyphs</a> for more elegant shapes than squares. This example uses data pulled from <a href="http://www.urban.org/features/vision-equitable-dc">A Vision for an Equitable DC</a>.</p>
-<p>Waffle charts will require a little extra tinkering since they are called from <code>library(waffle)</code> instead of <code>library(ggplot2)</code>. Most importantly, waffle charts require <code>theme_urban(text = element_text(family = &quot;Lato&quot;))</code> for the Lato font.</p>
+<p>Waffle charts will require a little extra tinkering since they are called from <code>library(waffle)</code> instead of <code>library(ggplot2)</code>. Most importantly, waffle charts require <code>theme_urban(text = element_text(family = "Lato"))</code> for the Lato font.</p>
 <div id="single-waffle-chart" class="section level3">
 <h3>Single Waffle Chart</h3>
 <pre class="r"><code>library(waffle)
@@ -1224,7 +1227,7 @@ waffle(parts, rows = 5, glyph_size = 12, colors = c(&quot;#1696d2&quot;, &quot;#
 </div>
 <div id="multiple-waffle-charts" class="section level3">
 <h3>Multiple Waffle Charts</h3>
-<p><code>library(waffle)</code> allows multiple waffle charts to be ironed together using <code>iron()</code>. Ironing multiple charts together requires some trial-and-error to get the sizes and resolution to look good, but the results can be worth the work. Don’t forget <code>theme(text = element_text(family = &quot;Lato&quot;))</code>!</p>
+<p><code>library(waffle)</code> allows multiple waffle charts to be ironed together using <code>iron()</code>. Ironing multiple charts together requires some trial-and-error to get the sizes and resolution to look good, but the results can be worth the work. Don’t forget <code>theme(text = element_text(family = "Lato"))</code>!</p>
 <pre class="r"><code>library(waffle)
 
 white &lt;- c(`With Degree` = 169300, `Without Degree` = 800)
@@ -1315,7 +1318,7 @@ bad_drivers %&gt;%
 <h2>Smoothers</h2>
 <hr />
 <p><code>geom_smooth()</code> fits and plots models to data with two or more dimensions.</p>
-<p>Understanding and manipulating defaults is more important for <code>geom_smooth()</code> than other geoms because it contains a number of assumptions. <code>geom_smooth()</code> automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with <code>formula = y ~ s(x, bs = &quot;cs&quot;)</code> for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.</p>
+<p>Understanding and manipulating defaults is more important for <code>geom_smooth()</code> than other geoms because it contains a number of assumptions. <code>geom_smooth()</code> automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with <code>formula = y ~ s(x, bs = "cs")</code> for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.</p>
 <p>Models are chosen with <code>method =</code> and can be set to lm(), glm(), gam(), loess(), rlm(), and more. Formulas can be specified with <code>formula =</code> and <code>y ~ x</code> syntax. Plotting the standard error is toggled with <code>se = TRUE</code> and <code>se = FALSE</code>, and level is specificed with <code>level =</code>. As always, more information can be seen in RStudio with <code>?geom_smooth()</code>.</p>
 <p><code>geom_point()</code> adds a scatterplot to <code>geom_smooth()</code>. The order of the function calls is important. The function called second will be layed on top of the function called first.</p>
 <pre class="r"><code>diamonds %&gt;%
@@ -1633,7 +1636,7 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2, width = 10, height = 6, de
 <p>Winston Chang, (2014). extrafont: Tools for using fonts. R package version 0.17. <a href="https://CRAN.R-project.org/package=extrafont" class="uri">https://CRAN.R-project.org/package=extrafont</a></p>
 <p>Yihui Xie (2018). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.19.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.5.1 (2018-07-02)
+<pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
 ## Running under: Windows 7 x64 (build 7601) Service Pack 1
 ## 
@@ -1651,38 +1654,37 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2, width = 10, height = 6, de
 ## 
 ## other attached packages:
 ##  [1] AmesHousing_0.0.3     gghighlight_0.1.0     fivethirtyeight_0.4.0
-##  [4] waffle_0.7.0          ggridges_0.5.1        ggrepel_0.8.0        
-##  [7] gapminder_0.3.0       hexbin_1.27.2         bindrcpp_0.2.2       
-## [10] urbnthemes_0.0.1      forcats_0.3.0         stringr_1.3.1        
-## [13] dplyr_0.7.8           purrr_0.2.5           readr_1.3.1          
-## [16] tidyr_0.8.2           tibble_2.0.1          ggplot2_3.1.0        
-## [19] tidyverse_1.2.1       knitr_1.21           
+##  [4] waffle_0.7.0          ggridges_0.5.1        ggrepel_0.8.1        
+##  [7] gapminder_0.3.0       urbnthemes_0.0.1      forcats_0.4.0        
+## [10] stringr_1.4.0         dplyr_0.8.0.1         purrr_0.3.2          
+## [13] readr_1.3.1           tidyr_0.8.3           tibble_2.1.3         
+## [16] ggplot2_3.2.0         tidyverse_1.2.1       knitr_1.22           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0          lubridate_1.7.4     lattice_0.20-38    
-##  [4] assertthat_0.2.0    digest_0.6.18       R6_2.3.0           
-##  [7] cellranger_1.1.0    plyr_1.8.4          backports_1.1.3    
-## [10] evaluate_0.12       httr_1.4.0          pillar_1.3.1       
-## [13] rlang_0.3.1         lazyeval_0.2.1      readxl_1.2.0       
-## [16] rstudioapi_0.9.0    extrafontdb_1.0     Matrix_1.2-15      
-## [19] rmarkdown_1.11      labeling_0.3        extrafont_0.17     
-## [22] munsell_0.5.0       broom_0.5.1         compiler_3.5.1     
-## [25] modelr_0.1.2        xfun_0.4            pkgconfig_2.0.2    
-## [28] mgcv_1.8-26         htmltools_0.3.6     tidyselect_0.2.5   
-## [31] gridExtra_2.3       crayon_1.3.4        withr_2.1.2        
-## [34] grid_3.5.1          nlme_3.1-137        jsonlite_1.6       
-## [37] Rttf2pt1_1.3.7      gtable_0.2.0        magrittr_1.5       
-## [40] scales_1.0.0        cli_1.0.1           stringi_1.2.4      
-## [43] reshape2_1.4.3      xml2_1.2.0          generics_0.0.2     
-## [46] RColorBrewer_1.1-2  tools_3.5.1         glue_1.3.0         
-## [49] urbnmapr_0.0.0.9001 hms_0.4.2           yaml_2.2.0         
-## [52] colorspace_1.4-0    rvest_0.3.2         bindr_0.1.1        
-## [55] haven_2.0.0</code></pre>
+##  [1] Rcpp_1.0.1          lubridate_1.7.4     lattice_0.20-38    
+##  [4] assertthat_0.2.1    digest_0.6.19       R6_2.4.0           
+##  [7] cellranger_1.1.0    plyr_1.8.4          backports_1.1.4    
+## [10] evaluate_0.13       httr_1.4.0          pillar_1.4.1       
+## [13] rlang_0.4.0         lazyeval_0.2.2      readxl_1.3.1       
+## [16] rstudioapi_0.10     extrafontdb_1.0     hexbin_1.27.2      
+## [19] Matrix_1.2-17       rmarkdown_1.12      labeling_0.3       
+## [22] splines_3.6.0       extrafont_0.17      munsell_0.5.0      
+## [25] broom_0.5.2         compiler_3.6.0      modelr_0.1.4       
+## [28] xfun_0.7            pkgconfig_2.0.2     mgcv_1.8-28        
+## [31] htmltools_0.3.6     tidyselect_0.2.5    gridExtra_2.3      
+## [34] crayon_1.3.4        withr_2.1.2         grid_3.6.0         
+## [37] nlme_3.1-140        jsonlite_1.6        Rttf2pt1_1.3.7     
+## [40] gtable_0.3.0        magrittr_1.5        scales_1.0.0       
+## [43] cli_1.1.0           stringi_1.4.3       reshape2_1.4.3     
+## [46] xml2_1.2.0          generics_0.0.2      RColorBrewer_1.1-2 
+## [49] tools_3.6.0         glue_1.3.1          urbnmapr_0.0.0.9002
+## [52] hms_0.4.2           yaml_2.2.0          colorspace_1.4-1   
+## [55] rvest_0.3.4         haven_2.1.0</code></pre>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Wickham, H., &amp; Stryjewski, L. (2011). 40 years of boxplots.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>Wickham, H., &amp; Stryjewski, L. (2011). 40 years of boxplots.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

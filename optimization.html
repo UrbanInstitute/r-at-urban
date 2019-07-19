@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>optimization.utf8.md</title>
 
 <script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -89,9 +89,7 @@ h6 {
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -209,8 +207,6 @@ $(document).ready(function () {
   menuAnchor.closest('li.dropdown').addClass('active');
 });
 </script>
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -369,6 +365,16 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
 <div class="col-xs-12 col-sm-4 col-md-3">
@@ -389,7 +395,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">R PROGRAMMING AT THE URBAN INSTITUTE</a>
+      <a class="navbar-brand" href="index.html">R@URBAN</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -400,7 +406,7 @@ div.tocify {
   <a href="intro-to-r.html">INTRO TO R</a>
 </li>
 <li>
-  <a href="graphics-guide.html">PLOTTING</a>
+  <a href="graphics-guide.html">DATA VIZ</a>
 </li>
 <li>
   <a href="mapping.html">MAPPING</a>
@@ -426,10 +432,7 @@ div.tocify {
 
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
-<div class="figure">
-<img src="optimization/images/urban-institute-logo.png" />
-
-</div>
+<p><img src="optimization/images/urban-institute-logo.png" /></p>
 <hr />
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
@@ -443,15 +446,9 @@ div.tocify {
 <h1>Update Your Installation</h1>
 <p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
 <p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
-<div class="figure">
-<img src="optimization/images/data-load-3-4.png" style="width:75.0%" />
-
-</div>
+<p><img src="optimization/images/data-load-3-4.png" style="width:75.0%" /></p>
 <p>While 3.5.0 took less than half the time:</p>
-<div class="figure">
-<img src="optimization/images/data-load-3-5.png" style="width:75.0%" />
-
-</div>
+<p><img src="optimization/images/data-load-3-5.png" style="width:75.0%" /></p>
 <p>To see what the R-core development team is up to, check out the <a href="%22https://cran.r-project.org/doc/manuals/r-devel/NEWS.html%22">NEWS</a> file from the R project.</p>
 <hr />
 </div>
@@ -471,8 +468,8 @@ profvis({
   write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
 
 })</code></pre>
-<div id="htmlwidget-8b456f2c311110f71d08" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8b456f2c311110f71d08">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,14,14,14,15,15,15,15,15,16,16,16,16,16,17,17,17,17,17,18,18,18,18,18,19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,7,6,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","names","names","have_name","exprs_auto_name","named_quos","summarise.tbl_df","summarise","summarise_if","function_list[[k]]","withVisible","freduce","_fseq","eval","eval","withVisible","%>%","close.connection","close","write.table","eval","eval","eval.parent","write.csv"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,11],"memalloc":[95.1038360595703,95.1038360595703,95.1038360595703,96.1827011108398,96.1827011108398,96.1827011108398,96.1863555908203,96.1863555908203,96.1863555908203,97.4145812988281,97.4145812988281,97.4145812988281,99.8649368286133,99.8649368286133,99.8649368286133,99.8808898925781,99.8808898925781,99.8808898925781,99.904426574707,99.904426574707,99.904426574707,99.9116363525391,99.9116363525391,99.9116363525391,104.795394897461,104.795394897461,104.795394897461,104.797370910645,104.797370910645,104.797370910645,104.799903869629,104.799903869629,104.799903869629,104.804359436035,104.804359436035,104.804359436035,104.808654785156,104.808654785156,104.808654785156,109.336791992188,109.336791992188,109.336791992188,109.336791992188,109.336791992188,113.719169616699,113.719169616699,113.719169616699,113.719169616699,113.719169616699,114.336738586426,114.336738586426,114.336738586426,114.336738586426,114.336738586426,114.954582214355,114.954582214355,114.954582214355,114.954582214355,114.954582214355,115.366386413574,115.366386413574,115.366386413574,115.366386413574,115.366386413574,115.778190612793,115.778190612793,115.778190612793,115.778190612793,115.778190612793,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,116.100936889648,117.567199707031,117.567199707031,117.567199707031,117.567199707031,117.567199707031,117.567199707031,117.567199707031],"meminc":[0,0,0,1.07886505126953,0,0,0.00365447998046875,0,0,1.22822570800781,0,0,2.45035552978516,0,0,0.0159530639648438,0,0,0.0235366821289062,0,0,0.00720977783203125,0,0,4.88375854492188,0,0,0.00197601318359375,0,0,0.002532958984375,0,0,0.00445556640625,0,0,0.00429534912109375,0,0,4.52813720703125,0,0,0,0,4.38237762451172,0,0,0,0,0.617568969726562,0,0,0,0,0.617843627929688,0,0,0,0,0.41180419921875,0,0,0,0,0.41180419921875,0,0,0,0,0.322746276855469,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1.46626281738281,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"D:\\Users\\AWILLI~1\\AppData\\Local\\Temp\\RtmpYd8YmY\\file628c145366ac.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-370f36cde14d55020a3d" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-370f36cde14d55020a3d">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,14,15,15,15,16,16,16,17,17,17,18,18,18,19,19,19,20,20,20,21,21,21,22,22,22,23,23,23,24,24,24,25,25,25,26,26,26,27,27,27,28,28,28,29,29,29,30,30,30,31,31,31,32,32,32,33,33,33,34,34,34,35,35,35,36,36,36,37,37,37,38,38,38,39,39,39,40,40,40,41,41,41,42,42,42,43,43,43,44,44,44,45,45,45,46,46,46,47,47,47,48,48,48,49,49,49,50,50,50,51,51,51,52,52,52,53,53,53,54,54,54,55,55,55,56,56,56,57,57,57,58,58,58,59,59,59,60,60,60,61,61,61,62,62,62,63,63,63,64,64,64,65,65,65,66,66,66,67,67,67,68,68,68,69,69,69,70,70,70,71,71,71,72,72,72,73,73,73,74,74,74,75,75,75,76,76,76,77,77,77,78,78,78,79,79,79,80,80,80,81,81,81,82,82,82,83,83,83,84,84,84,85,85,85,86,86,86,87,87,87,88,88,88,89,89,89,90,90,90,91,91,91,92,92,92,93,93,93,94,94,94,95,95,95,96,96,96,97,97,97,98,98,98,99,99,99,100,100,100,101,101,101,102,102,102,103,103,103,104,104,104,105,105,105,106,106,106,107,107,107,108,108,108,109,109,109,110,110,110,111,111,111,112,112,112,113,113,113,114,114,114,115,115,115,116,116,116,117,117,117,118,118,118,119,119,119,120,120,120,121,121,121,122,122,122,123,123,123,124,124,124,125,125,125,126,126,126,127,127,127,128,128,128,129,129,129,130,130,130,131,131,131,132,132,132,132,132,133,133,133,133,133,134,134,134,134,134,135,135,135,135,135,136,136,136,136,136,137,137,137,137,137,138,138,138,138,138,139,139,139,139,139,139,140,140,140,140,140,140,141,141,141,141,141,141,142,142,142,142,142,142,142,143,143,143,143,143,143,143,144,144,144,144,144,144,144],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,6,5,4,3,2,1,6,5,4,3,2,1,6,5,4,3,2,1,7,6,5,4,3,2,1,7,6,5,4,3,2,1,7,6,5,4,3,2,1],"label":["file","read.table","read.csv","file","read.table","read.csv","file","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","file","write.table","eval","eval","eval.parent","write.csv","file","write.table","eval","eval","eval.parent","write.csv","file","write.table","eval","eval","eval.parent","write.csv","close.connection","close","write.table","eval","eval","eval.parent","write.csv","close.connection","close","write.table","eval","eval","eval.parent","write.csv","close.connection","close","write.table","eval","eval","eval.parent","write.csv"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,1,null,null,null,null,null,1,null,null,null,null,null,1,null,null,null,null,null,null,1,null,null,null,null,null,null,1,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,11,null,null,null,null,null,11,null,null,null,null,null,11,null,null,null,null,null,null,11,null,null,null,null,null,null,11,null,null,null,null,null,null,11],"memalloc":[81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.5981979370117,81.7198181152344,81.7198181152344,81.7198181152344,81.7198181152344,81.7198181152344,81.7198181152344,81.8763656616211,81.8763656616211,81.8763656616211,81.8775177001953,81.8775177001953,81.8775177001953,82.1833648681641,82.1833648681641,82.1833648681641,82.1833648681641,82.1833648681641,82.1833648681641,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.1859359741211,82.7976150512695,82.7976150512695,82.7976150512695,82.7987594604492,82.7987594604492,82.7987594604492,82.7987594604492,82.7987594604492,82.7987594604492,82.8002624511719,82.8002624511719,82.8002624511719,82.8012084960938,82.8012084960938,82.8012084960938,82.80126953125,82.80126953125,82.80126953125,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,82.8031921386719,84.0259094238281,84.0259094238281,84.0259094238281,84.0259094238281,84.0259094238281,84.0259094238281,84.028076171875,84.028076171875,84.028076171875,84.028076171875,84.028076171875,84.028076171875,84.0305786132812,84.0305786132812,84.0305786132812,84.0305786132812,84.0305786132812,84.0305786132812,84.0326385498047,84.0326385498047,84.0326385498047,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0332412719727,84.0351486206055,84.0351486206055,84.0351486206055,84.0365524291992,84.0365524291992,84.0365524291992,84.0377502441406,84.0377502441406,84.0377502441406,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.4816513061523,86.485466003418,86.485466003418,86.485466003418,86.485466003418,86.485466003418,86.485466003418,86.4865798950195,86.4865798950195,86.4865798950195,86.4899215698242,86.4899215698242,86.4899215698242,86.4948501586914,86.4948501586914,86.4948501586914,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4948883056641,86.4974517822266,86.4974517822266,86.4974517822266,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5002822875977,86.5044250488281,86.5044250488281,86.5044250488281,86.506217956543,86.506217956543,86.506217956543,86.5062255859375,86.5062255859375,86.5062255859375,86.5114135742188,86.5114135742188,86.5114135742188,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5117721557617,86.5182113647461,86.5182113647461,86.5182113647461,86.5182113647461,86.5182113647461,86.5182113647461,86.5229797363281,86.5229797363281,86.5229797363281,86.5250473022461,86.5250473022461,86.5250473022461,86.5250473022461,86.5250473022461,86.5250473022461,86.5271377563477,86.5271377563477,86.5271377563477,86.5271377563477,86.5271377563477,86.5271377563477,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.527473449707,86.5276107788086,86.5276107788086,86.5276107788086,86.5278396606445,86.5278396606445,86.5278396606445,86.5278396606445,86.5278396606445,86.5278396606445,89.4575805664062,89.4575805664062,89.4575805664062,91.4109725952148,91.4109725952148,91.4109725952148,91.4109954833984,91.4109954833984,91.4109954833984,91.4109954833984,91.4109954833984,91.4109954833984,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4114227294922,91.4117202758789,91.4117202758789,91.4117202758789,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4118347167969,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4123001098633,91.4127578735352,91.4127578735352,91.4127578735352,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4128189086914,91.4133987426758,91.4133987426758,91.4133987426758,91.4133987426758,91.4133987426758,91.4133987426758,91.4140472412109,91.4140472412109,91.4140472412109,91.4142684936523,91.4142684936523,91.4142684936523,91.4145050048828,91.4145050048828,91.4145050048828,91.4153060913086,91.4153060913086,91.4153060913086,91.4153060913086,91.4153060913086,91.4153060913086,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.416374206543,91.4164352416992,91.4164352416992,91.4164352416992,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4172973632812,91.4178848266602,91.4178848266602,91.4178848266602,91.4183349609375,91.4183349609375,91.4183349609375,91.4183349609375,91.4183349609375,91.4183349609375,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4196548461914,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4211273193359,91.4225082397461,91.4225082397461,91.4225082397461,91.4225082397461,91.4225082397461,91.4225082397461,91.4241027832031,91.4241027832031,91.4241027832031,91.4248199462891,91.4248199462891,91.4248199462891,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,95.9529037475586,97.9824523925781,97.9824523925781,97.9824523925781,97.9824523925781,97.9824523925781,100.335250854492,100.335250854492,100.335250854492,100.335250854492,100.335250854492,101.158843994141,101.158843994141,101.158843994141,101.158843994141,101.158843994141,101.982437133789,101.982437133789,101.982437133789,101.982437133789,101.982437133789,102.394233703613,102.394233703613,102.394233703613,102.394233703613,102.394233703613,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.861572265625,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754,102.865577697754],"meminc":[0,0,0,0,0,0,0,0,0,0.121620178222656,0,0,0,0,0,0.156547546386719,0,0,0.00115203857421875,0,0,0.30584716796875,0,0,0,0,0,0.00257110595703125,0,0,0,0,0,0,0,0,0.611679077148438,0,0,0.0011444091796875,0,0,0,0,0,0.00150299072265625,0,0,0.000946044921875,0,0,6.103515625e-005,0,0,0.001922607421875,0,0,0,0,0,0,0,0,0,0,0,1.22271728515625,0,0,0,0,0,0.002166748046875,0,0,0,0,0,0.00250244140625,0,0,0,0,0,0.0020599365234375,0,0,0.00060272216796875,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0019073486328125,0,0,0.00140380859375,0,0,0.00119781494140625,0,0,2.44390106201172,0,0,0,0,0,0,0,0,0,0,0,0.003814697265625,0,0,0,0,0,0.0011138916015625,0,0,0.0033416748046875,0,0,0.0049285888671875,0,0,3.814697265625e-005,0,0,0,0,0,0,0,0,0.0025634765625,0,0,0.00283050537109375,0,0,0,0,0,0,0,0,0.00414276123046875,0,0,0.00179290771484375,0,0,7.62939453125e-006,0,0,0.00518798828125,0,0,0.00035858154296875,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.006439208984375,0,0,0,0,0,0.00476837158203125,0,0,0.00206756591796875,0,0,0,0,0,0.0020904541015625,0,0,0,0,0,0.000335693359375,0,0,0,0,0,0,0,0,0,0,0,0.0001373291015625,0,0,0.0002288818359375,0,0,0,0,0,2.92974090576172,0,0,1.95339202880859,0,0,2.288818359375e-005,0,0,0,0,0,0.00042724609375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.00029754638671875,0,0,0.00011444091796875,0,0,0,0,0,0,0,0,0,0,0,0.00046539306640625,0,0,0,0,0,0,0,0,0,0,0,0.000457763671875,0,0,6.103515625e-005,0,0,0,0,0,0,0,0,0,0,0,0.000579833984375,0,0,0,0,0,0.00064849853515625,0,0,0.00022125244140625,0,0,0.00023651123046875,0,0,0.00080108642578125,0,0,0,0,0,0.001068115234375,0,0,0,0,0,0,0,0,0,0,0,6.103515625e-005,0,0,0.00086212158203125,0,0,0,0,0,0,0,0,0.00058746337890625,0,0,0.00045013427734375,0,0,0,0,0,0.00131988525390625,0,0,0,0,0,0,0,0,0.00147247314453125,0,0,0,0,0,0,0,0,0.00138092041015625,0,0,0,0,0,0.00159454345703125,0,0,0.0007171630859375,0,0,4.52808380126953,0,0,0,0,0,0,0,0,0,2.02954864501953,0,0,0,0,2.35279846191406,0,0,0,0,0.823593139648438,0,0,0,0,0.823593139648438,0,0,0,0,0.411796569824219,0,0,0,0,0.467338562011719,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.00400543212890625,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,"<expr>",null,null,null,null,null,"<expr>",null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"D:\\Users\\AWILLI~1\\AppData\\Local\\Temp\\Rtmpk5ImRY\\file31b06f783815.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
 <p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
 <pre class="r"><code>library(microbenchmark)
@@ -482,12 +479,12 @@ microbenchmark(
   readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
 )</code></pre>
 <pre><code>## Unit: milliseconds
-##                                               expr       min        lq
-##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 130.99884 149.32255
-##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.37036  66.02348
-##       mean    median        uq       max neval cld
-##  162.68227 159.97750 170.90750 357.35605   100   b
-##   71.38701  71.54106  76.69259  88.87102   100  a</code></pre>
+##                                               expr      min        lq
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 134.3391 150.88082
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.8776  63.98157
+##       mean    median        uq      max neval cld
+##  161.00719 155.50997 165.16150 344.9624   100   b
+##   69.07384  66.85787  71.56706 142.5719   100  a</code></pre>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -548,12 +545,12 @@ microbenchmark::microbenchmark(
   unit = &quot;s&quot;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr         min          lq          mean      median           uq
-##  sequential 0.000002643 0.000003776 0.00000666839 0.000005664 0.0000071745
-##    parallel 0.032288417 0.036240601 0.04024171159 0.039894130 0.0424279845
+##        expr         min          lq          mean      median          uq
+##  sequential 0.000002643 0.000003398 0.00000496179 0.000003777 0.000006797
+##    parallel 0.035752097 0.039927221 0.04180707649 0.041185649 0.042464652
 ##          max neval cld
-##  0.000043798   100  a 
-##  0.073130996   100   b</code></pre>
+##  0.000008685   100  a 
+##  0.067089692   100   b</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -570,7 +567,7 @@ system.time(
          )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##   47.47    1.84   49.52</code></pre>
+##   46.51    1.59   48.41</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
@@ -581,7 +578,7 @@ system.time(
                 )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.06    0.19   28.58</code></pre>
+##    0.03    0.16   23.62</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -703,7 +700,7 @@ pryr::object_size(as.character(x))</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Feel free to contact Kyle Ueyama (<a href="mailto:kueyama@urban.org">kueyama@urban.org</a>) if this would be useful for your project.</p>
+<p>Feel free to contact Kyle Ueyama (<a href="mailto:kueyama@urban.org" class="email">kueyama@urban.org</a>) if this would be useful for your project.</p>
 <hr />
 </div>
 </div>
@@ -746,9 +743,9 @@ microbenchmark::microbenchmark(
   good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr      min        lq       mean   median        uq       max
-##   bad_loop(x) 1017.922 1107.4050 1678.64179 1210.859 1530.2805 13138.962
-##  good_loop(x)    9.062    9.8175   76.00858   14.348   21.8995  5874.191
+##          expr     min       lq       mean   median        uq       max
+##   bad_loop(x) 986.580 1079.273 1527.58324 1141.382 1234.8300 12457.034
+##  good_loop(x)   8.684   10.573   69.07998   11.705   13.2155  5623.845
 ##  neval cld
 ##    100   b
 ##    100  a</code></pre>
@@ -760,12 +757,12 @@ microbenchmark::microbenchmark(
   good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min        lq        mean    median        uq
-##   bad_loop(y) 15567.097 26413.660 32318.79952 32093.592 37689.327
-##  good_loop(y)    21.144    29.262    45.27469    44.554    56.447
-##        max neval cld
-##  56231.842   100   b
-##     75.891   100  a</code></pre>
+##          expr       min       lq        mean     median         uq
+##   bad_loop(y) 14308.995 16321.80 23433.87971 23317.9065 24723.7735
+##  good_loop(y)    18.124    24.92    34.51017    31.9045    42.4765
+##         max neval cld
+##  218868.178   100   b
+##      90.616   100  a</code></pre>
 </div>
 <div id="vectorized-functions" class="section level2">
 <h2>Vectorized Functions</h2>
@@ -781,8 +778,8 @@ microbenchmark::microbenchmark(
 )</code></pre>
 <pre><code>## Unit: nanoseconds
 ##             expr   min    lq     mean median    uq   max neval cld
-##  lapply(x, sqrt) 33604 34359 44221.19  35491 49839 93260   100   b
-##          sqrt(x)   755  1133  1578.76   1133  1511 20012   100  a</code></pre>
+##  lapply(x, sqrt) 32848 33226 34574.28  33604 33604 74381   100   b
+##          sqrt(x)   755   756  1235.22   1133  1134 14348   100  a</code></pre>
 </div>
 </div>
 

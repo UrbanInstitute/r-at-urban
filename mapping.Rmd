@@ -325,7 +325,7 @@ It is often desirable to map geographies that aren't easily available in an R pa
 
 `readOGR()` from `library(rgdal)` is the most used function for reading shapefiles. One challenge of working with shapefiles is the hierarchical data structure. Click on the shapefile in the R Studio environment to explore the tree and see how the data are organized. Another challenge is merges. In the following example, mortgage data need to be merged with the appropriate Census tracts. 
 
-```{r census-tract-choropleth, fig.height = 3.5}
+```{r census-tract-choropleth, fig.height = 3.5, eval = FALSE}
 # load necessary packages
 library(tidyverse)
 library(sp)
@@ -413,6 +413,10 @@ tracts_dc_long %>%
 				strip.text = element_text(size = 11),
 				plot.caption = element_text(size = 11),
 				strip.background = element_rect(fill = "#ffffff"))
+```
+
+```{r}
+knitr::include_graphics("mapping/census-tract-choropleth-1.png")
 ```
 
 ## Tile Grid Maps
@@ -734,46 +738,6 @@ ggplot() +
 
 The code above is the quickest and easiest method for making a dot map in R. Dot maps in R typically don't include Alaska, Hawaii, or territories like Puerto Rico. 
 
-Subsets of the above map can be made by adjusting the bounding box. Another option is `qmplot()`. This function will automatically fit the bounding box to the data. Use `I()` with `color =` and `alpha =` so those variables don't show up in the legends. Here's a map of mortgages in Washington, D.C.:
-
-`qmplot()` has many different map types which can be set with the `maptype =` argument. `"toner-lite"` is the only map type that isn't cluttered. 
-
-```{r qmplot mortgages}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# read the mortgage data for DC in 2011
-mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
-
-# quick plot
-qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
-			 color = I("#1696d2"), alpha = I(0.2)) +
-	labs(title = "Mortgage purchases in 2011",
-			 subtitle = "Washington, D.C.", 
-			 caption = "Urban Institute analysis of HMDA data") +
-	theme(axis.line = element_blank())
-```
-
-Here's a similar map of mortgages in Washington, D.C. with `geom = "density2d"`.
-
-```{r qmplot mortgage density}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# load mortgage data for DC in 2011
-mortgages <- read_csv("mapping/data/districtofcolumbia2011.csv")
-
-# quick plot!
-qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite", 
-			 geom = "density2d", color = I("#1696d2")) +
-	labs(title = "Mortgage purchases in 2011",
-			 subtitle = "Washington, D.C.", 
-			 caption = "Urban Institute analysis of HMDA data") +
-	theme(axis.line = element_blank())
-```
-
 # Analysis
 
 ------
@@ -785,160 +749,6 @@ qmplot(x = longitude, y = latitude, data = mortgages, maptype = "toner-lite",
 Geocoding is the process of converting addresses into coordinates. Longitudes and latitudes are often necessary for creating dot maps, calculating distances, and linking addresses to geographies like Census tracts. 
 
 For a thorough outline of geocoding methods, read the National Neighborhood Indicators Partnership geocoding memo ([available on Box](https://urbanorg.box.com/s/lr6r6fbwg2peo6336e0vuh9iwrnfde4m)) written by Rob Pitingolo. The rest of this section outline methods available in R for geocoding addresses. 
-
-#### Google Maps Geocoding API
-
-The [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/start) is a service that provides geocoding and reverse geocoding. Its main advantage is "fuzzy matching", which means it can often find coordinates for incorrect or imprecise addresses. It is fast, but the free service is limited to 2,500 queries per day. Use `geocodeQueryCheck()` to check remaining number of geocoding queries and to create logic for pausing geocoding. 
-
-Note, attempts to work around the query limit by splitting the data across multiple machines have so far been unsuccessful. 
-
-The Google Maps Geocoding API also has restrictive [terms of service](https://developers.google.com/maps/terms). In particular:
-
-> *10.4 d.* No use of Content without a Google map. Unless the Maps APIs Documentation expressly permits you to do so, you will not use the Content in a Maps API Implementation without a corresponding Google map. For example, you may display Street View imagery without a corresponding Google map because the Maps APIs Documentation expressly permits this use.
-
-> *10.4 e.* No use of Content with a non-Google map. You must not use the Content in a Maps API Implementation that contains a non-Google map.
-
-`geocode()` in `library(ggmap)` is the easiest way to use the Google Maps Geocoding API. The `get_coordinates()` function below is built around `geocode()` and is heavily inspired by [shanelyn on R-Bloggers](https://www.r-bloggers.com/batch-geocoding-with-r-and-google-maps/). It takes an address and returns latitude, longitude, the matched address, and the address type from the Google Maps Geocoding API. 
-
-`geocode()` needs addresses or locations to be one string in one column/variable instead of multiple strings across multiple columns/variables like street, city, and zip. Fortunately, R has powerful tools for string and vector manipulation. Most addresses can be combined using `mutate()` and `paste()`. The [strings chapter in R for Data Science](http://r4ds.had.co.nz/strings.html) is a good resource for more sophisticated string manipulation. 
-
-```{r google geocoder}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-library(stringr)
-
-# create coordinates function
-get_coordinates <- function(address) {
-	
-  # geocode the address (returns a complicated data structure)
-	geo_reply <- geocode(location = address, output = "all", messaging = TRUE, source = "dsk")
-		
-	# create an empty tibble to populate with tidy data
-	answer <- data.frame(
-		latitude = NA, 
-		longitude = NA, 
-		accuracy = NA, 
-		formatted_address = NA, 
-		address_type = NA, 
-		status = NA
-	)
-		
-	# store the status of the geo code
-	answer$status <- geo_reply$status
-	
-	# store the number of remaining geocodes
-	remaining_queries <- geocodeQueryCheck()
-	
-	# if the R session is over the Google geocode query limit, the pause for 1 minute
-	while (remaining_queries <= 5) {
-		print(paste("over query limit,", remaining_queries, " queries remaining. Pausing for 1 minute")) 
-		time <- Sys.time()
-		print(as.character(time))
-		Sys.sleep(60)
-		remaining_queries <- geocodeQueryCheck()
-	}
-	
-	# if the geocode was bad, return the empty data frame
-	if (geo_reply$status != "OK") {
-		return(answer)
-	}  
-	
-	# else, extract what we need from the Google server reply into the tibble
-	answer$latitude <- geo_reply$results[[1]]$geometry$location$lat
-	answer$longitude <- geo_reply$results[[1]]$geometry$location$lng   
-	
-	if (length(geo_reply$results[[1]]$types) > 0){
-		answer$accuracy <- geo_reply$results[[1]]$types[[1]]
-	}
-	
-	answer$address_type <- paste(geo_reply$results[[1]]$types, collapse=',')
-	answer$formatted_address <- geo_reply$results[[1]]$formatted_address
-	
-	return(answer)
-}
-```
-
-##### Single address
-
-The above function can be used on a single address or it can be iterated across a vector of addresses. Geocoding one address is as simple as calling any function, like `mean()` or `sum()` in R. 
-
-```{r google geocode single address, eval=FALSE}
-# load the necessary packages
-library(tidyverse)
-library(ggmap)
-
-# use the get_coordinates function
-get_coordinates(address = "1600 Monument Ave. Richmond, Virginia 23220") %>%
-	kable(digits = 2, caption = "Output from geocoding one address", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
-
-##### Multiple addresses
-
-Geocoding multiple addresses is a little more complicated than geocoding one address. It requires iterating the function across a vector of addresses using `map()` from `library(purrr)`. As the output from the previous function shows, `get_coordinates()` returns a data frame of interesting information that then needs to be parsed into vectors using `latitude = map_dbl(coords, 1)`, `longitude = map_dbl(coords, 2)` and `accuracy = map_chr(coords, 3)`. 
-
-**Note:** `map()` from `library(purrr)` often creates conflicts when mapping. Be careful with the order in which packages are loaded and don't be afraid to use double colons like `purrr::map()`. 
-
-```{r google geocode multiple addresses, eval=FALSE}
-# laod the necessary packages
-library(tidyverse)
-library(purrr)
-library(ggmap)
-
-# creates vectors of institution names and addresses
-institutions <- c("Urban Institute", "Brookings Institution")
-addresses <- c("2100 M Street NW, Washington DC", 
-							 "1775 Massachusetts Ave NW, Washington, DC 20036")
-
-# iterate the function over the tibble and return the answer
-tibble(institution = institutions,
-			 address = addresses) %>%
-	mutate(coords = purrr::map(address, get_coordinates)) %>%
-	mutate(latitude = map_dbl(coords, 1),
-				 longitude = map_dbl(coords, 2),
-				 accuracy = map_chr(coords, 3)) %>%
-	select(-coords) %>%
-	kable(digits = 2, caption = "Output from geocoding multiple addresses", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
-
-##### Exceeding the 2,500 limit
-
-It is possible to pay for additional queries. The current rate is $0.50 per additional 1,000 requests with a daily limit of 100,000 requests. This requires a more advanced version of `library(ggmap)` that is only accessible through `library(devtools)`. devtools sources the package from GitHub instead of CRAN. This version of ggmap is less stable but it includes `register_google()`. Adding an [API Key](https://developers.google.com/maps/documentation/geocoding/get-api-key) can increase the daily quota to 100,000.  
-
-```{r credential check, eval = FALSE}
-ggmap_credentials()
-```
-
-```{r udpdate credential, eval = FALSE}
-register_google(key = "[your key here]", account_type = "premium", day_limit = 100000)
-```
-
-#### mutate_geocode
-
-`mutate_geocode()` from `library(ggmap)` is similar to `geocode`, but it appends the latitude and longitude to a data frame. *Note:* this only works with `data.frame()` and does not work with `tibble()` or objects of class tbl_df. It also doesn't return information about the matched address which is useful for correcting addresses or address types. 
-
-`mutate_geocode()` has the same query limit and characteristics as `geocode` (above).
-
-```{r mutate_geocode, eval = FALSE}
-# load the necessary packages
-library(tidycensus)
-library(ggmap)
-
-institutions <- c("Urban Institute", "Brookings Institution")
-addresses <- c("2100 M Street NW, Washington DC", 
-							 "1775 Massachusetts Ave NW, Washington, DC 20036")
-
-data.frame(institution = institutions, 
-					 address = addresses, 
-					 stringsAsFactors = FALSE) %>%
-	mutate_geocode(address,) %>%
-	kable(digits = 2, caption = "Output from ggmap::mutate_geocode", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-
-rm(addresses, institutions)
-```
 
 #### US Census Geocoder API
 
@@ -1018,29 +828,6 @@ output %>%
 ```
 
 An optimal strategy for geocoding many addresses could be to break the data into 1,000 observation chunks and submit each chunk to the US Census Geocoder API. Then, use the Google Maps Geocoding API to geocode observations for which the US Census Geocoder API could not find a match. This could all be accomplished with relatively simple R code. 
-
-## Calculating distances and travel times
-
-------
-
-#### mapdist()
-
-`mapdist()` returns the expected travel distance and expected travel time between two locations. The function is vectorized. If a vector of location is passed into the function then it will return a tidy data frame. `mode =` can be set to "driving", "walking", "bicycling", or "transit". 
-
-The `library(ggmap)` GitHub page is a good [resource](https://github.com/dkahle/ggmap) for this type of analysis. 
-
-```{r mapdist, eval = FALSE}
-# load the necessary packages
-library(ggmap)
-
-ggmap::mapdist(from = "Lincoln Monument", 
-				to = "Washington Monument",
-				mode = "walking",
-				output = "simple",
-				source = "dsk") %>%
-	kable(digits = 2, caption = "Output from ggmap::mapdist()", format = "html", align = "l") %>%
-	kableExtra::kable_styling(full_width = FALSE, position = "left")
-```
 
 ## Sampling coordinates
 
