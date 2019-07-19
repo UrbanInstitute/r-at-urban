@@ -8,7 +8,7 @@ output:
     toc_float: TRUE
     pandoc_args: [ 
       "--tab-stop=2" 
-    ] 
+    ]
 editor_options: 
   chunk_output_type: console
 ---
@@ -57,7 +57,7 @@ Run the following code to install or update `urbnthemes`:
 
 ```
 install.packages("devtools")
-devtools::install_github("UI-Research/urbnthemes")
+devtools::install_github("UrbanInstitute/urbnthemes")
 ```
 
 Run the following code at the top of each script:
