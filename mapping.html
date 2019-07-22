@@ -572,96 +572,94 @@ ggplot() +
 <div id="choropleth-maps" class="section level3">
 <h3>Choropleth maps</h3>
 <p>Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts.</p>
+<div id="urbnmapr" class="section level4">
+<h4><code>urbnmapr</code></h4>
+<p><code>library(urbnmapr)</code> is a tool for making stats and county choropleth maps of the United States, with Alaska and Hawaii shifted and scaled to be displayed next to the continental US.</p>
+<p>Variables mapped as colors or shades need to be joined using <code>left_join()</code> to geographic data loaded by <code>library(urbnmapr)</code>. In this example, the variable <code>&quot;state_name&quot;</code> is used to join the geographic data to the data we wish to display.</p>
+<pre class="r"><code>library(urbnmapr)
+library(urbnthemes)
+library(sf)
+
+states &lt;- get_urbn_map(map = &quot;states&quot;, sf = TRUE)
+
+state_data &lt;- states %&gt;% 
+  left_join(statedata, by = &quot;state_name&quot;)
+
+
+ggplot() +
+  geom_sf(data = state_data, mapping = aes(fill = horate),
+          color = &quot;white&quot;) +
+  scale_fill_gradientn(labels = scales::percent) +
+  theme_urbn_map() +
+  labs(fill = &quot;Homeownership rate&quot;)</code></pre>
+<p><img src="mapping/www/images/unnamed-chunk-1-1.png" width="672" /></p>
+<p><code>library(urbnmapr)</code> makes it is easy to filter to a subset of geographies. Here, <code>filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;))</code> is used to filter to three states before <code>ggplot()</code> is called.</p>
+<pre class="r"><code># load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+# load shapefiles for the three states
+state &lt;- get_urbn_map(map = &quot;states&quot;, sf = TRUE) %&gt;%
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;)) 
+
+ggplot() +
+  geom_sf(data = state, mapping = aes(),
+          color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.25) +
+  labs(title = &quot;Northwest United States&quot;) +
+  # use UTM zone 10, projected CRS used in the Pacific Northwest
+  coord_sf(crs = 32610) +
+  theme_urbn_map()</code></pre>
+<p><img src="mapping/www/images/state-map-northwest-1.png" width="672" /></p>
+<p><code>library(urbnmapr)</code> can also be used to map counties. Here, <code>counties</code> is used to map all counties in the Continental United States.</p>
+<pre class="r"><code># load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+
+counties &lt;- get_urbn_map(map = &quot;counties&quot;, sf = TRUE)
+
+# map!
+ggplot() +
+  geom_sf(data = counties, mapping = aes(),
+          color = &quot;#ffffff&quot;, fill = &quot;gray&quot;, size = 0.25) +
+  theme_urbn_map()</code></pre>
+<p><img src="mapping/www/images/us-county-map-1.png" width="672" /></p>
+<p>Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.</p>
+<pre class="r"><code># load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+# load the shapefiles for counties, join with county level data
+county &lt;- get_urbn_map(map = &quot;counties&quot;, sf = TRUE) %&gt;%
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;)) %&gt;% 
+  left_join(countydata, by = &quot;county_fips&quot;)
+
+# load the shapefiles for states
+state &lt;- get_urbn_map(map = &quot;states&quot;, sf = TRUE) %&gt;%
+  filter(state_name %in% c(&quot;Washington&quot;, &quot;Oregon&quot;, &quot;Idaho&quot;)) 
+
+# map
+ggplot() +
+  geom_sf(data = county, 
+          mapping = aes(fill = medhhincome),
+          color = NA, size = 0.2) +
+  geom_sf(data = state,
+          mapping = aes(),
+          color = &quot;#ffffff&quot;, fill = NA, size = 0.6) +
+  scale_fill_gradientn(labels = scales::dollar) +
+  # use UTM zone 10, projected CRS used in the Pacific Northwest
+  coord_sf(crs = 32610) +
+  theme_urbn_map() +
+  labs(title = &quot;Household Income by County in the Northwest United States&quot;,
+       fill = &quot;Median household incone&quot;)</code></pre>
+<p><img src="mapping/www/images/northwest-county-map-1.png" width="672" /></p>
 <hr />
+</div>
 </div>
 </div>
 <div id="choropleth-maps-1" class="section level2">
 <h2>Choropleth Maps</h2>
 <hr />
-<div id="libraryurbnmapr-1" class="section level3">
-<h3>library(urbnmapr)</h3>
-<p><a href="https://github.com/UrbanInstitute/urbnmapr">urbnmapr</a> is an R package created by the Urban Institute. It includes state and county outlines for the entire United States with Hawaii and Alaska next to the Continental U.S. The packages includes a data frame for states called <code>states</code> and a data frame for counties called <code>counties</code>.</p>
-<p>Variables mapped as colors or shades need to be joined using <code>left_join()</code> to geographic data loaded by <code>library(urbnmapr)</code>. In this example, the variable <code>&quot;state_name&quot;</code> is joined to <code>&quot;State&quot;</code>. If ever in doubt, use <code>anti_join()</code> to test which cases don’t join. After joining, use <code>geom_polygon()</code>. Be sure to include <code>coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45)</code> to create an Albers Equal Area projection.</p>
-<!-- ```{r} -->
-<!-- # load necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(forcats) -->
-<!-- library(gridExtra) -->
-<!-- library(urbnmapr) -->
-<!-- library(urbnthemes) -->
-<!-- set_urbn_defaults(style = "map") -->
-<!-- # read the state CHIP data -->
-<!-- chip <- read_csv("mapping/data/chip-enrollment.csv") -->
-<!-- # set the state names to lower case and create the five groups based on the order -->
-<!-- # of state CHIP enrollment     -->
-<!-- chip <- chip %>% -->
-<!--   arrange(`CHIP Enrollment`) %>% -->
-<!--   mutate(Enrollment = c(rep("Group 1", times = 11),  -->
-<!--                         rep("Group 2", times = 10), -->
-<!--                         rep("Group 3", times = 10),  -->
-<!--                         rep("Group 4", times = 10),  -->
-<!--                         rep("Group 5", times = 10))) -->
-<!-- # join chip data and state shapes -->
-<!-- chip <- left_join(chip, states, by = c("State" = "state_name"))  -->
-<!-- # test join -->
-<!-- mismatches <- anti_join(chip, states, by = c("State" = "state_name"))  -->
-<!-- # create a vector with 5 hexadecimal colors for the 5 groups -->
-<!-- urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635") -->
-<!-- # plot the data with colors based on state CHIP enrollment and white borders  -->
-<!-- # between the states -->
-<!-- ggplot(data = chip, mapping = aes(long, lat, group = group, fill = Enrollment)) + -->
-<!--   geom_polygon(color = "#ffffff", size = 0.25) + -->
-<!--   scale_fill_manual(values = urban_colors) +   -->
-<!--   coord_map(projection = "albers", lat0 = 39, lat1 = 45) + -->
-<!--   labs(title = "State CHIP Enrollment")  + -->
-<!--   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0)) -->
-<!-- ``` -->
-<!-- `library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called.  -->
-<!-- ```{r state-map-northwest} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-<!-- # read the shapefiles for the three states -->
-<!-- state <- states %>% -->
-<!--  filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-<!-- # map! -->
-<!-- ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!--  geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) + -->
-<!--  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
-<!--  labs(title = "Northwest United States") -->
-<!-- ``` -->
-<!-- `library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States.  -->
-<!-- ```{r us-county-map} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-<!-- # map! -->
-<!-- ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!--  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
-<!--  geom_polygon(color = "#ffffff", fill = "gray", size = 0.1) -->
-<!-- ``` -->
-<!-- Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.  -->
-<!-- ```{r northwest-county-map} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-<!-- # read the shapefiles for counties -->
-<!-- county <- counties %>% -->
-<!--  filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-<!-- # read the shapefiles for states -->
-<!-- state <- states %>% -->
-<!--  filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-<!-- # map -->
-<!-- ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!--  geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +   -->
-<!--  geom_polygon(data = state, -->
-<!--    mapping = aes(x = long, y = lat, group = group),  -->
-<!--    color = "#ffffff",  -->
-<!--    fill = NA,  -->
-<!--    size = 0.4) +  -->
-<!--  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +   -->
-<!--  labs(title = "Counties in the Northwest United States") -->
-<!-- ``` -->
 <!-- ### Mapping individual states -->
 <!-- The groups of states above use the same Albers Equal-Area Conic Projection as the maps of the entire United States. For single state maps, the Urban Institute uses [state plane coordinate systems](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System). This requires loading the data from `library(tidycensus)` and using special features. tidycensus has quality documentation. This [GitHub](https://github.com/walkerke/tidycensus) page and this [vignette](https://walkerke.github.io/tidycensus/articles/spatial-data.html) are good places to start.  -->
 <!-- ```{r virginia} -->
@@ -1135,7 +1133,6 @@ ggplot() +
 <!-- ``` -->
 </div>
 </div>
-</div>
 <div id="analysis" class="section level1">
 <h1>Analysis</h1>
 <hr />
@@ -1468,19 +1465,20 @@ ggplot() +
 ## [13] e1071_1.7-2        httr_1.4.0         pillar_1.4.2      
 ## [16] rlang_0.4.0        lazyeval_0.2.2     readxl_1.3.1      
 ## [19] rstudioapi_0.10    extrafontdb_1.0    rmarkdown_1.14    
-## [22] webshot_0.5.1      extrafont_0.17     munsell_0.5.0     
-## [25] broom_0.5.2        compiler_3.6.1     modelr_0.1.4      
-## [28] xfun_0.8           pkgconfig_2.0.2    rgeos_0.4-3       
-## [31] htmltools_0.3.6    tidyselect_0.2.5   gridExtra_2.3     
-## [34] viridisLite_0.3.0  crayon_1.3.4       withr_2.1.2       
-## [37] grid_3.6.1         nlme_3.1-140       jsonlite_1.6      
-## [40] Rttf2pt1_1.3.7     gtable_0.3.0       DBI_1.0.0         
-## [43] magrittr_1.5       units_0.6-3        scales_1.0.0      
-## [46] KernSmooth_2.23-15 cli_1.1.0          stringi_1.4.3     
-## [49] sp_1.3-1           xml2_1.2.0         vctrs_0.2.0       
-## [52] generics_0.0.2     tools_3.6.1        glue_1.3.1        
-## [55] hms_0.5.0          yaml_2.2.0         colorspace_1.4-1  
-## [58] classInt_0.3-3     rvest_0.3.4        haven_2.1.1</code></pre>
+## [22] labeling_0.3       webshot_0.5.1      extrafont_0.17    
+## [25] munsell_0.5.0      broom_0.5.2        compiler_3.6.1    
+## [28] modelr_0.1.4       xfun_0.8           pkgconfig_2.0.2   
+## [31] rgeos_0.4-3        htmltools_0.3.6    tidyselect_0.2.5  
+## [34] gridExtra_2.3      viridisLite_0.3.0  crayon_1.3.4      
+## [37] withr_2.1.2        grid_3.6.1         nlme_3.1-140      
+## [40] jsonlite_1.6       Rttf2pt1_1.3.7     gtable_0.3.0      
+## [43] DBI_1.0.0          magrittr_1.5       units_0.6-3       
+## [46] scales_1.0.0       KernSmooth_2.23-15 cli_1.1.0         
+## [49] stringi_1.4.3      sp_1.3-1           xml2_1.2.0        
+## [52] vctrs_0.2.0        generics_0.0.2     tools_3.6.1       
+## [55] glue_1.3.1         hms_0.5.0          yaml_2.2.0        
+## [58] colorspace_1.4-1   classInt_0.3-3     rvest_0.3.4       
+## [61] haven_2.1.1</code></pre>
 </div>
 </div>
 

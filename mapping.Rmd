@@ -261,10 +261,113 @@ ggplot() +
 ```
 
 
+
 ### Choropleth maps
 
 Choropleth maps display geographic areas with shades, colors, or patterns in proportion to a variable or variables. Choropleth maps can represent massive geographies like the entire world and small geographies like Census Tracts. 
 
+
+#### `urbnmapr`
+
+`library(urbnmapr)` is a tool for making stats and county choropleth maps of the United States, with Alaska and Hawaii shifted and scaled to be displayed next to the continental US. 
+
+Variables mapped as colors or shades need to be joined using `left_join()` to geographic data loaded by `library(urbnmapr)`. In this example, the variable `"state_name"` is used to join the geographic data to the data we wish to display.  
+
+
+```{r}
+
+library(urbnmapr)
+library(urbnthemes)
+library(sf)
+
+states <- get_urbn_map(map = "states", sf = TRUE)
+
+state_data <- states %>% 
+	left_join(statedata, by = "state_name")
+
+
+ggplot() +
+	geom_sf(data = state_data, mapping = aes(fill = horate),
+					color = "white") +
+	scale_fill_gradientn(labels = scales::percent) +
+	theme_urbn_map() +
+	labs(fill = "Homeownership rate")
+
+```
+
+
+
+`library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called.
+
+```{r state-map-northwest}
+# load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+# load shapefiles for the three states
+state <- get_urbn_map(map = "states", sf = TRUE) %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho")) 
+
+ggplot() +
+	geom_sf(data = state, mapping = aes(),
+					color = "#ffffff", fill = "gray", size = 0.25) +
+	labs(title = "Northwest United States") +
+	# use UTM zone 10, projected CRS used in the Pacific Northwest
+	coord_sf(crs = 32610) +
+	theme_urbn_map()
+
+```
+
+`library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States.
+
+```{r us-county-map}
+# load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+
+counties <- get_urbn_map(map = "counties", sf = TRUE)
+
+# map!
+ggplot() +
+	geom_sf(data = counties, mapping = aes(),
+					color = "#ffffff", fill = "gray", size = 0.25) +
+	theme_urbn_map()
+```
+
+
+
+Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.
+
+```{r northwest-county-map}
+# load the necessary packages
+library(tidyverse)
+library(urbnmapr)
+
+# load the shapefiles for counties, join with county level data
+county <- get_urbn_map(map = "counties", sf = TRUE) %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho")) %>% 
+	left_join(countydata, by = "county_fips")
+
+# load the shapefiles for states
+state <- get_urbn_map(map = "states", sf = TRUE) %>%
+	filter(state_name %in% c("Washington", "Oregon", "Idaho")) 
+
+# map
+ggplot() +
+	geom_sf(data = county, 
+					mapping = aes(fill = medhhincome),
+					color = NA, size = 0.2) +
+	geom_sf(data = state,
+					mapping = aes(),
+					color = "#ffffff", fill = NA, size = 0.6) +
+	scale_fill_gradientn(labels = scales::dollar) +
+	# use UTM zone 10, projected CRS used in the Pacific Northwest
+	coord_sf(crs = 32610) +
+	theme_urbn_map() +
+	labs(title = "Household Income by County in the Northwest United States",
+			 fill = "Median household incone")
+```
 
 
 ------
@@ -281,111 +384,7 @@ Choropleth maps display geographic areas with shades, colors, or patterns in pro
 
 
 
-### library(urbnmapr)
 
-[urbnmapr](https://github.com/UrbanInstitute/urbnmapr) is an R package created by the Urban Institute. It includes state and county outlines for the entire United States with Hawaii and Alaska next to the Continental U.S. The packages includes a data frame for states called `states` and a data frame for counties called `counties`.
-
-Variables mapped as colors or shades need to be joined using `left_join()` to geographic data loaded by `library(urbnmapr)`. In this example, the variable `"state_name"` is joined to `"State"`. If ever in doubt, use `anti_join()` to test which cases don't join. After joining, use `geom_polygon()`. Be sure to include `coord_map("albers", lat0 = 39, lat1 = 45)` to create an Albers Equal Area projection. 
-
-<!-- ```{r} -->
-<!-- # load necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(forcats) -->
-<!-- library(gridExtra) -->
-<!-- library(urbnmapr) -->
-<!-- library(urbnthemes) -->
-
-<!-- set_urbn_defaults(style = "map") -->
-
-<!-- # read the state CHIP data -->
-<!-- chip <- read_csv("mapping/data/chip-enrollment.csv") -->
-
-<!-- # set the state names to lower case and create the five groups based on the order -->
-<!-- # of state CHIP enrollment     -->
-<!-- chip <- chip %>% -->
-<!--   arrange(`CHIP Enrollment`) %>% -->
-<!--   mutate(Enrollment = c(rep("Group 1", times = 11),  -->
-<!--                         rep("Group 2", times = 10), -->
-<!--                         rep("Group 3", times = 10),  -->
-<!--                         rep("Group 4", times = 10),  -->
-<!--                         rep("Group 5", times = 10))) -->
-
-<!-- # join chip data and state shapes -->
-<!-- chip <- left_join(chip, states, by = c("State" = "state_name"))  -->
-
-<!-- # test join -->
-<!-- mismatches <- anti_join(chip, states, by = c("State" = "state_name"))  -->
-
-<!-- # create a vector with 5 hexadecimal colors for the 5 groups -->
-<!-- urban_colors <- c("#cfe8f3", "#a2d4ec", "#46abdb", "#12719e", "#062635") -->
-
-<!-- # plot the data with colors based on state CHIP enrollment and white borders  -->
-<!-- # between the states -->
-<!-- ggplot(data = chip, mapping = aes(long, lat, group = group, fill = Enrollment)) + -->
-<!--   geom_polygon(color = "#ffffff", size = 0.25) + -->
-<!--   scale_fill_manual(values = urban_colors) +   -->
-<!--   coord_map(projection = "albers", lat0 = 39, lat1 = 45) + -->
-<!--   labs(title = "State CHIP Enrollment")  + -->
-<!--   theme(plot.margin = margin(t = 0, r = 0, b = 0, l = 0)) -->
-<!-- ``` -->
-
-<!-- `library(urbnmapr)` makes it is easy to filter to a subset of geographies. Here, `filter(state_name %in% c("Washington", "Oregon", "Idaho"))` is used to filter to three states before `ggplot()` is called.  -->
-
-<!-- ```{r state-map-northwest} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-
-<!-- # read the shapefiles for the three states -->
-<!-- state <- states %>% -->
-<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-
-<!-- # map! -->
-<!-- ggplot(data = state, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.25) + -->
-<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
-<!-- 	labs(title = "Northwest United States") -->
-<!-- ``` -->
-
-<!-- `library(urbnmapr)` can also be used to map counties. Here, `counties` is used to map all counties in the Continental United States.  -->
-
-<!-- ```{r us-county-map} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-
-<!-- # map! -->
-<!-- ggplot(data = counties, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) +  -->
-<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.1) -->
-<!-- ``` -->
-
-<!-- Geographies can be added on top of each other as layers. In this case, states is called once with no fill and a thick border to outline states and then counties is called with fill and a thin border to outline counties.  -->
-
-<!-- ```{r northwest-county-map} -->
-<!-- # load the necessary packages -->
-<!-- library(tidyverse) -->
-<!-- library(urbnmapr) -->
-
-<!-- # read the shapefiles for counties -->
-<!-- county <- counties %>% -->
-<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-
-<!-- # read the shapefiles for states -->
-<!-- state <- states %>% -->
-<!-- 	filter(state_name %in% c("Washington", "Oregon", "Idaho")) -->
-
-<!-- # map -->
-<!-- ggplot(data = county, mapping = aes(x = long, y = lat, group = group)) +  -->
-<!-- 	geom_polygon(color = "#ffffff", fill = "gray", size = 0.2) +	 -->
-<!-- 	geom_polygon(data = state, -->
-<!-- 	  mapping = aes(x = long, y = lat, group = group),  -->
-<!-- 	  color = "#ffffff",  -->
-<!-- 	  fill = NA,  -->
-<!-- 	  size = 0.4) +	 -->
-<!-- 	coord_map(projection = "albers", lat0 = 39, lat1 = 45) + 	 -->
-<!-- 	labs(title = "Counties in the Northwest United States") -->
-<!-- ``` -->
 
 <!-- ### Mapping individual states -->
 
