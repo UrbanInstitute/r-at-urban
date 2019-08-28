@@ -1355,7 +1355,7 @@ plot <- mtcars %>%
   ggplot(aes(x = wt, y = mpg)) +
   geom_point()
 
-ggsave(filename = "cars.png", plot = plot2, width = 10, height = 6, device = cairo_pdf)
+ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
 ```
 
 ## Bibliography and Session Information
