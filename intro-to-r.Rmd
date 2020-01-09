@@ -40,7 +40,7 @@ This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-ga
 
 R boasts a strong community in the world and inside the Urban Institute. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org) with thoughts or questions about R.  
 
-## Setting Up R
+## What is R?
 
 ------
 
@@ -62,13 +62,38 @@ RStudio is developed by a for-profit company called [RStudio](https://www.rstudi
 
 While R code can be written in any text editor, the RStudio IDE is a powerful tool with a console, syntax-highlighting, and debugging tools. [This cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf) outlines the power of RStudio. 
 
-### Installation and Updates
 
-Contact IT at helpdesk@urban.org to install R and RStudio on your machine. 
+## Installation and Updates
 
-The R Project for Statistical Computing frequently releases R updates. The best way to update R on a Windows machine is with `library(installr)` (see below to learn more about packages). Load the package and then submit the function `updateR()` to start the updating process. On Mac or Linux, visit [this link](https://cran.r-project.org/mirrors.html), choose a mirror, and download the newest version of R. 
+------
 
-RStudio also releases occasional updates. Go to Help > Check for Updates to see if RStudio is up-to-date. If it is out-of-date, download the [appropriate update](https://www.rstudio.com/products/rstudio/download/) and contact IT at helpdesk@urban.org for administrative approval. Moving forward, RStudio will automatically and regularly update on Windows computers at the Urban Institute. 
+### When should you update?
+
+All Urban computers should come pre-installed with R and Rstudio. However your R version may be out of date and require updating. We recommend having at least R version 3.6.0 or higher. You can check what version of R you have installed by opening Rstudio and submitting the following line of code to the console: `R.Version()$version.string`.  
+
+If you're working on a personal computer, you may not have R or Rstudio installed. So follow this guide to install both on your computer. 
+
+### Updating/Installing R
+
+1) Visit https://cran.r-project.org/bin/windows/base/. The latest R version will be the downloadable link at the top. As of 1/1/2020, that R version is 3.6.2. Click on the link at the top and download the `R-x.x.x-win.exe` file. 
+
+2) Open the R-x.x.x-win.exe` file. Click next, accept all the defaults, and install R. After R has been installed, click the Finish button. You should not need admin privileges for this.
+
+3) Check that your version of R has been updated in Rstudio. If Rstudio is already open, first close it. Then open Rstudio and retype in `R.Version()$version.string`. You should see an updated version number printed out on the console. 
+
+4) Test that R packages are loading as expected. Packages you already had installed should continue to work with newer versions of R. But in some cases, you may need to re-install the packages to work properly with new versions of R. 
+
+### Updating/Installing Rstudio
+
+1) Open Rstudio and go to Help > Check for Updates to see if RStudio is up-to-date
+
+2) If it is out-of-date, download the [appropriate update](https://rstudio.com/products/rstudio/download/#download).
+
+3) Before you run the installer, contact IT at helpdesk@urban.org for administrative approval as the program requires admin access.
+
+4) Run the installer and accept all defaults. 
+
+Moving forward, RStudio will automatically and regularly update on Windows computers at the Urban Institute. 
 
 ## Learning R
 
