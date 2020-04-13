@@ -12,6 +12,8 @@ navbar:
     href: mapping.html
   - text: OPTIMIZATION
     href: optimization.html
+  - text: RESOURCES
+    href: resources.html    
 output:
   html_document:
     output_dir: '.'

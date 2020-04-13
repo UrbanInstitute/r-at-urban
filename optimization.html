@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title>optimization.utf8.md</title>
+<title>optimization.utf8</title>
 
 <script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,13 +25,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <script src="site_libs/d3-3.5.6/d3.min.js"></script>
-<link href="site_libs/profvis-0.3.5/profvis.css" rel="stylesheet" />
-<script src="site_libs/profvis-0.3.5/profvis.js"></script>
+<link href="site_libs/profvis-0.3.6/profvis.css" rel="stylesheet" />
+<script src="site_libs/profvis-0.3.6/profvis.js"></script>
 <link href="site_libs/highlight-6.2.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlight-6.2.0/highlight.js"></script>
-<script src="site_libs/profvis-binding-0.3.5/profvis.js"></script>
+<script src="site_libs/profvis-binding-0.3.6/profvis.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114294141-1"></script>
 <script>
@@ -103,7 +103,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -252,6 +251,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -264,48 +264,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -319,6 +280,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -354,8 +321,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -414,6 +379,9 @@ div.tocify {
 <li>
   <a href="optimization.html">OPTIMIZATION</a>
 </li>
+<li>
+  <a href="resources.html">RESOURCES</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -446,9 +414,9 @@ div.tocify {
 <h1>Update Your Installation</h1>
 <p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
 <p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
-<p><img src="optimization/images/data-load-3-4.png" style="width:75.0%" /></p>
+<p><img src="optimization/images/data-load-3-4.PNG" style="width:75.0%" /></p>
 <p>While 3.5.0 took less than half the time:</p>
-<p><img src="optimization/images/data-load-3-5.png" style="width:75.0%" /></p>
+<p><img src="optimization/images/data-load-3-5.PNG" style="width:75.0%" /></p>
 <p>To see what the R-core development team is up to, check out the <a href="%22https://cran.r-project.org/doc/manuals/r-devel/NEWS.html%22">NEWS</a> file from the R project.</p>
 <hr />
 </div>
@@ -468,8 +436,8 @@ profvis({
   write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
 
 })</code></pre>
-<div id="htmlwidget-370f36cde14d55020a3d" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-370f36cde14d55020a3d">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,14,15,15,15,16,16,16,17,17,17,18,18,18,19,19,19,19,19,20,20,20,20,20,21,21,21,21,21,22,22,22,22,22,23,23,23,23,23,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,27],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,12,11,10,9,8,7,6,5,4,3,2,1,6,5,4,3,2,1,7,6,5,4,3,2,1],"label":["file","read.table","read.csv","file","read.table","read.csv",".External","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","summarise_impl","summarise.tbl_df","summarise","summarise_if","function_list[[k]]","withVisible","freduce","_fseq","eval","eval","withVisible","%>%","file","write.table","eval","eval","eval.parent","write.csv","close.connection","close","write.table","eval","eval","eval.parent","write.csv"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,1,null,null,null,null,null,1,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,11,null,null,null,null,null,null,11],"memalloc":[83.6413192749023,83.6413192749023,83.6413192749023,83.6413192749023,83.6413192749023,83.6413192749023,83.6418685913086,83.6418685913086,83.6418685913086,83.9198532104492,83.9198532104492,83.9198532104492,83.9211044311523,83.9211044311523,83.9211044311523,84.2290573120117,84.2290573120117,84.2290573120117,84.8449783325195,84.8449783325195,84.8449783325195,86.070930480957,86.070930480957,86.070930480957,86.0763473510742,86.0763473510742,86.0763473510742,88.5303268432617,88.5303268432617,88.5303268432617,88.5434036254883,88.5434036254883,88.5434036254883,88.5548934936523,88.5548934936523,88.5548934936523,88.5704879760742,88.5704879760742,88.5704879760742,93.4543609619141,93.4543609619141,93.4543609619141,93.4555206298828,93.4555206298828,93.4555206298828,93.457389831543,93.457389831543,93.457389831543,93.4604187011719,93.4604187011719,93.4604187011719,93.4642486572266,93.4642486572266,93.4642486572266,97.9960250854492,97.9960250854492,97.9960250854492,97.9960250854492,97.9960250854492,100.643051147461,100.643051147461,100.643051147461,100.643051147461,100.643051147461,102.378372192383,102.378372192383,102.378372192383,102.378372192383,102.378372192383,103.201965332031,103.201965332031,103.201965332031,103.201965332031,103.201965332031,103.613761901855,103.613761901855,103.613761901855,103.613761901855,103.613761901855,104.437355041504,104.437355041504,104.437355041504,104.437355041504,104.437355041504,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.772407531738,104.904693603516,104.904693603516,104.904693603516,104.904693603516,104.904693603516,104.904693603516,104.908699035645,104.908699035645,104.908699035645,104.908699035645,104.908699035645,104.908699035645,104.908699035645],"meminc":[0,0,0,0,0,0,0.00054931640625,0,0,0.277984619140625,0,0,0.001251220703125,0,0,0.307952880859375,0,0,0.615921020507812,0,0,1.2259521484375,0,0,0.0054168701171875,0,0,2.4539794921875,0,0,0.0130767822265625,0,0,0.0114898681640625,0,0,0.015594482421875,0,0,4.88387298583984,0,0,0.00115966796875,0,0,0.00186920166015625,0,0,0.00302886962890625,0,0,0.0038299560546875,0,0,4.53177642822266,0,0,0,0,2.64702606201172,0,0,0,0,1.73532104492188,0,0,0,0,0.823593139648438,0,0,0,0,0.411796569824219,0,0,0,0,0.823593139648438,0,0,0,0,0.335052490234375,0,0,0,0,0,0,0,0,0,0,0,0.132286071777344,0,0,0,0,0,0.00400543212890625,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,"<expr>",null,null,null,null,null,"<expr>",null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"D:\\Users\\AWILLI~1\\AppData\\Local\\Temp\\RtmpmEVJT8\\file5447bda5b6.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2a0fb9370f36cde14d55" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2a0fb9370f36cde14d55">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,7,7,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5],"memalloc":[84.4746170043945,84.4746170043945,84.4746170043945,85.7106552124023,85.7106552124023,85.7106552124023,88.1777114868164,88.1777114868164,88.1777114868164,88.6884078979492,88.6884078979492,88.6884078979492,93.0849151611328,93.0849151611328,93.0849151611328,93.0911712646484,93.0911712646484,93.0911712646484,97.6321334838867,97.6321334838867,97.6321334838867,97.6321334838867,97.6321334838867,100.779434204102,100.779434204102,100.779434204102,100.779434204102,100.779434204102,102.632041931152,102.632041931152,102.632041931152,102.632041931152,102.632041931152,102.838073730469,102.838073730469,102.838073730469,102.838073730469,102.838073730469,103.661666870117,103.661666870117,103.661666870117,103.661666870117,103.661666870117,104.073463439941,104.073463439941,104.073463439941,104.073463439941,104.073463439941],"meminc":[0,0,0,1.23603820800781,0,0,2.46705627441406,0,0,0.510696411132812,0,0,4.39650726318359,0,0,0.006256103515625,0,0,4.54096221923828,0,0,0,0,3.14730072021484,0,0,0,0,1.85260772705078,0,0,0,0,0.206031799316406,0,0,0,0,0.823593139648438,0,0,0,0,0.411796569824219,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"/var/folders/3z/q_yh5ftj4j3f7h3wpvd9xbd80000gn/T//Rtmp4adVhs/file130f61686b2b.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
 <p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
 <pre class="r"><code>library(microbenchmark)
@@ -480,11 +448,11 @@ microbenchmark(
 )</code></pre>
 <pre><code>## Unit: milliseconds
 ##                                               expr       min        lq
-##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 130.43227 146.83872
-##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.66089  65.63051
-##       mean    median        uq       max neval cld
-##  156.90778 155.41554 161.75683 341.21891   100   b
-##   70.00131  69.08876  73.18584  96.03627   100  a</code></pre>
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 118.00048 119.02672
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  47.71464  49.06033
+##       mean   median        uq       max neval cld
+##  125.11275 119.9598 130.19686 289.28763   100   b
+##   50.08897  49.3057  49.69222  62.01806   100  a</code></pre>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -545,12 +513,12 @@ microbenchmark::microbenchmark(
   unit = &quot;s&quot;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr         min          lq          mean      median          uq
-##  sequential 0.000002266 0.000003398 0.00000504099 0.000003965 0.000006042
-##    parallel 0.034408458 0.036897515 0.03901684845 0.037756084 0.039201381
+##        expr         min           lq          mean       median          uq
+##  sequential 0.000001628 0.0000017765 0.00000297804 0.0000021325 0.000004096
+##    parallel 0.029404974 0.0302604720 0.03182235514 0.0306733020 0.031143715
 ##          max neval cld
-##  0.000027562   100  a 
-##  0.067750690   100   b</code></pre>
+##  0.000010342   100  a 
+##  0.055392167   100   b</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -567,7 +535,7 @@ system.time(
          )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##   44.74    1.99   46.76</code></pre>
+##  31.891   1.443  33.355</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
@@ -578,7 +546,7 @@ system.time(
                 )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.03    0.21   23.45</code></pre>
+##   0.114   0.006  15.916</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -619,7 +587,7 @@ stopCluster(cl)</code></pre>
 <p>As data collection and storage becomes easier and cheaper, it is relatively simple to obtain relatively large data files. An important point to keep in mind is that the size of your data will generally expand when it is read from a storage device into R. A general rule of thumb is that a file will take somewhere around 3-4 times more space in memory than it does on disk.</p>
 <p>For instance, compare the size of the <code>iris</code> data set when it is saved as a .csv file locally vs the size of the object when it is read in to an R session:</p>
 <pre class="r"><code>file.size(&quot;optimization/data/iris.csv&quot;) / 1000</code></pre>
-<pre><code>## [1] 3.867</code></pre>
+<pre><code>## [1] 3.716</code></pre>
 <pre class="r"><code>df &lt;- readr::read_csv(&quot;optimization/data/iris.csv&quot;)
 pryr::object_size(df)</code></pre>
 <pre><code>## 9.91 kB</code></pre>
@@ -743,9 +711,9 @@ microbenchmark::microbenchmark(
   good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr     min      lq       mean   median       uq       max neval
-##   bad_loop(x) 955.225 998.455 1574.36849 1171.000 1300.124 14108.246   100
-##  good_loop(x)   7.929   9.062   68.02545   10.572   13.593  5616.945   100
+##          expr      min       lq       mean   median        uq       max neval
+##   bad_loop(x) 1770.655 1891.641 2488.34802 1933.752 2023.7185 19832.932   100
+##  good_loop(x)    7.620    7.968   43.14056    9.907   12.1545  3277.499   100
 ##  cld
 ##    b
 ##   a</code></pre>
@@ -757,12 +725,12 @@ microbenchmark::microbenchmark(
   good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min        lq        mean     median        uq
-##   bad_loop(y) 14080.684 22369.613 31590.37699 29169.8275 37562.774
-##  good_loop(y)    18.123    19.633    32.00241    32.4705    37.001
-##         max neval cld
-##  224724.978   100   b
-##     134.412   100  a</code></pre>
+##          expr       min         lq        mean     median        uq       max
+##   bad_loop(y) 28393.314 29378.7985 38516.84523 41054.1650 41518.451 210655.61
+##  good_loop(y)    17.637    18.1175    24.14361    18.8055    31.113     33.23
+##  neval cld
+##    100   b
+##    100  a</code></pre>
 </div>
 <div id="vectorized-functions" class="section level2">
 <h2>Vectorized Functions</h2>
@@ -777,9 +745,9 @@ microbenchmark::microbenchmark(
   sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min    lq     mean median    uq   max neval cld
-##  lapply(x, sqrt) 37379 38511 39028.80  38512 39266 52859   100   b
-##          sqrt(x)   755  1133  1348.41   1134  1511  7551   100  a</code></pre>
+##             expr   min      lq     mean  median      uq   max neval cld
+##  lapply(x, sqrt) 23226 23528.5 24149.91 23667.5 23851.5 38792   100   b
+##          sqrt(x)   474   600.0   695.42   654.5   710.0  2442   100  a</code></pre>
 </div>
 </div>
 
@@ -801,6 +769,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
