@@ -350,7 +350,7 @@ getXKCD("random")
 ```{r xkcd run, echo=FALSE}
 library(RXKCD)
 # assignment to hide text output
-boom <- getXKCD("random")
+comic <- getXKCD(539)
 ```
 
 Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools > Check for Package Updated in RStudio. 
