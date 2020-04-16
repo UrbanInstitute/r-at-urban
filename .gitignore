@@ -39,3 +39,7 @@ vignettes/*.pdf
 mapping/shapefiles/
 
 *.db
+
+# private files
+*census_api_key.R
+getting-data/census_api_key.R
