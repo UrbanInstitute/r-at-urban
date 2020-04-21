@@ -38,6 +38,7 @@ output:
 
 * [Introduction to Econometrics with R](https://www.econometrics-with-r.org/) by Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer
 * [An Introduction to Bayesian Thinking](https://statswithr.github.io/book/) by Merlise Clyde et. al.
+* [Statistical Inference via Data Science](https://moderndive.com/index.html) by Chester Ismay and Albert Y. Kim
 
 ### Machine Learning
 

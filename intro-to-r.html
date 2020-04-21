@@ -469,7 +469,9 @@ div.tocify {
 <p>Here’s a quick example that reads a .csv, filters the data, and creates a publishable column plot in just fifteen lines of code:</p>
 <pre class="r"><code># load packages and source the Urban Institute ggplot2 theme
 library(tidyverse) # contains read_csv, library(dplyr), and library(ggplot2)
-source(&quot;https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R&quot;)
+library(urbnthemes)
+
+set_urbn_defaults(style = &quot;print&quot;)
 
 # read bankdata.csv
 bank &lt;- read_csv(&quot;intro-to-r/data/bankdata.csv&quot;) 
@@ -534,7 +536,9 @@ starwars %&gt;%
 <p><code>library(dslabs)</code> by <a href="https://simplystatistics.org/2018/01/22/the-dslabs-package-provides-datasets-for-teaching-data-science/">Rafael Irizarry</a> includes varied data sets that are intentionally imperfect that are useful for practice. Students of econometrics will enjoy <code>library(wooldridge)</code>. It loads 105 data sets from <em>Introductory Econometrics: A Modern Approach</em> by Jeffrey Wooldridge. Now you can practice estimating your hedonic pricing models in R!</p>
 <pre class="r"><code>library(wooldridge)
 library(tidyverse)
-source(&#39;https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme_mac.R&#39;)
+library(urbnthemes)
+
+set_urbn_defaults(style = &quot;print&quot;)
 
 as_tibble(hprice1) %&gt;%
   ggplot(aes(x = sqrft, y = price)) +
