@@ -37,7 +37,8 @@ output:
 ### Modeling
 
 * [Introduction to Econometrics with R](https://www.econometrics-with-r.org/) by Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer
-
+* [An Introduction to Bayesian Thinking](https://statswithr.github.io/book/) by Merlise Clyde et. al.
+* [Statistical Inference via Data Science](https://moderndive.com/index.html) by Chester Ismay and Albert Y. Kim
 
 ### Machine Learning
 
@@ -57,6 +58,7 @@ output:
 * [Advanced R](https://adv-r.hadley.nz/) by Hadley Wickham
 * [R Packages](https://r-pkgs.org/) by Hadley Wickham
 * [Master Spark with R](https://therinspark.com/) by Javier Luraschi, Kevin Kuo, and Edgar Ruiz
+* [Functional programming and unit testing for data munging with R](https://b-rodrigues.github.io/fput/) by Bruno Rodrigues
 
 # Websites
 
