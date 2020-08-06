@@ -528,8 +528,8 @@ starwars %&gt;%
 ##   species      n
 ##   &lt;chr&gt;    &lt;int&gt;
 ## 1 Human       35
-## 2 Droid        5
-## 3 &lt;NA&gt;         5
+## 2 Droid        6
+## 3 &lt;NA&gt;         4
 ## 4 Gungan       3
 ## 5 Kaminoan     2
 ## 6 Mirialan     2</code></pre>
@@ -652,7 +652,7 @@ mean(apples)</code></pre>
 <div id="packages" class="section level3">
 <h3>Packages</h3>
 <p>Opening RStudio automatically loads “base R”, a fundamental collection of code and functions that handles simple operations like math and system management. R can be extended with collections of code and functions developed by the R community called packages. This sounds wild, but most packages are created and maintained by some of the best statisticians and developers in the world.</p>
-<p>Most packages can be installed with <code>install.packages(&quot;dplyr&quot;)</code>, where the string between the quotation marks is the name of the package. Packages installed with <code>install.packages()</code> come from CRAN and must pass certain checks for performance and documentation. Popular packages on CRAN, like dplyr, have as much, if not more support, standards, and quality than code in proprietary software packages like Stata or SAS.</p>
+<p>Most packages can be installed with <code>install.packages("dplyr")</code>, where the string between the quotation marks is the name of the package. Packages installed with <code>install.packages()</code> come from CRAN and must pass certain checks for performance and documentation. Popular packages on CRAN, like dplyr, have as much, if not more support, standards, and quality than code in proprietary software packages like Stata or SAS.</p>
 <p>It is possible, but less common, to install packages from places like GitHub. This is less secure and the functionality of the packages is more likely to change over time. <code>install.packages()</code> need only be run once per version of package per machine and should rarely be included in .R scripts.</p>
 <p>Packages are loaded once per R session with the function <code>library()</code>. It is a good idea to include <code>library(package-name)</code> at the top of scripts for each package used in the script. This way it is obvious at the top of the script which packages are installed and loaded.</p>
 <p><strong>Note:</strong> <code>install.packages()</code> uses quoted package names and <code>library()</code> uses unquoted package names.</p>
@@ -719,7 +719,7 @@ getXKCD(&quot;random&quot;)</code></pre>
 <h4>Filepaths</h4>
 <p>Never use <code>\</code> in file paths in R. <code>\</code> is a regular expression and will complicate an analysis. Fortunately, RStudio understands <code>/</code> in file paths regardless of operating system.</p>
 <p>Never use <code>setwd()</code> in R. It is unnecessary, it makes code unreproducible across machines, and it is rude to collaborators. R Projects create a better framework for file paths. Simply treat the directory where the R Project lives as the working directory and directories inside of that directory as sub-directories.</p>
-<p>For example, say there’s a <code>.Rproj</code> called <code>starwars-analysis.Rproj</code> in a directory called <code>starwars-analysis</code>. If there is a .csv in that folder called <code>jedi.csv</code>, the file can be loaded with <code>read_csv(&quot;jedi.csv&quot;)</code> instead of <code>read_csv(&quot;H:/ibp/analyses/starwars-analysis/diamonds.csv&quot;)</code>. If that file is in a sub-directory of <code>starwars-analysis</code> called <code>data</code>, it can be loaded with <code>read_csv(&quot;data/jedi.csv&quot;)</code>. The same concepts hold for writing data and graphics.</p>
+<p>For example, say there’s a <code>.Rproj</code> called <code>starwars-analysis.Rproj</code> in a directory called <code>starwars-analysis</code>. If there is a .csv in that folder called <code>jedi.csv</code>, the file can be loaded with <code>read_csv("jedi.csv")</code> instead of <code>read_csv("H:/ibp/analyses/starwars-analysis/diamonds.csv")</code>. If that file is in a sub-directory of <code>starwars-analysis</code> called <code>data</code>, it can be loaded with <code>read_csv("data/jedi.csv")</code>. The same concepts hold for writing data and graphics.</p>
 <p>This simplifies code and makes it portable because all relative filepaths will be identical on all computers. To share an analysis, simply send the entire directory to a collaborator or share it with GitHub.</p>
 <p>Here’s an example directory:</p>
 <center>
@@ -755,7 +755,7 @@ getXKCD(&quot;random&quot;)</code></pre>
 <h4>Files</h4>
 <p>Naming conventions for scripts and files is probably the most overlooked dimension in programming and analysis. The first three bullets from this section come from this <a href="http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf">rich slide deck</a> by Jenny Bryan. This may seem pedantic, but picking a file naming convention now can save a bunch of time and headaches in the future.</p>
 <p><strong>1) Machine readable</strong></p>
-<p>Create file names that are easily machine readable. Use all lower case letters and skip punctuation other than delimiters. Use underscores as characters for splitting the file name. For example, <code>stringr::str_split_fixed(&quot;2018-01-10_r-introduction_machine-readable-example_01.csv&quot;, &quot;[_\\.]&quot;, 5)</code> splits the file name on underscores and periods and returns date, project, file name, file number, and file type. This information can then be stored and sorted in a data frame.</p>
+<p>Create file names that are easily machine readable. Use all lower case letters and skip punctuation other than delimiters. Use underscores as characters for splitting the file name. For example, <code>stringr::str_split_fixed("2018-01-10_r-introduction_machine-readable-example_01.csv", "[_\\.]", 5)</code> splits the file name on underscores and periods and returns date, project, file name, file number, and file type. This information can then be stored and sorted in a data frame.</p>
 <p><strong>2) Human readable</strong></p>
 <p>Create file names that are human readable. The example from above is informative without any machine interpretation.</p>
 <p><strong>3) Plays well with default ordering</strong></p>
@@ -849,7 +849,7 @@ Project-oriented workflow <a href="https://www.tidyverse.org/articles/2017/12/wo
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS  10.15.3
+## Running under: macOS  10.15.5
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
@@ -862,48 +862,49 @@ Project-oriented workflow <a href="https://www.tidyverse.org/articles/2017/12/wo
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] RXKCD_1.9.2           wooldridge_1.3.1      AmesHousing_0.0.3    
+##  [1] RXKCD_1.9.2           wooldridge_1.3.1      AmesHousing_0.0.4    
 ##  [4] gghighlight_0.3.0     fivethirtyeight_0.5.0 ggridges_0.5.2       
-##  [7] ggrepel_0.8.2         gapminder_0.3.0       urbnthemes_0.0.1     
-## [10] knitr_1.28            censusapi_0.6.0       tidycensus_0.9.6     
-## [13] forcats_0.5.0         stringr_1.4.0         dplyr_0.8.5          
-## [16] purrr_0.3.3           readr_1.3.1           tidyr_1.0.2          
-## [19] tibble_3.0.0          ggplot2_3.3.0         tidyverse_1.3.0      
+##  [7] ggrepel_0.8.2         gapminder_0.3.0       urbnthemes_0.0.2     
+## [10] knitr_1.29            censusapi_0.6.0       tidycensus_0.9.9.5   
+## [13] forcats_0.5.0         stringr_1.4.0         dplyr_1.0.0          
+## [16] purrr_0.3.4           readr_1.3.1           tidyr_1.1.0          
+## [19] tibble_3.0.1          ggplot2_3.3.2         tidyverse_1.3.0      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-143        fs_1.4.1            sf_0.8-0           
-##  [4] lubridate_1.7.4     httr_1.4.1          rprojroot_1.3-2    
-##  [7] tools_3.6.0         backports_1.1.6     utf8_1.1.4         
-## [10] rgdal_1.4-8         R6_2.4.1            KernSmooth_2.23-16 
-## [13] DBI_1.1.0           mgcv_1.8-31         colorspace_1.4-1   
-## [16] withr_2.1.2         sp_1.4-1            tidyselect_1.0.0   
+##  [1] nlme_3.1-148        fs_1.4.2            sf_0.9-4           
+##  [4] lubridate_1.7.9     httr_1.4.1          rprojroot_1.3-2    
+##  [7] tools_3.6.0         backports_1.1.8     utf8_1.1.4         
+## [10] rgdal_1.5-12        R6_2.4.1            KernSmooth_2.23-17 
+## [13] mgcv_1.8-31         DBI_1.1.0           colorspace_1.4-1   
+## [16] withr_2.2.0         sp_1.4-2            tidyselect_1.1.0   
 ## [19] gridExtra_2.3       curl_4.3            compiler_3.6.0     
 ## [22] extrafontdb_1.0     cli_2.0.2           rvest_0.3.5        
-## [25] xml2_1.2.5          labeling_0.3        scales_1.1.0       
-## [28] classInt_0.4-2      rappdirs_0.3.1      digest_0.6.25      
-## [31] foreign_0.8-76      rmarkdown_2.1       jpeg_0.1-8.1       
-## [34] pkgconfig_2.0.3     htmltools_0.4.0     extrafont_0.17     
-## [37] dbplyr_1.4.2        rlang_0.4.5         readxl_1.3.1       
-## [40] rstudioapi_0.11     generics_0.0.2      farver_2.0.3       
-## [43] jsonlite_1.6.1      magrittr_1.5        Matrix_1.2-18      
-## [46] Rcpp_1.0.4.6        munsell_0.5.0       fansi_0.4.1        
-## [49] lifecycle_0.2.0     stringi_1.4.6       yaml_2.2.1         
-## [52] RJSONIO_1.3-1.4     plyr_1.8.6          grid_3.6.0         
-## [55] maptools_0.9-9      crayon_1.3.4        lattice_0.20-40    
-## [58] splines_3.6.0       haven_2.2.0         hms_0.5.3          
-## [61] pillar_1.4.3        uuid_0.1-4          urbnmapr_0.0.0.9002
-## [64] reprex_0.3.0        glue_1.4.0          evaluate_0.14      
-## [67] modelr_0.1.6        png_0.1-7           vctrs_0.2.4        
-## [70] Rttf2pt1_1.3.8      cellranger_1.1.0    gtable_0.3.0       
-## [73] assertthat_0.2.1    xfun_0.12           broom_0.5.5        
-## [76] e1071_1.7-3         class_7.3-16        tigris_0.9.4       
-## [79] units_0.6-5         ellipsis_0.3.0      here_0.1</code></pre>
+## [25] xml2_1.3.2          labeling_0.3        scales_1.1.1       
+## [28] classInt_0.4-3      hexbin_1.28.1       rappdirs_0.3.1     
+## [31] digest_0.6.25       foreign_0.8-76      rmarkdown_2.3      
+## [34] jpeg_0.1-8.1        pkgconfig_2.0.3     htmltools_0.5.0    
+## [37] extrafont_0.17      dbplyr_1.4.4        rlang_0.4.6        
+## [40] readxl_1.3.1        rstudioapi_0.11     generics_0.0.2     
+## [43] farver_2.0.3        jsonlite_1.7.0      magrittr_1.5       
+## [46] Matrix_1.2-18       Rcpp_1.0.4          munsell_0.5.0      
+## [49] fansi_0.4.1         lifecycle_0.2.0     stringi_1.4.6      
+## [52] yaml_2.2.1          RJSONIO_1.3-1.4     plyr_1.8.6         
+## [55] grid_3.6.0          maptools_1.0-1      blob_1.2.1         
+## [58] crayon_1.3.4        lattice_0.20-41     splines_3.6.0      
+## [61] haven_2.3.1         hms_0.5.3           pillar_1.4.4       
+## [64] uuid_0.1-4          urbnmapr_0.0.0.9002 reprex_0.3.0       
+## [67] glue_1.4.1          evaluate_0.14       modelr_0.1.8       
+## [70] png_0.1-7           vctrs_0.3.1         Rttf2pt1_1.3.8     
+## [73] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
+## [76] xfun_0.15           broom_0.5.6         e1071_1.7-3        
+## [79] class_7.3-17        tigris_0.9.4        units_0.6-7        
+## [82] ellipsis_0.3.1      here_0.1</code></pre>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The language “reproducible, accurate, and collaborative analyses” comes from <a href="https://www.rstudio.com/resources/videos/opinionated-analysis-development/">Hilary S. Parker’s talk</a> at rstudio::conf 2017 about opinionated analysis development.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>The basis for <a href="https://www.coursera.org/learn/reproducible-research/lecture/abevs/reproducible-research-concepts-and-ideas-part-2">this section</a> comes from this Coursera talk by Roger Peng.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>The language “reproducible, accurate, and collaborative analyses” comes from <a href="https://www.rstudio.com/resources/videos/opinionated-analysis-development/">Hilary S. Parker’s talk</a> at rstudio::conf 2017 about opinionated analysis development.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The basis for <a href="https://www.coursera.org/learn/reproducible-research/lecture/abevs/reproducible-research-concepts-and-ideas-part-2">this section</a> comes from this Coursera talk by Roger Peng.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -962,7 +963,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
