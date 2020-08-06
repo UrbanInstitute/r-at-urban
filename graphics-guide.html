@@ -437,6 +437,7 @@ set_urbn_defaults(style = &quot;print&quot;)</code></pre>
 
 urbnthemes::lato_install()</code></pre>
 <p>Loading and importing fonts may take a few minutes.</p>
+<p>Waffle charts with glyphs require fontawesome. <code>fontawesome_test()</code> and <code>fontawesome_install()</code> are the fontawesome versions of the above functions. Be sure to install fontawesome from <a href="https://github.com/hrbrmstr/waffle/tree/master/inst/fonts">here</a>.</p>
 </div>
 <div id="grammar-of-graphics-and-conventions" class="section level3">
 <h3>Grammar of Graphics and Conventions</h3>
@@ -483,7 +484,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="one-color-rotated" class="section level3">
 <h3>One Color (Rotated)</h3>
-<p>This example introduces <code>coord_flip()</code> and <code>remove_axis(axis = &quot;x&quot;, flip = TRUE)</code>. <code>remove_axis()</code> is from <code>library(urbnthemes)</code> and creates a custom theme for rotated bar plots.</p>
+<p>This example introduces <code>coord_flip()</code> and <code>remove_axis(axis = "x", flip = TRUE)</code>. <code>remove_axis()</code> is from <code>library(urbnthemes)</code> and creates a custom theme for rotated bar plots.</p>
 <pre class="r"><code>mtcars %&gt;%
   count(cyl) %&gt;%
   ggplot(mapping = aes(x = factor(cyl), y = n)) +
@@ -537,7 +538,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="stacked-bar-plot-with-position-fill" class="section level3">
 <h3>Stacked Bar Plot With Position = Fill</h3>
-<p>The previous examples used <code>geom_col()</code>, which takes a y value for bar height. This example uses <code>geom_bar()</code> which sums the values and generates a value for bar heights. In this example, <code>position = &quot;fill&quot;</code> in <code>geom_bar()</code> changes the y-axis from count to the proportion of each bar.</p>
+<p>The previous examples used <code>geom_col()</code>, which takes a y value for bar height. This example uses <code>geom_bar()</code> which sums the values and generates a value for bar heights. In this example, <code>position = "fill"</code> in <code>geom_bar()</code> changes the y-axis from count to the proportion of each bar.</p>
 <pre class="r"><code>mtcars %&gt;%
   mutate(am = factor(am, labels = c(&quot;Automatic&quot;, &quot;Manual&quot;)),
          cyl = factor(cyl)) %&gt;%  
@@ -552,7 +553,7 @@ urbnthemes::lato_install()</code></pre>
 </div>
 <div id="dodged-bar-plot" class="section level3">
 <h3>Dodged Bar Plot</h3>
-<p>Subsetted bar charts in ggplot2 are stacked by default. <code>position = &quot;dodge&quot;</code> in <code>geom_col()</code> expands the bar chart so the bars appear next to each other.</p>
+<p>Subsetted bar charts in ggplot2 are stacked by default. <code>position = "dodge"</code> in <code>geom_col()</code> expands the bar chart so the bars appear next to each other.</p>
 <pre class="r"><code>mtcars %&gt;%
   mutate(am = factor(am, labels = c(&quot;Automatic&quot;, &quot;Manual&quot;)),
          cyl = factor(cyl)) %&gt;%
@@ -1233,7 +1234,7 @@ bad_drivers %&gt;%
 <h2>Smoothers</h2>
 <hr />
 <p><code>geom_smooth()</code> fits and plots models to data with two or more dimensions.</p>
-<p>Understanding and manipulating defaults is more important for <code>geom_smooth()</code> than other geoms because it contains a number of assumptions. <code>geom_smooth()</code> automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with <code>formula = y ~ s(x, bs = &quot;cs&quot;)</code> for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.</p>
+<p>Understanding and manipulating defaults is more important for <code>geom_smooth()</code> than other geoms because it contains a number of assumptions. <code>geom_smooth()</code> automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with <code>formula = y ~ s(x, bs = "cs")</code> for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.</p>
 <p>Models are chosen with <code>method =</code> and can be set to lm(), glm(), gam(), loess(), rlm(), and more. Formulas can be specified with <code>formula =</code> and <code>y ~ x</code> syntax. Plotting the standard error is toggled with <code>se = TRUE</code> and <code>se = FALSE</code>, and level is specificed with <code>level =</code>. As always, more information can be seen in RStudio with <code>?geom_smooth()</code>.</p>
 <p><code>geom_point()</code> adds a scatterplot to <code>geom_smooth()</code>. The order of the function calls is important. The function called second will be layed on top of the function called first.</p>
 <pre class="r"><code>diamonds %&gt;%
@@ -1534,6 +1535,119 @@ ggsave(filename = &quot;cars.png&quot;, plot = plot2)</code></pre>
 
 ggsave(filename = &quot;cars.pdf&quot;, plot = plot2, width = 6.5, height = 4, device = cairo_pdf)</code></pre>
 </div>
+<div id="urbnthemes" class="section level2">
+<h2>urbnthemes</h2>
+<div id="overview" class="section level3">
+<h3>Overview</h3>
+<p><code>urbnthemes</code> is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends <code>ggplot2</code> with print and map themes as well as tools that make plotting easier at the Urban Institute. <code>urbnthemes</code> replaces the <a href="https://github.com/UrbanInstitute/urban_R_theme">urban_R_theme</a>.</p>
+<p>Always load <code>library(urbnthemes)</code> after <code>library(ggplot2)</code> or <code>library(tidyverse)</code>.</p>
+</div>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<p>Use <code>set_urbn_defaults(style = "print")</code> to set the default styles. <code>scatter_grid()</code>, <code>remove_ticks()</code>, <code>add_axis()</code>, and <code>remove_axis()</code> can all be used to improve graphics.</p>
+<pre class="r"><code>library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults(style = &quot;print&quot;)
+
+ggplot(data = mtcars, mapping = aes(factor(cyl))) +
+  geom_bar() + 
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  labs(x = &quot;Number of Cylinders&quot;,
+       y = &quot;Count&quot;) +
+  remove_ticks()</code></pre>
+<p><img src="graphics-guide/www/images/example-1.png" width="624" /></p>
+</div>
+<div id="combining-elements" class="section level3">
+<h3>Combining elements</h3>
+<p><code>library(urbnthemes)</code> contains functions for combining plot elements into graphics. <code>urbn_plot()</code> brings all of the elements together.</p>
+<ul>
+<li><code>urbn_logo_text()</code></li>
+<li><code>remove_ticks()</code></li>
+<li><code>remove_axis()</code></li>
+<li><code>scatter_grid()</code></li>
+<li><code>add_axis()</code></li>
+<li><code>urbn_geofacet</code></li>
+</ul>
+<pre class="r"><code>library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults(style = &quot;print&quot;)
+
+plot &lt;- ggplot(data = mtcars, mapping = aes(factor(cyl))) +
+  geom_bar() + 
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  labs(x = &quot;Number of Cylinders&quot;,
+       y = &quot;Count&quot;) +
+  remove_ticks()
+
+urbn_plot(plot, urbn_logo_text(), ncol = 1, heights = c(30, 1))</code></pre>
+<p><img src="graphics-guide/www/images/example2-1.png" width="624" /></p>
+<p>Sometimes it’s important to horizontally add the y-axis title above the plot. <code>urbn_y_title()</code> can be sued for this task. The following example goes one step further and adds the title between the legend and the plot.</p>
+<pre class="r"><code>library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults()
+
+plot &lt;- ggplot(data = mtcars, mapping = aes(x = wt, y = mpg, color = factor(cyl))) +
+  geom_point() + 
+  scale_x_continuous(expand = c(0, 0),
+                     limits = c(0, 8)) +
+  scale_y_continuous(expand = c(0, 0),
+                     limits = c(0, 40)) +
+  remove_ticks() +
+  labs(&quot;&quot;) +
+  scatter_grid()
+
+urbn_plot(get_legend(plot),
+          urbn_y_title(&quot;Miles per gallon&quot;),
+          remove_legend(plot), 
+          urbn_logo_text(), 
+          ncol = 1, 
+          heights = c(3, 1, 30, 1))</code></pre>
+<p><img src="graphics-guide/www/images/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+<div id="palettes" class="section level3">
+<h3>Palettes</h3>
+<p><code>urbnthemes</code> contains many quick-access color palettes from the <a href="http://urbaninstitute.github.io/graphics-styleguide/">Urban Institute Data Visualization Style Guide</a>. These palettes can be used to quickly overwrite default color palettes from <code>urbnthemes</code>.</p>
+<ul>
+<li><code>palette_urbn_main</code> is the eight color discrete palette of the Urban Institute with cyan, yellow, black, gray, magenta, green, space gray, and red.</li>
+<li><code>palette_urbn_diverging</code> is an eight color diverging palette.</li>
+<li><code>palette_urbn_quintile</code> is a five color blue palette that is good for quintiles.</li>
+<li><code>palette_urbn_politics</code> is a two color palette with blue for Democrats and red for Republicans.</li>
+</ul>
+<p>There are seven palettes that are continuous palettes of the seven unique colors in the discrete Urban Institute color palette:</p>
+<ul>
+<li><code>palette_urbn_cyan</code></li>
+<li><code>palette_urbn_gray</code></li>
+<li><code>palette_urbn_yellow</code></li>
+<li><code>palette_urbn_magenta</code></li>
+<li><code>palette_urbn_green</code></li>
+<li><code>palette_urbn_spacegray</code></li>
+<li><code>palette_urbn_red</code></li>
+</ul>
+<p>Use <code>view_palette()</code> to see the palette:</p>
+<pre class="r"><code>view_palette(palette_urbn_magenta)</code></pre>
+<pre><code>## [1] &quot;c(#351123, #761548, #af1f6b, #e90989, #e54096, #e46aa7, #eb99c2, #f5cbdf)&quot;</code></pre>
+<p><img src="graphics-guide/www/images/view-palette-1.png" width="624" /></p>
+<p>The vectors can be subset using base R syntax. This allows for the quick selection of specific colors from a palette.</p>
+<pre class="r"><code>palette_urbn_main[1:4]</code></pre>
+<pre><code>##      cyan    yellow     black      gray 
+## &quot;#1696d2&quot; &quot;#fdbf11&quot; &quot;#000000&quot; &quot;#d2d2d2&quot;</code></pre>
+<pre class="r"><code>palette_urbn_spacegray[1:5]</code></pre>
+<pre><code>## [1] &quot;#d5d5d4&quot; &quot;#adabac&quot; &quot;#848081&quot; &quot;#5c5859&quot; &quot;#332d2f&quot;</code></pre>
+</div>
+<div id="utility-functions" class="section level3">
+<h3>Utility functions</h3>
+<p><code>library(urbnthemes)</code> contains four functions that are helpful with managing font instalations:</p>
+<ul>
+<li><code>lato_test()</code></li>
+<li><code>lato_install()</code></li>
+<li><code>fontawesome_test()</code></li>
+<li><code>fontawesome_install()</code></li>
+</ul>
+</div>
+</div>
 <div id="bibliography-and-session-information" class="section level2">
 <h2>Bibliography and Session Information</h2>
 <hr />
@@ -1553,7 +1667,7 @@ ggsave(filename = &quot;cars.pdf&quot;, plot = plot2, width = 6.5, height = 4, d
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.6.0 (2019-04-26)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS  10.15.3
+## Running under: macOS  10.15.5
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
@@ -1566,46 +1680,47 @@ ggsave(filename = &quot;cars.pdf&quot;, plot = plot2, width = 6.5, height = 4, d
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] AmesHousing_0.0.3     gghighlight_0.3.0     fivethirtyeight_0.5.0
+##  [1] AmesHousing_0.0.4     gghighlight_0.3.0     fivethirtyeight_0.5.0
 ##  [4] ggridges_0.5.2        ggrepel_0.8.2         gapminder_0.3.0      
-##  [7] urbnthemes_0.0.1      knitr_1.28            censusapi_0.6.0      
-## [10] tidycensus_0.9.6      forcats_0.5.0         stringr_1.4.0        
-## [13] dplyr_0.8.5           purrr_0.3.3           readr_1.3.1          
-## [16] tidyr_1.0.2           tibble_3.0.0          ggplot2_3.3.0        
+##  [7] urbnthemes_0.0.2      knitr_1.29            censusapi_0.6.0      
+## [10] tidycensus_0.9.9.5    forcats_0.5.0         stringr_1.4.0        
+## [13] dplyr_1.0.0           purrr_0.3.4           readr_1.3.1          
+## [16] tidyr_1.1.0           tibble_3.0.1          ggplot2_3.3.2        
 ## [19] tidyverse_1.3.0      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-143        fs_1.4.1            sf_0.8-0           
-##  [4] lubridate_1.7.4     httr_1.4.1          rprojroot_1.3-2    
-##  [7] tools_3.6.0         backports_1.1.6     utf8_1.1.4         
-## [10] rgdal_1.4-8         R6_2.4.1            KernSmooth_2.23-16 
-## [13] DBI_1.1.0           mgcv_1.8-31         colorspace_1.4-1   
-## [16] withr_2.1.2         sp_1.4-1            tidyselect_1.0.0   
+##  [1] nlme_3.1-148        fs_1.4.2            sf_0.9-4           
+##  [4] lubridate_1.7.9     httr_1.4.1          rprojroot_1.3-2    
+##  [7] tools_3.6.0         backports_1.1.8     utf8_1.1.4         
+## [10] rgdal_1.5-12        R6_2.4.1            KernSmooth_2.23-17 
+## [13] mgcv_1.8-31         DBI_1.1.0           colorspace_1.4-1   
+## [16] withr_2.2.0         sp_1.4-2            tidyselect_1.1.0   
 ## [19] gridExtra_2.3       curl_4.3            compiler_3.6.0     
 ## [22] extrafontdb_1.0     cli_2.0.2           rvest_0.3.5        
-## [25] xml2_1.2.5          labeling_0.3        scales_1.1.0       
-## [28] classInt_0.4-2      rappdirs_0.3.1      digest_0.6.25      
-## [31] foreign_0.8-76      rmarkdown_2.1       pkgconfig_2.0.3    
-## [34] htmltools_0.4.0     extrafont_0.17      dbplyr_1.4.2       
-## [37] rlang_0.4.5         readxl_1.3.1        rstudioapi_0.11    
-## [40] generics_0.0.2      farver_2.0.3        jsonlite_1.6.1     
-## [43] magrittr_1.5        Matrix_1.2-18       Rcpp_1.0.4.6       
-## [46] munsell_0.5.0       fansi_0.4.1         lifecycle_0.2.0    
-## [49] stringi_1.4.6       yaml_2.2.1          plyr_1.8.6         
-## [52] grid_3.6.0          maptools_0.9-9      crayon_1.3.4       
-## [55] lattice_0.20-40     splines_3.6.0       haven_2.2.0        
-## [58] hms_0.5.3           pillar_1.4.3        uuid_0.1-4         
-## [61] urbnmapr_0.0.0.9002 reprex_0.3.0        glue_1.4.0         
-## [64] evaluate_0.14       modelr_0.1.6        vctrs_0.2.4        
-## [67] Rttf2pt1_1.3.8      cellranger_1.1.0    gtable_0.3.0       
-## [70] assertthat_0.2.1    xfun_0.12           broom_0.5.5        
-## [73] e1071_1.7-3         class_7.3-16        tigris_0.9.4       
-## [76] units_0.6-5         ellipsis_0.3.0      here_0.1</code></pre>
+## [25] xml2_1.3.2          labeling_0.3        scales_1.1.1       
+## [28] classInt_0.4-3      hexbin_1.28.1       rappdirs_0.3.1     
+## [31] digest_0.6.25       foreign_0.8-76      rmarkdown_2.3      
+## [34] pkgconfig_2.0.3     htmltools_0.5.0     extrafont_0.17     
+## [37] dbplyr_1.4.4        rlang_0.4.6         readxl_1.3.1       
+## [40] rstudioapi_0.11     generics_0.0.2      farver_2.0.3       
+## [43] jsonlite_1.7.0      magrittr_1.5        Matrix_1.2-18      
+## [46] Rcpp_1.0.4          munsell_0.5.0       fansi_0.4.1        
+## [49] lifecycle_0.2.0     stringi_1.4.6       yaml_2.2.1         
+## [52] plyr_1.8.6          grid_3.6.0          maptools_1.0-1     
+## [55] blob_1.2.1          crayon_1.3.4        lattice_0.20-41    
+## [58] splines_3.6.0       haven_2.3.1         hms_0.5.3          
+## [61] pillar_1.4.4        uuid_0.1-4          urbnmapr_0.0.0.9002
+## [64] reprex_0.3.0        glue_1.4.1          evaluate_0.14      
+## [67] modelr_0.1.8        vctrs_0.3.1         Rttf2pt1_1.3.8     
+## [70] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
+## [73] xfun_0.15           broom_0.5.6         e1071_1.7-3        
+## [76] class_7.3-17        tigris_0.9.4        units_0.6-7        
+## [79] ellipsis_0.3.1      here_0.1</code></pre>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Wickham, H., &amp; Stryjewski, L. (2011). 40 years of boxplots.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Wickham, H., &amp; Stryjewski, L. (2011). 40 years of boxplots.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -1664,7 +1779,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

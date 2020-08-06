@@ -84,6 +84,8 @@ urbnthemes::lato_install()
 
 Loading and importing fonts may take a few minutes.
 
+Waffle charts with glyphs require fontawesome. `fontawesome_test()` and `fontawesome_install()` are the fontawesome versions of the above functions. Be sure to install fontawesome from [here](https://github.com/hrbrmstr/waffle/tree/master/inst/fonts).
+
 ### Grammar of Graphics and Conventions
 
 Hadley Wickham's ggplot2 is based on Leland Wilkinson's [*The Grammar of Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448) and Wickham's [*A Layered Grammar of Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2. 
@@ -1296,6 +1298,129 @@ plot <- mtcars %>%
 
 ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
 ```
+
+## urbnthemes
+
+### Overview
+
+`urbnthemes` is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends `ggplot2` with print and map themes as well as tools that make plotting easier at the Urban Institute. `urbnthemes` replaces the [urban_R_theme](https://github.com/UrbanInstitute/urban_R_theme).
+
+Always load `library(urbnthemes)` after `library(ggplot2)` or `library(tidyverse)`.
+
+### Usage
+
+Use `set_urbn_defaults(style = "print")` to set the default styles. `scatter_grid()`, `remove_ticks()`, `add_axis()`, and `remove_axis()` can all be used to improve graphics. 
+
+```{r example, message=FALSE}
+library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults(style = "print")
+
+ggplot(data = mtcars, mapping = aes(factor(cyl))) +
+  geom_bar() + 
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  labs(x = "Number of Cylinders",
+       y = "Count") +
+  remove_ticks()
+```
+
+### Combining elements
+
+`library(urbnthemes)` contains functions for combining plot elements into graphics. `urbn_plot()` brings all of the elements together. 
+
+* `urbn_logo_text()`
+* `remove_ticks()`
+* `remove_axis()`
+* `scatter_grid()`
+* `add_axis()`
+* `urbn_geofacet`
+
+```{r example2}
+library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults(style = "print")
+
+plot <- ggplot(data = mtcars, mapping = aes(factor(cyl))) +
+  geom_bar() + 
+  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  labs(x = "Number of Cylinders",
+       y = "Count") +
+  remove_ticks()
+
+urbn_plot(plot, urbn_logo_text(), ncol = 1, heights = c(30, 1))
+```
+
+Sometimes it's important to horizontally add the y-axis title above the plot. `urbn_y_title()` can be sued for this task. The following example goes one step further and adds the title between the legend and the plot. 
+
+```{r}
+library(ggplot2)
+library(urbnthemes)
+
+set_urbn_defaults()
+
+plot <- ggplot(data = mtcars, mapping = aes(x = wt, y = mpg, color = factor(cyl))) +
+  geom_point() + 
+	scale_x_continuous(expand = c(0, 0),
+										 limits = c(0, 8)) +
+  scale_y_continuous(expand = c(0, 0),
+  									 limits = c(0, 40)) +
+  remove_ticks() +
+	labs("") +
+	scatter_grid()
+
+urbn_plot(get_legend(plot),
+					urbn_y_title("Miles per gallon"),
+					remove_legend(plot), 
+					urbn_logo_text(), 
+					ncol = 1, 
+					heights = c(3, 1, 30, 1))
+```
+
+### Palettes
+
+`urbnthemes` contains many quick-access color palettes from the [Urban Institute Data Visualization Style Guide](http://urbaninstitute.github.io/graphics-styleguide/). These palettes can be used to quickly overwrite default color palettes from `urbnthemes`.
+
+* `palette_urbn_main` is the eight color discrete palette of the Urban Institute with cyan, yellow, black, gray, magenta, green, space gray, and red. 
+* `palette_urbn_diverging` is an eight color diverging palette. 
+* `palette_urbn_quintile` is a five color blue palette that is good for quintiles. 
+* `palette_urbn_politics` is a two color palette with blue for Democrats and red for Republicans. 
+
+There are seven palettes that are continuous palettes of the seven unique colors in the discrete Urban Institute color palette:
+
+* `palette_urbn_cyan`
+* `palette_urbn_gray`
+* `palette_urbn_yellow`
+* `palette_urbn_magenta`
+* `palette_urbn_green`
+* `palette_urbn_spacegray`
+* `palette_urbn_red`
+
+Use `view_palette()` to see the palette:
+
+```{r view-palette}
+view_palette(palette_urbn_magenta)
+```
+
+The vectors can be subset using base R syntax. This allows for the quick selection of specific colors from a palette. 
+
+```{r palette-subset1}
+palette_urbn_main[1:4]
+```
+
+```{r palette-subset2}
+palette_urbn_spacegray[1:5]
+```
+
+### Utility functions
+
+`library(urbnthemes)` contains four functions that are helpful with managing font instalations:
+
+* `lato_test()`
+* `lato_install()`
+* `fontawesome_test()`
+* `fontawesome_install()`
 
 ## Bibliography and Session Information
 
