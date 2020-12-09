@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20190531</pubdate>
+                <title>Fire Stations</title>
+                <geoform>vector digital data</geoform>
+                <pubinfo>
+                    <publish>DC GIS</publish>
+                </pubinfo>
+                <lworkcit>
+                    <citeinfo>
+                        <origin/>
+                        <title>DC Geographic Information System</title>
+                        <geoform>vector digital data</geoform>
+                    </citeinfo>
+                </lworkcit>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>DC Fire and Emergency Medical Services Department (FEMS) stations. This dataset was created as part of the DC Geographic Information System (DC GIS) for the D.C. Office of the Chief Technology Officer (OCTO) and participating D.C. government agencies. Fire stations were identified from D.C. Fire and EMS Department records and heads-up digitized from 2002 orthophotographs.Upated by FEMS May 2019.</abstract>
+            <purpose>DC Fire and Emergency Medical Services Department (FEMS) stations.</purpose>
+        </descript>
+        <status>
+            <progress>Complete</progress>
+            <update>As needed</update>
+        </status>
+        <spdom/>
+        <keywords>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>Fire Department</themekey>
+                <themekey>Fire Station</themekey>
+                <themekey>Emergency Services Department</themekey>
+                <themekey>Fire And Emergency Services Department</themekey>
+                <themekey>Fire Equipment</themekey>
+                <themekey>Fire Apparatus</themekey>
+                <themekey>Emergency Services Equipment</themekey>
+                <themekey>Government Facility</themekey>
+                <themekey>society</themekey>
+                <themekey>Ambulance</themekey>
+                <themekey>pubSafety</themekey>
+            </theme>
+            <theme>
+                <themekt>ISO 19115 Topic Categories</themekt>
+                <themekey>society</themekey>
+            </theme>
+            <place>
+                <placekt>None</placekt>
+                <placekey>DCGIS</placekey>
+                <placekey>DC</placekey>
+                <placekey>District of Columbia</placekey>
+                <placekey>Washington</placekey>
+                <placekey>D.C.</placekey>
+                <placekey>DC GIS</placekey>
+            </place>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>This work is licensed under a Creative Commons Attribution 4.0 International License.</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                    <cntper>GIS Data Coordinator</cntper>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>200 I Street SE, 5th Floor</address>
+                    <city>Washington</city>
+                    <state>DC</state>
+                    <postal>20003</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntfax>(202) 727-5660</cntfax>
+                <cntemail>dcgis@dc.gov</cntemail>
+                <hours>8:30 am - 5 pm</hours>
+            </cntinfo>
+        </ptcontac>
+        <datacred>DC Fire and Emergency Medical Services</datacred>
+    </idinfo>
+    <dataqual>
+        <attracc>
+            <attraccr>Data believed to be complete and accurate, subject to change. Digital version compared with original source data for accuracy and completeness. Validated by source and/or responsible agency.</attraccr>
+        </attracc>
+        <logic>In process of validation by source and/or responsible agency.</logic>
+        <complete>Data believed to be complete and accurate, subject to change. Digital version compared with original source data for accuracy and completeness. Validated by source and/or responsible agency.</complete>
+        <posacc>
+            <horizpa>
+                <horizpar>In process of validation by source and/or responsible agency.</horizpar>
+            </horizpa>
+            <vertacc>
+                <vertaccr>N/A</vertaccr>
+            </vertacc>
+        </posacc>
+        <lineage>
+            <srcinfo>
+                <srccite>
+                    <citeinfo>
+                        <origin/>
+                        <title>D.C. Fire and Emergency Medical Services Website</title>
+                        <othercit>Site visited April, September 2001, April 2002, and July 2002 for validation.</othercit>
+                        <onlink>http://fems.dc.gov/info/fems_station_loc.shtm</onlink>
+                    </citeinfo>
+                </srccite>
+                <typesrc>onLine</typesrc>
+                <srccitea>D.C. Fire and Emergency Medical Services Website</srccitea>
+                <srccontr>locations and attributes</srccontr>
+            </srcinfo>
+            <procstep>
+                <procdesc>Fire stations were identified from D.C. Fire and EMS Department records and heads-up digitized from the 1995 orthophotographs. Engine company #3 was added and the attribution was enhanced and standardized. Also, staff added two items to the feature class: ENGINE and BATTALION.</procdesc>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>OCTO</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntfax>202-727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30 am - 5pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>FEMS staff reviewed the attribution and provided updates. OCTO GIS staff then incorporated the updated attributes with the shapefile.</procdesc>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntfax>202-727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30am - 5pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>Staff geocoded the fire stations to the DC Master Address Repository (MAR) and added the AID. Staff also updated the attribution to reflect closed stations and reassigned equipment.</procdesc>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntaddr>
+                            <addrtype>mailing and physical</addrtype>
+                            <address>200 I Street SE, 5th Floor</address>
+                            <city>Washington</city>
+                            <state>DC</state>
+                            <postal>20001</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntfax>202-727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30am - 5:30pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>FEMS staff provided data on open and closed fire stations and equipment changes.</procdesc>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntaddr>
+                            <addrtype>mailing and physical</addrtype>
+                            <address>200 I Street SE, 5th Floor</address>
+                            <city>Washington</city>
+                            <state>DC</state>
+                            <postal>20001</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntfax>202-727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30am - 5:30pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>Fire stations were identified from lists published by the D.C. Fire and Emergency Management Services website. A point shapefile was created by geocoding the addresses. These points were compared to the 1995 orthophotographs, the building footprint layer, and the D.C. Real Property Tax owner points for address and ownership information. The square suffix lot attribute was retained as the link to the data from the D.C. Office of Tax and Revenue. A link to the appropriate website was provided for reference. The geocoded points were then moved to the center of the corresponding buildings and core attributes were added. All DC GIS data is stored and exported in Maryland State Plane coordinates NAD 83 meters.</procdesc>
+                <procdate>20010806</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Coordinator</cntper>
+                        </cntorgp>
+                        <cntfax>(202) 727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>10 am - 5 pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>added phone number</procdesc>
+                <procdate>20090305</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>OCTO</cntorg>
+                        </cntorgp>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>Moved Engine 10 to its temporary location on Galluadet University, while the firehouse is renovated.</procdesc>
+                <procdate>20100514</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>OCTO</cntorg>
+                        </cntorgp>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>All Re-located units are back at their regular stations and these changes should be made: Engine 28 Station is closed for renovations. E28 is running from Engine 21 Station T14 is running from Engine 31 Station A28 is running from Engine 9 Station BFC 5 and EMS 5 are at Engine 20 Station. At Engine 29 Station, there is no Medic Unit. At Engine 5 Station there is Medic Unit 5. Engine 10 Station has moved back to its old location at 1342 Florida Ave. NE</procdesc>
+                <procdate>20110715</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>OCTO</cntorg>
+                        </cntorgp>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>Staff updated the location of E01 (2225 M St. NW) and E22 (6825 Georgia Ave NW). Also updated E01 truck attribute from 1 to 2. </procdesc>
+                <procdate>20180412</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntaddr>
+                            <addrtype>mailing and physical</addrtype>
+                            <address>200 I Street SE, 5th Floor</address>
+                            <city>Washington</city>
+                            <state>DC</state>
+                            <postal>20003</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntfax>(202) 727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30 am - 5 pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>Staff updated equipmemt counts.</procdesc>
+                <procdate>20181012</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntaddr>
+                            <addrtype>unknown</addrtype>
+                            <address>200 I Street SE, 5th Floor</address>
+                            <city>Washington</city>
+                            <state>DC</state>
+                            <postal>20003</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntfax>(202) 727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30 am - 5 pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+            <procstep>
+                <procdesc>FEMS added Ready Reserve and moved Engine Company 22 from 5760 Georgia Ava to 6825 Georgia Ave.</procdesc>
+                <procdate>20190531</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                            <cntper>GIS Data Coordinator</cntper>
+                        </cntorgp>
+                        <cntaddr>
+                            <addrtype>unknown</addrtype>
+                            <address>200 I Street SE, 5th Floor</address>
+                            <city>Washington</city>
+                            <state>DC</state>
+                            <postal>20003</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntfax>(202) 727-5660</cntfax>
+                        <cntemail>dcgis@dc.gov</cntemail>
+                        <hours>8:30 am - 5 pm</hours>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+        </lineage>
+    </dataqual>
+    <spdoinfo>
+        <direct>Vector</direct>
+        <ptvctinf>
+            <sdtsterm>
+                <sdtstype>Entity point</sdtstype>
+                <ptvctcnt>0</ptvctcnt>
+            </sdtsterm>
+        </ptvctinf>
+    </spdoinfo>
+    <eainfo>
+        <detailed>
+            <enttyp>
+                <enttypl>FireStnPt</enttypl>
+            </enttyp>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef>Internal feature number.</attrdef>
+                <attrdefs>Esri</attrdefs>
+                <attrdomv>
+                              
+                    <udom>Sequential unique whole numbers that are automatically generated.</udom>
+                            
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>NAME</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>TYPE</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>SSL</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>ADDRESS</attrlabl>
+                <attrdef>Address of Fire Station</attrdef>
+                <attrdefs>OCTO</attrdefs>
+                <attrdomv>
+                              
+                    <udom>Matched Address in MAR</udom>
+                            
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>BATTALION</attrlabl>
+                <attrdef>Battallion Number</attrdef>
+                <attrdefs>OCTO</attrdefs>
+            </attr>
+            <attr>
+                <attrlabl>BFC</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>AMBULANCE</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>RESCSQUAD</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>MEDICUNIT</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>TRUCK</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>PHONE</attrlabl>
+                <attrdef>Phone Number of Fire Station</attrdef>
+                <attrdefs>OCTO</attrdefs>
+            </attr>
+            <attr>
+                <attrlabl>DETAIL</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>SPECIALTY</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>ENGINE</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef>Feature geometry.</attrdef>
+                <attrdefs>Esri</attrdefs>
+                <attrdomv>
+                              
+                    <udom>Coordinates defining the features.</udom>
+                            
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>RENSTATUS</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>AID</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>REL_UNITS</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>WEB_URL</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>X</attrlabl>
+                <attrdef>MAR X Coordinates (Maryland State Plane Meters)</attrdef>
+                <attrdefs>OCTO</attrdefs>
+            </attr>
+            <attr>
+                <attrlabl>Y</attrlabl>
+                <attrdef>MAR Y Coordinates (Maryland State Plane Meters)</attrdef>
+                <attrdefs>OCTO</attrdefs>
+            </attr>
+            <attr>
+                <attrlabl>GIS_ID</attrlabl>
+                <attrdef>OCTO GIS sequential identifier</attrdef>
+                <attrdefs>OCTO</attrdefs>
+            </attr>
+        </detailed>
+    </eainfo>
+    <distinfo>
+        <distrib>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                    <cntper>GIS Data Coordinator</cntper>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>200 I Street SE, 5th Floor</address>
+                    <city>Washington</city>
+                    <state>DC</state>
+                    <postal>20003</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntfax>(202) 727-5660</cntfax>
+                <cntemail>dcgis@dc.gov</cntemail>
+                <hours>8:30 am - 5 pm</hours>
+            </cntinfo>
+        </distrib>
+        <distliab>See access and use constraints information.</distliab>
+        <custom>DC datasets can be downloaded from "http://opendata.dc.gov".</custom>
+    </distinfo>
+    <metainfo>
+        <metd>20190607</metd>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>D.C. Office of the Chief Technology Officer</cntorg>
+                    <cntper>GIS Data Coordinator</cntper>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>200 I Street SE, 5th Floor</address>
+                    <city>Washington</city>
+                    <state>DC</state>
+                    <postal>20003</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntfax>(202) 727-5660</cntfax>
+                <cntemail>dcgis@dc.gov</cntemail>
+                <hours>8:30 am - 5 pm</hours>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>
