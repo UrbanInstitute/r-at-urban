@@ -62,7 +62,7 @@ R.
 
 Rob Pitingolo
 ([rpitingolo\@urban.org](mailto:rpitingolo@urban.org){.email}) and the
-Urban Institute Mapping Users Group are also a fantasitc resource to
+Urban Institute Mapping Users Group are also a fantastic resource to
 learn more about maps.
 
 ## Why map with R?
@@ -389,12 +389,31 @@ may be missing from either the left hand side dataframe (in this case
 can happen if a few states are missing in your data, or your data has
 misspelled states that weren't matched.
 
-We highly recommend using the `anti_join` function to test which rows
-don't join. You can also use `libraray(tidylog)` and the
+We highly recommend using `libraray(tidylog)` and the
 `tidylog::left_join()` function - instead of the regular `left_join`
 function - to print additional information on the number of rows that
 are unmatched, or rows only in the left hand side/right hand side
-dataframes.
+dataframes. This will help you identify errors and mismatches between datasets
+early on in your data ingestion process. For example, if we want to append 
+population counts to each of the states using another datasource:
+
+```{r, message = TRUE, include = TRUE}
+state_pops <- 
+	read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv") %>% 
+	filter(ages == "total", year == "2010") %>% 
+	select(state_abbv   = `state/region`, population)
+
+# Do anti-joins to figure out 
+chip_with_geographies <- chip_with_geographies  %>% 
+	# Specify left_join from tidylog to print messages
+	# Don't library(tidylog) unless you want all dplyr functions to print out
+	# status messages. We recommend using tidylog:: explicitly whenever you want
+	# print out status messages
+ 	tidylog::left_join(state_pops, by = "state_abbv")
+
+```
+
+
 
 ## Coordinate Reference Systems
 
@@ -451,7 +470,12 @@ distance based spatial operations (ie creating buffers)
 
 ### Names of CRS
 
-CRS can be specified either by name (ie Maryland State Plane) or EPSG identifier (ie 4326). THe EPSG identifier is a numeric identifier that uniquely identifies each coordinate reference system.
+CRS can be specified either by name (ie Maryland State Plane) or EPSG identifier (ie `2248`). THe EPSG identifier is a numeric identifier that uniquely identifies each coordinate reference system.
+
+EPSG stands for the now defunct European Petroleum Survey Group. 
+
+While oil companies have generally been terrible for the earth, the one nice thing they did was set up standards for coordinate reference systems. They were interesetd in this to have hyperspecific drilling operations in various parts of the world
+
 
 ### Finding the CRS
 
@@ -473,7 +497,7 @@ TODO: Put in proj2crs site.
 
 - For all file type, you should scan the metadata and any accompanying documentation to see if the coordinate reference system for geographic data is specified
 
-### CRS in R
+### Setting the CRS
 
 The `sf` package has a number of handy functions for identifying,
 setting, or transforming CRS for datasets.
@@ -713,8 +737,8 @@ Here are a few things to keep in mind:
 Choropleth maps display geographic areas with shades, colors, or
 patterns in proportion to a variable or variables. Choropleth maps can
 represent massive geographies like the entire world and small
-geographies like Census Tracts. To make a choloropleth map where you
-shade in regions in poroportion to a variable, you can set an aesthetic
+geographies like Census Tracts. To make a choropleth map where you
+shade in regions in proportion to a variable, you can set an aesthetic
 mapping inside the `aes` argument of `geom_sf`.
 
 When we set an aesthetic mapping, we are telling R that we want some
@@ -722,20 +746,68 @@ aspect of the plot to change in accordance with a variable in our
 dataset. And because we want the fill color to vary, we use the `fill`
 aesthetic.
 
+
+### Continuous color scale
 Let's say we wanted to make a chloropleth map of states colored in by
-total CHIP enrollment (ie the `chip_enrollment` variable in the
+CHIP enrollment as a percentage of total population (ie the `chip_enrollment` variable  divided by the `population` variable in the
 `chip_with_geographies` dataframe). Below is the code we would use
 
-```{r}
+```{r, choropleth-1}
+library(tidyverse)
+library(sf)
+
+# Calculate the chip enrollment percentage and append as a column
+chip_with_geographies <- chip_with_geographies %>% 
+	mutate(chip_pct = chip_enrollment/population)
 
 # make chloropleth map
 ggplot() + 
-	geom_sf(data = chip_with_geographies, 
+	geom_sf(# data has to be an sf dataframe
+					data = chip_with_geographies, 
 					# we set the fill aesthetic to be a column for chloropleth maps
-					aes(fill = chip_enrollment)) + 
+					aes(fill = chip_pct),
+					# Set off-white boundaries
+					color = "white") + 
+	theme_urbn_map() +
+	# Display legend labels as percentages. Note we use use scale_fill_continuous bc
+	# we want a continuous legend
+	scale_fill_continuous(labels = scales::percent)
+
+```
+
+### Continuous color scale
+
+You can also have discrete color bins (ie 0-1%, 1-2%, etc) for the legend. Be 
+careful when doing this as changing the number or size of bins can drastically 
+change how the map looks.
+
+
+```{r}
+
+# make chloropleth map with discrete buckets
+
+# Discretize continuous chip_pct variable
+x = chip_with_geographies %>% 
+	# Add two rows where chip_pct = 0 and 1 in order to have cut_interval
+	# generate bins that include 0 and 1 as they aren't in the data explicitly
+	add_row(chip_pct = 0) %>% 
+	add_row(chip_pct = 1) %>% 
+	mutate(chip_pct = cut_interval(chip_pct, n =3))
+				 	
+				 
+ggplot() + 
+	geom_sf(data = x, 
+					# we set the fill aesthetic to be a column for chloropleth maps
+					aes(fill = chip_pct)) + 
 	theme_urbn_map()
 
 ```
+
+
+
+When mapping, you need to be very careful when setting color breaks for legends
+as slightly different breaks can generate very different looking maps 
+
 
 ## Interactive Maps
 
@@ -835,6 +907,9 @@ is a good starting point.
 ## Geofacetting
 
 ## Cartograms
+
+
+
 
 # Spatial Operations
 
