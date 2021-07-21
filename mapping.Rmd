@@ -47,8 +47,7 @@ explicitly as coordinates (latitude & longitude) or implicitly as
 addresses, Census tracts, or other identifiers.
 
 This guide outlines the many tools in R for geospatial analysis and
-mapping. New tools are always being developed, so this guide will
-occasionally be updated as better methods emerge. **This is a long
+mapping.  **This is a long
 guide, so if you need something specific, we encourage you to scroll to
 the appropriate section using the Table of Contents on the left.**
 
@@ -58,7 +57,7 @@ Please don't hesitate to contact Aaron Williams
 ([awilliams\@urban.org](mailto:awilliams@urban.org){.email}) or Ajjit
 Narayanan ([anarayanan\@urban.org](mailto:anarayanan@urban.org){.email})
 if you have any questions about this guide or need any assistance with
-R.
+R. And make sure to join our slack channel at #r-users-group!
 
 Rob Pitingolo
 ([rpitingolo\@urban.org](mailto:rpitingolo@urban.org){.email}) and the
@@ -107,6 +106,7 @@ in R has many advantages including:
     lectures and notes)
 -   All of the vignettes for the [`sf`
     package](https://cran.r-project.org/web/packages/sf/sf.pdf)
+-		Andrew Heiss' fantastic mapping [guide]
 -   [Geocomputation with
     R](https://geocompr.robinlovelace.net/index.html): A book by Robin
     Lovelace and others
@@ -123,7 +123,7 @@ The `sf` library is a key tool used for working with spatial data in R.
 `sf` stands for simple features (not San Francisco you Bay Area folks)
 and denotes a way to describe the spatial attributes of real life
 objects. The R object you will be working with most frequently for
-mapping is an `sf` dataframe. An `sf` dataframe is essentially a regular
+mapping in R is an `sf` dataframe. An `sf` dataframe is essentially a regular
 R dataframe, with a couple of extra features for use in mapping. These
 extra features exclusive to `sf` dataframes include:
 
@@ -165,9 +165,7 @@ The first step to mapping in R is reading in your spatial data and
 ensuring it is an `sf` dataframe. R provides many helpful packages and
 functions to do this.
 
-### R packages
-
-#### For states and counties
+### For states and counties
 
 We highly recommend using the `libraray(urbnmapr)` package, which was
 created by folks here at Urban to easily create state and county level
@@ -185,16 +183,16 @@ dataframe of all the states in the US.
 
 library(urbnmapr)
 
-states <- get_urbn_map("states", sf = TRUE)
+states <- get_urbn_map("counties", sf = TRUE)
 
 ```
 
-#### For tracts and other Census geographies
+### For tracts and other Census geographies
 
 We recommend using the `library(tigris)` package, which allows you to
-easily download TIGER and other cartographic boundareis from the US
+easily download TIGER and other cartographic boundaries from the US
 Census Bureau. In order to automatically load in the boundaries as `sf`
-objects, run `r options(tigris_class = "sf")` once per session.
+objects, run `r options(tigris_class = "sf")` once per R session.
 
 `library(tigris)` has all standard census geographies, including census
 tracts, counties, CBSAs, ZCTAs, congressional districts, tribal areas,
@@ -206,11 +204,11 @@ line boundary files. This means that the boundaries are not clipped to
 the shoreline and can be very large in size. For thematic mapping,
 cartographic boundary files are a better choice, as they are clipped to
 the shoreline, generalized, and therefore usually smaller in size
-wihtout losing too much accuracy. To load cartographic boundaries,
-include the `r cb = TRUE` argument. Note that if you are doing detailed
+without losing too much accuracy. To load cartographic boundaries,
+include the `cb = TRUE` argument. If you are doing detailed
 geospatial analysis and need the most detailed shapefiles, then you
 should use the detailed TIGER line boundary files and set
-`r cb = FALSE`.
+`cb = FALSE`.
 
 `library(tigris)` functions also allow you to load boundaries for
 previous years, though they will default to the most recent year.
@@ -218,7 +216,7 @@ previous years, though they will default to the most recent year.
 Unlike `library(urbnmapr)`, different functions are used to get
 geographic data for different geographic levels- for instance, the
 `blocks()` function will load census block groups, and the `tracts()`
-function will load tracts For the full list of supported geographies and
+function will load tract data. For the full list of supported geographies and
 functions, see the [package
 vignette](https://cran.r-project.org/web/packages/tigris/tigris.pdf).
 Below is an example of how you would use `library(tigris)` to get a `sf`
@@ -228,6 +226,7 @@ dataframe of all Census tracts in Maryland for 2015.
 
 library(tigris)
 
+# Only need to set once per script
 options(tigris_class = "sf")
 
 md_zctas <- tracts(state = "MD",
@@ -242,12 +241,12 @@ package to `libraray(tigris)`: `library(tidycensus)`. That package
 allows you to download in Census variables and Census geographic data
 simultaneously.
 
-#### For boundaries outside the US
+### For boundaries outside the US
 
 We recommend using the `library(rnaturalearth)` package, which is
 similar to `library(tigris)` but allows you to download and use
 boundaries beyond the US. Instead of setting class to `sf` one time per
-session as we did with `libraray(tigris)`, you must set the
+session as we did with `library(tigris)`, you must set the
 `returnclass = "sf"` argument each time you use a function from the
 package. Below is an example of downloading in an `sf` dataframe of all
 the countries in the world.
@@ -296,6 +295,8 @@ including geodatabases, .KML files, and many others. For a full list,
 please see the function help page.
 
 #### CSVs or dataframes with lat/lons
+
+When you have latitudes/longitudes
 
 `library(sf)` contains the `st_as_sf()` function for converting existing
 dataframes that have columns for longitude and latitude into an `sf`
@@ -420,87 +421,71 @@ chip_with_geographies <- chip_with_geographies  %>%
 ### What are they?
 
 Coordinate reference systems (CRS) specify the 3d shape of the earth
-used in a spatial datset and optionally how we project that 3d shape
+used in a spatial dataset and optionally how we project that 3d shape
 onto a 2d surface. They are an important part of working with spatial
 data as you need to ensure that all the data you are working with are in
-the same CRS.
+the same CRS in order for spatial opperations and maps to be accurate.
 
 To visualize how coordinate reference systems work, imagine that the
 earth is a orange. Now peel the skin off an orange and try to flatten
-it. There are many ways to do it, but all will create distortions of
+it. There are many ways to do it, but all will create [distortions](https://twitter.com/neilrkaye/status/1050740679008296967) of
 some kind. The CRS will give us the formula we've used to specify the
 shape of the orange (usually a sphere or ellipsoid of some kind) and
 optionally, specify how we flattened the orange into 2d.
 
 Broadly, there are two kinds of Coordinate Reference Systems:
 
-1) [\*\*Geographic coordinate systems\*\* (sometimes called unprojected
-coordinate
-systems)]([https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.htm):](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.htm):)
+1) [**Geographic coordinate systems**](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.html) (sometimes called unprojected coordinate systems)
 
-- Specifes a 3d shape for the earth
-
-- Uses a spheroid/ellipsoid surface to approximate shape of the earth
-
-- Usually use decimal degree units (ie latitude/longitude) to identify
-locations on earth
+		* Specifies a 3d shape for the earth
+		* Uses a spheroid/ellipsoid surface to approximate shape of the earth
+		* Usually use decimal degree units (ie latitude/longitude) to identifylocations on earth
 
 ```{r, eval = T, echo = F, out.width = 300, out.width=300}
-knitr::include_graphics("../www/images/gcs_esri.png")
+	knitr::include_graphics(here("mapping", "www", "images", "gcs_esri.png"))
 ```
 
-2) [\*\*Projected coordinate systems\*\*]()
+2) [**Projected coordinate systems**]()
+    * Specifies a 3d shape for the earth + a 2d mappin
+		* Is a geographic coordinate system + a *projection*
+		* **projection**: mathematical formula used to convert a 3d coordinate system to a 2d flat coordinate system
+		* Many different kinds of projections, including Equal Area, Equidistant, Conformal
+		* All projections distort the true shape of the earth in some way, either in terms of shape, area, or angle. Required [xkcd comic]([https://xkcd.com/977/)](https://xkcd.com/977/))
+		* Usually use linear units (ie feet, meters) and therefore useful for distance based spatial operations (ie creating buffers)
 
-- Specifies a 3d shape for the earth + a 2d mapping
+CRS can be specified either by name (ie Maryland State Plane) or EPSG identifier (ie `2248`). THe EPSG identifier is a numeric identifier that uniquely identifies a coordinate reference system.
 
-- Is a geographic coordinate system + a \*projection\*
-
-- \*\*projection\*\*: mathematical formula used to convert a 3d
-coordinate system to a 2d flat coordinate system
-
-- Many different kinds of projections, including Equal Area,
-Equidistant, Conformal
-
-- All projections distort the true shape of the earth in some way,
-either in terms of shape, area, or angle. Required [xkcd
-comic]([https://xkcd.com/977/)](https://xkcd.com/977/))
-
-- Usually use linear units (ie feet, meters) and therefore useful for
-distance based spatial operations (ie creating buffers)
-
-### Names of CRS
-
-CRS can be specified either by name (ie Maryland State Plane) or EPSG identifier (ie `2248`). THe EPSG identifier is a numeric identifier that uniquely identifies each coordinate reference system.
-
-EPSG stands for the now defunct European Petroleum Survey Group. 
-
-While oil companies have generally been terrible for the earth, the one nice thing they did was set up standards for coordinate reference systems. They were interesetd in this to have hyperspecific drilling operations in various parts of the world
-
+EPSG stands for the now defunct European Petroleum Survey Group. While oil companies have generally been terrible for the earth, the one nice thing they did was set up common standards for coordinate reference systems .
 
 ### Finding the CRS
 
-If you are lucky, your data will have embedded CRS data that will be automatically picked up when the file is read in. This is usually the case for GeoJSONS (`.geojson`) and shapfiles (`.shp`). When you use `st_read` on these files, you should see the CRS displayed in the metadata:
+If you are lucky, your data will have embedded CRS data that will be automatically detected when the file is read in. This is usually the case for GeoJSONS (`.geojson`) and shapefiles (`.shp`). When you use `st_read()` on these files, you should see the CRS displayed in the metadata:
 
 ```{r import-shpfile-crs example}
-
-# TODO: put pic of shapefile crs example. There's already a pic in www/images but a circle needs to be added around the crs
+	knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
 ```
 
 
-Sometimes however, this CRS field will be blank or be `NA` as the dataset did not specify the CRS. In that case you must find and set the CRS for your data before proceeding with analysis. Below are some good rules of thumb for finding out what CRS your data is in:
+Sometimes however, this CRS field will be blank or be `NA` as the dataste did not specify the CRS. In that case you must find and set the CRS for your data before proceeding with analysis. Below are some good rules of thumb for finding out what CRS your data is in:
 
-- For geojsons, the CRS should always be 4326 (or WGS 84). The official geojson specification states that this is the only valid crs for geojsons. 
+- For geojsons, the CRS should always be 4326 (or WGS 84). The official geojson specification states that this is the only valid crs for geojsons, but in the wild, this may not be true 100% of the time.
 
-- For shapefiles, there should be a file that ends in `.proj` in the same directory as the `.shp` file. This file conntains the projection information for that file.
+- For shapefiles, there should be a file that ends in `.proj` in the same directory as the `.shp` file. This file contains the projection information for that file.
 
 TODO: Put in proj2crs site. 
 
-- For all file type, you should scan the metadata and any accompanying documentation to see if the coordinate reference system for geographic data is specified
+- For CSV's with latitude/longitude columns, the CRS is usually `EPSG:4326` (or WGS 84). 
+
+- Look at the metadata and any accompanying documentation to see if the coordinate reference system for the data is specified
+
+If none of the above rules of thumb apply to you, check out the [Whattheproj](https://stevage.github.io/WhatTheProj/), or the `crsuggest` R [package]()
 
 ### Setting the CRS
 
 The `sf` package has a number of handy functions for identifying,
-setting, or transforming CRS for datasets.
+setting, or transforming rthe CRS for a spatial dataset.
+
+TODO: Add info on CRS
 
 # Mapping
 
@@ -523,13 +508,13 @@ The [Urban Institute Data Visualization Style Guide]:
 
 The best advice we can give you is to first think about the point you're
 trying to get across to your readers and then decide whether a map will
-allow you to effectively do that. For example, if you really want
+allow you to most effectively do that. For example, if you really want
 readers to understand that there is a large gap between the top 5 states
 with high housing costs and the rest of the states, perhaps you are
 better off using an ordered bar chart or an ordered table. But if you
 want readers to understand that there is a clear geographic pattern of
 coastal states having higher housing costs, perhaps a map would be the
-appropriate visualization
+appropriate visualization.
 
 Below are some helpful blogposts which might help you answer these
 deeper questions \`\
@@ -580,7 +565,7 @@ We promise, it's easier than it looks.
 
 ### A simple map
 
-To make a simple map, all you need to do is add a `geom_sf` to a
+To make a simple map, all you need to do is add a `geom_sf()` to a
 `ggplot` and set the `data` argument equal to an `sf` dataframe. Say for
 example you wanted to make a map of all 50 states using data from
 `library(urbnmapr)`:
