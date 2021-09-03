@@ -4,7 +4,7 @@ output:
     includes:
       in_header: analytics.html  	
     css: styles.css
-    code_folding: hide
+    code_folding: none
     toc: TRUE
     toc_float: TRUE
     pandoc_args: 
@@ -35,21 +35,10 @@ library(knitr)
 library(kableExtra)
 library(here)
 library(sf)
+library(vembedr)
 ```
 
-# Introduction
-
-------------------------------------------------------------------------
-
-Geospatial analysis is the ingestion, manipulation, display, and
-modeling of geographic/spatial data. Spatial data can be represented
-explicitly as coordinates (latitude & longitude) or implicitly as
-addresses, Census tracts, or other identifiers.
-
-This guide outlines the many tools in R for geospatial analysis and
-mapping.  **This is a long
-guide, so if you need something specific, we encourage you to scroll to
-the appropriate section using the Table of Contents on the left.**
+# Text to put somewhere
 
 We hope this guide is a useful resource that helps you accomplish your
 existing research ideas or helps you come up with entirely new ideas.
@@ -57,12 +46,40 @@ Please don't hesitate to contact Aaron Williams
 ([awilliams\@urban.org](mailto:awilliams@urban.org){.email}) or Ajjit
 Narayanan ([anarayanan\@urban.org](mailto:anarayanan@urban.org){.email})
 if you have any questions about this guide or need any assistance with
-R. And make sure to join our slack channel at #r-users-group!
+R. And make sure to join our slack channel at \#r-users-group!
 
 Rob Pitingolo
 ([rpitingolo\@urban.org](mailto:rpitingolo@urban.org){.email}) and the
 Urban Institute Mapping Users Group are also a fantastic resource to
 learn more about maps.
+
+# Introduction
+
+------------------------------------------------------------------------
+
+This guide will teach you the concepts and R libraries you will need for
+mapping and geospatial analysis in R. **This is a long guide, so if you
+need something specific, we encourage you to scroll to the appropriate
+section using the Table of Contents on the left.** If you just want to
+see code examples of maps you can copy and paste, go to the Map Gallery
+(coming soon!).
+
+## Should this be a map?
+
+The [Urban Institute Data Visualization Style
+Guide](http://urbaninstitute.github.io/graphics-styleguide/)  offers some
+blunt but useful suggestions for maps:
+
+> Just because you've got geographic data, doesn't mean that you have to
+> make a map. Many times, there are more efficient storyforms that will
+> get your point across more clearly. If your data shows a very clear
+> geographic trend or if the absolute location of a place or event
+> matters, maps might be the best approach, but sometimes the reflexive
+> impulse to map the data can make you forget that showing the data in
+> another form might answer other---and sometimes more
+> important---questions.
+
+So we would encourage you to think critically beofore making a map
 
 ## Why map with R?
 
@@ -70,43 +87,55 @@ R can have a steeper learning curve than point-and-click tools - like
 QGIS or ArcGIS - for geospatial analysis and mapping. But creating maps
 in R has many advantages including:
 
-1)  *Reproducibility*: By creating maps with R code, you can easily
+1)  **Reproducibility**: By creating maps with R code, you can easily
     share the outputs and the code that generated the output with
     collaborators, allowing them to replicate your work and catch errors
     easily.
-2)  *Iteration*: With point and click software like ArcGIS, making 50
+
+2)  **Iteration**: With point and click software like ArcGIS, making 50
     maps would be 50 times the work/time. But using R, we can easily
     make make many iterations of the same map with a few changes to the
     code.
-3)  *Easy Updates*: Writing code provides a roadmap for others (and
+
+3)  **Easy Updates**: Writing code provides a roadmap for others (and
     future you!) to quickly update parts of the map as needed. Say for
     example a collabarator wanted to change the legend colors of 50
     state maps. With R, this is possible in just a few seconds!
-4)  *An Expansive ecosystem*: There are several R packages that make it
-    very easy to get spatial data, create static and interactive maps,
-    and perform spatial analyses. This feature rich package ecosystem is
-    frankly unmatched by other programming languages and even point and
-    click tools like QGIS and ArcGIS. Some of these R packages include:
 
--   `sf`: For managing and analyzing spatial dataframes
--   `tigris`: For downloading in Census geographies
--   `ggplot2`: For making publication ready static maps
--   `urbnmapr`: For automatically adding Urban styling to static maps
--   `mapview`: For making exploratory interactive maps
+4)  **An Expansive ecosystem**: There are several R packages that make
+    it very easy to get spatial data, create static and interactive
+    maps, and perform spatial analyses. This feature rich package
+    ecosystem which all play nice together is frankly unmatched by other
+    programming languages and even point and click tools like QGIS and
+    ArcGIS. Some of these R packages include:
 
-5)  *Cost*: Most point-and-click tools for geospatial analysis are
+    -   \`sf\`: For managing and analyzing spatial dataframes
+    -   \`tigris\`: For downloading in Census geographies
+    -   \`ggplot2\`: For making publication ready static maps
+    -   \`urbnmapr\`: For automatically adding Urban styling to static
+        maps
+    -   \`mapview\`: For making expxploratory interactive maps
+
+5)  **Cost**: Most point-and-click tools for geospatial analysis are
     proprietary and expensive. R is free opensource software. The
     software and most of its packages can be used for free by anyone for
     almost any use case.
 
-## Helpful Resources
+## Helpful Learning Resources
 
 -   The Urban Institute [mapping training
     series](https://ui-research.github.io/urbn101-mapping/) (with video
     lectures and notes)
+-   Chapters
+    [5](https://walker-data.com/census-r/census-geographic-data-and-applications-in-r.html),
+    [6](https://walker-data.com/census-r/mapping-census-data-with-r.html),
+    and
+    [7](https://walker-data.com/census-r/spatial-analysis-with-us-census-data.html)
+    from Kyle Walker's Analyzing US Census Data
+    [book](https://walker-data.com/census-r/index.html).
+-   Andew Heiss' fantastic mapping [guide](https://datavizm20.classes.andrewheiss.com/example/12-example/)
 -   All of the vignettes for the [`sf`
     package](https://cran.r-project.org/web/packages/sf/sf.pdf)
--		Andrew Heiss' fantastic mapping [guide]
 -   [Geocomputation with
     R](https://geocompr.robinlovelace.net/index.html): A book by Robin
     Lovelace and others
@@ -119,36 +148,51 @@ in R has many advantages including:
 
 ## library(sf)
 
-The `sf` library is a key tool used for working with spatial data in R.
-`sf` stands for simple features (not San Francisco you Bay Area folks)
-and denotes a way to describe the spatial attributes of real life
-objects. The R object you will be working with most frequently for
-mapping in R is an `sf` dataframe. An `sf` dataframe is essentially a regular
-R dataframe, with a couple of extra features for use in mapping. These
-extra features exclusive to `sf` dataframes include:
+The `sf` library is a key tool for reading in, managing, and working
+with spatial data in R. `sf` stands for simple features (not San
+Francisco you Bay Area folks) and denotes a way to describe the spatial
+attributes of real life objects. The R object you will be working with
+most frequently for mapping is an `sf` dataframe. An `sf` dataframe
+is essentially a regular R dataframe, with a couple of extra features
+for use in mapping. These extra features exclusive to `sf` dataframes
+include:
 
 -   sticky `geometry` columns
 -   attached coordinate reference systems
 -   some other spatial metadata
 
 The most important of the above list is the sticky `geometry` column,
-which is a special column that contains all of the geographic
+which is a magical column that contains all of the geographic
 information for each row of data. Say for example you had a `sf`
 dataframe of all DC census tracts. Then the `geometry` column would
 contain all of the geographic points used to define DC census tract
 polygons. The stickiness of this column means that no matter what data
 munging/filtering you do, you will not be able to drop or delete the
-`geometry` column. This is because if you do, then all the geographic
-information is lost and the object can no longer be an `sf` dataframe.
-Below is a graphic to help you understand this:
+`geometry` column. Below is a graphic to help you understand this:
 
-TODO: Insert Allison Horst Image
+`r knitr::include_graphics(here::here("mapping", "www", "images", "sf_sticky_geometry.png"), dpi = 600)`
 
 credits: @allisonhorst
 
-Below is an example of an `sf` dataframe. Not that there is some spatial
-metadata which shows up as a header before the contents of the
-dataframe.
+And below is an example of reading in an `sf` dataframe and printing it
+to the R console.
+
+```{r print_sf, warning = F, message = F}
+# Read in spatial data about DC parks from DC Open Data Portal
+dc_parks  = st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
+										quiet = T)
+
+# Select just a few columns for readability
+dc_parks = dc_parks %>%
+	select(NAME, geometry)
+
+# Print to the console
+dc_parks
+```
+
+Note that there is some spatial metadata such as the `Geometry Type`,
+`Bounding Box`, and `CRS` which shows up as a header before the actual
+contents of the dataframe.
 
 Since `sf` dataframes operate similarly to regular dataframes, we can
 use all our familiar `tidyverse` functions for data wrangling, including
@@ -156,74 +200,68 @@ use all our familiar `tidyverse` functions for data wrangling, including
 `sf` package also has many functions that provide easy ways to replicate
 common tasks done in other GIS software like spatial joins, clipping,
 and buffering. Almost all of the mapping and geospatial analysis methods
-described in this guide rely on you having an `sf` dataframe. So now
-let's talk about how to get one!
+described in this guide rely on you having an `sf` dataframe. So let's
+talk about how to get one!
 
 ## Importing spatial data
 
-The first step to mapping in R is reading in your spatial data and
-ensuring it is an `sf` dataframe. R provides many helpful packages and
-functions to do this.
+The first step to mapping in R is reading in your spatial data as an
+`sf` dataframe. There are many R packages that make this easy, depending
+on the kind of spatial data you want to read in.
 
 ### For states and counties
 
-We highly recommend using the `libraray(urbnmapr)` package, which was
+We highly recommend using the `library(urbnmapr)` package, which was
 created by folks here at Urban to easily create state and county level
-maps. The `get_urbn_map()` allows you to read in spatial ldata on states
-and counties, with options to include territories. Importantly, it will
-also display AL and HI as insets on the map in accordance with the Urban
-Institute Data Visualization Style Guide. For infromation on how to
-install `urbnmapr`, see the [GitHub
+maps. The `get_urbn_map()` function in the package allows you to read in
+spatial data on states and counties, with options to include
+territories. Importantly, it will also display AL and HI as insets on
+the map in accordance with the Urban Institute Data Visualization Style
+Guide. For information on how to install `urbnmapr`, see the [GitHub
 repository](https://github.com/UrbanInstitute/urbnmapr).
 
 Below is an example of how you would use `urbnmapr` to get an `sf`
-dataframe of all the states in the US.
+dataframe of all the states or counties in the US.
 
 ```{r urbnmapr-1, eval=FALSE}
-
 library(urbnmapr)
 
-states <- get_urbn_map("counties", sf = TRUE)
+# Get state data
+states <- get_urbn_map("states", sf = TRUE)
 
+# Can also get county data
+counties <- get_urbn_map("counties", sf = TRUE)
 ```
 
-### For tracts and other Census geographies
+### For other Census geographies
 
 We recommend using the `library(tigris)` package, which allows you to
 easily download TIGER and other cartographic boundaries from the US
 Census Bureau. In order to automatically load in the boundaries as `sf`
 objects, run `r options(tigris_class = "sf")` once per R session.
 
-`library(tigris)` has all standard census geographies, including census
-tracts, counties, CBSAs, ZCTAs, congressional districts, tribal areas,
-and more. It also includes other elements such as water, roads, and
-military bases.
+`library(tigris)` has all the standard census geographies, including
+census tracts, counties, CBSAs, ZCTAs, congressional districts, tribal
+areas, and more. It also includes other elements such as water, roads,
+and military bases. A couple of notes on `library(tigris)`:
 
-By default, `libraray(tigris)` will download large very detailed TIGER
-line boundary files. This means that the boundaries are not clipped to
-the shoreline and can be very large in size. For thematic mapping,
-cartographic boundary files are a better choice, as they are clipped to
-the shoreline, generalized, and therefore usually smaller in size
-without losing too much accuracy. To load cartographic boundaries,
-include the `cb = TRUE` argument. If you are doing detailed
-geospatial analysis and need the most detailed shapefiles, then you
-should use the detailed TIGER line boundary files and set
-`cb = FALSE`.
+-   By default, `libraray(tigris)` will download large very large and
+    detailed TIGER line boundary files. For thematic mapping, the
+    smaller cartographic boundary files are a better choice, as they are
+    clipped to the shoreline, generalized, and therefore usually smaller
+    in size without losing too much accuracy. To load cartographic
+    boundaries, use the `cb = TRUE` argument. If you are doing detailed
+    geospatial analysis and need the most detailed shapefiles, then you
+    should use the detailed TIGER line boundary files and set
+    `cb = FALSE`.
 
-`library(tigris)` functions also allow you to load boundaries for
-previous years, though they will default to the most recent year.
+-   `library(tigris)` functions also allow you to load boundaries for
+    previous years, though they will default to the most recent year.
 
-Unlike `library(urbnmapr)`, different functions are used to get
-geographic data for different geographic levels- for instance, the
-`blocks()` function will load census block groups, and the `tracts()`
-function will load tract data. For the full list of supported geographies and
-functions, see the [package
-vignette](https://cran.r-project.org/web/packages/tigris/tigris.pdf).
 Below is an example of how you would use `library(tigris)` to get a `sf`
 dataframe of all Census tracts in Maryland for 2015.
 
 ```{r tigris-1, eval=FALSE}
-
 library(tigris)
 
 # Only need to set once per script
@@ -235,10 +273,18 @@ md_zctas <- tracts(state = "MD",
 
 ```
 
-For folks interested in also pulling in Census demographic information
+Unlike `library(urbnmapr)`, different functions are used to get
+geographic data for different geographic levels. For instance, the
+`blocks()` function will load census block group data, and the `tracts()`
+function will load tract data. Other functions include `block_groups()`,
+`zctas()` , and `core_based_statistical_areas()`. For the
+full list of supported geographies and functions, see the [package
+vignette](https://cran.r-project.org/web/packages/tigris/tigris.pdf).
+
+For folks interested in pulling in Census demographic information
 along with Census geographies, we recommend checking out the sister
-package to `libraray(tigris)`: `library(tidycensus)`. That package
-allows you to download in Census variables and Census geographic data
+package to `library(tigris)`: `library(tidycensus)`. That package allows
+you to download in Census variables and Census geographic data
 simultaneously.
 
 ### For boundaries outside the US
@@ -266,302 +312,327 @@ ggplot() +
 
 #### Shapefiles/GeoJSONS
 
+Shapefiles and GeoJSONs are 2 common spatial file formats you will found
+out in the wild. `library(sf)` has a function called `st_read` which
+allows you to easily read in these files as `sf` dataframes. The only
+required argument is `dsn` or data source name. This is the filepath of the 
+`.shp` file or the `.geojson` file on your local computer. For geojsons, 
+`dsn` can also be a URL.
 
-Shapefiles and GeoJSONs are 2 common spatial file formats you might
-found out in the wild. `libraray(sf)` has a function called `st_read`
-which allows you to easily read in these files as `sf` dataframes. The
-only required argument is `dsn` or data source name. This is the
-filepath of the `.shp` file or the `.geojson` file on your local
-computer. It can also be a URL for a geojson file.
+Below is an example of reading in a shapefile of fire stations in DC
+which is stored in `mapping/data/shapefiles/`.
 
-Bear in mind that most shapefiles are actually stored as 6 different
-files inside a folder. You will want to provide the file path to the
-file ending in `.shp`.
-
-```{r st-read}
+```{r list f-ei}
 library(sf)
 
+# Print out all files in the directory
 list.files("mapping/data/shapefiles")
+```
 
-dc_firestations <- st_read(dsn = here("mapping", "data", "shapefiles", "Fire_Stations.shp"))
+Note that shapefiles are actually stored as 6+ different files inside a
+folder. You need to provide the fileapth to the file ending in `.shp`.
 
-ggplot() +
-	geom_sf(dc_firestations, mapping = aes())
+```{r st-read-shpfile}
+dc_firestations <- st_read(dsn = "mapping/data/shapefiles/Fire_Stations.shp",
+													 quiet = T)
 
 ```
 
-`st_read` also supports a wide variety of other spatial file formats,
-including geodatabases, .KML files, and many others. For a full list,
-please see the function help page.
+And now `dc_firestations` is an `sf` dataframe you can use in all your
+mapping needs! `st_read` supports reading in a wide variety of
+other spatial file formats, including geodatabases, KML files, and over
+200 others. For an incomplete list, please see the this `sf`
+[vignette](https://r-spatial.github.io/sf/articles/sf2.html).
 
 #### CSVs or dataframes with lat/lons
 
-When you have latitudes/longitudes
+If you have a CSV with geographic information stored in columns, you will need
+to read in the CSV as a regular R dataframe and then convert to an `sf` dataframe.
+`library(sf)` contains the `st_as_sf()` function for converting regular
+R dataframes into an `sf` dataframe. The two arguments you must specify for this
+function are:
 
-`library(sf)` contains the `st_as_sf()` function for converting existing
-dataframes that have columns for longitude and latitude into an `sf`
-dataframe. The two arguments you must specify for this function are:
-
--   `coords`: the names of the columns corresponding to longitude and
-    latitude (in that order!)
+-   `coords`: A length 2 vector with the names of the columns
+    corresponding to longitude and latitude (in that order!). For
+    example, `c("lon", "lat")`.
 -   `crs`: The CRS (coordinate references system) for your
-    longitude/latitude coordinates. It is very important that you set
-    the right CRS when converting your data, otherwise your data will
-    now show up where you expect it to. This means you might have to
-    scour the data documentation to figure out which CRS is used for
-    your longitude/latitude columns. In case you can't find any
-    documentation on the appropriate CRS, a good starting point is CRS
-    `4326`, or the WGS 84 projection. This is the most popular CRS used
-    for longitude/latitude. To learn more about CRS, see this section.
+    longitude/latitude coordinates. Remember you need to specify both the \
+    authority and the SRID code, for exmaple ("EPSG:4326"). For more information
+    on finding and setttnig CRS codes, please see this section.
     (TODO: INSERT CRS LINK)
 
-One other common mistake is that before converting to an `sf` dataframe,
-you must drop any rows that have `NA` values for latitude or longitude.
-If your data contains `NA` values, then the `st_as_sf()` function will
-throw an error. Below is an example of reading in data from a CSV and
+Below is an example of reading in data from a CSV and
 converting it to an `sf` dataframe.
 
-```{r make-sf}
-
+```{r make-sf, message = F, warning = F}
 library(sf)
 
+# Read in dataset of state capitals which is stored as a csv
 state_capitals <- read_csv("mapping/data/state-capitals.csv")
 
-state_capitals_sf <- state_capitals %>% 
+state_capitals <- state_capitals %>% 
+	# Specify names of the lon/lat columns in the CSV to use to make geometry col
 	st_as_sf(coords = c("longitude", "latitude"),
 					 crs = 4326)
 
 ```
 
+One common mistake is that before converting to an `sf` dataframe, you
+must drop any rows that have `NA` values for latitude or longitude. If
+your data contains `NA` values, then the `st_as_sf()` function will
+throw an error. 
+
 ## Appending spatial info to your data
 
 Oftentimes, the data you are working with will just have state or county
-identifiers and will not have any geographic information In this case,
-you must do the extra work of downloading in the geographic data as an
-`sf` dataframe and then joining your non-spatial data to some spatial
-data. Generally this involves 3 steps:
+identifiers - like FIPS codes or state abbreviations - but will not
+contain any geographic information. In this case, you must do the extra
+work of downloading in the geographic data as an `sf` dataframe and then
+joining your non-spatial data to the spatial data. Generally this
+involves 3 steps:
 
 1)  Reading in your own data as a data frame
 2)  Reading in the geographic data as an `sf` dataframe
 3)  Using `left_join` to merge the geographic data with your own non
     spatial data and create a new expanded `sf` dataframe
 
-Let's say we wanted a `sf` dataframe of CHIP enrollment by state, but
-all we had was data on CHIP enrollment and state abbrevations. The below
-code chunk shows how we add the spatial data to our original dataframe
-and turn it into a `sf` datafarme.
+Let's say we had a dataframe on CHIP enrollment by state with state
+abbreviations.
 
-```{r}
-
-# load necessary packages
-library(tidyverse)
-library(urbnmapr)
-library(urbnthemes)
-library(janitor)
-
-set_urbn_defaults(style = "map")
+```{r readin-chip-data, warning=F, message=F}
 
 # read the state CHIP data
-# replace with project filepath to your CSV below
-chip <- read_csv("mapping/data/chip-enrollment.csv") %>% 
+chip_by_state <- read_csv("mapping/data/chip-enrollment.csv") %>% 
 	# clean column names so there are no random spaces/uppercase letters
 	janitor::clean_names()
+
+# print to the console
+chip_by_state %>% head()
+
+```
+
+In order to convert this to an `sf` dataframe, we need to read in the
+spatial boundaries for each state and append the magical `geometry`
+column to turn it into an `sf` dataframe. Here is how we do that with
+`get_urbn_map()` and `left_join()` .
+
+```{r append-spatial-info, warning = F, message = F}
+library(urbnmapr)
 
 # read in state geographic data from urbnmapr
 states <- get_urbn_map(map = "states", sf = TRUE)
 
-
-# left join state geographies to state_chip_data
-chip_with_geographies = left_join(states, chip, 
-																	# Specify join column, which are slightly
-																	# differently named in states and chip 
-																	# respectively
-																	by = c("state_abbv" = "state_abbreviation"))
+# left join state geographies to chip data
+chip_with_geographies = states %>% 
+	left_join( 
+		chip_by_state, 
+		# Specify join column, which are slightly differently named in states and chip 
+		# respectively
+		by = c("state_abbv" = "state_abbreviation"))
 
 chip_with_geographies %>% 
 	select(state_fips, state_abbv, chip_enrollment)
 
-
 ```
 
-A common pitfall when doing the `left_join` above is that some records
-may be missing from either the left hand side dataframe (in this case
-`states`) or the right hand side dataframe (in this case `chip`). This
-can happen if a few states are missing in your data, or your data has
-misspelled states that weren't matched.
+A common pitfall when doing `left_join()`s is that some records may be
+missing from either the left hand side dataframe (in this case `states`)
+or the right hand side dataframe (in this case `chip`). This can happen
+if a few states are missing in your data, or if your data has misspelled
+states that weren't matched.
 
 We highly recommend using `libraray(tidylog)` and the
 `tidylog::left_join()` function - instead of the regular `left_join`
 function - to print additional information on the number of rows that
 are unmatched, or rows only in the left hand side/right hand side
-dataframes. This will help you identify errors and mismatches between datasets
-early on in your data ingestion process. For example, if we want to append 
-population counts to each of the states using another datasource:
+dataframes. This will help you identify errors and mismatches between
+datasets early on in your data ingestion process. For example say we
+also wanted to merge in a dataset of state population totals onto our
+`chip_with_geographies` dataframe. If we use `tidylog::left_join()`
 
-```{r, message = TRUE, include = TRUE}
+```{r append-state-pops, message = TRUE, include = TRUE}
+
+# Read in data on state populations from 2010
 state_pops <- 
-	read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv") %>% 
+	read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv",
+					 # Set this to disable printing column info to console
+					 col_types = cols()) %>% 
 	filter(ages == "total", year == "2010") %>% 
 	select(state_abbv   = `state/region`, population)
 
-# Do anti-joins to figure out 
 chip_with_geographies <- chip_with_geographies  %>% 
-	# Specify left_join from tidylog to print messages
-	# Don't library(tidylog) unless you want all dplyr functions to print out
-	# status messages. We recommend using tidylog:: explicitly whenever you want
-	# print out status messages
+	# Specify left_join from tidylog to print summary messages
  	tidylog::left_join(state_pops, by = "state_abbv")
+ 
 
 ```
 
-
+After some digging, we see that the two unmatched rows in the `state_pops`
+dataframe correspond to PR and the USA total, which we choose to safely
+disregard.
 
 ## Coordinate Reference Systems
 
-### What are they?
+### The short version
+
+Just watch this video:
+`r vembedr::embed_url("https://www.youtube.com/watch?v=vVX-PrBRtTY")`
+
+The Urban Institute Style Guide requires the use of the Atlas Equal Earth
+Projection (`"ESRI:102003"`) for US maps. For state and local maps, use
+[this](https://github.com/veltman/d3-stateplane) handy guide to find an 
+appropriate State Plane projection. 
+
+### The long version
 
 Coordinate reference systems (CRS) specify the 3d shape of the earth
-used in a spatial dataset and optionally how we project that 3d shape
-onto a 2d surface. They are an important part of working with spatial
+and optionally how we project that 3d shape onto a 2d surface. They are an important part of working with spatial
 data as you need to ensure that all the data you are working with are in
-the same CRS in order for spatial opperations and maps to be accurate.
+the same CRS in order for spatial operations and maps to be accurate.
 
-To visualize how coordinate reference systems work, imagine that the
-earth is a orange. Now peel the skin off an orange and try to flatten
-it. There are many ways to do it, but all will create [distortions](https://twitter.com/neilrkaye/status/1050740679008296967) of
-some kind. The CRS will give us the formula we've used to specify the
+CRS can be specified either by name (ie Maryland State Plane) or
+**S**patial **R**eference System **ID**entifier (SRID). THe SRID is a
+numeric identifier that uniquely identifies a coordinate reference
+system. Generally when referring to an SRID, you need to refer to an
+authority (ie the data source) and a unique ID. An example is
+`EPSG:26985` which refers to the Maryland State plane projection from the
+EPSG, or `ESRI:102003` which refers to the Atlas Equal Area projection
+from ESRI. Most CRS codes will be from the EPSG, and some from ESRI and
+others. A good resource for finding/validating CRS codes is
+[epsg.io](epsg.io).
+
+Sidenote - EPSG stands for the now defunct European Petroleum Survey
+Group. And while oil companies have generally been terrible for the
+earth, the one nice thing they did for the earth was to set up common
+standards for coordinate reference systems.
+
+You might be thinking well isn't the earth just a sphere? Why do we need
+all this complicated stuff? And the answer is well the earth is [kind
+of](https://oceanservice.noaa.gov/facts/earth-round.html) a sphere, but
+it's really more of a misshapen ellipsoid which is pudgier at the
+equator than at the poles. To visualize how coordinate reference systems work, imagine that the
+earth is a (lumpy) orange. Now peel the skin off an orange and try to
+flatten it. There are many ways to do it, but all will create
+[distortions](https://twitter.com/neilrkaye/status/1050740679008296967)
+of some kind. The CRS will give us the formula we've used to specify the
 shape of the orange (usually a sphere or ellipsoid of some kind) and
 optionally, specify how we flattened the orange into 2d.
 
 Broadly, there are two kinds of Coordinate Reference Systems:
 
-1) [**Geographic coordinate systems**](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.html) (sometimes called unprojected coordinate systems)
+1)  [**Geographic coordinate
+    systems**](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.html)
 
-		* Specifies a 3d shape for the earth
-		* Uses a spheroid/ellipsoid surface to approximate shape of the earth
-		* Usually use decimal degree units (ie latitude/longitude) to identifylocations on earth
+    -   (sometimes called unprojected coordinate systems)
+    -   Specifies a 3d shape for the earth
+    -   Uses a spheroid/ellipsoid to approximate shape of the earth
+    -   Usually use decimal degree units (ie latitude/longitude) to
+        identify locations on earth
+        `r knitr::include_graphics(here::here("mapping", "www", "images", "gcs_esri.png"), dpi = 150)`
 
-```{r, eval = T, echo = F, out.width = 300, out.width=300}
-	knitr::include_graphics(here("mapping", "www", "images", "gcs_esri.png"))
-```
 
-2) [**Projected coordinate systems**]()
-    * Specifies a 3d shape for the earth + a 2d mappin
-		* Is a geographic coordinate system + a *projection*
-		* **projection**: mathematical formula used to convert a 3d coordinate system to a 2d flat coordinate system
-		* Many different kinds of projections, including Equal Area, Equidistant, Conformal
-		* All projections distort the true shape of the earth in some way, either in terms of shape, area, or angle. Required [xkcd comic]([https://xkcd.com/977/)](https://xkcd.com/977/))
-		* Usually use linear units (ie feet, meters) and therefore useful for distance based spatial operations (ie creating buffers)
+2)  [**Projected coordinate systems**](https://mgimond.github.io/Spatial/chp09-0.html#projected-coordinate-systems)
 
-CRS can be specified either by name (ie Maryland State Plane) or EPSG identifier (ie `2248`). THe EPSG identifier is a numeric identifier that uniquely identifies a coordinate reference system.
+    -   Specifies a 3d shape for the earth + a 2d mapping
 
-EPSG stands for the now defunct European Petroleum Survey Group. While oil companies have generally been terrible for the earth, the one nice thing they did was set up common standards for coordinate reference systems .
+        -   Is a geographic coordinate system + a *projection*
+        
+            `r knitr::include_graphics("https://imgs.xkcd.com/comics/projecting.png")`
+        -   **projection**: mathematical formula used to convert a 3d
+            coordinate system to a 2d flat coordinate system
+        -   Many different kinds of projections, including Equal Area,
+            Equidistant, Conformal, etc
+        -   All projections distort the true shape of the earth in some
+            way, either in terms of shape, area, or angle. Required
+            [xkcd comic](https://xkcd.com/977/)
+        -   Usually use linear units (ie feet, meters) and therefore
+            useful for distance based spatial operations (ie creating
+            buffers)
 
 ### Finding the CRS
 
-If you are lucky, your data will have embedded CRS data that will be automatically detected when the file is read in. This is usually the case for GeoJSONS (`.geojson`) and shapefiles (`.shp`). When you use `st_read()` on these files, you should see the CRS displayed in the metadata:
+If you are lucky, your data will have embedded CRS data that will be
+automatically detected when the file is read in. This is usually the
+case for GeoJSONS (`.geojson`) and shapefiles (`.shp`). When you use
+`st_read()` on these files, you should see the CRS displayed in the
+metadata:
 
-```{r import-shpfile-crs example}
+```{r import-shpfile-crs example, echo = F}
 	knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
 ```
 
 
-Sometimes however, this CRS field will be blank or be `NA` as the dataste did not specify the CRS. In that case you must find and set the CRS for your data before proceeding with analysis. Below are some good rules of thumb for finding out what CRS your data is in:
+You can also the `st_crs()` function to find the CRS associated with your `sf` dataframe. Note that the information returned is very long, but the key information is located at the end in `ID[authority, SRID]`. For example:
+```{r st_crs}
+st_crs(dc_firestations)
+```
 
-- For geojsons, the CRS should always be 4326 (or WGS 84). The official geojson specification states that this is the only valid crs for geojsons, but in the wild, this may not be true 100% of the time.
 
-- For shapefiles, there should be a file that ends in `.proj` in the same directory as the `.shp` file. This file contains the projection information for that file.
+Sometimes however, the CRS will be blank or `NA` as the
+dataset did not specify the CRS. In that case you MUST find and set the
+CRS for your data before proceeding with analysis. Below are some good
+rules of thumb for finding out what the CRS for your data is:
 
-TODO: Put in proj2crs site. 
+-   For geojsons, the CRS should always be `EPSG:4326` (or WGS 84). The
+    official geojson specification states that this is the only valid
+    crs for geojsons, but in the wild, this may not be true 100% of the
+    time.
+-   For shapefiles, there should be a file that ends in `.proj` in the
+    same directory as the `.shp` file. This file contains the projection
+    information for that file.
+-   For CSV's with latitude/longitude columns, the CRS is usually
+    `EPSG:4326` (or WGS 84).
+-   Look at the metadata and any accompanying documentation to see if
+    the coordinate reference system for the data is specified
 
-- For CSV's with latitude/longitude columns, the CRS is usually `EPSG:4326` (or WGS 84). 
+If none of the above rules of thumb apply to you, check out
+[Whattheproj](https://stevage.github.io/WhatTheProj/), or the
+`crsuggest` R [package]() for help identifying the CRS in your data. Once you've 
+identified the appropriate CRS, you can set the CRS for your data with `st_crs()`:
 
-- Look at the metadata and any accompanying documentation to see if the coordinate reference system for the data is specified
+```{r set_crs, eval = F}
+# If you are certain that your data contains coordinates in the ESRI Atlas Equal Earth projections
+some_sf_dataframe = st_crs("ESRI:102003")
+```
 
-If none of the above rules of thumb apply to you, check out the [Whattheproj](https://stevage.github.io/WhatTheProj/), or the `crsuggest` R [package]()
 
-### Setting the CRS
+### Transforming the CRS
 
-The `sf` package has a number of handy functions for identifying,
-setting, or transforming rthe CRS for a spatial dataset.
+Often you will need to change the CRS for your `sf` dataframe. You can do this with `st_transform`:
 
-TODO: Add info on CRS
+```{r}
+# Tranforming CRS from WGS 84 to Urban required Equal Earth Projection
+dc_firestations = dc_firestations %>% st_transform("ESRI:102003")
+```
+
+if you are working with multiple `sf` dataframes which have different CRS, 
+you will need to transform the CRS to all be the same. Luckily, `st_transform`
+allows you to just use the CRS of another `sf` dataframe when transforming, so 
+an easy way to do this would be
+
+```{r}
+# transform CRS of df to be the same as CRS of dc_firestations
+chip_with_geographies = chip_with_geographies %>% 
+	st_transform(crs = st_crs(dc_firestations))
+
+```
 
 # Mapping
 
 In order to start mapping, you need an `sf` dataframe. If you don't have
-one, see the Basic Concepts section above.
-
-## When should you map?
-
-Before you make a map, we encourage you to read this snippet from the
-The [Urban Institute Data Visualization Style Guide]:
-
-> Just because you've got geographic data, doesn't mean that you have to
-> make a map. Many times, there are more efficient storyforms that will
-> get your point across more clearly. If your data shows a very clear
-> geographic trend or if the absolute location of a place or event
-> matters, maps might be the best approach, but sometimes the reflexive
-> impulse to map the data can make you forget that showing the data in
-> another form might answer other---and sometimes more
-> important---questions.
-
-The best advice we can give you is to first think about the point you're
-trying to get across to your readers and then decide whether a map will
-allow you to most effectively do that. For example, if you really want
-readers to understand that there is a large gap between the top 5 states
-with high housing costs and the rest of the states, perhaps you are
-better off using an ordered bar chart or an ordered table. But if you
-want readers to understand that there is a clear geographic pattern of
-coastal states having higher housing costs, perhaps a map would be the
-appropriate visualization.
-
-Below are some helpful blogposts which might help you answer these
-deeper questions \`\
-\* [When Maps Shouldn't be
-Maps](http://www.ericson.net/content/2011/10/when-maps-shouldnt-be-maps/)
-\* [How a map's "bins" can influence your perception of an important
-policy
-issue](https://www.urban.org/urban-wire/how-maps-bins-can-influence-your-perception-important-policy-issue)
+one, see the `Basic Concepts` section above.
 
 ## The basics
 
 ### library(ggplot2)
 
 Most mapping in R fits the same theoretical framework as plotting in R
-using `library(ggplot2)`. Hadley Wickham's ggplot2 is based on Leland
-Wilkinson's [*The Grammar of
-Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448)
-and Wickham's [*A Layered Grammar of
-Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The
-layered grammar of graphics is a structured way of thinking about the
-components of a plot, which correspond to the arguments and functions
-used in ggplot2 and ultimately mapping. The main components of a plot
-(and a map) are the following:
+using `library(ggplot2)`. To learn more about ggplot2, visit the Data Viz [page](https://urbaninstitute.github.io/r-at-urban/graphics-guide.html#Grammar_of_Graphics_and_Conventions)
+or read the official ggplot [book](html)
 
--   **Data** are what are visualized in a plot and **aesthetic
-    mappings** are directions for how data are mapped in a plot in a way
-    that can be perceived by humans (ie color, transparency, shape, etc)
--   **Geoms** are representations of the actual data like points, lines,
-    and bars.
--   **Stats** are statistical transformations that represent summaries
-    of the data like histograms.
--   **Scales** map values in the data space to values in the aesthetic
-    space. Scales draw legends and axes.
--   **Coordinate Systems** describe how geoms are mapped to the plane of
-    the graphic.
--   **Facets** break the data into meaningful subsets like small
-    multiples.
--   **Themes** control the finer points of a plot such as fonts, font
-    sizes, and background colors.
-
-If this sounds like a lot, don't worry! We usually only make use of a
-couple of these properties explicitly when making a map and a lot of
-these properties are simplified for maps. For example,`geom_sf` is the
-main geom used for mapping in `ggplot2`. And since `sf` objects have a
-column named `geometry` that contains the geographic information needed
-for the map, you usually do not need to specify any aesthetic mappings.
-We promise, it's easier than it looks.
+The key function for mapping is the special `geom_sf()` geom which works with 
+`sf` dataframes. This function magically detects whether you have point or 
+polygon spatial data and displays the results on a map. 
 
 ### A simple map
 
@@ -590,14 +661,14 @@ aesthetic mappings later.
 
 ### `library(urbnthemes)`
 
-`library(urbnthemes)` has functions that automatically styles maps in
+`library(urbnthemes)`  automatically styles maps in
 accordance with the [Urban Institute Data Visualization Style
 Guide](http://urbaninstitute.github.io/graphics-styleguide/). By using
 `library(urbnthemes)`, you can create publication ready maps you can
 immediately drop in to Urban research briefs or blog posts.
 
 To install `urbnthemes`, visit the package's [GitHub
-repository](https://github.com/UrbanInstitute/urbnthemes).
+repository](https://github.com/UrbanInstitute/urbnthemes) and follow the instructions.
 
 You can use the automated theming functions in two ways: set the map
 defaults once per script, or add `theme_urbn_map()` to the end of each
@@ -625,50 +696,48 @@ ggplot() +
 Just like in other GIS software, you can layer multiple geometries on
 top of each other using the `+` operator from `library(ggplot2)`. The
 shapes will appear from bottom to top (ie the last mapped object will
-show up on top). It is important that all layers are in the same
-CRS(coordinate reference system).
+show up on top). It is important that all layers are in the same CRS
+(coordinate reference system).
 
 ```{r layers}
 
-state_capitals <- read_csv("mapping/data/state-capitals.csv") %>% 
-	# We filter out AL and HI for now as mapping points in AL and HI can get 
-	# tricky when they are insets
-	filter(!state %in% c("Alaska", "Hawaii")) %>% 
-	st_as_sf(coords = c("longitude", "latitude"),
-					 crs = 4326) %>% 
-	st_transform(crs = 2163)
+state_capitals = state_capitals %>% 
+	# This will change CRS to ESRI:102003 and shift the AK and HI state capitals
+	# point locations to the appropriate locations on the inset maps.
+	tigris::shift_geometry()
 
 ggplot() +
-	geom_sf(data = states %>% 
-							# We filter out AL and HI for now as mapping points in AL and HI 
-							# can get tricky when they are insets
-						filter(!state_abbv %in% c("AK", "HI")), 
+	geom_sf(data = states,
 					mapping = aes()) +
-	geom_sf(data = state_capitals, mapping = aes(),
-					color = "#1696d2", size = 2.0) +
+	geom_sf(data = state_capitals, 
+					mapping = aes(),
+					# urbnthemes library has urbn color palettes built in.
+					color = palette_urbn_main['cyan'], 
+					size = 2.0) +
 	theme_urbn_map()
-
 
 ```
 
 ### Fill and Outline Colors
 
 The same commands used to change colors, opacity, lines, size, etc. in
-charts can be used for maps too. For instance, if I wanted to change the
-colors of the map above, I would simply use the `fill =` and `color =`
+charts can be used for maps too. For instance, to change the
+colors of the map above, just use the `fill =` and `color =`
 parameters in `geom_sf()`. `fill` will change the fill color of
 polygons; `color` will change the color of polygon outlines, lines, and
 points.
 
-`library(urbnthemes)` contains helper variables (like
+`library(urbnthemes)` contains inbuilt. helper variables (like
 `palette_urbn_main`) for accessing color palettes from the Urban Data
-Viz Style guide.
+Viz Style guide. If for example you want states to be Urban's magenta color:
 
 ```{r urbnthemes- pink}
 
 ggplot() +
 	geom_sf(states, mapping = aes(),
-					fill = palette_urbn_main['magenta'], 
+					# Adjust polygon fill color
+					fill = palette_urbn_main['magenta'],
+					# Adjust polygon outline color
 					color = "white") +
 	theme_urbn_map()
 
@@ -676,39 +745,37 @@ ggplot() +
 
 ### Adding text
 
-Something about geom_sf_text() and geom_sf_label()
+You can also add text, like state abbreviations, directly to your map using 
+`geom_sf_text` and the helper function `get_urbn_labels()`. 
+
+```{r geom_sf_text}
+ggplot() +
+	geom_sf(states, mapping = aes(),
+					color = "white") +
+	theme_urbn_map() +
+	# Generates dataframe of state abbv and appropriate location to plot them
+	geom_sf_text(data = get_urbn_labels(map = "states", 
+																			sf = TRUE), 
+                aes(label = state_abbv), 
+            size = 3)
+
+```
+There's also `geom_sf_label()` if you want labels with a border. 
+```{r geom_sf_label}
+
+ggplot() +
+	geom_sf(states, mapping = aes(),
+					color = "white") +
+	theme_urbn_map() +
+	geom_sf_label(data = get_urbn_labels(map = "states", 
+																			sf = TRUE), 
+                aes(label = state_abbv), 
+            size = 3)
+
+```
 
 ### Urban Institute style
 
-The [Urban Institute Data Visualization Style
-Guide](http://urbaninstitute.github.io/graphics-styleguide/) is the best
-place to start when making any visualization. The guide offers some
-blunt suggestions for maps:
-
-> Just because you've got geographic data, doesn't mean that you have to
-> make a map. Many times, there are more efficient storyforms that will
-> get your point across more clearly. If your data shows a very clear
-> geographic trend or if the absolute location of a place or event
-> matters, maps might be the best approach, but sometimes the reflexive
-> impulse to map the data can make you forget that showing the data in
-> another form might answer other---and sometimes more
-> important---questions.
-
-That said, some of the most-convincing data visualizations are maps. The
-style guide has well-defined guidelines for standard chart and graph
-types, but some of the more complex or novel visualizations below will
-need to be styled and tweaked on a case-by-case basis. For
-external-facing products (presentations, publications, web interactives,
-etc.) you will likely need to collaborate with Urban's Communications
-team. Please contact Ben Chartoff
-([bchartoff\@urban.org](mailto:bchartoff@urban.org){.email}) with
-questions or thoughts related to visual presentation, or discuss with
-the editorial team in the course of editing your publication/product.
-
-Here are a few things to keep in mind:
-
--   The following maps are styled by the Urban Institute package
-    [`urbnthemes`](https://github.com/UrbanInstitute/urbnthemes).
 -   U.S. dot maps and U.S. choropleths use the Albers Equal-Area Conic
     Projection. Tile-based maps like tile grid maps and geofaceting use
     the Mercator projection.
@@ -722,24 +789,23 @@ Here are a few things to keep in mind:
 Choropleth maps display geographic areas with shades, colors, or
 patterns in proportion to a variable or variables. Choropleth maps can
 represent massive geographies like the entire world and small
-geographies like Census Tracts. To make a choropleth map where you
-shade in regions in proportion to a variable, you can set an aesthetic
-mapping inside the `aes` argument of `geom_sf`.
+geographies like Census Tracts. To make a choropleth map where you shade
+in regions in proportion to a variable, you can set an aesthetic mapping
+inside the `aes` argument of `geom_sf`.
 
 When we set an aesthetic mapping, we are telling R that we want some
 aspect of the plot to change in accordance with a variable in our
 dataset. And because we want the fill color to vary, we use the `fill`
 aesthetic.
 
-
 ### Continuous color scale
+
 Let's say we wanted to make a chloropleth map of states colored in by
-CHIP enrollment as a percentage of total population (ie the `chip_enrollment` variable  divided by the `population` variable in the
+CHIP enrollment as a percentage of total population (ie the
+`chip_enrollment` variable divided by the `population` variable in the
 `chip_with_geographies` dataframe). Below is the code we would use
 
 ```{r, choropleth-1}
-library(tidyverse)
-library(sf)
 
 # Calculate the chip enrollment percentage and append as a column
 chip_with_geographies <- chip_with_geographies %>% 
@@ -747,25 +813,23 @@ chip_with_geographies <- chip_with_geographies %>%
 
 # make chloropleth map
 ggplot() + 
-	geom_sf(# data has to be an sf dataframe
-					data = chip_with_geographies, 
-					# we set the fill aesthetic to be a column for chloropleth maps
+	geom_sf(data = chip_with_geographies, 
+					# we set the fill aesthetic to be a column in the data
 					aes(fill = chip_pct),
-					# Set off-white boundaries
+					# set white boundaries
 					color = "white") + 
 	theme_urbn_map() +
-	# Display legend labels as percentages. Note we use use scale_fill_continuous bc
+	# dipslay legend labels as percentages. Note we use use scale_fill_continuous bc
 	# we want a continuous legend
 	scale_fill_continuous(labels = scales::percent)
 
 ```
 
-### Continuous color scale
+### Discrete color scale
 
-You can also have discrete color bins (ie 0-1%, 1-2%, etc) for the legend. Be 
-careful when doing this as changing the number or size of bins can drastically 
-change how the map looks.
-
+You can also have discrete color bins (ie 0-1%, 1-2%, etc) for the
+legend. Be careful when doing this as changing the number or size of
+bins can drastically change how the map looks.
 
 ```{r}
 
@@ -788,11 +852,9 @@ ggplot() +
 
 ```
 
-
-
-When mapping, you need to be very careful when setting color breaks for legends
-as slightly different breaks can generate very different looking maps 
-
+When mapping, you need to be very careful when setting color breaks for
+legends as slightly different breaks can generate very different looking
+maps
 
 ## Interactive Maps
 
@@ -893,9 +955,6 @@ is a good starting point.
 
 ## Cartograms
 
-
-
-
 # Spatial Operations
 
 ### Calculating Distance
@@ -963,8 +1022,6 @@ gt(cleaned_address_table) %>%
 
     )
 
-
-
 ```
 
 All that being said, our geocoder is pretty tolerant of different
@@ -1004,7 +1061,7 @@ you will need to:
 
 The geocoded file will be your original data, plus a few more columns
 (including latitude and longitude). each of the new columns that have
-been appended to your original data. [ It's very important that you take
+been appended to your original data. [It's very important that you take
 a look at the Addr_type
 column]{style="background-color: #FFFF00;  font-weight: bold"} in the
 CSV before doing further analysis to check the accuracy of the geocoding
@@ -1012,156 +1069,162 @@ process.
 
 </p>
 
-+----------+-----------------------------------------------------------+
-| Column   | Description                                               |
-+:=========+:==========================================================+
-| Ma       | The actual address that the inputted address was matched  |
-| tch_addr | to. This is the address that the geocoder used to get     |
-|          | Latitudes / Longitudes. If there are potentially many     |
-|          | typos or non standard address formats in your data file,  |
-|          | you will want to take a close look at this column to      |
-|          | confirm that the matched address correctly handled typos  |
-|          | and badly formatted addresses.                            |
-+----------+-----------------------------------------------------------+
-| L        | The WGS 84 datum Longitude (EPSG code 4326)               |
-| ongitude |                                                           |
-+----------+-----------------------------------------------------------+
-| Latitude | The WGS 84 datum Latitude (EPSG code 4326)                |
-+----------+-----------------------------------------------------------+
-| A        | The match level for a geocode request. This should be     |
-| ddr_type | used as an indicator of the precision of geocode results. |
-|          | Generally, Subaddress, PointAddress, StreetAddress, and   |
-|          | StreetInt represent accurate matches. The list below      |
-|          | contains all possible values for this field. **Green      |
-|          | values represent High accuracy matches, yellow represents |
-|          | Medium accuracy matches and red represents Low            |
-|          | accuracy/inaccurate matches**. If you have many yellow    |
-|          | and red values in your data, you should manually check    |
-|          | the results before proceeding with analysis. All possible |
-|          | values:\                                                  |
-|          | \                                                         |
-|          | **Subaddress:** A subset of a PointAddress that           |
-|          | represents a house or building subaddress location, such  |
-|          | as an apartment unit, floor, or individual building       |
-|          | within a complex. The UnitName, UnitType, LevelName,      |
-|          | LevelType, BldgName, and BldgType field values help to    |
-|          | distinguish subaddresses which may be associated with the |
-|          | same PointAddress. Reference data consists of point       |
-|          | features with associated house number, street name, and   |
-|          | subaddress elements, along with administrative divisions  |
-|          | and optional postal code; for example, 3836 Emerald Ave,  |
-|          | Suite C, La Verne, CA, 91750.\                            |
-|          | \                                                         |
-|          | **PointAddress:** A street address based on points that   |
-|          | represent house and building locations. Typically, this   |
-|          | is the most spatially accurate match level. Reference     |
-|          | data contains address points with associated house        |
-|          | numbers and street names, along with administrative       |
-|          | divisions and optional postal code. The X / Y             |
-|          | (`Longitude`/`Latitude`) and `geometry` output values for |
-|          | a PointAddress match represent the street entry location  |
-|          | for the address; this is the location used for routing    |
-|          | operations. The `DisplayX` and `DisplayY` values          |
-|          | represent the rooftop, or actual, location of the         |
-|          | address. Example: 380 New York St, Redlands, CA, 92373.\  |
-|          | \                                                         |
-|          | **StreetAddress** --- A street address that differs from  |
-|          | PointAddress because the house number is interpolated     |
-|          | from a range of numbers. Reference data contains street   |
-|          | center lines with house number ranges, along with         |
-|          | administrative divisions and optional postal code         |
-|          | information, for example, 647 Haight St, San Francisco,   |
-|          | CA, 94117.\                                               |
-|          | \                                                         |
-|          | **StreetInt:** A street address consisting of a street    |
-|          | intersection along with city and optional state and       |
-|          | postal code information. This is derived from             |
-|          | StreetAddress reference data, for example, Redlands Blvd  |
-|          | & New York St, Redlands, CA, 92373.\                      |
-|          | \                                                         |
-|          | **StreetName:** Similar to a street address but without   |
-|          | the house number. Reference data contains street          |
-|          | centerlines with associated street names (no numbered     |
-|          | address ranges), along with administrative divisions and  |
-|          | optional postal code, for example, W Olive Ave, Redlands, |
-|          | CA, 92373.\                                               |
-|          | \                                                         |
-|          | **StreetAddressExt:** An interpolated street address      |
-|          | match that is returned when parameter                     |
-|          | matchOutOfRange=true and the input house number exceeds   |
-|          | the house number range for the matched street segment.\   |
-|          | \                                                         |
-|          | **DistanceMarker:** A street address that represents the  |
-|          | linear distance along a street, typically in kilometers   |
-|          | or miles, from a designated origin location. Example:     |
-|          | Carr 682 KM 4, Barceloneta, 00617.\                       |
-|          | \                                                         |
-|          | **PostalExt:** A postal code with an additional           |
-|          | extension, such as the United States Postal Service       |
-|          | ZIP+4. Reference data is postal code points with          |
-|          | extensions, for example, 90210-3841.\                     |
-|          | \                                                         |
-|          | **POI:** ---Points of interest. Reference data consists   |
-|          | of administrative division place-names, businesses,       |
-|          | landmarks, and geographic features, for example, Golden   |
-|          | Gate Bridge.\                                             |
-|          | \                                                         |
-|          | **Locality:** A place-name representing a populated       |
-|          | place. The Type output field provides more detailed       |
-|          | information about the type of populated place. Possible   |
-|          | Type values for Locality matches include Block, Sector,   |
-|          | Neighborhood, District, City, MetroArea, County, State or |
-|          | Province, Territory, Country, and Zone. Example: Bogotá,  |
-|          | COL,\                                                     |
-|          | \                                                         |
-|          | **PostalLoc:** A combination of postal code and city      |
-|          | name. Reference data is typically a union of postal       |
-|          | boundaries and administrative (locality) boundaries, for  |
-|          | example, 7132 Frauenkirchen.\                             |
-|          | \                                                         |
-|          | **Postal:** Postal code. Reference data is postal code    |
-|          | points, for example, 90210 USA.                           |
-+----------+-----------------------------------------------------------+
-| Score    | A number from 1--100 indicating the degree to which the   |
-|          | input tokens in a geocoding request match the address     |
-|          | components in a candidate record. A score of 100          |
-|          | represents a perfect match, while lower scores represent  |
-|          | decreasing match accuracy.                                |
-+----------+-----------------------------------------------------------+
-| Status   | Indicates whether a batch geocode request results in a    |
-|          | match, tie, or unmatched. Possible values include\        |
-|          | \                                                         |
-|          | M - Match. The returned address matches the input address |
-|          | and is the highest scoring candidate.\                    |
-|          | \                                                         |
-|          | T - Tied. The returned address matches the input address  |
-|          | but has the same score as one or more additional          |
-|          | candidates.\                                              |
-|          | \                                                         |
-|          | U - Unmatched. No addresses match the inputtd address.    |
-+----------+-----------------------------------------------------------+
-| geometry | The WKT (Well-known text) representation of the latitudes |
-|          | and longitudes. This column may be useful if you're       |
-|          | reading the CSV into R, Python, or ArcGIS                 |
-+----------+-----------------------------------------------------------+
-| Region   | The state that `Match_addr` is located in                 |
-+----------+-----------------------------------------------------------+
-| Re       | Abbreviated State Name. For example, CA for California    |
-| gionAbbr |                                                           |
-+----------+-----------------------------------------------------------+
-| S        | The county that the input address is located in           |
-| ubregion |                                                           |
-+----------+-----------------------------------------------------------+
-| M        | The name of the Metropolitan area that `Match_addr` is    |
-| etroArea | located in. This field may be blank if the input address  |
-|          | is not located within a metro area.                       |
-+----------+-----------------------------------------------------------+
-| City     | The city that `Match_addr` is located in                  |
-+----------+-----------------------------------------------------------+
-| Nbrhd    | The Neighborhood that `Match_addr` is located in. Note    |
-|          | these are ESRI defined neighborhoods which may or may not |
-|          | align with other sources neighborhood definitions         |
-+----------+-----------------------------------------------------------+
++-------------+-------------------------------------------------------+
+| Column      | Description                                           |
++:============+:======================================================+
+| Ma tch_addr | The actual address that the inputted address was      |
+|             | matched to. This is the address that the geocoder     |
+|             | used to get Latitudes / Longitudes. If there are      |
+|             | potentially many typos or non standard address        |
+|             | formats in your data file, you will want to take a    |
+|             | close look at this column to confirm that the matched |
+|             | address correctly handled typos and badly formatted   |
+|             | addresses.                                            |
++-------------+-------------------------------------------------------+
+| L ongitude  | The WGS 84 datum Longitude (EPSG code 4326)           |
++-------------+-------------------------------------------------------+
+| Latitude    | The WGS 84 datum Latitude (EPSG code 4326)            |
++-------------+-------------------------------------------------------+
+| A ddr_type  | The match level for a geocode request. This should be |
+|             | used as an indicator of the precision of geocode      |
+|             | results. Generally, Subaddress, PointAddress,         |
+|             | StreetAddress, and StreetInt represent accurate       |
+|             | matches. The list below contains all possible values  |
+|             | for this field. **Green values represent High         |
+|             | accuracy matches, yellow represents Medium accuracy   |
+|             | matches and red represents Low accuracy/inaccurate    |
+|             | matches**. If you have many yellow and red values in  |
+|             | your data, you should manually check the results      |
+|             | before proceeding with analysis. All possible         |
+|             | values:\                                              |
+|             | \                                                     |
+|             | **Subaddress:** A subset of a PointAddress that       |
+|             | represents a house or building subaddress location,   |
+|             | such as an apartment unit, floor, or individual       |
+|             | building within a complex. The UnitName, UnitType,    |
+|             | LevelName, LevelType, BldgName, and BldgType field    |
+|             | values help to distinguish subaddresses which may be  |
+|             | associated with the same PointAddress. Reference data |
+|             | consists of point features with associated house      |
+|             | number, street name, and subaddress elements, along   |
+|             | with administrative divisions and optional postal     |
+|             | code; for example, 3836 Emerald Ave, Suite C, La      |
+|             | Verne, CA, 91750.\                                    |
+|             | \                                                     |
+|             | **PointAddress:** A street address based on points    |
+|             | that represent house and building locations.          |
+|             | Typically, this is the most spatially accurate match  |
+|             | level. Reference data contains address points with    |
+|             | associated house numbers and street names, along with |
+|             | administrative divisions and optional postal code.    |
+|             | The X / Y (`Longitude`/`Latitude`) and `geometry`     |
+|             | output values for a PointAddress match represent the  |
+|             | street entry location for the address; this is the    |
+|             | location used for routing operations. The `DisplayX`  |
+|             | and `DisplayY` values represent the rooftop, or       |
+|             | actual, location of the address. Example: 380 New     |
+|             | York St, Redlands, CA, 92373.\                        |
+|             | \                                                     |
+|             | **StreetAddress** --- A street address that differs   |
+|             | from PointAddress because the house number is         |
+|             | interpolated from a range of numbers. Reference data  |
+|             | contains street center lines with house number        |
+|             | ranges, along with administrative divisions and       |
+|             | optional postal code information, for example, 647    |
+|             | Haight St, San Francisco, CA, 94117.\                 |
+|             | \                                                     |
+|             | **StreetInt:** A street address consisting of a       |
+|             | street intersection along with city and optional      |
+|             | state and postal code information. This is derived    |
+|             | from StreetAddress reference data, for example,       |
+|             | Redlands Blvd & New York St, Redlands, CA, 92373.\    |
+|             | \                                                     |
+|             | **StreetName:** Similar to a street address but       |
+|             | without the house number. Reference data contains     |
+|             | street centerlines with associated street names (no   |
+|             | numbered address ranges), along with administrative   |
+|             | divisions and optional postal code, for example, W    |
+|             | Olive Ave, Redlands, CA, 92373.\                      |
+|             | \                                                     |
+|             | **StreetAddressExt:** An interpolated street address  |
+|             | match that is returned when parameter                 |
+|             | matchOutOfRange=true and the input house number       |
+|             | exceeds the house number range for the matched street |
+|             | segment.\                                             |
+|             | \                                                     |
+|             | **DistanceMarker:** A street address that represents  |
+|             | the linear distance along a street, typically in      |
+|             | kilometers or miles, from a designated origin         |
+|             | location. Example: Carr 682 KM 4, Barceloneta,        |
+|             | 00617.\                                               |
+|             | \                                                     |
+|             | **PostalExt:** A postal code with an additional       |
+|             | extension, such as the United States Postal Service   |
+|             | ZIP+4. Reference data is postal code points with      |
+|             | extensions, for example, 90210-3841.\                 |
+|             | \                                                     |
+|             | **POI:** ---Points of interest. Reference data        |
+|             | consists of administrative division place-names,      |
+|             | businesses, landmarks, and geographic features, for   |
+|             | example, Golden Gate Bridge.\                         |
+|             | \                                                     |
+|             | **Locality:** A place-name representing a populated   |
+|             | place. The Type output field provides more detailed   |
+|             | information about the type of populated place.        |
+|             | Possible Type values for Locality matches include     |
+|             | Block, Sector, Neighborhood, District, City,          |
+|             | MetroArea, County, State or Province, Territory,      |
+|             | Country, and Zone. Example: Bogotá, COL,\             |
+|             | \                                                     |
+|             | **PostalLoc:** A combination of postal code and city  |
+|             | name. Reference data is typically a union of postal   |
+|             | boundaries and administrative (locality) boundaries,  |
+|             | for example, 7132 Frauenkirchen.\                     |
+|             | \                                                     |
+|             | **Postal:** Postal code. Reference data is postal     |
+|             | code points, for example, 90210 USA.                  |
++-------------+-------------------------------------------------------+
+| Score       | A number from 1--100 indicating the degree to which   |
+|             | the input tokens in a geocoding request match the     |
+|             | address components in a candidate record. A score of  |
+|             | 100 represents a perfect match, while lower scores    |
+|             | represent decreasing match accuracy.                  |
++-------------+-------------------------------------------------------+
+| Status      | Indicates whether a batch geocode request results in  |
+|             | a match, tie, or unmatched. Possible values include\  |
+|             | \                                                     |
+|             | M - Match. The returned address matches the input     |
+|             | address and is the highest scoring candidate.\        |
+|             | \                                                     |
+|             | T - Tied. The returned address matches the input      |
+|             | address but has the same score as one or more         |
+|             | additional candidates.\                               |
+|             | \                                                     |
+|             | U - Unmatched. No addresses match the inputtd         |
+|             | address.                                              |
++-------------+-------------------------------------------------------+
+| geometry    | The WKT (Well-known text) representation of the       |
+|             | latitudes and longitudes. This column may be useful   |
+|             | if you're reading the CSV into R, Python, or ArcGIS   |
++-------------+-------------------------------------------------------+
+| Region      | The state that `Match_addr` is located in             |
++-------------+-------------------------------------------------------+
+| Re gionAbbr | Abbreviated State Name. For example, CA for           |
+|             | California                                            |
++-------------+-------------------------------------------------------+
+| S ubregion  | The county that the input address is located in       |
++-------------+-------------------------------------------------------+
+| M etroArea  | The name of the Metropolitan area that `Match_addr`   |
+|             | is located in. This field may be blank if the input   |
+|             | address is not located within a metro area.           |
++-------------+-------------------------------------------------------+
+| City        | The city that `Match_addr` is located in              |
++-------------+-------------------------------------------------------+
+| Nbrhd       | The Neighborhood that `Match_addr` is located in.     |
+|             | Note these are ESRI defined neighborhoods which may   |
+|             | or may not align with other sources neighborhood      |
+|             | definitions                                           |
++-------------+-------------------------------------------------------+
 
 While interactive maps are a great tool to explore and understand your
 data, we do not recommend using them in Urban research briefs or blog
