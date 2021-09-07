@@ -760,6 +760,7 @@ ggplot() +
             size = 3)
 
 ```
+
 There's also `geom_sf_label()` if you want labels with a border. 
 ```{r geom_sf_label}
 
@@ -789,41 +790,58 @@ ggplot() +
 Choropleth maps display geographic areas with shades, colors, or
 patterns in proportion to a variable or variables. Choropleth maps can
 represent massive geographies like the entire world and small
-geographies like Census Tracts. To make a choropleth map where you shade
-in regions in proportion to a variable, you can set an aesthetic mapping
-inside the `aes` argument of `geom_sf`.
+geographies like Census Tracts. To make a choropleth map, you need to set the
+`fill` argument equal to a variable in your data inside the `aes()` argument of 
+`geom_sf`. As an example:
 
-When we set an aesthetic mapping, we are telling R that we want some
+
+```{r}
+chip_with_geographies %>% 
+	ggplot() +
+	geom_sf(aes(fill = chip_enrollment), 
+					# Set state outline color to white
+					color = "white")
+```
+
+
+When we set an aesthetic mapping inside `aes()`, we are telling R that we want some
 aspect of the plot to change in accordance with a variable in our
 dataset. And because we want the fill color to vary, we use the `fill`
 aesthetic.
 
 ### Continuous color scale
 
-Let's say we wanted to make a chloropleth map of states colored in by
+Let's say we wanted to make a choropleth map of states colored in by
 CHIP enrollment as a percentage of total population (ie the
 `chip_enrollment` variable divided by the `population` variable in the
 `chip_with_geographies` dataframe). Below is the code we would use
 
 ```{r, choropleth-1}
-
 # Calculate the chip enrollment percentage and append as a column
 chip_with_geographies <- chip_with_geographies %>% 
 	mutate(chip_pct = chip_enrollment/population)
 
 # make chloropleth map
-ggplot() + 
+chip_with_geographies_map = ggplot() + 
 	geom_sf(data = chip_with_geographies, 
 					# we set the fill aesthetic to be a column in the data
 					aes(fill = chip_pct),
 					# set white boundaries
 					color = "white") + 
-	theme_urbn_map() +
-	# dipslay legend labels as percentages. Note we use use scale_fill_continuous bc
-	# we want a continuous legend
-	scale_fill_continuous(labels = scales::percent)
+	theme_urbn_map()
+
+chip_with_geographies_map
 
 ```
+
+And if we wanted to turn the text in the legend to be percentages, we can use 
+the `labels` argument of the  `scale_fill_continuous` function.
+```{r}
+chip_with_geographies_map +
+	scale_fill_continuous(labels = scales::percent_format())
+
+```
+
 
 ### Discrete color scale
 
@@ -837,10 +855,10 @@ bins can drastically change how the map looks.
 
 # Discretize continuous chip_pct variable
 x = chip_with_geographies %>% 
-	# Add two rows where chip_pct = 0 and 1 in order to have cut_interval
-	# generate bins that include 0 and 1 as they aren't in the data explicitly
-	add_row(chip_pct = 0) %>% 
-	add_row(chip_pct = 1) %>% 
+	# # Add two rows where chip_pct = 0 and 1 in order to have cut_interval
+	# # generate bins that include 0 and 1 as they aren't in the data explicitly
+	add_row(chip_pct = 0) %>%
+	# add_row(chip_pct = 1) %>% 
 	mutate(chip_pct = cut_interval(chip_pct, n =3))
 				 	
 				 
