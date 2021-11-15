@@ -11,27 +11,38 @@
 
 
 
-<title>optimization.utf8</title>
+<title>optimization.knit</title>
 
-<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="site_libs/d3-3.5.6/d3.min.js"></script>
-<link href="site_libs/profvis-0.3.6/profvis.css" rel="stylesheet" />
-<script src="site_libs/profvis-0.3.6/profvis.js"></script>
+<link href="site_libs/profvis-0.3.6.9000/profvis.css" rel="stylesheet" />
+<script src="site_libs/profvis-0.3.6.9000/profvis.js"></script>
+<script src="site_libs/profvis-0.3.6.9000/scroll.js"></script>
 <link href="site_libs/highlight-6.2.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlight-6.2.0/highlight.js"></script>
-<script src="site_libs/profvis-binding-0.3.6/profvis.js"></script>
+<script src="site_libs/profvis-binding-0.3.7/profvis.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114294141-1"></script>
 <script>
@@ -41,13 +52,18 @@
 
  gtag('config', 'UA-114294141-1');
 </script>
+			
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -60,32 +76,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -96,10 +87,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -116,40 +103,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -177,7 +137,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -189,7 +149,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -200,10 +160,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -215,7 +188,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -341,7 +313,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -374,7 +346,7 @@ div.tocify {
   <a href="graphics-guide.html">DATA VIZ</a>
 </li>
 <li>
-  <a href="mapping.html">MAPPING</a>
+  <a href="mapping.html">GEOSPATIAL</a>
 </li>
 <li>
   <a href="getting-data.html">GETTING DATA</a>
@@ -393,7 +365,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -430,32 +402,32 @@ div.tocify {
 library(dplyr)
 
 profvis({
-  diamonds &lt;- read.csv(&quot;optimization/data/diamonds.csv&quot;)
-  
-  diamonds_by_cut &lt;- diamonds %&gt;%
-    group_by(cut) %&gt;%
-    summarise_if(is.numeric, mean)
+    diamonds &lt;- read.csv(&quot;optimization/data/diamonds.csv&quot;)
+    
+    diamonds_by_cut &lt;- diamonds %&gt;%
+        group_by(cut) %&gt;%
+        summarise_if(is.numeric, mean)
 
-  write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
+    write.csv(diamonds_by_cut, file = &quot;optimization/data/diamonds_by_cut.csv&quot;)  
 
 })</code></pre>
-<div id="htmlwidget-2a0fb9370f36cde14d55" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2a0fb9370f36cde14d55">{"x":{"message":{"prof":{"time":[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14],"depth":[3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,5,4,3,2,1,13,12,11,10,9,8,7,6,5,4,3,2,1,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1],"label":["scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv","scan","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv",".External2","type.convert.default","type.convert","read.table","read.csv","vec_group_loc","vec_split_id_order","compute_groups","grouped_df","group_by.data.frame","group_by","function_list[[i]]","freduce","_fseq","eval","eval","withVisible","%>%","vec_chop","resolve_chunks","promise_fn","<Anonymous>",".Call","mask$eval_all_summarise","doTryCatch","tryCatchOne","tryCatchList","tryCatch","summarise_cols","summarise.grouped_df","summarise","summarise_if","function_list[[k]]","withVisible","freduce","_fseq","eval","eval","withVisible","%>%"],"filenum":[null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1],"linenum":[null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7],"memalloc":[85.9869842529297,85.9869842529297,85.9869842529297,87.222900390625,87.222900390625,87.222900390625,89.6883087158203,89.6883087158203,89.6883087158203,89.7123794555664,89.7123794555664,89.7123794555664,94.5968475341797,94.5968475341797,94.5968475341797,94.6026916503906,94.6026916503906,94.6026916503906,97.9020233154297,97.9020233154297,97.9020233154297,100.968170166016,100.968170166016,100.968170166016,100.968170166016,100.968170166016,103.526733398438,103.526733398438,103.526733398438,103.526733398438,103.526733398438,104.350326538086,104.350326538086,104.350326538086,104.350326538086,104.350326538086,104.76212310791,104.76212310791,104.76212310791,104.76212310791,104.76212310791,105.173919677734,105.173919677734,105.173919677734,105.173919677734,105.173919677734,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,105.595909118652,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191,109.359107971191],"meminc":[0,0,0,1.23591613769531,0,0,2.46540832519531,0,0,0.0240707397460938,0,0,4.88446807861328,0,0,0.0058441162109375,0,0,3.29933166503906,0,0,3.06614685058594,0,0,0,0,2.55856323242188,0,0,0,0,0.823593139648438,0,0,0,0,0.411796569824219,0,0,0,0,0.411796569824219,0,0,0,0,0.421989440917969,0,0,0,0,0,0,0,0,0,0,0,0,3.76319885253906,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"filename":[null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"<expr>"]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\t\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\t\n\n})\n","normpath":"<expr>"}],"prof_output":"/var/folders/3z/q_yh5ftj4j3f7h3wpvd9xbd80000gn/T//RtmpfcSCUb/file3ce96248e04b.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c5ea361f0f5929f255bf" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c5ea361f0f5929f255bf">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,9,10,10,11,11,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14],"depth":[1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,13,12,11,10,9,8,7,6,5,4,3,2,1,2,1],"label":["rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site","vapply","map_mold","map_lgl","is_installed","has_crayon","new_quo_deparser","expr_deparse","spec_fn","spec","signal_stage","lifecycle::signal_superseded","summarise_if","rmarkdown::render_site","<Anonymous>","rmarkdown::render_site"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[87.5358505249023,88.7650375366211,91.2209167480469,91.2481231689453,91.7513275146484,96.1468811035156,96.1503677368164,96.1547927856445,98.6296310424805,102.344139099121,102.344139099121,103.167762756348,103.167762756348,103.991386413574,103.991386413574,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,104.415191650391,106.820472717285,106.820472717285],"meminc":[0,1.22918701171875,2.45587921142578,0.0272064208984375,0.503204345703125,4.39555358886719,0.00348663330078125,0.004425048828125,2.47483825683594,3.71450805664062,0,0.823623657226562,0,0.823623657226562,0,0.423805236816406,0,0,0,0,0,0,0,0,0,0,0,0,2.40528106689453,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/3z/q_yh5ftj4j3f7h3wpvd9xbd80000gn/T//Rtmp44EEdG/file10c475de2ddc7.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
 <p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
 <pre class="r"><code>library(microbenchmark)
 
 microbenchmark(
-  read.csv(&quot;optimization/data/diamonds.csv&quot;),
-  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
+    read.csv(&quot;optimization/data/diamonds.csv&quot;),
+    readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)
 )</code></pre>
 <pre><code>## Unit: milliseconds
-##                                               expr       min        lq
-##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 123.93891 126.25761
-##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  49.55769  50.60418
-##       mean    median        uq      max neval cld
-##  130.74248 127.87054 137.73478 143.7169   100   b
-##   53.84881  50.89884  51.26233 231.8559   100  a</code></pre>
+##                                               expr      min        lq      mean
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 107.3084 111.93209 120.59155
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  42.1876  43.47712  47.35593
+##     median        uq       max neval cld
+##  116.95028 126.53346 175.60787   100   b
+##   45.29543  47.94108  90.61758   100  a</code></pre>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -469,7 +441,7 @@ microbenchmark(
 
 out &lt;- vector(&quot;list&quot;, length(x))
 for (i in seq_along(x)) {
-  out[[i]] &lt;- sqrt(x[[i]])
+    out[[i]] &lt;- sqrt(x[[i]])
 }
 unlist(out)</code></pre>
 <pre><code>## [1] 1 2 3 4</code></pre>
@@ -511,17 +483,17 @@ plan(multiprocess)
 x &lt;- c(1, 4, 9, 16)
 
 microbenchmark::microbenchmark(
-  sequential = lapply(x, sqrt),
-  parallel = future_lapply(x, sqrt),
-  unit = &quot;s&quot;
+    sequential = lapply(x, sqrt),
+    parallel = future_lapply(x, sqrt),
+    unit = &quot;s&quot;
 )</code></pre>
 <pre><code>## Unit: seconds
-##        expr         min          lq          mean       median          uq
-##  sequential 0.000001653 0.000001829 0.00000301948 0.0000021525 0.000004086
-##    parallel 0.031143611 0.031657483 0.03386077392 0.0319804245 0.033087036
-##          max neval cld
-##  0.000014345   100  a 
-##  0.058254104   100   b</code></pre>
+##        expr         min           lq          mean      median          uq
+##  sequential 0.000001874 0.0000022765 0.00000433469 0.000004691 0.000005023
+##    parallel 0.028051095 0.0308629545 0.03727371756 0.032493621 0.034889104
+##         max neval cld
+##  0.00002024   100  a 
+##  0.32196626   100   b</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -533,23 +505,23 @@ df &lt;- dplyr::select(df, -c(cut, color, clarity))
 centers = 2:5
 
 system.time(
-  lapply(centers, 
-         function(x) kmeans(df, centers = x, nstart = 500)
-         )
-  )</code></pre>
+    lapply(centers, 
+                 function(x) kmeans(df, centers = x, nstart = 500)
+                 )
+    )</code></pre>
 <pre><code>##    user  system elapsed 
-##  33.281   1.920  35.366</code></pre>
+##  38.091   3.091  41.953</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
 
 system.time(
-  future_lapply(centers, 
-                function(x) kmeans(df, centers = x, nstart = 500)
-                )
-  )</code></pre>
+    future_lapply(centers, 
+                                function(x) kmeans(df, centers = x, nstart = 500)
+                                )
+    )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.123   0.006  16.892</code></pre>
+##   0.383   0.018  21.188</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -593,7 +565,7 @@ stopCluster(cl)</code></pre>
 <pre><code>## [1] 3.716</code></pre>
 <pre class="r"><code>df &lt;- readr::read_csv(&quot;optimization/data/iris.csv&quot;)
 pryr::object_size(df)</code></pre>
-<pre><code>## 9.91 kB</code></pre>
+<pre><code>## 5,384 B</code></pre>
 <p>This means that on a standard Urban Institute desktop, you may have issues reading in files that are larger than 4 GB.</p>
 <div id="object-size" class="section level2">
 <h2>Object Size</h2>
@@ -608,23 +580,23 @@ pryr::object_size(df)</code></pre>
 <p>Consider the following example:</p>
 <pre class="r"><code>x &lt;- 1:100
 pryr::object_size(x)</code></pre>
-<pre><code>## 448 B</code></pre>
+<pre><code>## 680 B</code></pre>
 <pre class="r"><code>pryr::object_size(as.double(x))</code></pre>
-<pre><code>## 848 B</code></pre>
+<pre><code>## 680 B</code></pre>
 <pre class="r"><code>pryr::object_size(as.character(x))</code></pre>
-<pre><code>## 6.45 kB</code></pre>
+<pre><code>## 1,264 B</code></pre>
 <p>An incorrect data type can easily cost you a lot of space in memory, especially at scale. This often happens when reading data from a text or csv file - data may have a format such as <code>c(1.0, 2.0, 3.0)</code> and will be read in as a <code>numeric</code> column, when <code>integer</code> is more appropriate and compact.</p>
 <p>You may also be familiar with <code>factor</code> variables within R. Essentially a <code>factor</code> will represent your data as integers, and map them back to their character representation. This can save memory when you have a compact and unique level of factors:</p>
 <pre class="r"><code>x &lt;- sample(letters, 10000, replace = TRUE)
 pryr::object_size(as.character(x))</code></pre>
-<pre><code>## 81.5 kB</code></pre>
+<pre><code>## 81,504 B</code></pre>
 <pre class="r"><code>pryr::object_size(as.factor(x))</code></pre>
-<pre><code>## 42.1 kB</code></pre>
+<pre><code>## 42,096 B</code></pre>
 <p>However if each element is unique, or if there is not a lot of overlap among elements, than the overhead will make a factor larger than its character representation:</p>
 <pre class="r"><code>pryr::object_size(as.factor(letters))</code></pre>
-<pre><code>## 2.22 kB</code></pre>
+<pre><code>## 2,224 B</code></pre>
 <pre class="r"><code>pryr::object_size(as.character(letters))</code></pre>
-<pre><code>## 1.71 kB</code></pre>
+<pre><code>## 1,712 B</code></pre>
 </div>
 <div id="cloud-computing" class="section level2">
 <h2>Cloud Computing</h2>
@@ -671,7 +643,7 @@ pryr::object_size(as.character(x))</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Feel free to contact Kyle Ueyama (<a href="mailto:kueyama@urban.org" class="email">kueyama@urban.org</a>) if this would be useful for your project.</p>
+<p>Feel free to contact Ajjit Narayanan (<a href="mailto:anarayanan@urban.org" class="email">anarayanan@urban.org</a>) if this would be useful for your project.</p>
 <hr />
 </div>
 </div>
@@ -684,39 +656,39 @@ pryr::object_size(as.character(x))</code></pre>
 <pre class="r"><code>x &lt;- 1:100
 out &lt;- c()
 for (i in x) {
-  out &lt;- c(out, sqrt(x))
-  }</code></pre>
+    out &lt;- c(out, sqrt(x))
+    }</code></pre>
 <p>The bottleneck in this loop is with the allocation of the vector <code>out</code>. Every time we iterate over an item in <code>x</code> and append it to <code>out</code>, R makes a copy of all the items already in <code>out</code>. As the size of the loop grows, your code will take longer and longer to run.</p>
 <p>A better practice is to pre-allocate <code>out</code> to be the correct length, and then insert the results as the loop runs.</p>
 <pre class="r"><code>x &lt;- 1:100
 out &lt;- rep(NA, length(x))
 for (i in seq_along(x)) {
-    out[i] &lt;- sqrt(x[i])
+        out[i] &lt;- sqrt(x[i])
 }</code></pre>
 <p>A quick benchmark shows how much more efficient a loop with a pre-allocated results vector is:</p>
 <pre class="r"><code>bad_loop &lt;- function(x) {
-  out &lt;- c()
-  for (i in x) {
-    out &lt;- c(out, sqrt(x))
-  }
+    out &lt;- c()
+    for (i in x) {
+        out &lt;- c(out, sqrt(x))
+    }
 }
 
 good_loop &lt;- function(x) {
-  out &lt;- rep(NA, length(x))
-  for (i in seq_along(x)) {
-    out[i] &lt;- sqrt(x[i])
-  }
+    out &lt;- rep(NA, length(x))
+    for (i in seq_along(x)) {
+        out[i] &lt;- sqrt(x[i])
+    }
 }
 
 x &lt;- 1:100
 microbenchmark::microbenchmark(
-  bad_loop(x),
-  good_loop(x)
+    bad_loop(x),
+    good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr     min        lq       mean    median        uq       max neval
-##   bad_loop(x) 1697.47 1987.4400 2611.53904 2021.8780 2082.9400 21014.576   100
-##  good_loop(x)    7.66    8.3555   45.81833   11.1595   17.0315  3346.036   100
+##          expr      min       lq       mean   median        uq      max neval
+##   bad_loop(x) 1851.940 2108.556 3105.89926 2252.559 2468.2765 30099.20   100
+##  good_loop(x)    6.914    7.390   52.49028    9.098   19.6565  3825.93   100
 ##  cld
 ##    b
 ##   a</code></pre>
@@ -724,13 +696,13 @@ microbenchmark::microbenchmark(
 <pre class="r"><code>y &lt;- 1:250
 
 microbenchmark::microbenchmark(
-  bad_loop(y),
-  good_loop(y)
+    bad_loop(y),
+    good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min       lq        mean    median        uq       max
-##   bad_loop(y) 30440.922 31293.80 39558.80518 43914.298 44828.648 48767.921
-##  good_loop(y)    17.535    18.66    25.90889    20.999    32.203    70.654
+##          expr       min        lq        mean    median         uq       max
+##   bad_loop(y) 32727.358 33797.787 43153.51317 49098.843 51080.3855 57617.881
+##  good_loop(y)    15.617    16.773    26.10878    29.576    31.1035    72.688
 ##  neval cld
 ##    100   b
 ##    100  a</code></pre>
@@ -744,13 +716,13 @@ sqrt(x)</code></pre>
 <p>This removes the need to use <code>lapply</code> or a for loop. Vectorized functions in R are generally written in a compiled language like C, C++, or FORTRAN, which makes their implementation faster.</p>
 <pre class="r"><code>x &lt;- 1:100
 microbenchmark::microbenchmark(
-  lapply(x, sqrt),
-  sqrt(x)
+    lapply(x, sqrt),
+    sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min      lq     mean  median      uq   max neval cld
-##  lapply(x, sqrt) 23843 24053.5 24580.82 24227.0 24446.5 42598   100   b
-##          sqrt(x)   474   550.5   699.67   632.5   713.0  5467   100  a</code></pre>
+##             expr   min    lq     mean median      uq   max neval cld
+##  lapply(x, sqrt) 24746 25270 27042.21  25474 25795.5 72540   100   b
+##          sqrt(x)   547   663   886.82    732   848.5  9234   100  a</code></pre>
 </div>
 </div>
 
@@ -765,7 +737,7 @@ microbenchmark::microbenchmark(
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -783,7 +755,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -792,6 +764,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

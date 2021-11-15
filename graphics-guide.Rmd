@@ -6,9 +6,6 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ]
 editor_options: 
   chunk_output_type: console
 ---
@@ -41,7 +38,7 @@ opts_chunk$set(fig.retina = 3)
 options(scipen = 999)
 ```
 
-R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using `urbnthemes`, the Urban Institute's R package for creating near-publication-ready plots with `ggplot2`. If you have any questions, please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org). 
+R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using `urbnthemes`, the Urban Institute's R package for creating near-publication-ready plots with `ggplot2`. If you have any questions, please don't hesitate to contact Aaron R. Williams (awilliams@urban.org) or Ajjit Narayanan (anarayanan@urban.org). 
 
 ### Background
 

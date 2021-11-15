@@ -11,14 +11,24 @@
 
 
 
-<title>graphics-guide.utf8</title>
+<title>graphics-guide.knit</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -35,13 +45,18 @@
 
  gtag('config', 'UA-114294141-1');
 </script>
+			
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -54,32 +69,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -90,10 +80,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -110,40 +96,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -171,7 +130,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -183,7 +142,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -194,10 +153,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -209,7 +181,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -338,7 +309,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -371,7 +342,7 @@ div.tocify {
   <a href="graphics-guide.html">DATA VIZ</a>
 </li>
 <li>
-  <a href="mapping.html">MAPPING</a>
+  <a href="mapping.html">GEOSPATIAL</a>
 </li>
 <li>
   <a href="getting-data.html">GETTING DATA</a>
@@ -390,11 +361,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -413,7 +384,7 @@ div.tocify {
 <div id="urban-institute-r-graphics-guide" class="section level2">
 <h2>Urban Institute R Graphics Guide</h2>
 <hr />
-<p>R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using <code>urbnthemes</code>, the Urban Institute’s R package for creating near-publication-ready plots with <code>ggplot2</code>. If you have any questions, please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org" class="email">awilliams@urban.org</a>) or Kyle Ueyama (<a href="mailto:kueyama@urban.org" class="email">kueyama@urban.org</a>).</p>
+<p>R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using <code>urbnthemes</code>, the Urban Institute’s R package for creating near-publication-ready plots with <code>ggplot2</code>. If you have any questions, please don’t hesitate to contact Aaron R. Williams (<a href="mailto:awilliams@urban.org" class="email">awilliams@urban.org</a>) or Ajjit Narayanan (<a href="mailto:anarayanan@urban.org" class="email">anarayanan@urban.org</a>).</p>
 <div id="background" class="section level3">
 <h3>Background</h3>
 <p><code>library(urbnthemes)</code> makes <code>ggplot2</code> output align more closely with <a href="http://urbaninstitute.github.io/graphics-styleguide/">the Urban Institute’s Data Visualization style guide</a>. This package does <strong>not produce publication ready graphics</strong>. Visual styles must still be edited using your project/paper’s normal editing workflow.</p>
@@ -570,33 +541,33 @@ urbnthemes::lato_install()</code></pre>
 <p><img src="graphics-guide/www/images/dodged-bar-plot-1.png" width="624" /></p>
 </div>
 <div id="lollipop-plotcleveland-dot-plot" class="section level3 tabset">
-<h3>Lollipop plot/Cleveland dot plot</h3>
+<h3 class="tabset">Lollipop plot/Cleveland dot plot</h3>
 <p>Lollipop plots and Cleveland dot plots are minimalist alternatives to bar plots. The key to both plots is to order the data based on the continuous variable using <code>arrange()</code> and then turn the discrete variable into a factor with the ordered levels of the continuous variable using <code>mutate()</code>. This step “stores” the order of the data.</p>
 <div id="lollipop-plot" class="section level4">
 <h4>Lollipop plot</h4>
 <pre class="r"><code>mtcars %&gt;%
-  rownames_to_column(&quot;model&quot;) %&gt;%
-  arrange(mpg) %&gt;%
-  mutate(model = factor(model, levels = .$model)) %&gt;%
-  ggplot(aes(mpg, model)) +
-    geom_segment(aes(x = 0, xend = mpg, y = model, yend = model)) + 
-    geom_point() +
-    scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
-    labs(x = NULL, 
-         y = &quot;Miles Per Gallon&quot;)</code></pre>
+    rownames_to_column(&quot;model&quot;) %&gt;%
+    arrange(mpg) %&gt;%
+    mutate(model = factor(model, levels = .$model)) %&gt;%
+    ggplot(aes(mpg, model)) +
+        geom_segment(aes(x = 0, xend = mpg, y = model, yend = model)) + 
+        geom_point() +
+        scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
+        labs(x = NULL, 
+                 y = &quot;Miles Per Gallon&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/lollipop-plot-1.png" width="624" /></p>
 </div>
 <div id="cleveland-dot-plot" class="section level4">
 <h4>Cleveland dot plot</h4>
 <pre class="r"><code>mtcars %&gt;%
-  rownames_to_column(&quot;model&quot;) %&gt;%
-  arrange(mpg) %&gt;%
-  mutate(model = factor(model, levels = .$model)) %&gt;%
-  ggplot(aes(mpg, model)) +
-    geom_point() +
-    scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
-    labs(x = NULL, 
-         y = &quot;Miles Per Gallon&quot;)</code></pre>
+    rownames_to_column(&quot;model&quot;) %&gt;%
+    arrange(mpg) %&gt;%
+    mutate(model = factor(model, levels = .$model)) %&gt;%
+    ggplot(aes(mpg, model)) +
+        geom_point() +
+        scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
+        labs(x = NULL, 
+                 y = &quot;Miles Per Gallon&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/cleveland-dot-plot-1.png" width="624" /></p>
 </div>
 </div>
@@ -655,7 +626,7 @@ urbnthemes::lato_install()</code></pre>
                      limits = c(0, 20000),
                      breaks = 0:4 * 5000,
                      labels = scales::dollar) +
-  scale_fill_gradientn(labels = scales::comma) +  
+    scale_fill_gradientn(labels = scales::comma) +  
   labs(x = &quot;Carat&quot;,
        y = &quot;Price&quot;) +
   scatter_grid() +
@@ -664,7 +635,7 @@ urbnthemes::lato_install()</code></pre>
 <p><img src="graphics-guide/www/images/scatter-plot-hex-1.png" width="624" /></p>
 </div>
 <div id="scatter-plots-with-random-noise" class="section level3 tabset">
-<h3>Scatter Plots With Random Noise</h3>
+<h3 class="tabset">Scatter Plots With Random Noise</h3>
 <p>Sometimes scatter plots have many overlapping points but a reasonable number of observations. <code>geom_jitter</code> adds a small amount of random noise so points are less likely to overlap. <code>width</code> and <code>height</code> control the amount of noise that is added. In the following before-and-after, notice how many more points are visible after adding jitter.</p>
 <div id="before" class="section level4">
 <h4>Before</h4>
@@ -719,7 +690,7 @@ mpg %&gt;%
   labs(x = &quot;Household income&quot;,
        y = &quot;Homeownership rate&quot;) +
   scatter_grid() +
-  theme(plot.margin = margin(r = 20))</code></pre>
+    theme(plot.margin = margin(r = 20))</code></pre>
 <p><img src="graphics-guide/www/images/geom_point-size-1.png" width="624" /></p>
 </div>
 <div id="scatter-plots-with-fill" class="section level3">
@@ -780,10 +751,10 @@ gapminder %&gt;%
 <p>Plotting more than one variable can be useful for seeing the relationship of variables over time, but it takes a small amount of data munging.</p>
 <p>This is because <code>ggplot2</code> wants data in a “long” format instead of a “wide” format for line plots with multiple lines. <code>gather()</code> and <code>spread()</code> from the <code>tidyr</code> package make switching back-and-forth between “long” and “wide” painless. Essentially, variable titles go into “key” and variable values go into “value”. Then ggplot2, turns the different levels of the key variable (population, unemployment) into colors.</p>
 <pre class="r"><code>as_tibble(EuStockMarkets) %&gt;%
-  mutate(date = time(EuStockMarkets)) %&gt;%
-  gather(key = &quot;key&quot;, value = &quot;value&quot;, -date) %&gt;%
-  ggplot(mapping = aes(x = date, y = value, color = key)) +
-  geom_line() +
+    mutate(date = time(EuStockMarkets)) %&gt;%
+    gather(key = &quot;key&quot;, value = &quot;value&quot;, -date) %&gt;%
+    ggplot(mapping = aes(x = date, y = value, color = key)) +
+    geom_line() +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
                      limits = c(1991, 1999), 
                      breaks = c(1991, 1993, 1995, 1997, 1999)) +
@@ -791,8 +762,8 @@ gapminder %&gt;%
                      breaks = 0:4 * 2500,
                      labels = scales::dollar, 
                      limits = c(0, 10000)) +  
-  labs(x = &quot;Date&quot;,
-       y = &quot;Value&quot;)</code></pre>
+    labs(x = &quot;Date&quot;,
+             y = &quot;Value&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/multiple-line-charts2-1.png" width="624" /></p>
 </div>
 <div id="step-plot" class="section level3">
@@ -826,8 +797,8 @@ fed_fund_rate %&gt;%
                      breaks = c(0, 0.01, 0.02, 0.03),
                      limits = c(0, 0.03),
                      labels = scales::percent) +  
-  labs(x = &quot;Date&quot;,
-       y = &quot;Upper-bound of the Federal Funds Rate&quot;)</code></pre>
+    labs(x = &quot;Date&quot;,
+             y = &quot;Upper-bound of the Federal Funds Rate&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/step-plot-1.png" width="624" /></p>
 </div>
 <div id="path-plot" class="section level3">
@@ -841,62 +812,62 @@ fed_fund_rate %&gt;%
 library(ggrepel)
 
 beveridge &lt;- read_csv(
-  &quot;quarter, vacanacy_rate, unempoyment_rate
-  2006-01-01,0.0310,0.0473
-  2006-04-01,0.0316,0.0463
-  2006-07-01,0.0313,0.0463
-  2006-10-01,0.0310,0.0443
-  2007-01-01,0.0323,0.0450
-  2007-04-01,0.0326,0.0450
-  2007-07-01,0.0316,0.0466
-  2007-10-01,0.0293,0.0480
-  2008-01-01,0.0286,0.0500
-  2008-04-01,0.0280,0.0533
-  2008-07-01,0.0253,0.0600
-  2008-10-01,0.0220,0.0686
-  2009-01-01,0.0196,0.0826
-  2009-04-01,0.0180,0.0930
-  2009-07-01,0.0176,0.0963
-  2009-10-01,0.0180,0.0993
-  2010-01-01,0.0196,0.0983
-  2010-04-01,0.0220,0.0963
-  2010-07-01,0.0216,0.0946
-  2010-10-01,0.0220,0.0950
-  2011-01-01,0.0226,0.0903
-  2011-04-01,0.0236,0.0906
-  2011-07-01,0.0250,0.0900
-  2011-10-01,0.0243,0.0863
-  2012-01-01,0.0270,0.0826
-  2012-04-01,0.0270,0.0820
-  2012-07-01,0.0266,0.0803
-  2012-10-01,0.0260,0.0780
-  2013-01-01,0.0276,0.0773
-  2013-04-01,0.0280,0.0753
-  2013-07-01,0.0280,0.0723
-  2013-10-01,0.0276,0.0693
-  2014-01-01,0.0290,0.0666
-  2014-04-01,0.0323,0.0623
-  2014-07-01,0.0326,0.0610
-  2014-10-01,0.0330,0.0570
-  2015-01-01,0.0350,0.0556
-  2015-04-01,0.0366,0.0540
-  2015-07-01,0.0373,0.0510
-  2015-10-01,0.0360,0.0500
-  2016-01-01,0.0386,0.0493
-  2016-04-01,0.0383,0.0486
-  2016-07-01,0.0383,0.0493
-  2016-10-01,0.0363,0.0473
-  2017-01-01,0.0366,0.0466
-  2017-04-01,0.0390,0.0433
-  2017-07-01,0.0406,0.0430
-  2017-10-01,0.0386,0.0410&quot;)
+    &quot;quarter, vacanacy_rate, unempoyment_rate
+    2006-01-01,0.0310,0.0473
+    2006-04-01,0.0316,0.0463
+    2006-07-01,0.0313,0.0463
+    2006-10-01,0.0310,0.0443
+    2007-01-01,0.0323,0.0450
+    2007-04-01,0.0326,0.0450
+    2007-07-01,0.0316,0.0466
+    2007-10-01,0.0293,0.0480
+    2008-01-01,0.0286,0.0500
+    2008-04-01,0.0280,0.0533
+    2008-07-01,0.0253,0.0600
+    2008-10-01,0.0220,0.0686
+    2009-01-01,0.0196,0.0826
+    2009-04-01,0.0180,0.0930
+    2009-07-01,0.0176,0.0963
+    2009-10-01,0.0180,0.0993
+    2010-01-01,0.0196,0.0983
+    2010-04-01,0.0220,0.0963
+    2010-07-01,0.0216,0.0946
+    2010-10-01,0.0220,0.0950
+    2011-01-01,0.0226,0.0903
+    2011-04-01,0.0236,0.0906
+    2011-07-01,0.0250,0.0900
+    2011-10-01,0.0243,0.0863
+    2012-01-01,0.0270,0.0826
+    2012-04-01,0.0270,0.0820
+    2012-07-01,0.0266,0.0803
+    2012-10-01,0.0260,0.0780
+    2013-01-01,0.0276,0.0773
+    2013-04-01,0.0280,0.0753
+    2013-07-01,0.0280,0.0723
+    2013-10-01,0.0276,0.0693
+    2014-01-01,0.0290,0.0666
+    2014-04-01,0.0323,0.0623
+    2014-07-01,0.0326,0.0610
+    2014-10-01,0.0330,0.0570
+    2015-01-01,0.0350,0.0556
+    2015-04-01,0.0366,0.0540
+    2015-07-01,0.0373,0.0510
+    2015-10-01,0.0360,0.0500
+    2016-01-01,0.0386,0.0493
+    2016-04-01,0.0383,0.0486
+    2016-07-01,0.0383,0.0493
+    2016-10-01,0.0363,0.0473
+    2017-01-01,0.0366,0.0466
+    2017-04-01,0.0390,0.0433
+    2017-07-01,0.0406,0.0430
+    2017-10-01,0.0386,0.0410&quot;)
 
 labels &lt;- beveridge %&gt;%
   filter(lubridate::month(quarter) == 1)
 
 beveridge %&gt;%
-  ggplot() +
-  geom_path(mapping = aes(x = unempoyment_rate, y = vacanacy_rate), alpha = 0.5) +
+    ggplot() +
+    geom_path(mapping = aes(x = unempoyment_rate, y = vacanacy_rate), alpha = 0.5) +
   geom_point(data = labels, mapping = aes(x = unempoyment_rate, y = vacanacy_rate)) +
   geom_text_repel(data = labels, mapping = aes(x = unempoyment_rate, y = vacanacy_rate, label = lubridate::year(quarter))) +  
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
@@ -906,8 +877,8 @@ beveridge %&gt;%
                      breaks = c(0, 0.01, 0.02, 0.03, 0.04, 0.05),
                      limits = c(0, 0.05),
                      labels = scales::percent) +  
-  labs(x = &quot;Seasonally-adjusted unemployment rate&quot;,
-       y = &quot;Seasonally-adjusted vacancy rate&quot;) +  
+    labs(x = &quot;Seasonally-adjusted unemployment rate&quot;,
+             y = &quot;Seasonally-adjusted vacancy rate&quot;) +  
   scatter_grid()</code></pre>
 <p><img src="graphics-guide/www/images/path-plot-1.png" width="624" /></p>
 </div>
@@ -917,9 +888,9 @@ beveridge %&gt;%
 library(ggrepel)
 
 unemployment &lt;- tibble(
-  time = c(&quot;October 2009&quot;, &quot;October 2009&quot;, &quot;October 2009&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;),
-  rate = c(7.4, 7.1, 10.0, 3.9, 3.8, 6.4),
-  state = c(&quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington, D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington, D.C.&quot;)
+    time = c(&quot;October 2009&quot;, &quot;October 2009&quot;, &quot;October 2009&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;, &quot;August 2017&quot;),
+    rate = c(7.4, 7.1, 10.0, 3.9, 3.8, 6.4),
+    state = c(&quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington, D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;, &quot;Washington, D.C.&quot;)
 )
 
 label &lt;- tibble(label = c(&quot;October 2009&quot;, &quot;August 2017&quot;))
@@ -927,23 +898,23 @@ october &lt;- filter(unemployment, time == &quot;October 2009&quot;)
 august &lt;- filter(unemployment, time == &quot;August 2017&quot;)
 
 unemployment %&gt;%
-  mutate(time = factor(time, levels = c(&quot;October 2009&quot;, &quot;August 2017&quot;)),
-         state = factor(state, levels = c(&quot;Washington, D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;))) %&gt;%
-  ggplot() + 
-  geom_line(aes(time, rate, group = state, color = state), show.legend = FALSE) +
-  geom_point(aes(x = time, y = rate, color = state)) +
-  labs(subtitle = &quot;Unemployment Rate&quot;) +
-  theme(axis.ticks.x = element_blank(),
-        axis.title.x = element_blank(),
-        axis.ticks.y = element_blank(),
+    mutate(time = factor(time, levels = c(&quot;October 2009&quot;, &quot;August 2017&quot;)),
+           state = factor(state, levels = c(&quot;Washington, D.C.&quot;, &quot;Maryland&quot;, &quot;Virginia&quot;))) %&gt;%
+    ggplot() + 
+    geom_line(aes(time, rate, group = state, color = state), show.legend = FALSE) +
+    geom_point(aes(x = time, y = rate, color = state)) +
+    labs(subtitle = &quot;Unemployment Rate&quot;) +
+    theme(axis.ticks.x = element_blank(),
+                axis.title.x = element_blank(),
+                axis.ticks.y = element_blank(),
         axis.title.y = element_blank(), 
         axis.text.y = element_blank(),
-        panel.grid.major.y = element_blank(),
+                panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         panel.grid.major.x = element_blank(),
-        axis.line = element_blank()) +
-  geom_text_repel(data = october, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = -0.06) + 
-  geom_text_repel(data = august, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = 0.06)</code></pre>
+                axis.line = element_blank()) +
+    geom_text_repel(data = october, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = -0.06) + 
+    geom_text_repel(data = august, mapping = aes(x = time, y = rate, label = as.character(rate)), nudge_x = 0.06)</code></pre>
 <p><img src="graphics-guide/www/images/slope-plot-1.png" width="624" /></p>
 </div>
 </div>
@@ -977,7 +948,7 @@ unemployment %&gt;%
                         y = factor(1)),
              alpha = 0.2, 
              size = 5,
-             color = &quot;grey50&quot;) +
+                     color = &quot;grey50&quot;) +
   geom_point(data = filter(msleep, name == &quot;Red fox&quot;),
              aes(x = sleep_total, 
                  y = factor(1), 
@@ -1052,7 +1023,7 @@ msleep %&gt;%
   geom_density(color = NA) +
   scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
                      limits = c(0, NA)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
+    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
   labs(x = &quot;Carat&quot;,
        y = &quot;Density&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/kernel-density-plot-1.png" width="624" /></p>
@@ -1073,7 +1044,7 @@ msleep %&gt;%
 <pre class="r"><code>library(ggridges)
 
 ggplot(diamonds, mapping = aes(x = price, y = cut)) +
-  geom_density_ridges(fill = &quot;#1696d2&quot;) +
+    geom_density_ridges(fill = &quot;#1696d2&quot;) +
   labs(x = &quot;Price&quot;,
        y = &quot;Cut&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/ridgeline-plots-1.png" width="624" /></p>
@@ -1113,7 +1084,7 @@ ggplot(diamonds, mapping = aes(x = price, y = cut)) +
               alpha = 0.4,
               shape = &quot;-&quot;,
               size = 10,
-              color = &quot;grey50&quot;) +
+                        color = &quot;grey50&quot;) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +  
     labs(x = NULL,
          y = &quot;Total sleep time (hours)&quot;) +
@@ -1239,11 +1210,11 @@ bad_drivers %&gt;%
 <p><code>geom_point()</code> adds a scatterplot to <code>geom_smooth()</code>. The order of the function calls is important. The function called second will be layed on top of the function called first.</p>
 <pre class="r"><code>diamonds %&gt;%
   ggplot(mapping = aes(x = carat, y = price)) +
-  geom_point(alpha = 0.05) +
-  geom_smooth(color =  &quot;#ec008b&quot;) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 5),
-                     breaks = 0:5) +
+    geom_point(alpha = 0.05) +
+    geom_smooth(color =  &quot;#ec008b&quot;) +
+    scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+                       limits = c(0, 5),
+                       breaks = 0:5) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
                      limits = c(0, 20000), 
                      labels = scales::dollar) +  
@@ -1254,28 +1225,28 @@ bad_drivers %&gt;%
 <p><code>geom_smooth</code> can be subset by categorical and factor variables. This requires subgroups to have a decent number of observations and and a fair amount of variability across the x-axis. Confidence intervals often widen at the ends so special care is needed for the chart to be meaningful and readable.</p>
 <p>This example uses Loess with MPG = displacement.</p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
-  geom_point(alpha = 0.2) +
-  geom_smooth() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
-                     breaks = 0:7) +
+    geom_point(alpha = 0.2) +
+    geom_smooth() +
+    scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+                       limits = c(0, 7),
+                       breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
                      limits = c(0, 60)) +  
-  labs(x = &quot;Engine displacement&quot;,
-       y = &quot;Highway MPG&quot;) +
+    labs(x = &quot;Engine displacement&quot;,
+             y = &quot;Highway MPG&quot;) +
   scatter_grid()</code></pre>
 <p><img src="graphics-guide/www/images/subset-geom_smooth-1.png" width="624" /></p>
 <p>This example uses linear models with MPG = displacement.</p>
 <pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
-  geom_point(alpha = 0.2) +
-  geom_smooth(method = &quot;lm&quot;) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
-                     limits = c(0, 7),
-                     breaks = 0:7) +
+    geom_point(alpha = 0.2) +
+    geom_smooth(method = &quot;lm&quot;) +
+    scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+                       limits = c(0, 7),
+                       breaks = 0:7) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
                      limits = c(0, 60)) +  
-  labs(x = &quot;Engine displacement&quot;,
-       y = &quot;Highway MPG&quot;) +
+    labs(x = &quot;Engine displacement&quot;,
+             y = &quot;Highway MPG&quot;) +
   scatter_grid()</code></pre>
 <p><img src="graphics-guide/www/images/subset-geom-smooth-lm-1.png" width="624" /></p>
 </div>
@@ -1366,7 +1337,7 @@ data %&gt;%
   geom_bar(stat = &quot;identity&quot;) +
   geom_text(aes(label = scales::dollar(price)), vjust = -1) +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
-                     labels = scales::dollar) +
+                                     labels = scales::dollar) +
   labs(title = &quot;Average Diamond Price by Diamond Cut&quot;,
        x = &quot;Cut&quot;,
        y = &quot;Price&quot;) +
@@ -1375,17 +1346,17 @@ data %&gt;%
 <p>It can also be used to label points in a scatter plot.</p>
 <p>It’s rarely useful to label every point in a scatter plot. Use <code>filter()</code> to create a second data set that is subsetted and pass it into the labelling function.</p>
 <pre class="r"><code>labels &lt;- mtcars %&gt;%
-  rownames_to_column(&quot;model&quot;) %&gt;%
-  filter(model %in% c(&quot;Toyota Corolla&quot;, &quot;Merc 240D&quot;, &quot;Datsun 710&quot;))
+    rownames_to_column(&quot;model&quot;) %&gt;%
+    filter(model %in% c(&quot;Toyota Corolla&quot;, &quot;Merc 240D&quot;, &quot;Datsun 710&quot;))
 
 mtcars %&gt;%
-  ggplot() +
-  geom_point(mapping = aes(x = wt, y = mpg)) +
-  geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
+    ggplot() +
+    geom_point(mapping = aes(x = wt, y = mpg)) +
+    geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
   scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 6)) + 
+                                     limits = c(0, 6)) + 
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 40)) +  
+                                     limits = c(0, 40)) +  
   labs(x = &quot;Weight (Tons)&quot;,
        y = &quot;Miles per gallon (MPG)&quot;) +
   scatter_grid()</code></pre>
@@ -1397,19 +1368,19 @@ mtcars %&gt;%
 <pre class="r"><code>library(ggrepel)
 
 labels &lt;- mtcars %&gt;%
-  rownames_to_column(&quot;model&quot;) %&gt;%
-  top_n(5, mpg)
+    rownames_to_column(&quot;model&quot;) %&gt;%
+    top_n(5, mpg)
 
 mtcars %&gt;%
-  ggplot(mapping = aes(x = wt, y = mpg)) +
-  geom_point() +
-  geom_text_repel(data = labels, 
-                  mapping = aes(label = model), 
-                  nudge_x = 0.38) +
+    ggplot(mapping = aes(x = wt, y = mpg)) +
+    geom_point() +
+    geom_text_repel(data = labels, 
+                    mapping = aes(label = model), 
+                    nudge_x = 0.38) +
   scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 6)) + 
+                                     limits = c(0, 6)) + 
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 40)) +  
+                                     limits = c(0, 40)) +  
   labs(x = &quot;Weight (Tons)&quot;,
        y = &quot;Miles per gallon (MPG)&quot;) +
   scatter_grid()</code></pre>
@@ -1423,10 +1394,10 @@ mtcars %&gt;%
   ggplot(aes(bodywt, sleep_total)) +
   geom_point() +
   scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(-10, 1000),
-                     labels = scales::comma) + 
+                                     limits = c(-10, 1000),
+                                     labels = scales::comma) + 
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 25)) +  
+                                     limits = c(0, 25)) +  
   annotate(&quot;text&quot;, x = 500, y = 12, label = &quot;These data suggest that heavy \n animals sleep less than light animals&quot;) +
   labs(x = &quot;Body weight (pounds)&quot;,
        y = &quot;Sleep time (hours)&quot;) +
@@ -1442,11 +1413,11 @@ ames %&gt;%
   ggplot(aes(square_footage, Sale_Price)) +
   geom_point(alpha = 0.2) +
   scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(-10, 12000),
-                     labels = scales::comma) + 
+                                     limits = c(-10, 12000),
+                                     labels = scales::comma) + 
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
-                     limits = c(0, 800),
-                     labels = scales::dollar) +  
+                                     limits = c(0, 800),
+                                     labels = scales::dollar) +  
   annotate(&quot;rect&quot;, xmin = 6800, xmax = 11500, ymin = 145, ymax = 210, alpha = 0.1) +
   annotate(&quot;text&quot;, x = 8750, y = 230, label = &quot;Unfinished homes&quot;) +
   labs(x = &quot;Square footage&quot;, 
@@ -1461,29 +1432,29 @@ ames %&gt;%
 <p>Geoms can be layered in <code>ggplot2</code>. This is useful for design and analysis.</p>
 <p>It is often useful to add points to line plots with a small number of values across the x-axis. This example from <a href="http://r4ds.had.co.nz/tidy-data.html">R for Data Science</a> shows how changing the line to grey can be appealing.</p>
 <div id="design" class="section level3 tabset">
-<h3>Design</h3>
+<h3 class="tabset">Design</h3>
 <div id="before-1" class="section level4">
 <h4>Before</h4>
 <pre class="r"><code>table1 %&gt;%
-  ggplot(aes(x = year, y = cases)) +
-    geom_line(aes(color = country)) +
-    geom_point(aes(color = country)) +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
-                       labels = scales::comma) +
-    scale_x_continuous(breaks = c(1999, 2000)) +
-    labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
+    ggplot(aes(x = year, y = cases)) +
+        geom_line(aes(color = country)) +
+        geom_point(aes(color = country)) +
+        scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
+                           labels = scales::comma) +
+        scale_x_continuous(breaks = c(1999, 2000)) +
+        labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/layering-geoms-design-1.png" width="624" /></p>
 </div>
 <div id="after-1" class="section level4">
 <h4>After</h4>
 <pre class="r"><code>table1 %&gt;%
-  ggplot(aes(year, cases)) +
-    geom_line(aes(group = country), color = &quot;grey50&quot;) +
-    geom_point(aes(color = country)) +
-    scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
-                       labels = scales::comma) +
-    scale_x_continuous(breaks = c(1999, 2000)) +
-    labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
+    ggplot(aes(year, cases)) +
+        geom_line(aes(group = country), color = &quot;grey50&quot;) +
+        geom_point(aes(color = country)) +
+        scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
+                           labels = scales::comma) +
+        scale_x_continuous(breaks = c(1999, 2000)) +
+        labs(title = &quot;Changes in Tuberculosis Cases in Three Countries&quot;)</code></pre>
 <p><img src="graphics-guide/www/images/layering-geoms-design-gray-1.png" width="624" /></p>
 <p>Layering geoms is also useful for adding trend lines and centroids to scatter plots.</p>
 <pre class="r"><code># Simple line
@@ -1494,20 +1465,20 @@ ames %&gt;%
 <div id="centroids" class="section level3">
 <h3>Centroids</h3>
 <pre class="r"><code>mpg_summary &lt;- mpg %&gt;%
-  group_by(cyl) %&gt;%
-  summarize(displ = mean(displ), cty = mean(cty))
+    group_by(cyl) %&gt;%
+    summarize(displ = mean(displ), cty = mean(cty))
 
 mpg %&gt;%
-  ggplot() +
-  geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
-  geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = &quot;#ec008b&quot;) +
-  geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
+    ggplot() +
+    geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
+    geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = &quot;#ec008b&quot;) +
+    geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
   scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)), 
                      limits = c(0, 8)) +  
   scale_y_continuous(expand = expand_scale(mult = c(0, 0)), 
                      limits = c(0, 40)) +
-  labs(x = &quot;Displacement&quot;,
-       y = &quot;City MPG&quot;) +
+    labs(x = &quot;Displacement&quot;,
+         y = &quot;City MPG&quot;) +
   scatter_grid()</code></pre>
 <p><img src="graphics-guide/www/images/centroids-1.png" width="624" /></p>
 </div>
@@ -1591,20 +1562,20 @@ set_urbn_defaults()
 
 plot &lt;- ggplot(data = mtcars, mapping = aes(x = wt, y = mpg, color = factor(cyl))) +
   geom_point() + 
-  scale_x_continuous(expand = c(0, 0),
-                     limits = c(0, 8)) +
+    scale_x_continuous(expand = c(0, 0),
+                                         limits = c(0, 8)) +
   scale_y_continuous(expand = c(0, 0),
-                     limits = c(0, 40)) +
+                                     limits = c(0, 40)) +
   remove_ticks() +
-  labs(&quot;&quot;) +
-  scatter_grid()
+    labs(&quot;&quot;) +
+    scatter_grid()
 
 urbn_plot(get_legend(plot),
-          urbn_y_title(&quot;Miles per gallon&quot;),
-          remove_legend(plot), 
-          urbn_logo_text(), 
-          ncol = 1, 
-          heights = c(3, 1, 30, 1))</code></pre>
+                    urbn_y_title(&quot;Miles per gallon&quot;),
+                    remove_legend(plot), 
+                    urbn_logo_text(), 
+                    ncol = 1, 
+                    heights = c(3, 1, 30, 1))</code></pre>
 <p><img src="graphics-guide/www/images/unnamed-chunk-1-1.png" width="624" /></p>
 </div>
 <div id="palettes" class="section level3">
@@ -1665,13 +1636,13 @@ urbn_plot(get_legend(plot),
 <p>Winston Chang, (2014). extrafont: Tools for using fonts. R package version 0.17. <a href="https://CRAN.R-project.org/package=extrafont" class="uri">https://CRAN.R-project.org/package=extrafont</a></p>
 <p>Yihui Xie (2018). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.19.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.6.0 (2019-04-26)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS  10.15.5
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1680,42 +1651,45 @@ urbn_plot(get_legend(plot),
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] AmesHousing_0.0.4     gghighlight_0.3.0     fivethirtyeight_0.5.0
-##  [4] ggridges_0.5.2        ggrepel_0.8.2         gapminder_0.3.0      
-##  [7] urbnthemes_0.0.2      knitr_1.29            censusapi_0.6.0      
-## [10] tidycensus_0.9.9.5    forcats_0.5.0         stringr_1.4.0        
-## [13] dplyr_1.0.0           purrr_0.3.4           readr_1.3.1          
-## [16] tidyr_1.1.0           tibble_3.0.1          ggplot2_3.3.2        
-## [19] tidyverse_1.3.0      
+##  [1] AmesHousing_0.0.4     gghighlight_0.3.2     fivethirtyeight_0.6.1
+##  [4] ggridges_0.5.3        ggrepel_0.9.1         gapminder_0.3.0      
+##  [7] urbnthemes_0.0.2      knitr_1.34            censusapi_0.7.1      
+## [10] tidycensus_1.0        forcats_0.5.1         stringr_1.4.0        
+## [13] dplyr_1.0.7           purrr_0.3.4           readr_2.0.1          
+## [16] tidyr_1.1.3           tibble_3.1.4          ggplot2_3.3.5        
+## [19] tidyverse_1.3.1      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-148        fs_1.4.2            sf_0.9-4           
-##  [4] lubridate_1.7.9     httr_1.4.1          rprojroot_1.3-2    
-##  [7] tools_3.6.0         backports_1.1.8     utf8_1.1.4         
-## [10] rgdal_1.5-12        R6_2.4.1            KernSmooth_2.23-17 
-## [13] mgcv_1.8-31         DBI_1.1.0           colorspace_1.4-1   
-## [16] withr_2.2.0         sp_1.4-2            tidyselect_1.1.0   
-## [19] gridExtra_2.3       curl_4.3            compiler_3.6.0     
-## [22] extrafontdb_1.0     cli_2.0.2           rvest_0.3.5        
-## [25] xml2_1.3.2          labeling_0.3        scales_1.1.1       
-## [28] classInt_0.4-3      hexbin_1.28.1       rappdirs_0.3.1     
-## [31] digest_0.6.25       foreign_0.8-76      rmarkdown_2.3      
-## [34] pkgconfig_2.0.3     htmltools_0.5.0     extrafont_0.17     
-## [37] dbplyr_1.4.4        rlang_0.4.6         readxl_1.3.1       
-## [40] rstudioapi_0.11     generics_0.0.2      farver_2.0.3       
-## [43] jsonlite_1.7.0      magrittr_1.5        Matrix_1.2-18      
-## [46] Rcpp_1.0.4          munsell_0.5.0       fansi_0.4.1        
-## [49] lifecycle_0.2.0     stringi_1.4.6       yaml_2.2.1         
-## [52] plyr_1.8.6          grid_3.6.0          maptools_1.0-1     
-## [55] blob_1.2.1          crayon_1.3.4        lattice_0.20-41    
-## [58] splines_3.6.0       haven_2.3.1         hms_0.5.3          
-## [61] pillar_1.4.4        uuid_0.1-4          urbnmapr_0.0.0.9002
-## [64] reprex_0.3.0        glue_1.4.1          evaluate_0.14      
-## [67] modelr_0.1.8        vctrs_0.3.1         Rttf2pt1_1.3.8     
-## [70] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
-## [73] xfun_0.15           broom_0.5.6         e1071_1.7-3        
-## [76] class_7.3-17        tigris_0.9.4        units_0.6-7        
-## [79] ellipsis_0.3.1      here_0.1</code></pre>
+##  [1] nlme_3.1-153        fs_1.5.0            sf_1.0-2           
+##  [4] bit64_4.0.5         lubridate_1.7.10    httr_1.4.2         
+##  [7] rprojroot_2.0.2     tools_4.1.0         backports_1.2.1    
+## [10] bslib_0.3.0         utf8_1.2.2          rgdal_1.5-25       
+## [13] R6_2.5.1            KernSmooth_2.23-20  mgcv_1.8-36        
+## [16] DBI_1.1.1           colorspace_2.0-2    withr_2.4.2        
+## [19] sp_1.4-5            tidyselect_1.1.1    gridExtra_2.3      
+## [22] bit_4.0.4           curl_4.3.2          compiler_4.1.0     
+## [25] extrafontdb_1.0     cli_3.0.1           rvest_1.0.1        
+## [28] xml2_1.3.2          labeling_0.4.2      sass_0.4.0         
+## [31] scales_1.1.1        classInt_0.4-3      hexbin_1.28.2      
+## [34] proxy_0.4-26        rappdirs_0.3.3      digest_0.6.27      
+## [37] foreign_0.8-81      rmarkdown_2.11      pkgconfig_2.0.3    
+## [40] htmltools_0.5.2     extrafont_0.17      dbplyr_2.1.1       
+## [43] fastmap_1.1.0       highr_0.9           rlang_0.4.11       
+## [46] readxl_1.3.1        rstudioapi_0.13     jquerylib_0.1.4    
+## [49] generics_0.1.0      farver_2.1.0        jsonlite_1.7.2     
+## [52] vroom_1.5.5         magrittr_2.0.1      Matrix_1.3-4       
+## [55] Rcpp_1.0.7          munsell_0.5.0       fansi_0.5.0        
+## [58] lifecycle_1.0.0     stringi_1.7.4       yaml_2.2.1         
+## [61] plyr_1.8.6          grid_4.1.0          maptools_1.1-2     
+## [64] parallel_4.1.0      crayon_1.4.1        lattice_0.20-44    
+## [67] splines_4.1.0       haven_2.4.3         hms_1.1.0          
+## [70] pillar_1.6.2        uuid_0.1-4          urbnmapr_0.0.0.9002
+## [73] reprex_2.0.1        glue_1.4.2          evaluate_0.14      
+## [76] modelr_0.1.8        vctrs_0.3.8         tzdb_0.1.2         
+## [79] Rttf2pt1_1.3.9      cellranger_1.1.0    gtable_0.3.0       
+## [82] assertthat_0.2.1    xfun_0.26           broom_0.7.9        
+## [85] e1071_1.7-8         class_7.3-19        tigris_1.4.1       
+## [88] units_0.7-2         ellipsis_0.3.2      here_1.0.1</code></pre>
 </div>
 <div class="footnotes">
 <hr />
@@ -1735,7 +1709,7 @@ urbn_plot(get_legend(plot),
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -1753,7 +1727,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -1767,6 +1741,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

@@ -7,11 +7,9 @@ output:
     code_folding: show
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ] 
+editor_options: 
+  chunk_output_type: console
 ---
-
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 

@@ -3,13 +3,12 @@ output:
   html_document:
     includes:
       in_header: analytics.html
-    css: intro-to-r/styles.css
+    css: styles.css
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ]     
+editor_options: 
+  chunk_output_type: console
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -202,7 +201,7 @@ When Googling, set the search range to the last year to avoid out-of-date soluti
 
 [RStudio Community](https://community.rstudio.com/) is a new forum for R Users. It has a smaller back catalog than Stack Overflow but users are friendlier than on Stack Overflow. 
 
-Finally, Aaron Williams (awilliams@urban.org) from IBP and Kyle Ueyama (kueyama@urban.org) from IT are available to solve problems, offer guidance, and share R enthusiasm. 
+Finally, Aaron R. Williams (awilliams@urban.org) from IBP and Ajjit Narayanan (anarayanan@urban.org) from TECH are available to solve problems, offer guidance, and share R enthusiasm. 
 
 ### CRAN Task Views
 

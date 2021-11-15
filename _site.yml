@@ -8,7 +8,7 @@ navbar:
     href: intro-to-r.html
   - text: DATA VIZ
     href: graphics-guide.html
-  - text: MAPPING
+  - text: GEOSPATIAL
     href: mapping.html
   - text: GETTING DATA
     href: getting-data.html    

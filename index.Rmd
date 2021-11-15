@@ -16,7 +16,7 @@ output:
 
 Welcome to the Urban Institute R Users Group website. This website contains resources for using R at the Urban Institute for analysis, visualization, mapping, and more.
 
-Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org) with any thoughts or questions about R at the Urban Institute. 
+Please don't hesitate to contact Aaron R. Williams (awilliams@urban.org) or Ajjit Narayanan (anarayanan@urban.org) with any thoughts or questions about R at the Urban Institute. 
 
 ## R Users Group
 
