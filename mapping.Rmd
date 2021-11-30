@@ -46,7 +46,9 @@ mapping and geospatial analysis in R. **This is a long guide, so if you
 need something specific, we encourage you to scroll to the appropriate
 section using the Table of Contents on the left.** If you just want to
 see code examples of maps you can copy and paste, go to the Map Gallery
-(coming soon!).
+(coming soon!). Now let's start mapping!
+
+![](mapping/www/images/yay_maps.gif)
 
 ## Geospatial Workflow
 
