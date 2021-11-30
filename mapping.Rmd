@@ -159,7 +159,8 @@ make a polygon) in a `geometry` column within R dataframes
 This is what `sf` dataframe looks like in the console:
 
 ```{r print-sf-dataframe}
-dc_parks <- st_read("mapping/data/dc_parks.geojson", quiet = T)
+dc_parks <- st_read("mapping/data/dc_parks.geojson", 
+										quiet = TRUE)
 
 # Print just the NAME and geometry column
 dc_parks %>%
@@ -198,12 +199,12 @@ credits: @allisonhorst
 
 This is what an `sf` dataframe looks like in the console:
 
-```{r print_sf, warning = F, message = F}
+```{r print_sf}
 # Read in spatial data about DC parks from DC Open Data Portal
-# dc_parks  = st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
-# 										quiet = T)
+dc_parks  = st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
+										quiet = TRUE)
 
-dc_parks <- st_read("mapping/data/dc_parks.geojson")
+# dc_parks <- st_read("mapping/data/dc_parks.geojson")
 
 # Select just a few columns for readability
 dc_parks <- dc_parks %>%
@@ -350,7 +351,7 @@ list.files("mapping/data/shapefiles")
 # Read in .shp file
 dc_firestations <- st_read(
   dsn = "mapping/data/shapefiles/Fire_Stations.shp",
-  quiet = T
+  quiet = TRUE
 )
 ```
 
@@ -381,7 +382,7 @@ arguments you must specify for this function are:
 Below is an example of reading in data from a CSV and converting it to
 an `sf` dataframe.
 
-```{r make-sf, message = F, warning = F}
+```{r make-sf}
 library(sf)
 
 # Read in dataset of state capitals which is stored as a csv
@@ -432,7 +433,7 @@ In order to convert this to an `sf` dataframe, we need to read in the
 spatial boundaries for each state and append it to our dataframe. Here
 is how we do that with `get_urbn_map()` and `left_join()` .
 
-```{r append-spatial-info, warning = F, message = F, cache = F}
+```{r append-spatial-info, cache = FALSE}
 library(urbnmapr)
 
 # read in state geographic data from urbnmapr
@@ -451,13 +452,12 @@ chip_with_geographies %>%
   select(state_fips, state_abbv, chip_enrollment)
 ```
 
-```{r append-state-pops, message = F, include = F, eval = T, echo = F}
+```{r append-state-pops, include = FALSE, eval = TRUE, echo = FALSE}
 # TODO: DELETE THIS
 
 # Read in data on state populations from 2010
 state_pops <-
-  read_csv("mapping/data/state_populations.csv",
-    # read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv",
+  read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv",
     # Set this to disable printing column info to console
     col_types = cols()
   ) %>%
@@ -576,7 +576,7 @@ case for GeoJSONS (`.geojson`) and shapefiles (`.shp`). When you use
 `st_read()` on these files, you should see the CRS displayed in the
 metadata:
 
-```{r import-shpfile-crs example, echo = F}
+```{r import-shpfile-crs example, echo = FALSE}
 knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
 ```
 
@@ -611,7 +611,7 @@ If none of the above rules of thumb apply to you, check out the
 Once you've identified the appropriate CRS, you can set the CRS for your
 data with `st_crs()`. :
 
-```{r set_crs, eval = F}
+```{r set_crs, eval = FALSE}
 
 # If you are certain that your data contains coordinates in the ESRI Atlas Equal Earth projections
 st_crs(some_sf_dataframe) <- st_crs("ESRI:102003")
@@ -676,7 +676,7 @@ To make a simple map, add `geom_sf()` to a `ggplot()` and set
 `data = an_sf_dataframe`. Below is code for making a map of all 50
 states using `library(urbnmapr)`:
 
-```{r first-map, cache = FALSE, cache = TRUE}
+```{r first-map, cache = TRUE}
 library(urbnmapr)
 
 states <- get_urbn_map("states", sf = TRUE)
@@ -724,7 +724,7 @@ bottom to top (ie the last mapped object will show up on top). It is
 important that all layers are in the same CRS (coordinate reference
 system).
 
-```{r layers, cache = T}
+```{r layers, cache = TRUE}
 
 state_capitals <- state_capitals %>%
   # This will change CRS to ESRI:102003 and shift the AK and HI state capitals
@@ -860,7 +860,7 @@ chip_with_geographies %>%
     # Make legend title more readable
     name = "CHIP Enrollment %",
     # Show top and bottom limits on legend
-    show.limits = T,
+    show.limits = TRUE,
     # Roughly set number of bins. Won't be exact as R uses algorithms under the
     # hood for pretty looking breaks.
     n.breaks = 4
@@ -935,7 +935,7 @@ how the map looks.
 This is just a layered map with one polygon layer and one point layer,
 where the points are sized in accordance with a variable in your data.
 
-```{r bubble_maps, warning = F, message = F, cache = TRUE}
+```{r bubble_maps, cache = TRUE}
 set_urbn_defaults(style = "map")
 
 # Get sf dataframe of DC tracts
@@ -943,7 +943,7 @@ library(tigris)
 dc_tracts <- tracts(
   state = "DC",
   year = 2019,
-  progress_bar = F
+  progress_bar = FALSE
 )
 
 # Add bubbles for firestations
@@ -972,7 +972,7 @@ different races within Washington DC tracts The code may look a little
 complicated, but the key workhorse function is `st_sample()` which
 samples points within each polygon to use in the dot density map:
 
-```{r dot_density_map, message = F, warning = F, cache = TRUE}
+```{r dot_density_maps, cache = TRUE}
 library(tidycensus)
 
 # Get counts by race of DC tracts
@@ -986,8 +986,8 @@ dc_pop <- get_acs(
     Black = "DP05_0078",
     Asian = "DP05_0080"
   ),
-  geometry = T,
-  progress_bar = F
+  geometry = TRUE,
+  progress_bar = FALSE
 )
 
 # Get unique groups (ie races)
@@ -1024,7 +1024,7 @@ ggplot() +
     # Adjust transparency and size to be more readable
     alpha = 0.5,
     size = 1.1,
-    stroke = F
+    stroke = FALSE
   )
 ```
 
@@ -1202,7 +1202,7 @@ Cropping (or clipping) is geographically filtering an `sf` datframe to just
 the area we are interested in. Say we wanted to look at the roads around Fire 
 Station 24 in DC. 
 
-```{r roads_cropping_before, cache = T, warning = F, message = F}
+```{r roads_cropping_before, cache = TRUE}
 library(tigris)
 library(units)
 
@@ -1220,7 +1220,7 @@ dc_roads <- roads(
   state = "DC",
   county = "District of Columbia",
   class = "sf",
-  progress_bar = F
+  progress_bar = FALSE
 ) %>%
   st_transform("EPSG:6487")
 
