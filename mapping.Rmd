@@ -159,13 +159,12 @@ make a polygon) in a `geometry` column within R dataframes
 This is what `sf` dataframe looks like in the console:
 
 ```{r print-sf-dataframe}
-dc_parks = st_read("mapping/data/dc_parks.geojson", quiet = T)
+dc_parks <- st_read("mapping/data/dc_parks.geojson", quiet = T)
 
 # Print just the NAME and geometry column
-dc_parks %>% 
-	select(NAME) %>% 
-	head(2)
-
+dc_parks %>%
+  select(NAME) %>%
+  head(2)
 ```
 
 
@@ -204,11 +203,11 @@ This is what an `sf` dataframe looks like in the console:
 # dc_parks  = st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
 # 										quiet = T)
 
-dc_parks = st_read("mapping/data/dc_parks.geojson")
+dc_parks <- st_read("mapping/data/dc_parks.geojson")
 
 # Select just a few columns for readability
-dc_parks = dc_parks %>%
-	select(NAME, geometry)
+dc_parks <- dc_parks %>%
+  select(NAME, geometry)
 
 # Print to the console
 dc_parks
@@ -286,10 +285,11 @@ library(tigris)
 # Only need to set once per script
 options(tigris_class = "sf")
 
-dc_tracts <- tracts(state = "DC",
-									cb = TRUE,
-									year = 2019)
-
+dc_tracts <- tracts(
+  state = "DC",
+  cb = TRUE,
+  year = 2019
+)
 ```
 
 Unlike `library(urbnmapr)`, different functions are used to get
@@ -322,8 +322,7 @@ library(rnaturalearth)
 world <- ne_countries(returnclass = "sf")
 
 ggplot() +
-	geom_sf(data = world, mapping = aes())
-
+  geom_sf(data = world, mapping = aes())
 ```
 
 ### Your own files
@@ -349,9 +348,10 @@ library(sf)
 list.files("mapping/data/shapefiles")
 
 # Read in .shp file
-dc_firestations <- st_read(dsn = "mapping/data/shapefiles/Fire_Stations.shp",
-													 quiet = T)
-
+dc_firestations <- st_read(
+  dsn = "mapping/data/shapefiles/Fire_Stations.shp",
+  quiet = T
+)
 ```
 
 And now `dc_firestations` is an `sf` dataframe you can use for all your
@@ -387,11 +387,12 @@ library(sf)
 # Read in dataset of state capitals which is stored as a csv
 state_capitals <- read_csv("mapping/data/state-capitals.csv")
 
-state_capitals <- state_capitals %>% 
-	# Specify names of the lon/lat columns in the CSV to use to make geometry col
-	st_as_sf(coords = c("longitude", "latitude"),
-					 crs = 4326)
-
+state_capitals <- state_capitals %>%
+  # Specify names of the lon/lat columns in the CSV to use to make geometry col
+  st_as_sf(
+    coords = c("longitude", "latitude"),
+    crs = 4326
+  )
 ```
 
 One common mistake is that before converting to an `sf` dataframe, you
@@ -419,13 +420,12 @@ abbreviations.
 ```{r readin-chip-data}
 
 # read the state CHIP data
-chip_by_state <- read_csv("mapping/data/chip-enrollment.csv") %>% 
-	# clean column names so there are no random spaces/uppercase letters
-	janitor::clean_names()
+chip_by_state <- read_csv("mapping/data/chip-enrollment.csv") %>%
+  # clean column names so there are no random spaces/uppercase letters
+  janitor::clean_names()
 
 # print to the console
 chip_by_state %>% head()
-
 ```
 
 In order to convert this to an `sf` dataframe, we need to read in the
@@ -439,37 +439,36 @@ library(urbnmapr)
 states <- get_urbn_map(map = "states", sf = TRUE)
 
 # left join state geographies to chip data
-chip_with_geographies = states %>% 
-	left_join( 
-		chip_by_state, 
-		# Specify join column, which are slightly differently named in states and chip 
-		# respectively
-		by = c("state_abbv" = "state_abbreviation"))
+chip_with_geographies <- states %>%
+  left_join(
+    chip_by_state,
+    # Specify join column, which are slightly differently named in states and chip
+    # respectively
+    by = c("state_abbv" = "state_abbreviation")
+  )
 
-chip_with_geographies %>% 
-	select(state_fips, state_abbv, chip_enrollment)
-
+chip_with_geographies %>%
+  select(state_fips, state_abbv, chip_enrollment)
 ```
 
 ```{r append-state-pops, message = F, include = F, eval = T, echo = F}
 # TODO: DELETE THIS
 
 # Read in data on state populations from 2010
-state_pops <- 
-	read_csv("mapping/data/state_populations.csv",
-	# read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv",
-					 # Set this to disable printing column info to console
-					 col_types = cols()) %>% 
-	filter(ages == "total", year == "2010") %>% 
-	select(state_abbv   = `state/region`, population)
+state_pops <-
+  read_csv("mapping/data/state_populations.csv",
+    # read_csv("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-population.csv",
+    # Set this to disable printing column info to console
+    col_types = cols()
+  ) %>%
+  filter(ages == "total", year == "2010") %>%
+  select(state_abbv = `state/region`, population)
 
-chip_with_geographies <- chip_with_geographies  %>% 
-	# Specify left_join from tidylog to print summary messages
- 	tidylog::left_join(state_pops, by = "state_abbv") %>% 
-	# Calculate the chip enrollment percentage and append as a column
-	mutate(chip_pct = chip_enrollment/population)
- 
-
+chip_with_geographies <- chip_with_geographies %>%
+  # Specify left_join from tidylog to print summary messages
+  tidylog::left_join(state_pops, by = "state_abbv") %>%
+  # Calculate the chip enrollment percentage and append as a column
+  mutate(chip_pct = chip_enrollment / population)
 ```
 
 # Project
@@ -578,7 +577,7 @@ case for GeoJSONS (`.geojson`) and shapefiles (`.shp`). When you use
 metadata:
 
 ```{r import-shpfile-crs example, echo = F}
-	knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
+knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
 ```
 
 You can also the `st_crs()` function to find the CRS. The CRS code is located at
@@ -615,7 +614,7 @@ data with `st_crs()`. :
 ```{r set_crs, eval = F}
 
 # If you are certain that your data contains coordinates in the ESRI Atlas Equal Earth projections
-st_crs(some_sf_dataframe) = st_crs("ESRI:102003")
+st_crs(some_sf_dataframe) <- st_crs("ESRI:102003")
 ```
 
 ## Transforming the CRS
@@ -627,7 +626,7 @@ for performing more accurate spatial operations. You can do this with
 
 ```{r transform-crs}
 # Tranforming CRS from WGS 84 to Urban required Equal Earth Projection
-state_capitals = state_capitals %>% st_transform("ESRI:102003")
+state_capitals <- state_capitals %>% st_transform("ESRI:102003")
 ```
 
 `st_transform()` also allows you to just use the CRS of another `sf`
@@ -635,9 +634,8 @@ dataframe when transforming.
 
 ```{r transform-crs-with-another-sf-object}
 # transform CRS of chip_with_geographies to be the same as CRS of dc_firestations
-chip_with_geographies = chip_with_geographies %>% 
-	st_transform(crs = st_crs(state_capitals))
-
+chip_with_geographies <- chip_with_geographies %>%
+  st_transform(crs = st_crs(state_capitals))
 ```
 
 If you are working with local data, you should use an appropriate state
@@ -649,8 +647,8 @@ of picking an appropriate state plane CRS.
 library(crsuggest)
 
 suggest_crs(dc_firestations) %>%
-	# Use the value in the "crs_code" column to transform CRS's
-	head(4)
+  # Use the value in the "crs_code" column to transform CRS's
+  head(4)
 ```
 
 # Map
@@ -684,9 +682,10 @@ library(urbnmapr)
 states <- get_urbn_map("states", sf = TRUE)
 
 ggplot() +
-	geom_sf(data = states, 
-					mapping = aes())
-
+  geom_sf(
+    data = states,
+    mapping = aes()
+  )
 ```
 
 ## Styling
@@ -713,9 +712,8 @@ set_urbn_defaults(style = "map")
 
 # Or you can add `+ theme_urbn_map()` to the end of every map you make
 ggplot() +
-	geom_sf(states, mapping = aes()) +
-	theme_urbn_map()
-
+  geom_sf(states, mapping = aes()) +
+  theme_urbn_map()
 ```
 
 ### Layering
@@ -728,22 +726,25 @@ system).
 
 ```{r layers, cache = T}
 
-state_capitals = state_capitals %>% 
-	# This will change CRS to ESRI:102003 and shift the AK and HI state capitals
-	# point locations to the appropriate locations on the inset maps.
-	tigris::shift_geometry()
+state_capitals <- state_capitals %>%
+  # This will change CRS to ESRI:102003 and shift the AK and HI state capitals
+  # point locations to the appropriate locations on the inset maps.
+  tigris::shift_geometry()
 
 ggplot() +
-	geom_sf(data = states,
-					mapping = aes()) +
-	# Note we change the data argument
-	geom_sf(data = state_capitals, 
-					mapping = aes(),
-					# urbnthemes library has urbn color palettes built in.
-					color = palette_urbn_main['yellow'], 
-					size = 2.0) +
-	theme_urbn_map()
-
+  geom_sf(
+    data = states,
+    mapping = aes()
+  ) +
+  # Note we change the data argument
+  geom_sf(
+    data = state_capitals,
+    mapping = aes(),
+    # urbnthemes library has urbn color palettes built in.
+    color = palette_urbn_main["yellow"],
+    size = 2.0
+  ) +
+  theme_urbn_map()
 ```
 
 ### Fill and Outline Colors
@@ -764,13 +765,14 @@ Urban's magenta color:
 ```{r urbnthemes- pink}
 
 ggplot() +
-	geom_sf(states, mapping = aes(),
-					# Adjust polygon fill color
-					fill = palette_urbn_main['magenta'],
-					# Adjust polygon outline color
-					color = "white") +
-	theme_urbn_map()
-
+  geom_sf(states,
+    mapping = aes(),
+    # Adjust polygon fill color
+    fill = palette_urbn_main["magenta"],
+    # Adjust polygon outline color
+    color = "white"
+  ) +
+  theme_urbn_map()
 ```
 
 ### Adding text
@@ -782,15 +784,20 @@ using `geom_sf_text` and the helper function `get_urbn_labels()`.
 library(urbnmapr)
 
 ggplot() +
-	geom_sf(states, mapping = aes(),
-					color = "white") +
-	theme_urbn_map() +
-	# Generates dataframe of state abbv and appropriate location to plot them
-	geom_sf_text(data = get_urbn_labels(map = "states", 
-																			sf = TRUE), 
-                aes(label = state_abbv), 
-            size = 3)
-
+  geom_sf(states,
+    mapping = aes(),
+    color = "white"
+  ) +
+  theme_urbn_map() +
+  # Generates dataframe of state abbv and appropriate location to plot them
+  geom_sf_text(
+    data = get_urbn_labels(
+      map = "states",
+      sf = TRUE
+    ),
+    aes(label = state_abbv),
+    size = 3
+  )
 ```
 
 There's also `geom_sf_label()` if you want labels with a border.
@@ -812,28 +819,27 @@ set `geom_sf(aes(fill = some_variable_name))`. Below are examples
 
 ```{r choropoleth_continious}
 # Map of CHIP enrollment percentage by state
-chip_with_geographies_map = chip_with_geographies %>% 
-	ggplot() +
-	geom_sf(aes(
-					# Color in states by the chip_pct variable
-					fill = chip_pct)
-					) 
+chip_with_geographies_map <- chip_with_geographies %>%
+  ggplot() +
+  geom_sf(aes(
+    # Color in states by the chip_pct variable
+    fill = chip_pct
+  ))
 
 
 # Below add-ons to the map are optional, but make the map look prettier.
 chip_with_geographies_map +
-	# scale_fill_gradientn adds colors with more interpolation and reverses color scale
-	scale_fill_gradientn(
-		# Convert legend from decimal to percentages
-		labels = scales::percent_format(),
-		# Make legend title more readable
-		name = "CHIP Enrollment %",
-		# Manually add 0 to lower limit to include it in legend. NA=use maximum value in data
-		limits = c(0, NA),
-		# Set number of breaks on legend = 3 
-		n.breaks = 3
-	)
-
+  # scale_fill_gradientn adds colors with more interpolation and reverses color scale
+  scale_fill_gradientn(
+    # Convert legend from decimal to percentages
+    labels = scales::percent_format(),
+    # Make legend title more readable
+    name = "CHIP Enrollment %",
+    # Manually add 0 to lower limit to include it in legend. NA=use maximum value in data
+    limits = c(0, NA),
+    # Set number of breaks on legend = 3
+    n.breaks = 3
+  )
 ```
 
 ### Discrete color scale
@@ -842,24 +848,23 @@ The quick and dirty way is with `scale_fill_steps()`, which creates
 discretized bins for continuous variables:
 
 ```{r chorpleth_disccrete}
-chip_with_geographies %>% 
-	ggplot() +
-	geom_sf(aes(
-					# Color in states by the chip_pct variable
-					fill = chip_pct)
-					) +
-	scale_fill_steps(
-		# Convert legend from decimal to percentages
-		labels = scales::percent_format(),
-		# Make legend title more readable
-		name = "CHIP Enrollment %",
-		# Show top and bottom limits on legend
-		show.limits = T,
-		# Roughly set number of bins. Won't be exact as R uses algorithms under the
-		# hood for pretty looking breaks.
-		n.breaks = 4
-		)
-
+chip_with_geographies %>%
+  ggplot() +
+  geom_sf(aes(
+    # Color in states by the chip_pct variable
+    fill = chip_pct
+  )) +
+  scale_fill_steps(
+    # Convert legend from decimal to percentages
+    labels = scales::percent_format(),
+    # Make legend title more readable
+    name = "CHIP Enrollment %",
+    # Show top and bottom limits on legend
+    show.limits = T,
+    # Roughly set number of bins. Won't be exact as R uses algorithms under the
+    # hood for pretty looking breaks.
+    n.breaks = 4
+  )
 ```
 
 Often you will want to manually generate the bins yourself to give you
@@ -871,50 +876,52 @@ function to get nice looking interval labels:
 ```{r format_intervals}
 
 # Helper function to clean up R generated intervals into nice looking interval labels
-format_interval = function(interval_text){
-	
-	text = interval_text %>% 
-		# Remove open and close brackets which is R generated math notation
-		str_remove_all("\\(") %>% 
-		str_remove_all("\\)") %>% 
-		str_remove_all("\\[") %>% 
-		str_remove_all("\\]") %>% 
-		str_replace_all(",", " — ")
-	
-	# Convert decimal ranges to percent ranges
-	text = text %>%
-		str_split(" — ") %>%
-		map(~as.numeric(.x) %>% scales::percent() %>% paste0(collapse = " — ")) %>% 
-		unlist() %>% 
-		# By default character vectors are plotted in alphabetical order. We want 
-		# factors in reverse alphabetical order to get correct colors in ggplot
-		fct_rev()
+format_interval <- function(interval_text) {
+  text <- interval_text %>%
+    # Remove open and close brackets which is R generated math notation
+    str_remove_all("\\(") %>%
+    str_remove_all("\\)") %>%
+    str_remove_all("\\[") %>%
+    str_remove_all("\\]") %>%
+    str_replace_all(",", " — ")
 
-	return(text)
+  # Convert decimal ranges to percent ranges
+  text <- text %>%
+    str_split(" — ") %>%
+    map(~ as.numeric(.x) %>%
+      scales::percent() %>%
+      paste0(collapse = " — ")) %>%
+    unlist() %>%
+    # By default character vectors are plotted in alphabetical order. We want
+    # factors in reverse alphabetical order to get correct colors in ggplot
+    fct_rev()
+
+  return(text)
 }
 
-chip_with_geographies = chip_with_geographies %>% 
-	# cut_interval into n groups with equal range. Set boundary so 0 is included in the bins
-	mutate(chip_pct_interval = cut_interval(chip_pct, n = 5)) %>% 
-	# Generate nice looking interval labels
-	mutate(chip_pct_interval = format_interval(chip_pct_interval)) 
+chip_with_geographies <- chip_with_geographies %>%
+  # cut_interval into n groups with equal range. Set boundary so 0 is included in the bins
+  mutate(chip_pct_interval = cut_interval(chip_pct, n = 5)) %>%
+  # Generate nice looking interval labels
+  mutate(chip_pct_interval = format_interval(chip_pct_interval))
 ```
 
 And now we can map the discretized `chip_pct_interval` variable using
 `geom_sf()`:
 
 ```{r make_discrete_map}
-chip_with_geographies %>% 
-	ggplot() +
-	geom_sf(aes(
-					# Color in states by the chip_pct variable
-					fill = chip_pct_interval)
-					) +
-	# Default is to use main urban palette, which assumes unrelated groups. We
-	# adjust calors manually to be on Urban cyan palette
-	scale_fill_manual(values = palette_urbn_cyan[c(8,7,5,3,1)],
-										name = "CHIP Enrollment %")
-	
+chip_with_geographies %>%
+  ggplot() +
+  geom_sf(aes(
+    # Color in states by the chip_pct variable
+    fill = chip_pct_interval
+  )) +
+  # Default is to use main urban palette, which assumes unrelated groups. We
+  # adjust calors manually to be on Urban cyan palette
+  scale_fill_manual(
+    values = palette_urbn_cyan[c(8, 7, 5, 3, 1)],
+    name = "CHIP Enrollment %"
+  )
 ```
 
 In addition to `cut_interval` there are [similar
@@ -933,20 +940,23 @@ set_urbn_defaults(style = "map")
 
 # Get sf dataframe of DC tracts
 library(tigris)
-dc_tracts = tracts(state = "DC",
-								year = 2019,
-								progress_bar = F)
+dc_tracts <- tracts(
+  state = "DC",
+  year = 2019,
+  progress_bar = F
+)
 
 # Add bubbles for firestations
 ggplot() +
-	geom_sf(data = dc_tracts, fill = palette_urbn_main["gray"]) +
-	geom_sf(data = dc_firestations, 
-					# Size bubbles by number of trucks at each station
-					aes(size = TRUCK),
-					color = palette_urbn_main["yellow"],
-					# Adjust transparency for readability
-					alpha = 0.8)
-
+  geom_sf(data = dc_tracts, fill = palette_urbn_main["gray"]) +
+  geom_sf(
+    data = dc_firestations,
+    # Size bubbles by number of trucks at each station
+    aes(size = TRUCK),
+    color = palette_urbn_main["yellow"],
+    # Adjust transparency for readability
+    alpha = 0.8
+  )
 ```
 
 ## Dot-density Maps
@@ -966,49 +976,56 @@ samples points within each polygon to use in the dot density map:
 library(tidycensus)
 
 # Get counts by race of DC tracts
-dc_pop = get_acs(geography = "tract",
-								 state = "DC",
-								 year = 2019,
-								 variables = c(
-								 	Hispanic = "DP05_0071",
-								 	White = "DP05_0077",
-								 	Black = "DP05_0078",
-								 	Asian = "DP05_0080"),
-								 geometry = T,
-								 progress_bar = F)
-	
+dc_pop <- get_acs(
+  geography = "tract",
+  state = "DC",
+  year = 2019,
+  variables = c(
+    Hispanic = "DP05_0071",
+    White = "DP05_0077",
+    Black = "DP05_0078",
+    Asian = "DP05_0080"
+  ),
+  geometry = T,
+  progress_bar = F
+)
+
 # Get unique groups (ie races)
 groups <- unique(dc_pop$variable)
 
 # For each unique group (ie race), generate sampled points
-dc_race_dots <- map_dfr(groups, ~{
+dc_race_dots <- map_dfr(groups, ~ {
   dc_pop %>%
-		# .x = the group used in the loop
+    # .x = the group used in the loop
     filter(variable == .x) %>%
-		# Use the projected MD state plane for accuracy
+    # Use the projected MD state plane for accuracy
     st_transform(crs = "EPSG:6487") %>%
-		# Have every dot represent 100 people
+    # Have every dot represent 100 people
     mutate(est100 = as.integer(estimate / 100)) %>%
     st_sample(size = .$est100, exact = TRUE) %>%
     st_sf() %>%
-		# Add group (ie race) as a column so we can use it when plotting
+    # Add group (ie race) as a column so we can use it when plotting
     mutate(group = .x)
-}) 
+})
 
 
 ggplot() +
-	# Plot tracts, then dots on top of tracts
-	geom_sf(data = dc_pop, 
-					# Make interior of tracts transparent and boundaries black 
-					fill = "transparent", 
-					color = "black") +
-	geom_sf(data = dc_race_dots, 
-					# Color in dots by racial group
-					aes(color = group),
-					# Adjust transparency and size to be more readable
-					alpha = 0.5,
-					size = 1.1,
-					stroke = F)
+  # Plot tracts, then dots on top of tracts
+  geom_sf(
+    data = dc_pop,
+    # Make interior of tracts transparent and boundaries black
+    fill = "transparent",
+    color = "black"
+  ) +
+  geom_sf(
+    data = dc_race_dots,
+    # Color in dots by racial group
+    aes(color = group),
+    # Adjust transparency and size to be more readable
+    alpha = 0.5,
+    size = 1.1,
+    stroke = F
+  )
 ```
 
 ## Geofacets
@@ -1030,17 +1047,21 @@ head(state_ranks %>% as_tibble())
 ```{r geofacet-ex, cache = TRUE}
 set_urbn_defaults(style = "print")
 
-state_ranks %>%  
-	filter(variable %in% c("education", "employment")) %>% 
-	ggplot(aes(x = rank, y = variable)) +
-	geom_col() +
-	facet_geo(facets = "state",
-						# Use custom urban geofacet grid which is built into urbnthemes
-						# For now we need to rename a few columns as urbnthemes has to be
-						# updated
-						grid = urbnthemes::urbn_geofacet %>% 
-							rename(code = state_code,
-										 name = state_name))
+state_ranks %>%
+  filter(variable %in% c("education", "employment")) %>%
+  ggplot(aes(x = rank, y = variable)) +
+  geom_col() +
+  facet_geo(
+    facets = "state",
+    # Use custom urban geofacet grid which is built into urbnthemes
+    # For now we need to rename a few columns as urbnthemes has to be
+    # updated
+    grid = urbnthemes::urbn_geofacet %>%
+      rename(
+        code = state_code,
+        name = state_name
+      )
+  )
 ```
 
 Interactive geofacets of the United States have been used in Urban
@@ -1064,14 +1085,16 @@ library(cartogram)
 
 set_urbn_defaults(style = "print")
 
-chip_with_geographies_weighted = chip_with_geographies %>% 
-	# Note column name needs to be in quotes for this package
-	cartogram_cont(weight = "population")
+chip_with_geographies_weighted <- chip_with_geographies %>%
+  # Note column name needs to be in quotes for this package
+  cartogram_cont(weight = "population")
 
-ggplot() + 
-	geom_sf(data = chip_with_geographies_weighted, 
-					# Color in states by chip percentages
-					aes(fill = chip_pct))
+ggplot() +
+  geom_sf(
+    data = chip_with_geographies_weighted,
+    # Color in states by chip percentages
+    aes(fill = chip_pct)
+  )
 ```
 
 ## Interactive Maps
@@ -1122,18 +1145,21 @@ perfect.
 
 ```{r mapview-colors-granular}
 # library(RColorBrewer)
-mapview(chip_with_geographies, 
-				col.regions = c(palette_urbn_green[6], 
-												"white", 
-												palette_urbn_cyan[6]),
-				zcol = "chip_enrollment") 
+mapview(chip_with_geographies,
+  col.regions = c(
+    palette_urbn_green[6],
+    "white",
+    palette_urbn_cyan[6]
+  ),
+  zcol = "chip_enrollment"
+)
 ```
 
 If you want to color in all points/polygons as the same color, just feed
 in a single color hex code to the `col.regions` argument:
 
 ```{r mapview-colors}
-mapview(chip_with_geographies, col.regions = palette_urbn_green[5]) 
+mapview(chip_with_geographies, col.regions = palette_urbn_green[5])
 ```
 
 #### Adding layers
@@ -1143,14 +1169,14 @@ operator. This is very useful when comparing 2 or more spatial datasets.
 
 ```{r mapview-layers}
 mapview(chip_with_geographies, col.regions = palette_urbn_green[5]) +
-	mapview(state_capitals, col.regions = palette_urbn_cyan[5])
+  mapview(state_capitals, col.regions = palette_urbn_cyan[5])
 ```
 
 You can even create slider maps by using the `|` operator!
 
 ```{r mapview-sliders}
 mapview(chip_with_geographies, col.regions = palette_urbn_green[5]) |
-	mapview(state_capitals, col.regions = palette_urbn_cyan[5])
+  mapview(state_capitals, col.regions = palette_urbn_cyan[5])
 ```
 
 ### More details
@@ -1180,34 +1206,38 @@ Station 24 in DC.
 library(tigris)
 library(units)
 
-dc_firestations = dc_firestations %>% 
-	st_transform("EPSG:6487") 
+dc_firestations <- dc_firestations %>%
+  st_transform("EPSG:6487")
 
 
 # Draw 500 meter circle around one fire station
-fire_station_24_buffered = dc_firestations %>% 
-	filter(NAME == "Engine 24 Station") %>% 
-	st_buffer(set_units(500, "meter"))
+fire_station_24_buffered <- dc_firestations %>%
+  filter(NAME == "Engine 24 Station") %>%
+  st_buffer(set_units(500, "meter"))
 
 # Get listing of all roads in DC
-dc_roads = roads(state = "DC", 
-								 county = "District of Columbia", 
-								 class = "sf",
-								 progress_bar = F) %>% 
-	st_transform("EPSG:6487") 
+dc_roads <- roads(
+  state = "DC",
+  county = "District of Columbia",
+  class = "sf",
+  progress_bar = F
+) %>%
+  st_transform("EPSG:6487")
 
 # View roads on top of fire_station
 ggplot() +
-		# Order matters! We need to plot fire_stations first, and then roads on top
-		# to see overlapping firestations
-		geom_sf(data = fire_station_24_buffered,
-					fill = palette_urbn_cyan[1],
-					color = palette_urbn_cyan[7]
-					) +
-	geom_sf(data = dc_roads, 
-					color = palette_urbn_gray[7]) +
-	theme_urbn_map()
-
+  # Order matters! We need to plot fire_stations first, and then roads on top
+  # to see overlapping firestations
+  geom_sf(
+    data = fire_station_24_buffered,
+    fill = palette_urbn_cyan[1],
+    color = palette_urbn_cyan[7]
+  ) +
+  geom_sf(
+    data = dc_roads,
+    color = palette_urbn_gray[7]
+  ) +
+  theme_urbn_map()
 ```
 
 We can clip the larger roads data to just roads that overlap with the circle 
@@ -1217,18 +1247,20 @@ around the fire station with `st_intersection()`.
 
 # Use st_intersection() to to crop the roads data to just roads within the
 # fire_station radius
-dc_roads_around_fire_station_24_buffered = fire_station_24_buffered %>% 
-	st_intersection(dc_roads)
+dc_roads_around_fire_station_24_buffered <- fire_station_24_buffered %>%
+  st_intersection(dc_roads)
 
 ggplot() +
-	geom_sf(data = fire_station_24_buffered,
-					fill = palette_urbn_cyan[1],
-					color = palette_urbn_cyan[7]
-					) +
-	geom_sf(data = dc_roads_around_fire_station_24_buffered, 
-					color = palette_urbn_gray[7]) +
-	theme_urbn_map()
-
+  geom_sf(
+    data = fire_station_24_buffered,
+    fill = palette_urbn_cyan[1],
+    color = palette_urbn_cyan[7]
+  ) +
+  geom_sf(
+    data = dc_roads_around_fire_station_24_buffered,
+    color = palette_urbn_gray[7]
+  ) +
+  theme_urbn_map()
 ```
 
 
@@ -1268,38 +1300,35 @@ process:
 
 ```{r cleaned-addr, cache=TRUE,eval=TRUE,results=TRUE, echo=FALSE}
 library(gt)
-cleaned_address_table  = tribble(
-	~"f_address", ~"Type of address",
-	"123 Troy Drive, Pillowtown, CO, 92432", "residnetial address",
-	"789 Abed Avenue, Apt 666, Blankesburg, CO, 92489", "residential apartment address",
-	"Shirley Boulevard and Britta Drive, Blanketsburg, CO, 92489", "street intersection",
-	"Pillowtown, CO", "city",
-	"92489, CO", "Zip Code",
-	
-	)
+cleaned_address_table <- tribble(
+  ~"f_address", ~"Type of address",
+  "123 Troy Drive, Pillowtown, CO, 92432", "residnetial address",
+  "789 Abed Avenue, Apt 666, Blankesburg, CO, 92489", "residential apartment address",
+  "Shirley Boulevard and Britta Drive, Blanketsburg, CO, 92489", "street intersection",
+  "Pillowtown, CO", "city",
+  "92489, CO", "Zip Code",
+)
 
-gt(cleaned_address_table) %>% 
-    # tab_header(title = md("Clean Address Examples")) %>% 
-    opt_row_striping(row_striping = TRUE) %>% 
-	  tab_style(
+gt(cleaned_address_table) %>%
+  # tab_header(title = md("Clean Address Examples")) %>%
+  opt_row_striping(row_striping = TRUE) %>%
+  tab_style(
     style = list(
-	      cell_text(weight = "bold")
-	      ),
-	    locations = cells_column_labels(
-	    	columns = vars(f_address, `Type of address`)
-	    )) %>% 
-    opt_align_table_header(align = c("left")) %>% 
-    tab_options(
-      container.width = "100%",
-      container.height = "400px",
-      # column_labels.background.color  = palette_urbn_cyan[1],
-      table.border.top.width = 0,
-      table.border.bottom.width = 0,
-      column_labels.border.bottom.width= 0,
-      
-
+      cell_text(weight = "bold")
+    ),
+    locations = cells_column_labels(
+      columns = vars(f_address, `Type of address`)
     )
-
+  ) %>%
+  opt_align_table_header(align = c("left")) %>%
+  tab_options(
+    container.width = "100%",
+    container.height = "400px",
+    # column_labels.background.color  = palette_urbn_cyan[1],
+    table.border.top.width = 0,
+    table.border.bottom.width = 0,
+    column_labels.border.bottom.width = 0,
+  )
 ```
 
 All that being said, our geocoder is pretty tolerant of different
@@ -1518,7 +1547,6 @@ Coming soon!
 ```{r session-info}
 
 sessionInfo()
-
 ```
 
 
