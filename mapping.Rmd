@@ -201,7 +201,7 @@ This is what an `sf` dataframe looks like in the console:
 
 ```{r print_sf}
 # Read in spatial data about DC parks from DC Open Data Portal
-dc_parks  = st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
+dc_parks  <- st_read("https://opendata.arcgis.com/api/v3/datasets/287eaa2ecbff4d699762bbc6795ffdca_9/downloads/data?format=geojson&spatialRefId=4326",
 										quiet = TRUE)
 
 # dc_parks <- st_read("mapping/data/dc_parks.geojson")
@@ -729,7 +729,9 @@ system).
 state_capitals <- state_capitals %>%
   # This will change CRS to ESRI:102003 and shift the AK and HI state capitals
   # point locations to the appropriate locations on the inset maps.
-  tigris::shift_geometry()
+  tigris::shift_geometry() %>%
+  # For now filter out AL and HI as their state capitals will be slightly off.
+  filter(!state %in% c("Alaska", "Hawaii"))
 
 ggplot() +
   geom_sf(
@@ -1083,7 +1085,7 @@ proportional to the population.
 ```{r cartogram-example, cache = TRUE}
 library(cartogram)
 
-set_urbn_defaults(style = "print")
+set_urbn_defaults(style = "map")
 
 chip_with_geographies_weighted <- chip_with_geographies %>%
   # Note column name needs to be in quotes for this package
@@ -1116,7 +1118,13 @@ mapping R libraries. All you have to do to create an interactive map is:
 ```{r show-mapview}
 library(mapview)
 
-mapview(chip_with_geographies)
+
+chip_with_geographies_for_interactive_mapping <- chip_with_geographies %>%
+  # Filter out AL and HI bc they would appear in Mexico. If you want AL, HI and
+  # in the correct place in interactive maps, make sure to use tigris::states()
+  filter(!state_abbv %in% c("AL", "HI"))
+
+mapview(chip_with_geographies_for_interactive_mapping)
 ```
 
 When you click on an object, you get a popup table of all it's attributes. And 
@@ -1134,7 +1142,7 @@ quotes* to the`zcol` argument inside the `mapview()` function:
 
 ```{r mapview_zcol}
 # Create interactive state map colored in by chip enrollment
-mapview(chip_with_geographies, zcol = "chip_enrollment")
+mapview(chip_with_geographies_for_interactive_mapping, zcol = "chip_enrollment")
 ```
 
 If you want more granular control over the color palette for the legend
@@ -1145,7 +1153,7 @@ perfect.
 
 ```{r mapview-colors-granular}
 # library(RColorBrewer)
-mapview(chip_with_geographies,
+mapview(chip_with_geographies_for_interactive_mapping,
   col.regions = c(
     palette_urbn_green[6],
     "white",
@@ -1159,7 +1167,9 @@ If you want to color in all points/polygons as the same color, just feed
 in a single color hex code to the `col.regions` argument:
 
 ```{r mapview-colors}
-mapview(chip_with_geographies, col.regions = palette_urbn_green[5])
+mapview(chip_with_geographies_for_interactive_mapping,
+  col.regions = palette_urbn_green[5]
+)
 ```
 
 #### Adding layers
@@ -1168,14 +1178,14 @@ You can add multiple `sf` objects on the same map by using the `+`
 operator. This is very useful when comparing 2 or more spatial datasets.
 
 ```{r mapview-layers}
-mapview(chip_with_geographies, col.regions = palette_urbn_green[5]) +
+mapview(chip_with_geographies_for_interactive_mapping, col.regions = palette_urbn_green[5]) +
   mapview(state_capitals, col.regions = palette_urbn_cyan[5])
 ```
 
 You can even create slider maps by using the `|` operator!
 
 ```{r mapview-sliders}
-mapview(chip_with_geographies, col.regions = palette_urbn_green[5]) |
+mapview(chip_with_geographies_for_interactive_mapping, col.regions = palette_urbn_green[5]) |
   mapview(state_capitals, col.regions = palette_urbn_cyan[5])
 ```
 
@@ -1240,7 +1250,7 @@ ggplot() +
   theme_urbn_map()
 ```
 
-We can clip the larger roads data to just roads that overlap with the circle 
+We can clip the larger roads dataframe to just roads that overlap with the circle 
 around the fire station with `st_intersection()`.
 
 ```{r roads_cropping_after}
@@ -1267,6 +1277,16 @@ ggplot() +
 **More Coming Soon!**
 
 ## Calculating Distance
+
+The `st_distance` function allows us to easily calculate distances between 2 sf 
+objects
+
+```{r}
+
+fire_station_24 = dc_firestations %>%
+  filter(NAME == "Engine 24 Station")
+
+```
 
 ## Spatial Joins
 
