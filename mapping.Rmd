@@ -73,7 +73,7 @@ blunt but useful suggestions for maps:
 > another form might answer other---and sometimes more
 > important---questions.
 
-So we would encourage you to think critically beofore making a map.
+So we would encourage you to think critically before making a map.
 
 ## Why map with R?
 
@@ -93,7 +93,7 @@ in R has many advantages including:
 
 3)  **Easy Updates**: Writing code provides a roadmap for others (and
     future you!) to quickly update parts of the map as needed. Say for
-    example a collabarator wanted to change the legend colors of 50
+    example a collaborator wanted to change the legend colors of 50
     state maps. With R, this is possible in just a few seconds!
 
 4)  **An Expansive ecosystem**: There are several R packages that make
@@ -111,7 +111,7 @@ in R has many advantages including:
     -   `mapview`: For making expxploratory interactive maps
 
 5)  **Cost**: Most point-and-click tools for geospatial analysis are
-    proprietary and expensive. R is free opensource software. The
+    proprietary and expensive. R is free open-source software. The
     software and most of its packages can be used for free by anyone for
     almost any use case.
 
@@ -130,7 +130,7 @@ resources:
     [7](https://walker-data.com/census-r/spatial-analysis-with-us-census-data.html)
     from Kyle Walker's Analyzing US Census Data
     [book](https://walker-data.com/census-r/index.html).
--   Andew Heiss' fantastic mapping
+-   Andrew Heiss' fantastic mapping
     [guide](https://datavizm20.classes.andrewheiss.com/example/12-example/)
 -   All of the vignettes for the [`sf`
     package](https://cran.r-project.org/web/packages/sf/sf.pdf)
@@ -594,7 +594,7 @@ thumb for finding out what the CRS for your data is:
 
 -   For geojsons, the CRS should always be `EPSG:4326` (or WGS 84). The
     official geojson specification states that this is the only valid
-    crs for geojsons, but in the wild, this may not be true 100% of the
+    CRS for geojsons, but in the wild, this may not be true 100% of the
     time.
 -   For shapefiles, there should be a file that ends in `.proj` in the
     same directory as the `.shp` file. This file contains the projection
@@ -620,12 +620,12 @@ st_crs(some_sf_dataframe) <- st_crs("ESRI:102003")
 ## Transforming the CRS
 
 Often you will need to change the CRS for your `sf` dataframe so that
-all datasets you are using have the sae CRS, or to use a projected CRS
+all datasets you are using have the same CRS, or to use a projected CRS
 for performing more accurate spatial operations. You can do this with
 `st_transform`:
 
 ```{r transform-crs}
-# Tranforming CRS from WGS 84 to Urban required Equal Earth Projection
+# Transforming CRS from WGS 84 to Urban required Equal Earth Projection
 state_capitals <- state_capitals %>% st_transform("ESRI:102003")
 ```
 
@@ -919,7 +919,7 @@ chip_with_geographies %>%
     fill = chip_pct_interval
   )) +
   # Default is to use main urban palette, which assumes unrelated groups. We
-  # adjust calors manually to be on Urban cyan palette
+  # adjust colors manually to be on Urban cyan palette
   scale_fill_manual(
     values = palette_urbn_cyan[c(8, 7, 5, 3, 1)],
     name = "CHIP Enrollment %"
@@ -1034,7 +1034,7 @@ ggplot() +
 
 Geofaceting arranges sub-geography-specific plots into a grid that
 resembles a larger geography (usually the US). This can be a useful
-alternative to chorpleth maps, which tend to overemphasize
+alternative to choropleth maps, which tend to overemphasize
 low-population density areas with large areas. To make geofacetted
 charts, use the `facet_geo()` function from the `geofacet` library,
 which can be thought of as equivalent to ggplot2's `facet_wrap()`. For
@@ -1136,7 +1136,7 @@ different from `libraray(ggplot2)` so be careful!
 
 #### Coloring in points/polygons
 
-In order to create a chloropleth map where we color in the
+In order to create a choropleth map where we color in the
 points/polygons by a variable, we need to feed in a column name *in
 quotes* to the`zcol` argument inside the `mapview()` function:
 
@@ -1208,7 +1208,7 @@ is a good starting point.
 
 ## Cropping
 
-Cropping (or clipping) is geographically filtering an `sf` datframe to just 
+Cropping (or clipping) is geographically filtering an `sf` dataframe to just 
 the area we are interested in. Say we wanted to look at the roads around Fire 
 Station 24 in DC. 
 
@@ -1255,7 +1255,7 @@ around the fire station with `st_intersection()`.
 
 ```{r roads_cropping_after}
 
-# Use st_intersection() to to crop the roads data to just roads within the
+# Use st_intersection() to crop the roads data to just roads within the
 # fire_station radius
 dc_roads_around_fire_station_24_buffered <- fire_station_24_buffered %>%
   st_intersection(dc_roads)
@@ -1518,7 +1518,7 @@ process.
 |            | address but has the same score as one or more        |
 |            | additional candidates.\                              |
 |            | \                                                    |
-|            | U - Unmatched. No addresses match the inputtd        |
+|            | U - Unmatched. No addresses match the inputted        |
 |            | address.                                             |
 +------------+------------------------------------------------------+
 | geometry   | The WKT (Well-known text) representation of the      |
