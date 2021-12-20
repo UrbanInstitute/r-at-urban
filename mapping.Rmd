@@ -473,7 +473,7 @@ chip_with_geographies <- chip_with_geographies %>%
 
 # Project
 
-## What are Coordinate Reference Systems {.tabset .tabset-pills}
+## Coordinate Reference Systems {.tabset .tabset-pills}
 
 ### The short version
 
@@ -484,12 +484,12 @@ following:
 -   All spatial data has a CRS, which specifies how to identify a
     location on earth.
 
--   It's important that all spatial data sets you are working with be in
+-   It's important that all spatial datasets you are working with be in
     the same CRS. You can find the CRS with `st_crs()` and change the
     CRS with `st_transform()`.
 
 -   The Urban Institute Style Guide requires the use of the Atlas Equal
-    Earth Projection (`"ESRI:102003"`) for US maps. For state and local
+    Earth Projection (`"ESRI:102003"`) for national maps. For state and local
     maps, use [this](https://github.com/veltman/d3-stateplane) handy
     guide to find an appropriate State Plane projection.
 
@@ -587,7 +587,7 @@ the end in `ID[authority, SRID]`.
 st_crs(dc_firestations)
 ```
 
-Sometimes however, the CRS will be blank or `NA` as the dataset did not
+Sometimes, the CRS will be blank or `NA` as the dataset did not
 specify the CRS. In that case you **MUST find and set the CRS for your
 data before proceeding** with analysis. Below are some good rules of
 thumb for finding out what the CRS for your data is:
@@ -609,7 +609,7 @@ If none of the above rules of thumb apply to you, check out the
 `crsuggest` R [package](https://github.com/walkerke/crsuggest).
 
 Once you've identified the appropriate CRS, you can set the CRS for your
-data with `st_crs()`. :
+data with `st_crs()`:
 
 ```{r set_crs, eval = FALSE}
 
@@ -1122,7 +1122,7 @@ library(mapview)
 chip_with_geographies_for_interactive_mapping <- chip_with_geographies %>%
   # Filter out AL and HI bc they would appear in Mexico. If you want AL, HI and
   # in the correct place in interactive maps, make sure to use tigris::states()
-  filter(!state_abbv %in% c("AL", "HI"))
+  filter(!state_abbv %in% c("AK", "HI"))
 
 mapview(chip_with_geographies_for_interactive_mapping)
 ```
@@ -1278,16 +1278,6 @@ ggplot() +
 
 ## Calculating Distance
 
-The `st_distance` function allows us to easily calculate distances between 2 sf 
-objects
-
-```{r}
-
-fire_station_24 = dc_firestations %>%
-  filter(NAME == "Engine 24 Station")
-
-```
-
 ## Spatial Joins
 
 ### Point to Polygon
@@ -1409,7 +1399,7 @@ process.
 |            | formatted addresses.                                 |
 +------------+------------------------------------------------------+
 | Longitude  | The WGS 84 datum Longitude (EPSG code 4326)          |
-| \|         |                                                      |
+|            |                                                      |
 +------------+------------------------------------------------------+
 | Latitude   | The WGS 84 datum Latitude (EPSG code 4326)           |
 +------------+------------------------------------------------------+
