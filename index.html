@@ -13,12 +13,22 @@
 
 <title>index.utf8</title>
 
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -31,13 +41,18 @@
 
  gtag('config', 'UA-114294141-1');
 </script>
+			
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -50,32 +65,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -86,10 +76,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -106,40 +92,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -167,7 +126,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -179,7 +138,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -190,10 +149,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -205,7 +177,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -310,7 +281,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -320,34 +291,41 @@ $(document).ready(function () {
 
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
-<p><img src="graphics-guide/www/images/urban-institute-logo.png" /></p>
-</div>
-<div id="section" class="section level2">
-<h2></h2>
-<p>Welcome to the Urban Institute R Users Group website. This website contains resources for using R at the Urban Institute for analysis, visualization, mapping, and more.</p>
-<p>Please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org" class="email">awilliams@urban.org</a>) or Kyle Ueyama (<a href="mailto:kueyama@urban.org" class="email">kueyama@urban.org</a>) with any thoughts or questions about R at the Urban Institute.</p>
+<p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
 </div>
 <div id="r-users-group" class="section level2">
 <h2>R Users Group</h2>
+<p>This website contains resources for using R at the Urban Institute for analysis, visualization, mapping, and more. Click on the links above to get started learning about R!</p>
 <p><em>The Urban Institute R Users Group is committed to exposing researchers to the joy and power of R; developing beginner, intermediate, and advanced R skills; encouraging and supporting novel applications of R to public policy research; and building a diverse and mutually supportive community of R Users.</em></p>
+<!-- ![](images/heartyr.gif) -->
+<p><img src="images/heartyr.gif" alt="gif of the R logo with hearts pourint out of it" width="200" height="200"/></p>
+<p>gif credits: <a href="https://twitter.com/allison_horst">Allison Horst</a></p>
 </div>
-<div id="r-lunch-labs" class="section level2">
-<h2>R Lunch Labs</h2>
-<p>The Urban Institute R Users Group hosts weekly lunch labs. R Lunch Labs are hands-on trainings for R users of all skill levels and soon-to-be R users. Each meeting begins with a 5-10 minute quick tip. Afterwards, attendees break into small groups and work on a range of topics including introduction to R, data management and plotting, mapping, and machine learning. Most users bring laptops, but there are a few extras for users without laptops.</p>
-<p>Please fill out the following form to receive email updates about Urban Institute R Lunch Labs:</p>
-<div id="section-1" class="section level3">
+<div id="sign-up-for-list-serv" class="section level2">
+<h2>Sign up for List Serv!</h2>
+<p>Please fill out the following form to receive email updates about upcoming RUG events and trainings. We promise not to spam your inbox:</p>
+<div id="section" class="section level3">
 <h3></h3>
 </div>
-<div id="section-2" class="section level3">
+<div id="section-1" class="section level3">
 <h3></h3>
 <center>
 <iframe width="600" height="330" frameborder="0" src="https://app.smartsheet.com/b/form/b47eba5ed1d74f8ab06f017311c339b9">
 </iframe>
 </center>
 <center>
-<p>Fill out <a href="https://app.smartsheet.com/b/form/0e9d04ced47b489b8d14971ae6c2fb15">this Smartsheet form</a> to unsubscribe from the R Lunch Lab email list.</p>
+<p>Fill out <a href="https://app.smartsheet.com/b/form/0e9d04ced47b489b8d14971ae6c2fb15">this Smartsheet form</a> to unsubscribe from the RUG List Serv.</p>
 </center>
 </div>
+</div>
+<div id="contact-info" class="section level2">
+<h2>Contact Info</h2>
+<p>Please don’t hesitate to contact Aaron Williams (<a href="mailto:awilliams@urban.org" class="email">awilliams@urban.org</a>) or Ajjit Narayanan (<a href="mailto:anaryaanan@urban.org" class="email">anaryaanan@urban.org</a>) with any thoughts or questions about R at the Urban Institute.</p>
+</div>
+<div id="r-lunch-labs" class="section level2">
+<h2>R Lunch Labs</h2>
+<p>The Urban Institute R Users Group hosts weekly lunch labs. R Lunch Labs are hands-on trainings for R users of all skill levels and soon-to-be R users. Each meeting begins with a 5-10 minute quick tip. Afterwards, attendees break into small groups and work on a range of topics including introduction to R, data management and plotting, mapping, and machine learning. Most users bring laptops, but there are a few extras for users without laptops.</p>
+<p>We have currently paused R Lunch Labs, but they will be back soon! If you have an idea for a topic you want to present informally at a lunch lab, please let us know!</p>
 </div>
 
 
@@ -359,7 +337,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -377,7 +355,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
