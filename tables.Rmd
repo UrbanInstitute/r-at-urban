@@ -314,8 +314,8 @@ diamonds %>%
 	select(carat, color, price) %>%
 	kable(format = "html", caption = "Diamond prices") %>%
 	kable_styling(full_width = FALSE) %>%
-  group_rows("Premium", 1, 6) %>%
-  group_rows("Ideal", 7, 10)
+  kableExtra::group_rows("Premium", 1, 6) %>%
+  kableExtra::group_rows("Ideal", 7, 10)
 ```
 
 ### add_footnote()
