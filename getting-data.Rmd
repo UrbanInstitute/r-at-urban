@@ -7,23 +7,22 @@ output:
     code_folding: show
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
-      "--tab-stop=2" 
-    ] 
+    pandoc_args:
+      "--tab-stop=2"
 ---
 
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](intro-to-r/images/urban-institute-logo.png)
+<img src="intro-to-r/images/urban-institute-logo.png" width="350">
 </div>
 
-```{r echo = FALSE}
-source(here::here("getting-data", "census_api_key.R"))
+```{r, echo = FALSE}
+# source(here::here("getting-data", "census_api_key.R"))
 ```
 
-```{r markdown setup, include=FALSE}
+```{r markdown-setup, include=FALSE}
 
 knitr::opts_chunk$set(fig.path = "intro-to-r/www/images/")
 knitr::opts_chunk$set(message = FALSE)
