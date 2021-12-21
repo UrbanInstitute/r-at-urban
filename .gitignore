@@ -43,3 +43,6 @@ mapping/shapefiles/
 # private files
 *census_api_key.R
 getting-data/census_api_key.R
+
+# Mac specific files
+.DS_Store

@@ -74,3 +74,34 @@ p {
 .nav-tabs>li>a {
 	border-radius: 0;
 }
+
+
+/*pills formatting */
+.nav-pills>li.active>a {
+	background-color: #e88e2d;
+}
+
+.nav-pills>li.active>a:focus {
+	background-color: #e88e2d;
+}
+
+
+.nav>li>a:focus {
+	background-color: #fff2cf;
+}
+
+.nav>li>a:hover {
+	background-color: #fff2cf;
+}
+
+a:focus {
+	color: #e88e2d;
+}
+
+a:hover {
+	color: #e88e2d;
+}
+
+a[role=tab] {
+	color: #ca5800;
+}
