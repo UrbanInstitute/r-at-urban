@@ -6,9 +6,8 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    pandoc_args: [ 
+    pandoc_args: 
       "--tab-stop=2" 
-    ]
 editor_options: 
   chunk_output_type: console
 ---
@@ -16,7 +15,7 @@ editor_options:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 <div id="header">
-![](graphics-guide/www/images/urban-institute-logo.png)
+<img src="graphics-guide/www/images/urban-institute-logo.png" width="350">
 </div>
 
 ## Urban Institute R Graphics Guide

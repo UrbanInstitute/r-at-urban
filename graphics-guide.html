@@ -13,12 +13,22 @@
 
 <title>graphics-guide.utf8</title>
 
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -35,13 +45,18 @@
 
  gtag('config', 'UA-114294141-1');
 </script>
+			
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -54,32 +69,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -90,10 +80,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -110,40 +96,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -171,7 +130,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -183,7 +142,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -194,10 +153,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -209,7 +181,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -338,13 +309,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -390,11 +361,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -408,7 +379,7 @@ div.tocify {
 
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
-<p><img src="graphics-guide/www/images/urban-institute-logo.png" /></p>
+<p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
 </div>
 <div id="urban-institute-r-graphics-guide" class="section level2">
 <h2>Urban Institute R Graphics Guide</h2>
@@ -570,7 +541,7 @@ urbnthemes::lato_install()</code></pre>
 <p><img src="graphics-guide/www/images/dodged-bar-plot-1.png" width="624" /></p>
 </div>
 <div id="lollipop-plotcleveland-dot-plot" class="section level3 tabset">
-<h3>Lollipop plot/Cleveland dot plot</h3>
+<h3 class="tabset">Lollipop plot/Cleveland dot plot</h3>
 <p>Lollipop plots and Cleveland dot plots are minimalist alternatives to bar plots. The key to both plots is to order the data based on the continuous variable using <code>arrange()</code> and then turn the discrete variable into a factor with the ordered levels of the continuous variable using <code>mutate()</code>. This step “stores” the order of the data.</p>
 <div id="lollipop-plot" class="section level4">
 <h4>Lollipop plot</h4>
@@ -664,7 +635,7 @@ urbnthemes::lato_install()</code></pre>
 <p><img src="graphics-guide/www/images/scatter-plot-hex-1.png" width="624" /></p>
 </div>
 <div id="scatter-plots-with-random-noise" class="section level3 tabset">
-<h3>Scatter Plots With Random Noise</h3>
+<h3 class="tabset">Scatter Plots With Random Noise</h3>
 <p>Sometimes scatter plots have many overlapping points but a reasonable number of observations. <code>geom_jitter</code> adds a small amount of random noise so points are less likely to overlap. <code>width</code> and <code>height</code> control the amount of noise that is added. In the following before-and-after, notice how many more points are visible after adding jitter.</p>
 <div id="before" class="section level4">
 <h4>Before</h4>
@@ -1461,7 +1432,7 @@ ames %&gt;%
 <p>Geoms can be layered in <code>ggplot2</code>. This is useful for design and analysis.</p>
 <p>It is often useful to add points to line plots with a small number of values across the x-axis. This example from <a href="http://r4ds.had.co.nz/tidy-data.html">R for Data Science</a> shows how changing the line to grey can be appealing.</p>
 <div id="design" class="section level3 tabset">
-<h3>Design</h3>
+<h3 class="tabset">Design</h3>
 <div id="before-1" class="section level4">
 <h4>Before</h4>
 <pre class="r"><code>table1 %&gt;%
@@ -1665,13 +1636,13 @@ urbn_plot(get_legend(plot),
 <p>Winston Chang, (2014). extrafont: Tools for using fonts. R package version 0.17. <a href="https://CRAN.R-project.org/package=extrafont" class="uri">https://CRAN.R-project.org/package=extrafont</a></p>
 <p>Yihui Xie (2018). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.19.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.6.0 (2019-04-26)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS  10.15.5
+<pre><code>## R version 4.0.5 (2021-03-31)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1680,42 +1651,44 @@ urbn_plot(get_legend(plot),
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] AmesHousing_0.0.4     gghighlight_0.3.0     fivethirtyeight_0.5.0
-##  [4] ggridges_0.5.2        ggrepel_0.8.2         gapminder_0.3.0      
-##  [7] urbnthemes_0.0.2      knitr_1.29            censusapi_0.6.0      
-## [10] tidycensus_0.9.9.5    forcats_0.5.0         stringr_1.4.0        
-## [13] dplyr_1.0.0           purrr_0.3.4           readr_1.3.1          
-## [16] tidyr_1.1.0           tibble_3.0.1          ggplot2_3.3.2        
-## [19] tidyverse_1.3.0      
+##  [1] AmesHousing_0.0.4     gghighlight_0.3.2     fivethirtyeight_0.6.2
+##  [4] ggridges_0.5.3        ggrepel_0.9.1         gapminder_0.3.0      
+##  [7] urbnthemes_0.0.2      knitr_1.31            censusapi_0.7.1      
+## [10] tidycensus_0.11.4     forcats_0.5.1         stringr_1.4.0        
+## [13] dplyr_1.0.7           purrr_0.3.4           readr_2.1.1          
+## [16] tidyr_1.1.4           tibble_3.1.6          ggplot2_3.3.5        
+## [19] tidyverse_1.3.1      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-148        fs_1.4.2            sf_0.9-4           
-##  [4] lubridate_1.7.9     httr_1.4.1          rprojroot_1.3-2    
-##  [7] tools_3.6.0         backports_1.1.8     utf8_1.1.4         
-## [10] rgdal_1.5-12        R6_2.4.1            KernSmooth_2.23-17 
-## [13] mgcv_1.8-31         DBI_1.1.0           colorspace_1.4-1   
-## [16] withr_2.2.0         sp_1.4-2            tidyselect_1.1.0   
-## [19] gridExtra_2.3       curl_4.3            compiler_3.6.0     
-## [22] extrafontdb_1.0     cli_2.0.2           rvest_0.3.5        
-## [25] xml2_1.3.2          labeling_0.3        scales_1.1.1       
-## [28] classInt_0.4-3      hexbin_1.28.1       rappdirs_0.3.1     
-## [31] digest_0.6.25       foreign_0.8-76      rmarkdown_2.3      
-## [34] pkgconfig_2.0.3     htmltools_0.5.0     extrafont_0.17     
-## [37] dbplyr_1.4.4        rlang_0.4.6         readxl_1.3.1       
-## [40] rstudioapi_0.11     generics_0.0.2      farver_2.0.3       
-## [43] jsonlite_1.7.0      magrittr_1.5        Matrix_1.2-18      
-## [46] Rcpp_1.0.4          munsell_0.5.0       fansi_0.4.1        
-## [49] lifecycle_0.2.0     stringi_1.4.6       yaml_2.2.1         
-## [52] plyr_1.8.6          grid_3.6.0          maptools_1.0-1     
-## [55] blob_1.2.1          crayon_1.3.4        lattice_0.20-41    
-## [58] splines_3.6.0       haven_2.3.1         hms_0.5.3          
-## [61] pillar_1.4.4        uuid_0.1-4          urbnmapr_0.0.0.9002
-## [64] reprex_0.3.0        glue_1.4.1          evaluate_0.14      
-## [67] modelr_0.1.8        vctrs_0.3.1         Rttf2pt1_1.3.8     
-## [70] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
-## [73] xfun_0.15           broom_0.5.6         e1071_1.7-3        
-## [76] class_7.3-17        tigris_0.9.4        units_0.6-7        
-## [79] ellipsis_0.3.1      here_0.1</code></pre>
+##  [1] nlme_3.1-152        fs_1.5.2            sf_0.9-8           
+##  [4] lubridate_1.7.10    bit64_4.0.5         httr_1.4.2         
+##  [7] tools_4.0.5         backports_1.2.1     bslib_0.3.1        
+## [10] utf8_1.2.2          rgdal_1.5-23        R6_2.5.1           
+## [13] KernSmooth_2.23-18  mgcv_1.8-34         DBI_1.1.1          
+## [16] colorspace_2.0-2    withr_2.4.3         sp_1.4-5           
+## [19] tidyselect_1.1.1    gridExtra_2.3       bit_4.0.4          
+## [22] curl_4.3.2          compiler_4.0.5      extrafontdb_1.0    
+## [25] cli_3.1.0           rvest_1.0.0         xml2_1.3.2         
+## [28] labeling_0.4.2      sass_0.4.0          scales_1.1.1       
+## [31] classInt_0.4-3      proxy_0.4-25        rappdirs_0.3.3     
+## [34] digest_0.6.29       foreign_0.8-81      rmarkdown_2.7      
+## [37] pkgconfig_2.0.3     htmltools_0.5.2     extrafont_0.17     
+## [40] dbplyr_2.1.1        fastmap_1.1.0       highr_0.8          
+## [43] rlang_0.4.12        readxl_1.3.1        rstudioapi_0.13    
+## [46] jquerylib_0.1.4     generics_0.1.1      farver_2.1.0       
+## [49] jsonlite_1.7.2      vroom_1.5.7         magrittr_2.0.1     
+## [52] Matrix_1.3-2        Rcpp_1.0.7          munsell_0.5.0      
+## [55] fansi_0.5.0         lifecycle_1.0.1     stringi_1.7.6      
+## [58] yaml_2.2.1          plyr_1.8.6          grid_4.0.5         
+## [61] maptools_1.1-1      parallel_4.0.5      crayon_1.4.2       
+## [64] lattice_0.20-41     splines_4.0.5       haven_2.3.1        
+## [67] hms_1.1.1           pillar_1.6.4        uuid_0.1-4         
+## [70] urbnmapr_0.0.0.9002 reprex_2.0.0        glue_1.5.1         
+## [73] evaluate_0.14       modelr_0.1.8        vctrs_0.3.8        
+## [76] tzdb_0.2.0          Rttf2pt1_1.3.9      cellranger_1.1.0   
+## [79] gtable_0.3.0        assertthat_0.2.1    xfun_0.22          
+## [82] broom_0.7.9         e1071_1.7-6         class_7.3-18       
+## [85] tigris_1.4.1        units_0.7-1         ellipsis_0.3.2</code></pre>
 </div>
 <div class="footnotes">
 <hr />
@@ -1735,7 +1708,7 @@ urbn_plot(get_legend(plot),
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -1753,7 +1726,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

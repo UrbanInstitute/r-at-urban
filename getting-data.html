@@ -13,12 +13,22 @@
 
 <title>getting-data.utf8</title>
 
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -35,13 +45,18 @@
 
  gtag('config', 'UA-114294141-1');
 </script>
+			
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -54,32 +69,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -90,10 +80,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -110,40 +96,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -171,7 +130,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -183,7 +142,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -194,10 +153,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -209,7 +181,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -338,13 +309,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -390,11 +361,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -408,7 +379,7 @@ div.tocify {
 
 <p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" /></p>
 <div id="header">
-<p><img src="intro-to-r/images/urban-institute-logo.png" /></p>
+<p><img src="intro-to-r/images/urban-institute-logo.png" width="350"></p>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -431,10 +402,10 @@ get_acs(geography = &quot;tract&quot;,
         geometry = TRUE,
         progress = FALSE)</code></pre>
 <pre><code>## Simple feature collection with 1181 features and 5 fields (with 1 geometry empty)
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -88.47323 ymin: 30.22333 xmax: -84.88908 ymax: 35.00803
-## CRS:            4269
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -88.47323 ymin: 30.22333 xmax: -84.88908 ymax: 35.00803
+## Geodetic CRS:  NAD83
 ## First 10 features:
 ##          GEOID                                          NAME   variable
 ## 1  01003010500     Census Tract 105, Baldwin County, Alabama B19013_001
@@ -489,7 +460,7 @@ get_income &lt;- function(state_fips) {
 # iterate the function
 map_df(.x = state_fips, # iterate along the vector of state fips codes
        .f = get_income) # apply get_income() to each fips_code  </code></pre>
-<pre><code>## # A tibble: 2,874 x 5
+<pre><code>## # A tibble: 2,874 × 5
 ##    GEOID       NAME                                     variable  estimate   moe
 ##    &lt;chr&gt;       &lt;chr&gt;                                    &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
 ##  1 01001020100 Census Tract 201, Autauga County, Alaba… B19013_0…    61838 11900
@@ -526,19 +497,19 @@ getCensus(name = &quot;acs/acs5&quot;,
           regionin = &quot;state:01&quot;,
           vintage = 2015) %&gt;%
   as_tibble()</code></pre>
-<pre><code>## # A tibble: 1,181 x 5
+<pre><code>## # A tibble: 1,181 × 5
 ##    state county tract  B19013_001E B19013_001M
 ##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;
-##  1 01    097    006501       52536        3984
-##  2 01    097    006502       62138        8936
-##  3 01    097    006600       49698        7580
-##  4 01    097    006701       32378       12367
-##  5 01    097    006702       37929        7786
-##  6 01    097    006801       71864        8059
-##  7 01    097    006802       49116        9120
-##  8 01    097    006901       34133        9692
-##  9 01    097    006902       42941       14738
-## 10 01    097    007000       63691        7456
+##  1 01    103    005109       29644        4098
+##  2 01    103    005106       35864        3443
+##  3 01    103    005107       66739        5468
+##  4 01    103    005108       64632        9804
+##  5 01    103    005701       46306        7926
+##  6 01    103    005702       47769       12939
+##  7 01    105    686800       30662        7299
+##  8 01    009    050102       43325        9484
+##  9 01    009    050300       37548        9655
+## 10 01    009    050700       46452        5167
 ## # … with 1,171 more rows</code></pre>
 <p>Smaller geographies like Census tracts can only be pulled state-by-state. This example demonstrates how to iterate across FIPS codes to pull Census tracts for multiple states. The process is as follows:</p>
 <ol style="list-style-type: decimal">
@@ -574,19 +545,19 @@ get_income &lt;- function(state_fips) {
 map_df(.x = state_fips, # iterate along the vector of state fips codes
        .f = get_income) %&gt;% # apply get_income() to each fips_code  
   as_tibble() </code></pre>
-<pre><code>## # A tibble: 2,874 x 5
+<pre><code>## # A tibble: 2,874 × 5
 ##    state county tract  B19013_001E B19013_001M
 ##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;
-##  1 01    097    006501       52536        3984
-##  2 01    097    006502       62138        8936
-##  3 01    097    006600       49698        7580
-##  4 01    097    006701       32378       12367
-##  5 01    097    006702       37929        7786
-##  6 01    097    006801       71864        8059
-##  7 01    097    006802       49116        9120
-##  8 01    097    006901       34133        9692
-##  9 01    097    006902       42941       14738
-## 10 01    097    007000       63691        7456
+##  1 01    103    005109       29644        4098
+##  2 01    103    005106       35864        3443
+##  3 01    103    005107       66739        5468
+##  4 01    103    005108       64632        9804
+##  5 01    103    005701       46306        7926
+##  6 01    103    005702       47769       12939
+##  7 01    105    686800       30662        7299
+##  8 01    009    050102       43325        9484
+##  9 01    009    050300       37548        9655
+## 10 01    009    050700       46452        5167
 ## # … with 2,864 more rows</code></pre>
 </div>
 
@@ -601,7 +572,7 @@ map_df(.x = state_fips, # iterate along the vector of state fips codes
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -619,7 +590,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
