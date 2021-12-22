@@ -17,7 +17,7 @@ editor_options:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 ::: {#header}
-![](mapping/www/images/urban-institute-logo.png)
+<img src="mapping/www/images/urban-institute-logo.png" width="350">
 :::
 
 ```{r markdown-setup, include=FALSE}
@@ -44,9 +44,9 @@ library(sf)
 This guide will teach you the concepts and code you will need for
 mapping and geospatial analysis in R. **This is a long guide, so if you
 need something specific, we encourage you to scroll to the appropriate
-section using the Table of Contents on the left.** If you just want to
-see code examples of maps you can copy and paste, go to the Map Gallery
-(coming soon!). Now let's start mapping!
+section using the Table of Contents on the left.** If you just want copy and 
+pasteable code to create different kinds of maps, head to the [`Map Gallery`](#map_gallery). 
+Now let's start mapping!
 
 ![](mapping/www/images/yay_maps.gif)
 
@@ -56,7 +56,7 @@ This picture below outlines what we think are the main steps in a
 geospatial workflow. This guide will be split into sections describing
 each of the steps.
 
-`r knitr::include_graphics(here::here("mapping", "www", "images", "geospatial_workflow.jpg"), dpi = 600)`
+`r knitr::include_graphics(here::here("mapping", "www", "images", "geospatial_workflow.png"), dpi = 350)`
 
 ## Should this be a map?
 
@@ -140,7 +140,7 @@ resources:
 -   UChicago's R Spatial Workshops:
     <https://spatialanalysis.github.io/tutorials/>
 
-# Get Spatial Data
+# Get Spatial Data {#get_spatial_data}
 
 ------------------------------------------------------------------------
 
@@ -376,8 +376,7 @@ arguments you must specify for this function are:
     longitude/latitude coordinates. Remember you need to specify both
     the\
     authority and the SRID code, for example ("EPSG:4326"). For more
-    information on finding and setting CRS codes, please see this
-    section. (TODO: INSERT CRS LINK)
+    information on finding and setting CRS codes, please see the [`CRS`](#crs) section.
 
 Below is an example of reading in data from a CSV and converting it to
 an `sf` dataframe.
@@ -473,7 +472,7 @@ chip_with_geographies <- chip_with_geographies %>%
 
 # Project
 
-## Coordinate Reference Systems {.tabset .tabset-pills}
+## Coordinate Reference Systems {.tabset .tabset-pills #crs}
 
 ### The short version
 
@@ -654,7 +653,7 @@ suggest_crs(dc_firestations) %>%
 # Map
 
 In order to start mapping, you need an `sf` dataframe. If you don't have
-one, see the `Get Spatial Data` section above.
+one, see the [`Get Spatial Data`](#get_spatial_data) section above.
 
 ## The basics
 
@@ -804,7 +803,7 @@ ggplot() +
 
 There's also `geom_sf_label()` if you want labels with a border.
 
-# Map Gallery
+# Map Gallery {#map_gallery}
 
 Below are copy and pasteable examples of maps you can make, after you
 have an `sf` dataframe.
@@ -1132,7 +1131,7 @@ when you hover over an object, you get a popup with an object id.
 
 Each of the above behaviors can be changed if desired. As you'll see in
 the below section, the syntax for `library(mapview)` is significantly
-different from `libraray(ggplot2)` so be careful!
+different from `library(ggplot2)` so be careful!
 
 #### Coloring in points/polygons
 
