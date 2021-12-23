@@ -17,7 +17,8 @@ editor_options:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 ::: {#header}
-<img src="mapping/www/images/urban-institute-logo.png" width="350">
+`r knitr::include_graphics(here::here("mapping", "www", "images","urban-institute-logo.png"), dpi = 200)`
+<!-- <img src="mapping/www/images/urban-institute-logo.png" width="350"> -->
 :::
 
 ```{r markdown-setup, include=FALSE}
@@ -326,9 +327,8 @@ ggplot() +
   geom_sf(data = world, mapping = aes())
 ```
 
-### Your own files
 
-#### Shapefiles/GeoJSONS
+### Shapefiles/GeoJSONS
 
 Shapefiles and GeoJSONs are 2 common spatial file formats you will found
 out in the wild. `library(sf)` has a function called `st_read` which
@@ -361,7 +361,7 @@ spatial file formats, including geodatabases, KML files, and over 200
 others. For an incomplete list, please see the this `sf`
 [vignette](https://r-spatial.github.io/sf/articles/sf2.html).
 
-#### CSVs or dataframes with lat/lons
+### CSVs or data with lat/lons
 
 If you have a CSV with geographic information stored in columns, you
 will need to read in the CSV as a regular R dataframe and then convert
@@ -1062,7 +1062,8 @@ state_ranks %>%
         code = state_code,
         name = state_name
       )
-  )
+  ) +
+  scale_x_continuous(breaks = c(0, 50))
 ```
 
 Interactive geofacets of the United States have been used in Urban

@@ -5,6 +5,7 @@
 /* increase space between paragraphs */
 p {
     margin: 15px 0 15px 0;
+    font-size: 14px;
 }
 
 /* make titles blue */
@@ -104,4 +105,13 @@ a:hover {
 
 a[role=tab] {
 	color: #ca5800;
+}
+
+
+/*blockquote formatting, slight changes to bootstrap min styles */
+blockquote {
+    padding: 0px 10px 0px 20px;
+    margin: 0 0 20px;
+    font-size: 16.5px;
+    border-left: 5px solid #eee;
 }
