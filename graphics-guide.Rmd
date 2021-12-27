@@ -55,8 +55,8 @@ The theme has been tested against `ggplot2 version 3.0.0`. It will not function 
 Run the following code to install or update `urbnthemes`:
 
 ```
-install.packages("devtools")
-devtools::install_github("UrbanInstitute/urbnthemes")
+install.packages("remotes")
+remotes::install_github("UrbanInstitute/urbnthemes")
 ```
 
 Run the following code at the top of each script:
