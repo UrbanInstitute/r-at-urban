@@ -413,7 +413,7 @@ profvis({
 
 })</code></pre>
 <div id="htmlwidget-76695835bd90709ea3e0" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-76695835bd90709ea3e0">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,9,9,10,10,11,11,12,12,13,13],"depth":[1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1],"label":["rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site","any","rmarkdown::render_site"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[67.7295455932617,68.9590454101562,71.4121322631836,71.4357299804688,71.4598846435547,76.3437728881836,76.3471908569336,76.3542404174805,80.8924179077148,80.8924179077148,82.5396347045898,82.5396347045898,83.3632431030273,83.3632431030273,84.1868515014648,84.1868515014648,85.842155456543,85.842155456543],"meminc":[0,1.22949981689453,2.45308685302734,0.0235977172851562,0.0241546630859375,4.88388824462891,0.00341796875,0.007049560546875,4.53817749023438,0,1.647216796875,0,0.8236083984375,0,0.8236083984375,0,1.65530395507812,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/ts/g8jm0k5x6rn5g79xpwwv6mxh0000gp/T//RtmpS8qWKW/file385917f03d4a.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-76695835bd90709ea3e0">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,9,10,10,11,11,12,12,13,13,14,14,15,15],"depth":[1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1],"label":["rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site",".External2","rmarkdown::render_site","<Anonymous>","rmarkdown::render_site"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[67.7298736572266,68.9589614868164,69.4589157104492,71.4288558959961,71.4572982788086,73.9017868041992,76.3445739746094,76.3488693237305,76.3559036254883,80.892448425293,80.892448425293,83.1572341918945,83.1572341918945,83.3632736206055,83.3632736206055,84.186882019043,84.186882019043,84.5986862182617,84.5986862182617,86.4399261474609,86.4399261474609],"meminc":[0,1.22908782958984,0.499954223632812,1.96994018554688,0.0284423828125,2.44448852539062,2.44278717041016,0.00429534912109375,0.0070343017578125,4.53654479980469,0,2.26478576660156,0,0.206039428710938,0,0.8236083984375,0,0.41180419921875,0,1.84123992919922,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/ts/g8jm0k5x6rn5g79xpwwv6mxh0000gp/T//Rtmp1du25J/file13a07d2ee74e.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so work on optimizing that first.</p>
 <p>Once you find the bottleneck that needs to be optimized, it can be useful to benchmark different potential solutions. The <code>microbenchmark</code> package can help you choose between different options. Continuing with the simple example with the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code> from the <code>readr</code> package.</p>
 <pre class="r"><code>library(microbenchmark)
@@ -424,11 +424,11 @@ microbenchmark(
 )</code></pre>
 <pre><code>## Unit: milliseconds
 ##                                               expr       min        lq
-##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 123.05954 132.64682
-##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  60.28844  63.90531
-##       mean    median        uq      max neval
-##  139.08712 134.87345 142.34705 207.9551   100
-##   68.24655  64.91071  70.58755 102.2127   100</code></pre>
+##         read.csv(&quot;optimization/data/diamonds.csv&quot;) 122.78229 137.72712
+##  readr::read_csv(&quot;optimization/data/diamonds.csv&quot;)  59.87223  72.96549
+##       mean    median        uq       max neval
+##  152.35365 148.70972 161.35379 407.14051   100
+##   76.88907  77.19928  81.16248  95.14518   100</code></pre>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -490,11 +490,11 @@ microbenchmark::microbenchmark(
 )</code></pre>
 <pre><code>## Unit: seconds
 ##        expr         min          lq          mean      median          uq
-##  sequential 0.000002256 0.000002634 0.00000438216 0.000005117 0.000005566
-##    parallel 0.033363058 0.034929309 0.04064780332 0.036427255 0.038860691
-##          max neval
-##  0.000009686   100
-##  0.357578753   100</code></pre>
+##  sequential 0.000001842 0.000002867 0.00000500679 0.000004984 0.000006173
+##    parallel 0.036905593 0.039635664 0.04467902216 0.040336639 0.041958211
+##         max neval
+##  0.00002581   100
+##  0.38085176   100</code></pre>
 <p>Parallelization was actually slower. In this case, the overhead of setting the code to run in parallel far outweighed any performance gain. In general, parallelization works well on long-running &amp; compute intensive jobs.</p>
 </div>
 <div id="a-somewhat-more-complex-example" class="section level2">
@@ -511,7 +511,7 @@ system.time(
          )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##  47.571   0.780  48.688</code></pre>
+##  43.015   1.039  44.456</code></pre>
 <p>A now running the same code in parallel:</p>
 <pre class="r"><code>library(future.apply)
 plan(multiprocess)
@@ -522,7 +522,7 @@ system.time(
                 )
   )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.430   0.018  25.179</code></pre>
+##   0.427   0.023  23.166</code></pre>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution time.</p>
 </div>
 <div id="additional-packages" class="section level2">
@@ -687,9 +687,9 @@ microbenchmark::microbenchmark(
   good_loop(x)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr      min       lq       mean    median       uq       max neval
-##   bad_loop(x) 1131.049 1308.322 2806.61086 1542.9890 2515.548 53175.301   100
-##  good_loop(x)    9.149    9.643   56.75602   11.0725   12.021  4497.198   100</code></pre>
+##          expr      min        lq       mean    median       uq       max neval
+##   bad_loop(x) 1041.416 1271.0035 2128.68008 1308.7880 1458.254 21143.377   100
+##  good_loop(x)    6.527    9.6345   60.90044   11.4585   17.866  4749.872   100</code></pre>
 <p>And note how performance of the “bad” loop degrades as the loop size grows.</p>
 <pre class="r"><code>y &lt;- 1:250
 
@@ -698,9 +698,9 @@ microbenchmark::microbenchmark(
   good_loop(y)
 )</code></pre>
 <pre><code>## Unit: microseconds
-##          expr       min         lq        mean     median        uq        max
-##   bad_loop(y) 18031.319 19219.3155 37324.45112 36963.7990 42494.665 278967.198
-##  good_loop(y)    19.972    21.0745    27.99823    23.7295    36.008     58.381
+##          expr       min        lq        mean     median         uq       max
+##   bad_loop(y) 18156.406 19201.533 29209.44077 30984.3305 33461.8660 52548.620
+##  good_loop(y)    19.872    21.406    30.03467    28.6745    37.2555    66.389
 ##  neval
 ##    100
 ##    100</code></pre>
@@ -718,9 +718,9 @@ microbenchmark::microbenchmark(
   sqrt(x)
 )</code></pre>
 <pre><code>## Unit: nanoseconds
-##             expr   min      lq     mean  median    uq   max neval
-##  lapply(x, sqrt) 33082 33397.5 33772.66 33640.0 33857 42832   100
-##          sqrt(x)   623   728.0   846.62   803.5   906  2011   100</code></pre>
+##             expr   min      lq     mean  median      uq   max neval
+##  lapply(x, sqrt) 33417 33952.0 36694.99 34497.5 35347.5 77467   100
+##          sqrt(x)   624   683.5   903.81   775.5   905.5  3523   100</code></pre>
 </div>
 </div>
 
