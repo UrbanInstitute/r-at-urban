@@ -55,8 +55,8 @@ The theme has been tested against `ggplot2 version 3.0.0`. It will not function 
 Run the following code to install or update `urbnthemes`:
 
 ```
-install.packages("devtools")
-devtools::install_github("UrbanInstitute/urbnthemes")
+install.packages("remotes")
+remotes::install_github("UrbanInstitute/urbnthemes")
 ```
 
 Run the following code at the top of each script:
@@ -68,22 +68,18 @@ library(urbnthemes)
 set_urbn_defaults(style = "print")
 ```
 
-If it is not already installed, please install the free [Lato font from Google fonts](https://www.google.com/fonts/specimen/Lato). If you're on Windows, you'll first need to [install Ghostscript](http://ghostscript.com/download/). You may need to have IT enter an admin password for this installation. Then, in R, tell R where your ghostscript file is. Edit the file path if yours is in a different place
-```
-Sys.setenv(R_GSCMD="C:/Program Files/gs/gs9.05/bin/gswin32c.exe")
-```
+### Installing Lato {#installing_lato}
 
-Run this script once to import and register Lato:
+Your Urban computer may not have the Lato font installed. If it is not installed, please install the free [Lato font from Google](https://www.google.com/fonts/specimen/Lato). Below are step by step instructions:
 
-```
-install.packages(c("ggplot2", "ggrepel", "extrafont"))
+1) Download the [Lato font](https://www.google.com/fonts/specimen/Lato) (as a zip file).
+2) Unzip the file on your computer.
+3) For each `.ttf` file in the unzipped `Lato/` folder, double click the file and click `Install` (on Windows) or `Install Font` (on Mac).
+4) Import and register Lato into R by running `urbnthemes::lato_import()` in the console once. Be patient as this may take a few minutes!
+5) To confirm installation, run `urbnthemes::lato_test()`. If this is successful you're done and Lato will automatically be used when creating plots with `library(urbnthemes)`. You only need to install Lato once per computer.
 
-urbnthemes::lato_install()
-```
 
-Loading and importing fonts may take a few minutes.
-
-Waffle charts with glyphs require fontawesome. `fontawesome_test()` and `fontawesome_install()` are the fontawesome versions of the above functions. Be sure to install fontawesome from [here](https://github.com/hrbrmstr/waffle/tree/master/inst/fonts).
+Waffle charts with glyphs require fontawesome. `fontawesome_test()` and `fontawesome_install()` are the fontawesome versions of the above functions. Be sure to install fontawesome from [here](https://github.com/hrbrmstr/waffle/tree/master/inst/fonts) first.
 
 ### Grammar of Graphics and Conventions
 

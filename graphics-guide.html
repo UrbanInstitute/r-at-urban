@@ -394,21 +394,25 @@ div.tocify {
 <div id="using-libraryurbnthemes" class="section level3">
 <h3>Using library(urbnthemes)</h3>
 <p>Run the following code to install or update <code>urbnthemes</code>:</p>
-<pre><code>install.packages(&quot;devtools&quot;)
-devtools::install_github(&quot;UrbanInstitute/urbnthemes&quot;)</code></pre>
+<pre><code>install.packages(&quot;remotes&quot;)
+remotes::install_github(&quot;UrbanInstitute/urbnthemes&quot;)</code></pre>
 <p>Run the following code at the top of each script:</p>
 <pre><code>library(tidyverse)
 library(urbnthemes)
 
 set_urbn_defaults(style = &quot;print&quot;)</code></pre>
-<p>If it is not already installed, please install the free <a href="https://www.google.com/fonts/specimen/Lato">Lato font from Google fonts</a>. If you’re on Windows, you’ll first need to <a href="http://ghostscript.com/download/">install Ghostscript</a>. You may need to have IT enter an admin password for this installation. Then, in R, tell R where your ghostscript file is. Edit the file path if yours is in a different place</p>
-<pre><code>Sys.setenv(R_GSCMD=&quot;C:/Program Files/gs/gs9.05/bin/gswin32c.exe&quot;)</code></pre>
-<p>Run this script once to import and register Lato:</p>
-<pre><code>install.packages(c(&quot;ggplot2&quot;, &quot;ggrepel&quot;, &quot;extrafont&quot;))
-
-urbnthemes::lato_install()</code></pre>
-<p>Loading and importing fonts may take a few minutes.</p>
-<p>Waffle charts with glyphs require fontawesome. <code>fontawesome_test()</code> and <code>fontawesome_install()</code> are the fontawesome versions of the above functions. Be sure to install fontawesome from <a href="https://github.com/hrbrmstr/waffle/tree/master/inst/fonts">here</a>.</p>
+</div>
+<div id="installing_lato" class="section level3">
+<h3>Installing Lato</h3>
+<p>Your Urban computer may not have the Lato font installed. If it is not installed, please install the free <a href="https://www.google.com/fonts/specimen/Lato">Lato font from Google</a>. Below are step by step instructions:</p>
+<ol style="list-style-type: decimal">
+<li>Download the <a href="https://www.google.com/fonts/specimen/Lato">Lato font</a> (as a zip file).</li>
+<li>Unzip the file on your computer.</li>
+<li>For each <code>.ttf</code> file in the unzipped <code>Lato/</code> folder, double click the file and click <code>Install</code> (on Windows) or <code>Install Font</code> (on Mac).</li>
+<li>Import and register Lato into R by running <code>urbnthemes::lato_import()</code> in the console once. Be patient as this may take a few minutes!</li>
+<li>To confirm installation, run <code>urbnthemes::lato_test()</code>. If this is successful you’re done and Lato will automatically be used when creating plots with <code>library(urbnthemes)</code>. You only need to install Lato once per computer.</li>
+</ol>
+<p>Waffle charts with glyphs require fontawesome. <code>fontawesome_test()</code> and <code>fontawesome_install()</code> are the fontawesome versions of the above functions. Be sure to install fontawesome from <a href="https://github.com/hrbrmstr/waffle/tree/master/inst/fonts">here</a> first.</p>
 </div>
 <div id="grammar-of-graphics-and-conventions" class="section level3">
 <h3>Grammar of Graphics and Conventions</h3>
