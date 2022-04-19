@@ -17,7 +17,7 @@ editor_options:
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
 ::: {#header}
-<img src="mapping/www/images/urban-institute-logo.png" width="350">
+<img src="mapping/www/images/urban-institute-logo.png" width="350"/>
 :::
 
 ```{r markdown-setup, include=FALSE}
@@ -45,9 +45,9 @@ library(rmarkdown)
 This guide will teach you the concepts and code you will need for
 mapping and geospatial analysis in R. **This is a long guide, so if you
 need something specific, we encourage you to scroll to the appropriate
-section using the Table of Contents on the left.** If you just want copy and 
-pasteable code to create different kinds of maps, head to the [`Map Gallery`](#map_gallery). 
-Now let's start mapping!
+section using the Table of Contents on the left.** If you just want copy
+and pasteable code to create different kinds of maps, head to the
+[`Map Gallery`](#map_gallery). Now let's start mapping!
 
 ![](mapping/www/images/yay_maps.gif)
 
@@ -239,7 +239,7 @@ and buffering. Almost all of the mapping and geospatial analysis methods
 described in this guide rely on you having an `sf` dataframe. So let's
 talk about how to get one!
 
-<br> 
+<br>
 
 ## Importing spatial data {.tabset .tabset-pills}
 
@@ -270,11 +270,8 @@ states <- get_urbn_map("states", sf = TRUE)
 counties <- get_urbn_map("counties", sf = TRUE)
 ```
 
-<br>
-<br>
-<br>
-<br>
-  
+<br> <br> <br> <br>
+
 ### Other Census geographies
 
 Use the `library(tigris)` package, which allows you to easily download
@@ -325,8 +322,7 @@ with Census geographies, we recommend checking out the sister package to
 `library(tigris)`: `library(tidycensus)`. That package allows you to
 download in Census variables and Census geographic data simultaneously.
 
-<br>
-<br>
+<br> <br>
 
 ### Countries
 
@@ -348,13 +344,7 @@ ggplot() +
   geom_sf(data = world, mapping = aes())
 ```
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<br> <br> <br> <br> <br> <br> <br>
 
 ### Your own files
 
@@ -406,7 +396,8 @@ arguments you must specify for this function are:
     longitude/latitude coordinates. Remember you need to specify both
     the\
     authority and the SRID code, for example ("EPSG:4326"). For more
-    information on finding and setting CRS codes, please see the [`CRS`](#crs) section.
+    information on finding and setting CRS codes, please see the
+    [`CRS`](#crs) section.
 
 Below is an example of reading in data from a CSV and converting it to
 an `sf` dataframe.
@@ -503,16 +494,14 @@ chip_with_geographies <- chip_with_geographies %>%
   mutate(chip_pct = chip_enrollment / population)
 ```
 
-<br>
-# Project
+<br> \# Project
 
-## Coordinate Reference Systems {.tabset .tabset-pills #crs}
+## Coordinate Reference Systems {#crs .tabset .tabset-pills}
 
 ### The short version
 
-Just watch [this
-video](https://www.youtube.com/watch?v=vVX-PrBRtTY%60) and know the
-following:
+Just watch [this video](https://www.youtube.com/watch?v=vVX-PrBRtTY%60)
+and know the following:
 
 -   All spatial data has a CRS, which specifies how to identify a
     location on earth.
@@ -522,9 +511,9 @@ following:
     CRS with `st_transform()`.
 
 -   The Urban Institute Style Guide requires the use of the Atlas Equal
-    Earth Projection (`"ESRI:102003"`) for national maps. For state and local
-    maps, use [this](https://github.com/veltman/d3-stateplane) handy
-    guide to find an appropriate State Plane projection.
+    Earth Projection (`"ESRI:102003"`) for national maps. For state and
+    local maps, use [this](https://github.com/veltman/d3-stateplane)
+    handy guide to find an appropriate State Plane projection.
 
 <br>
 
@@ -586,8 +575,7 @@ Broadly, there are two kinds of Coordinate Reference Systems:
 
             `r knitr::include_graphics(here::here("mapping", "www", "images", "projecting_xkcd.png"), dpi = 150)`
 
-            credit:
-            [xkcd](https://imgs.xkcd.com/comics/projecting.png)
+            credit: [xkcd](https://imgs.xkcd.com/comics/projecting.png)
 
         -   **projection**: mathematical formula used to convert a 3d
             coordinate system to a 2d flat coordinate system
@@ -617,17 +605,17 @@ metadata:
 knitr::include_graphics(here("mapping", "www", "images", "sf_crs_pic.png"))
 ```
 
-You can also the `st_crs()` function to find the CRS. The CRS code is located at
-the end in `ID[authority, SRID]`.
+You can also the `st_crs()` function to find the CRS. The CRS code is
+located at the end in `ID[authority, SRID]`.
 
 ```{r st_crs}
 st_crs(dc_firestations)
 ```
 
-Sometimes, the CRS will be blank or `NA` as the dataset did not
-specify the CRS. In that case you **MUST find and set the CRS for your
-data before proceeding** with analysis. Below are some good rules of
-thumb for finding out what the CRS for your data is:
+Sometimes, the CRS will be blank or `NA` as the dataset did not specify
+the CRS. In that case you **MUST find and set the CRS for your data
+before proceeding** with analysis. Below are some good rules of thumb
+for finding out what the CRS for your data is:
 
 -   For geojsons, the CRS should always be `EPSG:4326` (or WGS 84). The
     official geojson specification states that this is the only valid
@@ -682,7 +670,7 @@ plane projection instead of the Atlas Equal Earth projection which is
 meant for national maps. `library(crsuggest)` can simplify the process
 of picking an appropriate state plane CRS.
 
-```{r crsuggest-ex, cache = TRUE}
+```{r crsuggest-ex}
 library(crsuggest)
 
 suggest_crs(dc_firestations) %>%
@@ -707,9 +695,10 @@ Viz
 [page](https://urbaninstitute.github.io/r-at-urban/graphics-guide.html#Grammar_of_Graphics_and_Conventions)
 or read the official ggplot [book](html).
 
-The key function for mapping is **the special `geom_sf()` function** which works
-with `sf` dataframes. This function magically detects whether you have
-point or polygon spatial data and displays the results on a map.
+The key function for mapping is **the special `geom_sf()` function**
+which works with `sf` dataframes. This function magically detects
+whether you have point or polygon spatial data and displays the results
+on a map.
 
 ### A simple map
 
@@ -729,7 +718,6 @@ ggplot() +
   )
 ```
 
-  
 ## Styling
 
 ### `library(urbnthemes)`
@@ -851,7 +839,8 @@ There's also `geom_sf_label()` if you want labels with a border.
 # Map Gallery {#map_gallery}
 
 Below are copy and pasteable examples of maps you can make, after you
-have an `sf` dataframe.
+have an `sf` dataframe. In all the examples, we have already run
+`set_urbn_defaults(style = "map")` to get Urban formatting.
 
 ## Choropleth Maps
 
@@ -994,7 +983,6 @@ for creating intervals/bins with slightly different rules. When creating
 bins, be careful as changing the number of bins can drastically change
 how the map looks.
 
-
 ## Bubble Maps
 
 This is just a layered map with one polygon layer and one point layer,
@@ -1024,21 +1012,18 @@ ggplot() +
   )
 ```
 
-<br> 
+<br>
 
 ## Dot-density Maps
 
-These maps scatter dots within a geographic area where dot
-represents a unit (like 100 people, or 1000 houses). They allow for
-representation of the internal heterogeneity of geographic units and are a 
-great alternative to choropleth maps.
+These maps scatter dots within a geographic area where dot represents a
+unit (like 100 people, or 1000 houses). They allow for representation of
+the internal heterogeneity of geographic units and are a great
+alternative to choropleth maps.
 
-To create this kind of map, you need to start with an `sf` dataframe that is of `geometry`
-type `POLYGON` or `MULTIPOLYGON` and then use `as_dot_density()` from `library(tidycensus)`.
-
-
-
-
+To create this kind of map, you need to start with an `sf` dataframe
+that is of `geometry` type `POLYGON` or `MULTIPOLYGON` and then use
+`as_dot_density()` from `library(tidycensus)`.
 
 ```{r}
 library(tidycensus)
@@ -1069,8 +1054,24 @@ dc_race_dots = dc_pop %>%
     erase_water = FALSE
   )
 
+# Plot tracts, then dots on top of tracts
+ggplot() +
+  geom_sf(
+    data = dc_pop,
+    # Make interior of tracts transparent and boundaries black
+    fill = "transparent",
+    color = "black"
+  ) +
+  geom_sf(
+    data = dc_race_dots,
+    # Color in dots by racial group
+    aes(color = variable),
+    # Adjust transparency and size to be more readable
+    alpha = 0.5,
+    size = 1.1,
+    stroke = FALSE
+  ) 
 ```
-
 
 ```{r}
 # Plot tracts, then dots on top of tracts
@@ -1176,8 +1177,8 @@ really want to include them).
 
 ### `library(mapview)`
 
-Probably the most user friendly of the interactive
-mapping R libraries. All you have to do to create an interactive map is:
+Probably the most user friendly of the interactive mapping R libraries.
+All you have to do to create an interactive map is:
 
 ```{r show-mapview}
 library(mapview)
@@ -1191,8 +1192,9 @@ any_sf_dataframe <- chip_with_geographies %>%
 mapview(any_sf_dataframe)
 ```
 
-When you click on an object, you get a popup table of all it's attributes. And 
-when you hover over an object, you get a popup with an object id.
+When you click on an object, you get a popup table of all it's
+attributes. And when you hover over an object, you get a popup with an
+object id.
 
 Each of the above behaviors can be changed if desired. As you'll see in
 the below section, the syntax for `library(mapview)` is significantly
@@ -1249,6 +1251,9 @@ mapview(any_sf_dataframe, col.regions = palette_urbn_green[5]) +
 You can even create slider maps by using the `|` operator!
 
 ```{r mapview-sliders}
+# you many need to install the below library
+library(leaflet.extras2)
+
 mapview(any_sf_dataframe, col.regions = palette_urbn_green[5]) |
   mapview(state_capitals, col.regions = palette_urbn_cyan[5])
 ```
@@ -1271,12 +1276,11 @@ is a good starting point.
 
 # Spatial Operations
 
-
 ## Cropping
 
-Cropping (or clipping) is geographically filtering dataset to just 
-the area we are interested in. Say we wanted to look at the roads around Fire 
-Station 24 in DC. 
+Cropping (or clipping) is geographically filtering dataset to just the
+area we are interested in. Say we wanted to look at the roads around
+Fire Station 24 in DC.
 
 ```{r roads_cropping_before, cache = TRUE, echo = FALSE}
 library(tigris)
@@ -1316,8 +1320,8 @@ ggplot() +
   theme_urbn_map()
 ```
 
-Use `st_intersection` to clip the larger roads dataset to just roads that 
-overlap with the circle.
+Use `st_intersection` to clip the larger roads dataset to just roads
+that overlap with the circle.
 
 ```{r roads_cropping_after}
 
@@ -1339,8 +1343,8 @@ ggplot() +
   theme_urbn_map()
 ```
 
-If you want to clip to data that intersects with the bounding box of the circle, 
-use `st_crop()`:
+If you want to clip to data that intersects with the bounding box of the
+circle, use `st_crop()`:
 
 ```{r}
 dc_roads_around_fire_station_24_clipped <- dc_roads %>%
@@ -1359,7 +1363,6 @@ ggplot() +
   theme_urbn_map()
 ```
 
-
 **More Coming Soon!**
 
 ## Calculating Distance
@@ -1369,6 +1372,7 @@ ggplot() +
 ### Point to Polygon
 
 ### Polygon to Polygon
+
 ## Aggregating
 
 ## Drive/Transit times
@@ -1388,8 +1392,8 @@ blog](https://medium.com/@urban_institute/choosing-a-geocoder-for-the-urban-inst
 ### Cleaning Addresses
 
 The single most important factor in getting accurate geocoded data is
-having cleaned, well structured address data. This can prove difficult as
-address data out in the wild is often messy and unstandardized. While
+having cleaned, well structured address data. This can prove difficult
+as address data out in the wild is often messy and unstandardized. While
 the rules for cleaning addresses are very data specific, below are some
 examples of clean addresses you should aim for in your data cleaning
 process:
@@ -1472,163 +1476,172 @@ process.
 
 </p>
 
-+------------+------------------------------------------------------+
-| Column     | Description                                          |
-+:===========+:=====================================================+
-| Match_addr | The actual address that the inputted address was     |
-|            | matched to. This is the address that the geocoder    |
-|            | used to get Latitudes / Longitudes. If there are     |
-|            | potentially many typos or non standard address       |
-|            | formats in your data file, you will want to take a   |
-|            | close look at this column to confirm that the        |
-|            | matched address correctly handled typos and badly    |
-|            | formatted addresses.                                 |
-+------------+------------------------------------------------------+
-| Longitude  | The WGS 84 datum Longitude (EPSG code 4326)          |
-|            |                                                      |
-+------------+------------------------------------------------------+
-| Latitude   | The WGS 84 datum Latitude (EPSG code 4326)           |
-+------------+------------------------------------------------------+
-| Addr_type  | The match level for a geocode request. This should   |
-|            | be used as an indicator of the precision of geocode  |
-|            | results. Generally, Subaddress, PointAddress,        |
-|            | StreetAddress, and StreetInt represent accurate      |
-|            | matches. The list below contains all possible values |
-|            | for this field. **Green values represent High        |
-|            | accuracy matches, yellow represents Medium accuracy  |
-|            | matches and red represents Low accuracy/inaccurate   |
-|            | matches**. If you have many yellow and red values in |
-|            | your data, you should manually check the results     |
-|            | before proceeding with analysis. All possible        |
-|            | values:\                                             |
-|            | \                                                    |
-|            | **Subaddress:** A subset of a PointAddress that      |
-|            | represents a house or building subaddress location,  |
-|            | such as an apartment unit, floor, or individual      |
-|            | building within a complex. The UnitName, UnitType,   |
-|            | LevelName, LevelType, BldgName, and BldgType field   |
-|            | values help to distinguish subaddresses which may be |
-|            | associated with the same PointAddress. Reference     |
-|            | data consists of point features with associated      |
-|            | house number, street name, and subaddress elements,  |
-|            | along with administrative divisions and optional     |
-|            | postal code; for example, 3836 Emerald Ave, Suite C, |
-|            | La Verne, CA, 91750.\                                |
-|            | \                                                    |
-|            | **PointAddress:** A street address based on points   |
-|            | that represent house and building locations.         |
-|            | Typically, this is the most spatially accurate match |
-|            | level. Reference data contains address points with   |
-|            | associated house numbers and street names, along     |
-|            | with administrative divisions and optional postal    |
-|            | code. The X / Y (`Longitude`/`Latitude`) and         |
-|            | `geometry` output values for a PointAddress match    |
-|            | represent the street entry location for the address; |
-|            | this is the location used for routing operations.    |
-|            | The `DisplayX` and `DisplayY` values represent the   |
-|            | rooftop, or actual, location of the address.         |
-|            | Example: 380 New York St, Redlands, CA, 92373.\      |
-|            | \                                                    |
-|            | **StreetAddress** --- A street address that differs  |
-|            | from PointAddress because the house number is        |
-|            | interpolated from a range of numbers. Reference data |
-|            | contains street center lines with house number       |
-|            | ranges, along with administrative divisions and      |
-|            | optional postal code information, for example, 647   |
-|            | Haight St, San Francisco, CA, 94117.\                |
-|            | \                                                    |
-|            | **StreetInt:** A street address consisting of a      |
-|            | street intersection along with city and optional     |
-|            | state and postal code information. This is derived   |
-|            | from StreetAddress reference data, for example,      |
-|            | Redlands Blvd & New York St, Redlands, CA, 92373.\   |
-|            | \                                                    |
-|            | **StreetName:** Similar to a street address but      |
-|            | without the house number. Reference data contains    |
-|            | street centerlines with associated street names (no  |
-|            | numbered address ranges), along with administrative  |
-|            | divisions and optional postal code, for example, W   |
-|            | Olive Ave, Redlands, CA, 92373.\                     |
-|            | \                                                    |
-|            | **StreetAddressExt:** An interpolated street address |
-|            | match that is returned when parameter                |
-|            | matchOutOfRange=true and the input house number      |
-|            | exceeds the house number range for the matched       |
-|            | street segment.\                                     |
-|            | \                                                    |
-|            | **DistanceMarker:** A street address that represents |
-|            | the linear distance along a street, typically in     |
-|            | kilometers or miles, from a designated origin        |
-|            | location. Example: Carr 682 KM 4, Barceloneta,       |
-|            | 00617.\                                              |
-|            | \                                                    |
-|            | **PostalExt:** A postal code with an additional      |
-|            | extension, such as the United States Postal Service  |
-|            | ZIP+4. Reference data is postal code points with     |
-|            | extensions, for example, 90210-3841.\                |
-|            | \                                                    |
-|            | **POI:** ---Points of interest. Reference data       |
-|            | consists of administrative division place-names,     |
-|            | businesses, landmarks, and geographic features, for  |
-|            | example, Golden Gate Bridge.\                        |
-|            | \                                                    |
-|            | **Locality:** A place-name representing a populated  |
-|            | place. The Type output field provides more detailed  |
-|            | information about the type of populated place.       |
-|            | Possible Type values for Locality matches include    |
-|            | Block, Sector, Neighborhood, District, City,         |
-|            | MetroArea, County, State or Province, Territory,     |
-|            | Country, and Zone. Example: Bogotá, COL,\            |
-|            | \                                                    |
-|            | **PostalLoc:** A combination of postal code and city |
-|            | name. Reference data is typically a union of postal  |
-|            | boundaries and administrative (locality) boundaries, |
-|            | for example, 7132 Frauenkirchen.\                    |
-|            | \                                                    |
-|            | **Postal:** Postal code. Reference data is postal    |
-|            | code points, for example, 90210 USA.                 |
-+------------+------------------------------------------------------+
-| Score      | A number from 1--100 indicating the degree to which  |
-|            | the input tokens in a geocoding request match the    |
-|            | address components in a candidate record. A score of |
-|            | 100 represents a perfect match, while lower scores   |
-|            | represent decreasing match accuracy.                 |
-+------------+------------------------------------------------------+
-| Status     | Indicates whether a batch geocode request results in |
-|            | a match, tie, or unmatched. Possible values include\ |
-|            | \                                                    |
-|            | M - Match. The returned address matches the input    |
-|            | address and is the highest scoring candidate.\       |
-|            | \                                                    |
-|            | T - Tied. The returned address matches the input     |
-|            | address but has the same score as one or more        |
-|            | additional candidates.\                              |
-|            | \                                                    |
-|            | U - Unmatched. No addresses match the inputted        |
-|            | address.                                             |
-+------------+------------------------------------------------------+
-| geometry   | The WKT (Well-known text) representation of the      |
-|            | latitudes and longitudes. This column may be useful  |
-|            | if you're reading the CSV into R, Python, or ArcGIS  |
-+------------+------------------------------------------------------+
-| Region     | The state that `Match_addr` is located in            |
-+------------+------------------------------------------------------+
-| RegionAbbr | Abbreviated State Name. For example, CA for          |
-|            | California                                           |
-+------------+------------------------------------------------------+
-| Subregion  | The county that the input address is located in      |
-+------------+------------------------------------------------------+
-| MetroArea  | The name of the Metropolitan area that `Match_addr`  |
-|            | is located in. This field may be blank if the input  |
-|            | address is not located within a metro area.          |
-+------------+------------------------------------------------------+
-| City       | The city that `Match_addr` is located in             |
-+------------+------------------------------------------------------+
-| Nbrhd      | The Neighborhood that `Match_addr` is located in.    |
-|            | Note these are ESRI defined neighborhoods which may  |
-|            | or may not align with other sources neighborhood     |
-|            | definitions                                          |
-+------------+------------------------------------------------------+
++--------------+---------------------------------------------------+
+| Column       | Description                                       |
++:=============+:==================================================+
+| Match_addr   | The actual address that the inputted address was  |
+|              | matched to. This is the address that the geocoder |
+|              | used to get Latitudes / Longitudes. If there are  |
+|              | potentially many typos or non standard address    |
+|              | formats in your data file, you will want to take  |
+|              | a close look at this column to confirm that the   |
+|              | matched address correctly handled typos and badly |
+|              | formatted addresses.                              |
++--------------+---------------------------------------------------+
+| Longitude    | The WGS 84 datum Longitude (EPSG code 4326)       |
++--------------+---------------------------------------------------+
+| Latitude     | The WGS 84 datum Latitude (EPSG code 4326)        |
++--------------+---------------------------------------------------+
+| Addr_type    | The match level for a geocode request. This       |
+|              | should be used as an indicator of the precision   |
+|              | of geocode results. Generally, Subaddress,        |
+|              | PointAddress, StreetAddress, and StreetInt        |
+|              | represent accurate matches. The list below        |
+|              | contains all possible values for this field.      |
+|              | **Green values represent High accuracy matches,   |
+|              | yellow represents Medium accuracy matches and red |
+|              | represents Low accuracy/inaccurate matches**. If  |
+|              | you have many yellow and red values in your data, |
+|              | you should manually check the results before      |
+|              | proceeding with analysis. All possible values:\   |
+|              | \                                                 |
+|              | **Subaddress:** A subset of a PointAddress that   |
+|              | represents a house or building subaddress         |
+|              | location, such as an apartment unit, floor, or    |
+|              | individual building within a complex. The         |
+|              | UnitName, UnitType, LevelName, LevelType,         |
+|              | BldgName, and BldgType field values help to       |
+|              | distinguish subaddresses which may be associated  |
+|              | with the same PointAddress. Reference data        |
+|              | consists of point features with associated house  |
+|              | number, street name, and subaddress elements,     |
+|              | along with administrative divisions and optional  |
+|              | postal code; for example, 3836 Emerald Ave, Suite |
+|              | C, La Verne, CA, 91750.\                          |
+|              | \                                                 |
+|              | **PointAddress:** A street address based on       |
+|              | points that represent house and building          |
+|              | locations. Typically, this is the most spatially  |
+|              | accurate match level. Reference data contains     |
+|              | address points with associated house numbers and  |
+|              | street names, along with administrative divisions |
+|              | and optional postal code. The X / Y               |
+|              | (`Longitude`/`Latitude`) and `geometry` output    |
+|              | values for a PointAddress match represent the     |
+|              | street entry location for the address; this is    |
+|              | the location used for routing operations. The     |
+|              | `DisplayX` and `DisplayY` values represent the    |
+|              | rooftop, or actual, location of the address.      |
+|              | Example: 380 New York St, Redlands, CA, 92373.\   |
+|              | \                                                 |
+|              | **StreetAddress** --- A street address that       |
+|              | differs from PointAddress because the house       |
+|              | number is interpolated from a range of numbers.   |
+|              | Reference data contains street center lines with  |
+|              | house number ranges, along with administrative    |
+|              | divisions and optional postal code information,   |
+|              | for example, 647 Haight St, San Francisco, CA,    |
+|              | 94117.\                                           |
+|              | \                                                 |
+|              | **StreetInt:** A street address consisting of a   |
+|              | street intersection along with city and optional  |
+|              | state and postal code information. This is        |
+|              | derived from StreetAddress reference data, for    |
+|              | example, Redlands Blvd & New York St, Redlands,   |
+|              | CA, 92373.\                                       |
+|              | \                                                 |
+|              | **StreetName:** Similar to a street address but   |
+|              | without the house number. Reference data contains |
+|              | street centerlines with associated street names   |
+|              | (no numbered address ranges), along with          |
+|              | administrative divisions and optional postal      |
+|              | code, for example, W Olive Ave, Redlands, CA,     |
+|              | 92373.\                                           |
+|              | \                                                 |
+|              | **StreetAddressExt:** An interpolated street      |
+|              | address match that is returned when parameter     |
+|              | matchOutOfRange=true and the input house number   |
+|              | exceeds the house number range for the matched    |
+|              | street segment.\                                  |
+|              | \                                                 |
+|              | **DistanceMarker:** A street address that         |
+|              | represents the linear distance along a street,    |
+|              | typically in kilometers or miles, from a          |
+|              | designated origin location. Example: Carr 682 KM  |
+|              | 4, Barceloneta, 00617.\                           |
+|              | \                                                 |
+|              | **PostalExt:** A postal code with an additional   |
+|              | extension, such as the United States Postal       |
+|              | Service ZIP+4. Reference data is postal code      |
+|              | points with extensions, for example, 90210-3841.\ |
+|              | \                                                 |
+|              | **POI:** ---Points of interest. Reference data    |
+|              | consists of administrative division place-names,  |
+|              | businesses, landmarks, and geographic features,   |
+|              | for example, Golden Gate Bridge.\                 |
+|              | \                                                 |
+|              | **Locality:** A place-name representing a         |
+|              | populated place. The Type output field provides   |
+|              | more detailed information about the type of       |
+|              | populated place. Possible Type values for         |
+|              | Locality matches include Block, Sector,           |
+|              | Neighborhood, District, City, MetroArea, County,  |
+|              | State or Province, Territory, Country, and Zone.  |
+|              | Example: Bogotá, COL,\                            |
+|              | \                                                 |
+|              | **PostalLoc:** A combination of postal code and   |
+|              | city name. Reference data is typically a union of |
+|              | postal boundaries and administrative (locality)   |
+|              | boundaries, for example, 7132 Frauenkirchen.\     |
+|              | \                                                 |
+|              | **Postal:** Postal code. Reference data is postal |
+|              | code points, for example, 90210 USA.              |
++--------------+---------------------------------------------------+
+| Score        | A number from 1--100 indicating the degree to     |
+|              | which the input tokens in a geocoding request     |
+|              | match the address components in a candidate       |
+|              | record. A score of 100 represents a perfect       |
+|              | match, while lower scores represent decreasing    |
+|              | match accuracy.                                   |
++--------------+---------------------------------------------------+
+| Status       | Indicates whether a batch geocode request results |
+|              | in a match, tie, or unmatched. Possible values    |
+|              | include\                                          |
+|              | \                                                 |
+|              | M - Match. The returned address matches the input |
+|              | address and is the highest scoring candidate.\    |
+|              | \                                                 |
+|              | T - Tied. The returned address matches the input  |
+|              | address but has the same score as one or more     |
+|              | additional candidates.\                           |
+|              | \                                                 |
+|              | U - Unmatched. No addresses match the inputted    |
+|              | address.                                          |
++--------------+---------------------------------------------------+
+| geometry     | The WKT (Well-known text) representation of the   |
+|              | latitudes and longitudes. This column may be      |
+|              | useful if you're reading the CSV into R, Python,  |
+|              | or ArcGIS                                         |
++--------------+---------------------------------------------------+
+| Region       | The state that `Match_addr` is located in         |
++--------------+---------------------------------------------------+
+| RegionAbbr   | Abbreviated State Name. For example, CA for       |
+|              | California                                        |
++--------------+---------------------------------------------------+
+| Subregion    | The county that the input address is located in   |
++--------------+---------------------------------------------------+
+| MetroArea    | The name of the Metropolitan area that            |
+|              | `Match_addr` is located in. This field may be     |
+|              | blank if the input address is not located within  |
+|              | a metro area.                                     |
++--------------+---------------------------------------------------+
+| City         | The city that `Match_addr` is located in          |
++--------------+---------------------------------------------------+
+| Nbrhd        | The Neighborhood that `Match_addr` is located in. |
+|              | Note these are ESRI defined neighborhoods which   |
+|              | may or may not align with other sources           |
+|              | neighborhood definitions                          |
++--------------+---------------------------------------------------+
 
 \
 
@@ -1644,5 +1657,3 @@ Coming soon!
 
 sessionInfo()
 ```
-
-
