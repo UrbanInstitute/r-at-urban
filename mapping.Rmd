@@ -1284,7 +1284,181 @@ ggplot() +
 ### Polygon to Polygon
 ## Aggregating
 
-## Drive/Transit times
+## Drive/Transit Times
+
+This section covers calculating travel times and distances between points via different modes of transportation (e.g. drive, transit, walk, bike, multi-modal). R offers a number of packages for conducting such analysis, but we will focus on the use of the [opentripplanner](https://cran.r-project.org/web/packages/opentripplanner/vignettes/opentripplanner.html) package. The package is an interface to use [OpenTripPlanner (OTP)](https://www.opentripplanner.org/) an open-source route planner written in Java. Urban researchers have used this package to analyze how access to place-based resources (e.g. healthcare facilities, jobs, SNAP retailers, etc.) by different modes of transportation varies by geography.
+
+If you have questions about the content in this section, please reach out to [astern\@urban.org](mailto:astern@urban.org){.email}.
+
+### Getting Started
+
+Install opentripplanner by running `install.packages("opentripplanner")`. You will also need to install the RcppSimdJson package for opentripplanner to work correctly using `install.packages("RcppSimdJson")`.
+
+### Installing Java {.tabset .tabset-pills}
+
+You will need to install Java 8 on your computer.**This is going to be the most difficult part of the process** - don't give up! We have outlined the process for different operating systems below.
+
+#### Windows/Mac
+
+Note that the Java link for Windows/Mac in the [prerequisites vignette](https://docs.ropensci.org/opentripplanner/articles/prerequisites.html) goes to the Java SE which is not the correct version to work with `opentripplanner`. Instead, you should download the [Java SDK](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) for your operating system. You will have to create an account prior to signing in.
+
+Once you download the Java SDK (JDK), double click the .exe file to download and follow the prompts, accepting all of the default options. You will need administrator privileges to do this. On a Mac, I was able to immediately run the `otp_check_java()` function in the R console and have it return TRUE, which indicates that Java 8 is correctly installed and identifiable by R. 
+
+On Windows, I needed to add the path to the JDK to my environment variables following [these instructions](https://stackoverflow.com/questions/15796855/java-is-not-recognized-as-an-internal-or-external-command). Note that on my computer, I set `JAVA_HOME` to `C:\Program Files\Java\jdk1.8.0_271` and added `C:\Program Files\Java\jdk1.8.0_271\bin` to my `PATH` environment variable. The location may be different on your computer. See [these instructions](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/) for editing environment variables on Windows, with the change of selecting "Edit environment variables for your account" instead of "Edit the system environment variables". Once the environment variables are edited, I had to completely restart RStudio in order for `otp_check_java()` to return TRUE. 
+
+Verify that you have installed Java Correctly by running `otp_check_java()` and confirming that it returns TRUE.
+
+#### Linux
+
+Run the following in the terminal within repository root directory:
+`sudo apt install openjdk-8-jdk`
+`sudo update-java-alternatives --set /usr/lib/jvm/java-1.8.0-openjdk-amd64`
+
+When testing on Linux, the last command gave an error, yet when running `sudo update-alternatives --config java` in the terminal it shows default java has changed from 11 to 8 and `otp_check_java()` returns TRUE, which confirms that the correct version of Java is installed.
+
+### Sourcing Data for Routing
+
+To use `opentripplanner` you will need the following data sources:
+
+- **OpenStreetMap (OSM) road data:** OTP requires road grid data from OSM, a crowd-sourced repository of road-grid data for the world. You can download OSM extracts for the entire US, a multi-state region, or a single state from [Geofabrik](https://download.geofabrik.de/north-america.html). Note that the OSM data on Geofabrik is updated daily and historical data can be difficult to access. The [Osmconvert](https://wiki.openstreetmap.org/wiki/Osmconvert)command line utility can be used to clip OSM files to a custom bounding box to reduce the memory needed for routing and the analysis time.
+- **General Transit Feed Specification (GTFS) data:** OTP requires transit data be in the GTFS format. [Transitland](https://www.transit.land/) is a useful repository for GTFS feeds from different transit agencies around the world which is updated regularly. Historical feed versions can also be downloaded from Transitland. Note that the historical time series and update schedule varies across agencies. 
+
+OTP brings together the OSM and GTFS data to construct a single graph (`Graph.obj`) that it uses to identify the best route (by default, best = fastest) between start and and points. Note that you must have both OSM and GTFS data even if you intend to use only car routes or transit routes. The `opentripplanner` documentation states that only the OSM data is required however testing car-only routes without transit data included in the graph returned an error. If you only need driving routes, you can download any transit data from transit.land that falls within the area of your road data (e.g. if you are performing analysis for Maine, you could search "Maine" on Transitland and download data for any agency). Note that you can either obtain data by downloading from the Transitland website or using their [API](https://www.transit.land/documentation/rest-api/).
+
+### Setting Up for Routing
+
+#### Create Folder Structure + Download OTP
+
+The `opentripplanner` package requires a very specific folder structure for analysis, which is implemented below. For more information, see "Building your own OTP Graph" in the [getting started vignette](https://cran.r-project.org/web/packages/opentripplanner/vignettes/opentripplanner.html).
+
+```{r otp-folder, eval=FALSE}
+library(opentripplanner)
+library(here)
+
+# create folder for OTP
+path_data <- here("otp")
+dir.create(path_data)
+
+# Download OTP java program 
+path_otp <- otp_dl_jar(path_data, cache =  FALSE)
+
+# Create folder for graphs 
+dir.create(here("otp/graphs"))
+
+# The otp/graphs folder created above can contain multiple different graphs,
+# each with their own folder noting the name of the graph (we'll use "default"). 
+# For example, if you wanted to create a separate graph for each state for an
+# analysis exploring access to health care in multiple states. 
+osm_path <- here("otp/graphs/default")
+dir.create(osm_path)
+```
+
+#### Download OSM and GTFS Data for Graph Build
+
+We'll use New Hampshire data with one transit agency as an example below. Note that we save the data in the directory for our default graph (`osm_path`) created above.
+```{r otp-data, eval=FALSE}
+
+# be sure to set method= "curl" as default on Windows downloads a corrupted version of the pbf file
+download.file("https://download.geofabrik.de/north-america/us/new-hampshire-latest.osm.pbf",
+              destfile = paste(osm_path, "new-hampshire.osm.pbf", sep = "/"),
+              method = "curl")
+
+download.file("http://whereismybus.advancetransit.com/GTFS/feed.zip",
+              destfile = paste(osm_path, "active_transit.zip", sep = "/"),
+              method = "curl")
+```
+
+#### Create Configuration Files
+
+One advantage of OTP is that it's highly customizable using configuration files for the graph build (e.g. the fares to use, the maximum transfer distance, etc.) and the router (e.g. walk speed, penalty waiting before first leg of a journey, etc.). For the full list of parameters that can be set in the configuration files, see the [OTP configuration documentation](http://docs.opentripplanner.org/en/latest/Configuration/#configuring-opentripplanner).
+```{r otp-config, eval=FALSE}
+build_config <- otp_make_config("build")
+otp_write_config(build_config,                
+                 dir = path_data,
+                 router = "default")
+
+router_config <- otp_make_config("router")
+# Configuration parameters can be modified directly
+router_config$routingDefaults$waitAtBeginningFactor <- 0.5
+otp_write_config(router_config,                
+                 dir = path_data,
+                 router = "default")
+```
+
+#### Creating Graph and Starting OTP
+
+Build Graph.obj object used for routing; By default, the function allots 2GB of memory for the graph build. For many moderately sized graphs (e.g. a single state), this will not be sufficient memory. You can increase the memory provided using the memory argument of the function below.
+```{r otp-graph, eval=FALSE}
+
+log1 <- otp_build_graph(otp = path_otp, 
+                        dir = path_data,
+                        router = "default")
+```
+
+Start up OTP java program. This can take a little bit of time. Once started, the program will open up a browser window with the routing interface. You can use that browser to manually find routes between points, but it is not needed for programatically conducting the routing.
+```{r otp-setup, eval=FALSE}
+log2 <- otp_setup(otp = path_otp, dir = path_data)
+```
+
+Create OTP connection object. Set timezone to the relevant timezone for the area you are routing. The command defaults to the timezone of your system returned by `Sys.timezone()`
+
+```{r otp-connect, eval=FALSE}
+otpcon <- otp_connect(timezone = "America/New_York",
+                      router = "default")
+```
+
+### Conducting Routing
+
+OTP can calculate a route between a single start and end point.
+```{r otp-route-one, eval=FALSE}
+departure_time <- as.POSIXct(strptime("2021-09-15 17:30:00", "%Y-%m-%d %H:%M:%S"), 
+                             tz = "America/New_York")
+
+route <- otp_plan(otpcon, 
+                  #OTP requires points be provided in (longitude, latitude) form
+                  fromPlace = c(-71.512, 43.207), 
+                  toPlace = c(-71.564, 43.196),
+                  # Both walking and public transit modes will be considered 
+                  mode = c("WALK", "TRANSIT"),
+                  #Can change to true if want geometry of driving route
+                  get_geometry = FALSE,
+                  #Only returns single fastest itinerary
+                  num_itineraries = 1,
+                  #By default, uses system time on computer as departure time
+                  date_time = departure_time)
+```
+OTP can also conduct batch routing, or calculating multiple routes at once - between a single start point and multiple end points or multiple start points and a single end point. Batch routing offers significant efficiency over calculating each route individually (even when parallelizing)
+
+For example, if we wanted to claculate the drive time between the start location used above and the centroids of all tracts in New Hampshire, we could use batch routing as follows:
+```{r otp-route-batch, eval=FALSE}
+# read in dataframe of population-weighted tract centroid points for New Hampshire
+# downloaded from  https://mcdc.missouri.edu/applications/geocorr2014.html
+nh_centroids <- read_csv(here("mapping/data", "nh_centroids.csv")) %>%
+  select(geoid, lat, long) %>%
+  st_as_sf(coords = c("long", "lat"),
+           crs = 4326)
+
+#Identifies number of cores for batch routing
+n_cores = detectCores() - 1
+
+batch_route <- otp_plan(otpcon, 
+                  fromPlace = c(-71.512, 43.207), 
+                  toPlace = nh_centroids,
+                  fromID = "test_id",
+                  toID = nh_centroids$geoid,
+                  mode = "CAR",
+                  get_geometry = FALSE,
+                  num_itineraries = 1,
+                  ncores = n_cores,
+                  date_time = departure_time)
+```
+
+### Limitations and `opentripplanner` vs. Google Maps
+
+Note that previously, many Urban researchers used the Google Maps API for routing analysis. However, changes to Google's terms of use for this service prohibit users from storing the search results, which makes most research applications a violation of the terms of service. While OTP can replicate much of the functionality of Google Maps that Urban researchers are likely to want, there are two known limitations:
+
+1. **Traffic:** Google Maps incorporates traffic into estimates of travel time using it's proprietary traffic data while OTP does not. 
+2. **Invalid Start or End Locations**: In some cases, a user may have start or end locations that are not reachable by road or transit, such as a location in a national park or a body of water. This is likeliest to occur when using centroids (either geographic or population-based) as the start and/or end points. While Google can automatically shift the invalid start/end point to the nearest valid point, OTP does not have that capacity. If you encounter this issue, you'll need replace the invalid point with a valid one manually, such as by searching the route you want on Google Maps and identifying a nearby start point that can be used as a replacement.
 
 ## Geocoding
 
