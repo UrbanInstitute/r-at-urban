@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>R@URBAN – intro-to-r</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-114294141-1"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'UA-114294141-1');
+</script>
+			
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R@URBAN</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">HOME</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./intro-to-r.html" aria-current="page">INTRO TO R</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./graphics-guide.html">DATA VIZ</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./mapping.html">MAPPING</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./getting-data.html">GETTING DATA</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./optimization.html">OPTIMIZATION</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources.html">RESOURCES</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#what-is-r" id="toc-what-is-r" class="nav-link" data-scroll-target="#what-is-r">What is R?</a></li>
+  <li><a href="#installation-and-updates" id="toc-installation-and-updates" class="nav-link" data-scroll-target="#installation-and-updates">Installation and Updates</a>
+  <ul class="collapse">
+  <li><a href="#when-should-you-update" id="toc-when-should-you-update" class="nav-link" data-scroll-target="#when-should-you-update">When should you update?</a></li>
+  <li><a href="#updatinginstalling-r" id="toc-updatinginstalling-r" class="nav-link" data-scroll-target="#updatinginstalling-r">Updating/Installing R</a></li>
+  <li><a href="#updatinginstalling-rstudio" id="toc-updatinginstalling-rstudio" class="nav-link" data-scroll-target="#updatinginstalling-rstudio">Updating/Installing Rstudio</a></li>
+  </ul></li>
+  <li><a href="#learning-r" id="toc-learning-r" class="nav-link" data-scroll-target="#learning-r">Learning R</a>
+  <ul class="collapse">
+  <li><a href="#what-to-learn" id="toc-what-to-learn" class="nav-link" data-scroll-target="#what-to-learn">What to Learn</a></li>
+  <li><a href="#resources-for-learning" id="toc-resources-for-learning" class="nav-link" data-scroll-target="#resources-for-learning">Resources for Learning</a></li>
+  <li><a href="#library" id="toc-library" class="nav-link" data-scroll-target="#library">Library</a></li>
+  <li><a href="#built-in-data-sets" id="toc-built-in-data-sets" class="nav-link" data-scroll-target="#built-in-data-sets">Built-in Data Sets</a></li>
+  <li><a href="#getting-help" id="toc-getting-help" class="nav-link" data-scroll-target="#getting-help">Getting Help</a></li>
+  <li><a href="#cran-task-views" id="toc-cran-task-views" class="nav-link" data-scroll-target="#cran-task-views">CRAN Task Views</a></li>
+  </ul></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code">R Code</a>
+  <ul class="collapse">
+  <li><a href="#submitting-code" id="toc-submitting-code" class="nav-link" data-scroll-target="#submitting-code">Submitting Code</a></li>
+  <li><a href="#syntax" id="toc-syntax" class="nav-link" data-scroll-target="#syntax">Syntax</a></li>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors">Vectors</a></li>
+  <li><a href="#data-frames" id="toc-data-frames" class="nav-link" data-scroll-target="#data-frames">Data frames</a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing values</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#cran" id="toc-cran" class="nav-link" data-scroll-target="#cran">CRAN</a></li>
+  </ul></li>
+  <li><a href="#organizing-analyses" id="toc-organizing-analyses" class="nav-link" data-scroll-target="#organizing-analyses">Organizing Analyses</a>
+  <ul class="collapse">
+  <li><a href="#projects" id="toc-projects" class="nav-link" data-scroll-target="#projects">Projects</a></li>
+  <li><a href="#naming-conventions" id="toc-naming-conventions" class="nav-link" data-scroll-target="#naming-conventions">Naming Conventions</a></li>
+  <li><a href="#version-control" id="toc-version-control" class="nav-link" data-scroll-target="#version-control">Version Control</a></li>
+  <li><a href="#coding-style" id="toc-coding-style" class="nav-link" data-scroll-target="#coding-style">Coding Style</a></li>
+  </ul></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting it All Together</a></li>
+  <li><a href="#bibliography-and-references" id="toc-bibliography-and-references" class="nav-link" data-scroll-target="#bibliography-and-references">Bibliography and References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato"></p>
+<div id="header">
+<p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
+</div>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<hr>
+<p>R is one of two premier programming languages for data science and one of the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">fastest growing programming languages.</a> Created by researchers for researchers (with some help from software engineers), R offers rich, intuitive tools that make it perfect for visualization, public policy analysis, econometrics, geospatial analysis, and statistics.</p>
+<p>R doesn’t come in a box. R was never wrapped in cellophane and it definitely isn’t purchased at a store. R’s pricelessness and open-source development are two of its greatest strengths, but it can often leave new users without the anchor of the box and booklet often provided with proprietary software.</p>
+<p>This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-gap guide for existing R Users. It starts with the most basic question, “what is R?” and progresses to advanced topics like organizing analyses. Along the way it even demonstrates how to read XKCD comics in R.</p>
+<p>R boasts a strong community in the world and inside the Urban Institute. Please don’t hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org) with thoughts or questions about R.</p>
+</section>
+<section id="what-is-r" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-r">What is R?</h2>
+<hr>
+<p><img src="intro-to-r/images/r-logo.png" class="img-fluid" style="width:15.0%"></p>
+<p><a href="https://www.r-project.org/logo/">Source</a></p>
+<p>R is a free, open-source software for statistical computing. It is known for intuitive, crisp graphics and an extensive, growing library of statistical and analytic methods. Above all, R boasts an enthusiastic community of developers, instructors, and users.</p>
+<p>The copyright and documentation for R is held by a not-for-profit organization called <a href="https://www.r-project.org/foundation/">The R Foundation</a>.</p>
+<p><img src="intro-to-r/images/r-studio-logo.png" class="img-fluid" style="width:15.0%"></p>
+<p><a href="https://en.wikipedia.org/w/index.php?curid=48590482">Source, Fair use</a></p>
+<p>RStudio is a free, open-source integrated development environment (IDE) that runs on top of R. In practice, R users almost exclusively open RStudio and rarely directly open R.</p>
+<p>RStudio is developed by a for-profit company called <a href="https://www.rstudio.com/">RStudio</a>. RStudio, the company, employs some of the R community’s most prolific, open-source developers and creates many open-source tools and trainings.</p>
+<p>While R code can be written in any text editor, the RStudio IDE is a powerful tool with a console, syntax-highlighting, and debugging tools. <a href="https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf">This cheatsheet</a> outlines the power of RStudio.</p>
+</section>
+<section id="installation-and-updates" class="level2">
+<h2 class="anchored" data-anchor-id="installation-and-updates">Installation and Updates</h2>
+<hr>
+<section id="when-should-you-update" class="level3">
+<h3 class="anchored" data-anchor-id="when-should-you-update">When should you update?</h3>
+<p>All Urban computers should come pre-installed with R and Rstudio. However your R version may be out of date and require updating. We recommend having at least R version 3.6.0 or higher. You can check what version of R you have installed by opening Rstudio and submitting the following line of code to the console: <code>R.Version()$version.string</code>.</p>
+<p>If you’re working on a personal computer, you may not have R or Rstudio installed. So follow this guide to install both on your computer.</p>
+</section>
+<section id="updatinginstalling-r" class="level3">
+<h3 class="anchored" data-anchor-id="updatinginstalling-r">Updating/Installing R</h3>
+<ol type="1">
+<li><p>Visit https://cran.r-project.org/bin/windows/base/. The latest R version will be the downloadable link at the top. As of 1/1/2020, that R version is 3.6.2. Click on the link at the top and download the <code>R-x.x.x-win.exe</code> file.</p></li>
+<li><p>Open the R-x.x.x-win.exe` file. Click next, accept all the defaults, and install R. After R has been installed, click the Finish button. You should not need admin privileges for this.</p></li>
+<li><p>Check that your version of R has been updated in Rstudio. If Rstudio is already open, first close it. Then open Rstudio and retype in <code>R.Version()$version.string</code>. You should see an updated version number printed out on the console.</p></li>
+<li><p>Test that R packages are loading as expected. Packages you already had installed should continue to work with newer versions of R. But in some cases, you may need to re-install the packages to work properly with new versions of R.</p></li>
+</ol>
+</section>
+<section id="updatinginstalling-rstudio" class="level3">
+<h3 class="anchored" data-anchor-id="updatinginstalling-rstudio">Updating/Installing Rstudio</h3>
+<ol type="1">
+<li><p>Open Rstudio and go to Help &gt; Check for Updates to see if RStudio is up-to-date</p></li>
+<li><p>If it is out-of-date, download the <a href="https://rstudio.com/products/rstudio/download/#download">appropriate update</a>.</p></li>
+<li><p>Before you run the installer, contact IT at helpdesk@urban.org for administrative approval as the program requires admin access.</p></li>
+<li><p>Run the installer and accept all defaults.</p></li>
+</ol>
+<p>Moving forward, RStudio will automatically and regularly update on Windows computers at the Urban Institute.</p>
+</section>
+</section>
+<section id="learning-r" class="level2">
+<h2 class="anchored" data-anchor-id="learning-r">Learning R</h2>
+<hr>
+<section id="what-to-learn" class="level3">
+<h3 class="anchored" data-anchor-id="what-to-learn">What to Learn</h3>
+<p>There is often more than one way to accomplish a goal in R because of the language’s flexibility. At first, this flexibility can be overwhelming. That’s why it is useful to pick and master one set of tools in R before branching out and learning everything R.</p>
+<p>Fortunately, <a href="https://www.tidyverse.org/">Hadley Wickham’s tidyverse</a> offers a comprehensive set of tools for data analysis that are good for both beginners and experts. The tidyverse is self-described as “an opinionated collection of R packages designed for data science.” The tidyverse consists of almost two dozen clear and concise tools for every part of an analysis workflow. At first, focus on the function <code>read_csv()</code> for loading data, the package <code>dplyr</code> for manipulating data, and the package <code>ggplot2</code> for plotting.</p>
+<p>Here’s a quick example that reads a .csv, filters the data, and creates a publishable column plot in just fifteen lines of code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages and source the Urban Institute ggplot2 theme</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># contains read_csv, library(dplyr), and library(ggplot2)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(urbnthemes)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_urbn_defaults</span>(<span class="at">style =</span> <span class="st">"print"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># read bankdata.csv</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bank <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"intro-to-r/data/bankdata.csv"</span>) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>bank_subset <span class="ot">&lt;-</span> bank <span class="sc">%&gt;%</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filter to observations of unmarried mothers less than age 30</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(married <span class="sc">==</span> <span class="st">"NO"</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span> <span class="dv">30</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># drop all variables except children and income</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(children, income)                                </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plot!</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>bank_subset <span class="sc">%&gt;%</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> children, <span class="at">y =</span> income)) <span class="sc">+</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun.y =</span> <span class="st">"mean"</span>) <span class="sc">+</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">labels =</span> scales<span class="sc">::</span>dollar) <span class="sc">+</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean income"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>             <span class="at">subtitle =</span> <span class="st">"Unmarried mothers less than age 30"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"Urban Institute analysis of bank data"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">"Number of children"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">"Income"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro-to-r/www/images/quick%20example-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="resources-for-learning" class="level3">
+<h3 class="anchored" data-anchor-id="resources-for-learning">Resources for Learning</h3>
+<p><em>R for Data Science</em> by Hadley Wickham and Garrett Grolemund is the best print resource for learning R and the tidyverse. The book is available <a href="http://r4ds.had.co.nz/index.html">online</a> for free and <em>begins</em> with visualization which is motivating and practical. <em>R for Data Science</em> contains dozens of worthwhile exercises but no solutions guide. Please check your solutions against the <a href="https://github.com/UI-Research/r4ds-exercises.git">Urban Institute r4ds solutions guide on GitHub</a> and please contribute if the exercise isn’t already in the guide!</p>
+<p>RStudio publishes a number of cheat sheets that cover the tidyverse. The main cheat sheets can be accessed in RStudio at Help &gt; Cheat Sheets. Additional cheat sheets are accessible here on the <a href="https://www.rstudio.com/resources/cheatsheets/">RStudio website</a>.</p>
+<p>David Robinson, a data scientist from Data Camp, has a new <a href="https://www.datacamp.com/instructors/drobinson">video course</a> about the tidyverse. Few people know as much about R and communicate as effectively as David Robinson.</p>
+<p><em>Advanced R</em> by Hadley Wickham is a good resource for new R users that have experience with other programming languages and computer science. It is available <a href="http://adv-r.had.co.nz/">online</a> for free.</p>
+</section>
+<section id="library" class="level3">
+<h3 class="anchored" data-anchor-id="library">Library</h3>
+<p>It’s easy to feel overwhelmed by the frenetic development of the extended R universe. Books are an invaluable resource for slowing down and focusing on fully-formed ideas.</p>
+<p>Aaron Williams (awilliams@urban.org) has a number of books that can be checked out:</p>
+<ul>
+<li><a href="https://www.nostarch.com/artofr.htm">The Art of R Programming</a></li>
+<li><a href="http://www.springer.com/us/book/9780387981413">ggplot2</a></li>
+<li><a href="http://shop.oreilly.com/product/0636920047995.do">Efficient R Programming</a> (<a href="https://csgillespie.github.io/efficientR/">Online!</a>)</li>
+<li><a href="http://shop.oreilly.com/product/0636920067153.do">Text Mining with R</a> (<a href="https://www.tidytextmining.com/">Online!</a>)</li>
+<li><a href="https://www.guilford.com/books/Reasoning-with-Data/Jeffrey-Stanton/9781462530267/reviews">Reasoning with Data</a></li>
+<li><a href="http://shop.oreilly.com/product/0636920048992.do">Practical Statistics for Data Scientists</a></li>
+</ul>
+</section>
+<section id="built-in-data-sets" class="level3">
+<h3 class="anchored" data-anchor-id="built-in-data-sets">Built-in Data Sets</h3>
+<p>R has many built-in data sets that are useful for practice and even more data sets are accessible through R packages.</p>
+<p>Submitting <code>data()</code> shows a list of all available data sets. <code>cars</code> and <code>iris</code> are two classic sets that are used in many examples.</p>
+<p><code>library(tidyverse)</code> loads many more “tidy” data sets including <code>diamonds</code> and <code>starwars</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(species) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  species      n
+  &lt;chr&gt;    &lt;int&gt;
+1 Human       35
+2 Droid        6
+3 &lt;NA&gt;         4
+4 Gungan       3
+5 Kaminoan     2
+6 Mirialan     2</code></pre>
+</div>
+</div>
+<p><code>library(dslabs)</code> by <a href="https://simplystatistics.org/2018/01/22/the-dslabs-package-provides-datasets-for-teaching-data-science/">Rafael Irizarry</a> includes varied data sets that are intentionally imperfect that are useful for practice. Students of econometrics will enjoy <code>library(wooldridge)</code>. It loads 105 data sets from <em>Introductory Econometrics: A Modern Approach</em> by Jeffrey Wooldridge. Now you can practice estimating your hedonic pricing models in R!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(urbnthemes)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_urbn_defaults</span>(<span class="at">style =</span> <span class="st">"print"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(hprice1) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sqrft, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">lim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">800</span>)) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'"hprice1" data from Wooldridge'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="intro-to-r/www/images/psid-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="getting-help" class="level3">
+<h3 class="anchored" data-anchor-id="getting-help">Getting Help</h3>
+<p>Even the best R programmers spend hours each week searching the Internet for answers. Here are some of the best ways to find answers:</p>
+<p>Submit <code>?</code> and any function name without parentheses (ex. <code>?mean</code>) to see the function documentation in RStudio.</p>
+<p>When Googling, set the search range to the last year to avoid out-of-date solutions and to focus on up-to-date practices.</p>
+<p><a href="https://stackoverflow.com/">Stack Overflow</a> contains numerous solutions. Add <code>[r]</code> to any search to limit results to R. If a problem is particularly perplexing, it is simple to submit questions. Exercise caution when submitting questions because the Stack Overflow community has strict norms about questions and loose norms about respecting novices.</p>
+<p><a href="https://community.rstudio.com/">RStudio Community</a> is a new forum for R Users. It has a smaller back catalog than Stack Overflow but users are friendlier than on Stack Overflow.</p>
+<p>Finally, Aaron Williams (awilliams@urban.org) from IBP and Kyle Ueyama (kueyama@urban.org) from IT are available to solve problems, offer guidance, and share R enthusiasm.</p>
+</section>
+<section id="cran-task-views" class="level3">
+<h3 class="anchored" data-anchor-id="cran-task-views">CRAN Task Views</h3>
+<p>R has sub-communities, frameworks, and tools focused on different subject-matter and and methodological areas. <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a> is invaluable for understanding these communities and finding the best frameworks and tools for different disciplines in R.</p>
+<p>CRAN Task Views has 35 pages focused on subcategories of R ranging from <a href="https://cran.r-project.org/web/views/Econometrics.html">econometrics</a> to natural language processing. Each page is maintained by a subject-matter expert and contains methods, packages, books, and mailing lists that are useful for researchers.</p>
+<p>The econometrics page alone contains detailed information on basic linear regression, microeconometrics, instrumental variables, panel data models, further regression models, time series data and models, data sets, CRAN packages, articles, books, and more.</p>
+</section>
+</section>
+<section id="r-code" class="level2">
+<h2 class="anchored" data-anchor-id="r-code">R Code</h2>
+<hr>
+<p>It’s time to start writing R code. Remember, most R users never open R and exclusively use RStudio. Go ahead and open R once to admire its dated text editor. Then, close R and never directly open it again. Now, open RStudio.</p>
+<section id="submitting-code" class="level3">
+<h3 class="anchored" data-anchor-id="submitting-code">Submitting Code</h3>
+<p>RStudio has four main panels: code editor (top left by default), R console (bottom left by default), environment and history (top right by default), and files, plots, packages, help, and viewer pane (bottom right by default).</p>
+<p>There are two main ways to submit code:</p>
+<ol type="1">
+<li>Type code to the right of <img src="intro-to-r/images/code-console.png" class="img-fluid"> in the R console and hit enter. <strong>Note:</strong> R won’t create a long-term record of this code.</li>
+<li>Click <img src="intro-to-r/images/new-script.png" class="img-fluid"> in the top left to create a new R script in the code editor panel. Type code in the script. Highlight desired code and either click run the in top right of the code editor panel or type Ctrl/command-enter to run code. Scripts can be saved, so they are the best way to write code that will be used again.</li>
+</ol>
+<p>For practice, submit <code>state.name</code> in the R console to create a vector with all fifty state names (sorry statehood advocates, no Washington, D.C.). Next, create a script, paste <code>state.name</code>, highlight the text, and click run at the top right of the code editor. You should get the same output both times.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>state.name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"      
+ [5] "California"     "Colorado"       "Connecticut"    "Delaware"      
+ [9] "Florida"        "Georgia"        "Hawaii"         "Idaho"         
+[13] "Illinois"       "Indiana"        "Iowa"           "Kansas"        
+[17] "Kentucky"       "Louisiana"      "Maine"          "Maryland"      
+[21] "Massachusetts"  "Michigan"       "Minnesota"      "Mississippi"   
+[25] "Missouri"       "Montana"        "Nebraska"       "Nevada"        
+[29] "New Hampshire"  "New Jersey"     "New Mexico"     "New York"      
+[33] "North Carolina" "North Dakota"   "Ohio"           "Oklahoma"      
+[37] "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina"
+[41] "South Dakota"   "Tennessee"      "Texas"          "Utah"          
+[45] "Vermont"        "Virginia"       "Washington"     "West Virginia" 
+[49] "Wisconsin"      "Wyoming"       </code></pre>
+</div>
+</div>
+</section>
+<section id="syntax" class="level3">
+<h3 class="anchored" data-anchor-id="syntax">Syntax</h3>
+<p>The are five fundamental pieces of syntax in R.</p>
+<ul>
+<li><code>&lt;-</code> is the assignment operator. An object created on the right side of an assignment operator is assigned to a name on the left side of an assignment operator. Assignment operators are important for saving the consequences of operations and functions. Operations without assignment operators will typically be printed to the console but not saved.</li>
+<li><code>#</code> begins a comment. Comments are useful for explaining decisions in scripts. As Haldey Wickham notes in the <a href="http://style.tidyverse.org/">Tidyverse styleguide</a>, ’In code, use comments to explain the “why” not the “what” or “how”.</li>
+<li><code>c()</code> combines similar vectors into larger vectors. For example, <code>c(1, 2, 3)</code> is a numeric vector of length three made up of three numeric vectors of length one.</li>
+<li><code>?</code> in front of any function name without parentheses returns function documentation. For example, <code>?mean</code>.</li>
+<li><code>%&gt;%</code> from <code>library(magrittr)</code> and <code>library(tidyverse)</code> is the “pipe operator”. It passes the output from one function to another function. This is useful because strings of operations can be “piped” together instead of each individual operation needing to be assigned to an object.</li>
+</ul>
+</section>
+<section id="vectors" class="level3">
+<h3 class="anchored" data-anchor-id="vectors">Vectors</h3>
+<p>Vectors are the fundamental piece of data in R. They are one-dimensional</p>
+<p>Most vectors are one-dimensional collections of logicals, integers, doubles, characters, factors, dates, or date-times. Vectors can’t mix types</p>
+<p>R has six commonl</p>
+<p>Scalars don’t exist in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">&gt;</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<p>todo(aaron): link to Hadley Wickham talk</p>
+</section>
+<section id="data-frames" class="level3">
+<h3 class="anchored" data-anchor-id="data-frames">Data frames</h3>
+<p>Data frames are combinations of equally lengthed vectors.</p>
+<p>Data analysis in R is built around the data fra</p>
+<p>each observation forms a row each variables forms a column each observational forms a table</p>
+</section>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing values</h3>
+<p>R stores missing values as <code>NA</code>. A single <code>NA</code> in a calculation can cause the entire result to return as <code>NA</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>The contagiousness of <code>NA</code> is good, it makes users explicitly acknowledge dropping missing values with <code>na.rm = TRUE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p><code>== NA</code> does not test for missing values. Instead, use <code>is.na()</code>.</p>
+<ul>
+<li>is.na() and math with booleans</li>
+<li>complete.cases</li>
+</ul>
+</section>
+<section id="functions" class="level3">
+<h3 class="anchored" data-anchor-id="functions">Functions</h3>
+<p>Functions in R are collections of code that when called cause certain actions. R contains hundreds of functions and thousands of more functions can be accessed through packages.</p>
+<p>Most functions take arguments. For example, the function <code>mean()</code> has arguments <code>x</code>, <code>trim</code>, <code>na.rm</code>, and <code>...</code>. The first argument in most functions, in this case <code>x</code>, is an input object. Arguments can be passed to functions by name or position. <code>mean(c(1, 2, 3))</code> is equivalent to <code>mean(x = c(1, 2, 3))</code>.</p>
+<p>Notice how the other three arguments were skipped. Most arguments in functions have default values. The best way to see default values is to submit the function name with a question mark, like <code>?mean</code>. In this case, <code>trim = 0</code>, <code>na.rm = FALSE</code>, and no further arguments were passed through with <code>...</code>.</p>
+<p>In the previous example, the <code>c()</code> function was nested inside of the <code>mean()</code> function. It is also possible to assign a vector of 1, 2, and 3 to a name and pass the name to the mean function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>apples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(apples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>R is a <a href="http://adv-r.had.co.nz/Functional-programming.html">functional programming language</a>. In addition to having many pre-made functions like <code>mean()</code>, R has powerful tools for creating and manipulating custom functions. This is useful because:</p>
+<ul>
+<li>It avoids tedious and error-prone copying-and-pasting and makes iterating processes simple;</li>
+<li>Is a powerful way to organize sets of operations;</li>
+<li>Is a standardized way to save code for later and to share operations with others.</li>
+</ul>
+<p>This last bullet is key to the package system in R.</p>
+</section>
+<section id="packages" class="level3">
+<h3 class="anchored" data-anchor-id="packages">Packages</h3>
+<p>Opening RStudio automatically loads “base R”, a fundamental collection of code and functions that handles simple operations like math and system management. R can be extended with collections of code and functions developed by the R community called packages. This sounds wild, but most packages are created and maintained by some of the best statisticians and developers in the world.</p>
+<p>Most packages can be installed with <code>install.packages("dplyr")</code>, where the string between the quotation marks is the name of the package. Packages installed with <code>install.packages()</code> come from CRAN and must pass certain checks for performance and documentation. Popular packages on CRAN, like dplyr, have as much, if not more support, standards, and quality than code in proprietary software packages like Stata or SAS.</p>
+<p>It is possible, but less common, to install packages from places like GitHub. This is less secure and the functionality of the packages is more likely to change over time. <code>install.packages()</code> need only be run once per version of package per machine and should rarely be included in .R scripts.</p>
+<p>Packages are loaded once per R session with the function <code>library()</code>. It is a good idea to include <code>library(package-name)</code> at the top of scripts for each package used in the script. This way it is obvious at the top of the script which packages are installed and loaded.</p>
+<p><strong>Note:</strong> <code>install.packages()</code> uses quoted package names and <code>library()</code> uses unquoted package names.</p>
+<p>For practice, submit the following three lines of code to install <code>RXKCD</code>, load <code>library(RXKCD)</code>, and get a random <a href="https://www.xkcd.com/">XKCD comic</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RXKCD"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RXKCD)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getXKCD</span>(<span class="st">"random"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="intro-to-r/www/images/xkcd%20run-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Packages are frequently updated, especially around the time R versions change. The easiest way to update packages is Tools &gt; Check for Package Updated in RStudio.</p>
+<p>Occasionally, two loaded packages will have functions with identical names. Any conflicts with be announced when loading packages. See how <code>filter()</code> and <code>lag()</code> from <code>library(tidyverse)</code> and <code>library(stats)</code> conflict:</p>
+<p><img src="intro-to-r/images/load-tidyverse.png" class="img-fluid"> In this case, the tidyverse functions are usually favored. If there is ever a conflict or any doubt about which function is used, use the package name and <code>::</code> to directly call the function. For example, <code>dplyr::select(apples)</code>. <code>::</code> can also be used to call a function without loading the entire package.</p>
+</section>
+<section id="cran" class="level3">
+<h3 class="anchored" data-anchor-id="cran">CRAN</h3>
+<p>The <a href="https://cran.r-project.org/index.html">Comprehensive R Archive Network</a> (CRAN) contains almost 12,000 packages contributed over the last two decades by a range of developers. New packages are added to CRAN almost every day.</p>
+<p>CRAN enables R to have all of the benefits of open-source development and the security and predictability of proprietary statistical packages like SAS and Stata. CRAN weds the benefits of broad-based, real-time package development with certain <a href="https://cran.r-project.org/index.html">standards</a> for functionality and documentation. Methods and tools make it to R before SAS or Stata, if they ever make it to SAS or Stata, but have standards that generally exceed Python or other open-source languages. (See: <a href="https://www.blog.pythonlibrary.org/2017/09/15/malicious-libraries-found-on-python-package-index-pypi/">Malicious Libraries Found on Python Package Index (PyPI)</a>)</p>
+<p>Because of CRAN’s long history and R’s place in the statistics community, CRAN contains many methods that can’t be accessed, much less duplicated, using proprietary software. In addition to being useful now, this also ensures that R isn’t a temporary fad and will have staying power because of the challenge of replicating or besting CRAN.</p>
+<p>R’s extensible design is important, but most tasks can be accomplished with a handful of packages:</p>
+<ul>
+<li><code>ggplot2</code> data visualization</li>
+<li><code>dplyr</code> data management</li>
+<li><code>tidyr</code> data tidying</li>
+<li><code>readr</code> data import</li>
+<li><code>purrr</code> functional programming</li>
+<li><code>tibble</code> data frames</li>
+<li><code>hms</code> times</li>
+<li><code>stringr</code> character strings</li>
+<li><code>lubridate</code> dates/times<br>
+</li>
+<li><code>forcats</code> factors</li>
+<li><code>DBI</code> databases</li>
+<li><code>haven</code> SPSS, SAS, and Stata files</li>
+<li><code>readxl</code>.xls and .xlsx</li>
+<li><code>modelr</code> simple modeling within a pipeline</li>
+<li><code>broom</code> turning models into tidy data</li>
+<li><code>tidyverse</code> loads all of the packages listed up to this point; see Hadley Wichkham’s “<a href="https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/">tidyverse</a>”</li>
+</ul>
+</section>
+</section>
+<section id="organizing-analyses" class="level2">
+<h2 class="anchored" data-anchor-id="organizing-analyses">Organizing Analyses</h2>
+<hr>
+<p>This section outlines how to organize an analysis to get the most out of R. Newer users may want to skip this section and work through <a href="http://r4ds.had.co.nz/">R for Data Science</a> until they understand <code>library(readr)</code>, <code>library(dplyr)</code>, and <code>library(ggplot2)</code>.</p>
+<section id="projects" class="level3">
+<h3 class="anchored" data-anchor-id="projects">Projects</h3>
+<p>Organizing scripts, files, and data is one of the most important steps to creating a clear and reproducible analysis.</p>
+<p>R Projects, proper noun, are the best way to organize an analysis. They have several advantages:</p>
+<ul>
+<li>They make it possible to concurrently run multiple RStudio sessions.</li>
+<li>They allow for project-specific RStudio settings.</li>
+<li>They integrate well with Git version control.</li>
+<li>They are the “node” of relative file paths. (more on this in a second)</li>
+</ul>
+<p>Before setting up an R Project, go to Tools &gt; Global Options and uncheck “Restore most recently opened project at startup”.</p>
+<p><img src="intro-to-r/images/restore.png" class="img-fluid" style="width:50.0%"></p>
+<p>Every new analysis in R should start with an R Project. First, create a directory that holds all data, scripts, and files for the analysis. Storing files and data in a sub-directories is encouraged. For example, data can be stored in a folder called data/.</p>
+<p>Next, click “New Project…” in the top right corner.</p>
+<p><img src="intro-to-r/images/new-project.png" class="img-fluid" style="width:50.0%"></p>
+<p>When prompted, turn your recently created “Existing Directory” into a project.</p>
+<p><img src="intro-to-r/images/existing-directory.png" class="img-fluid" style="width:50.0%"></p>
+<p>Upon completion, the name of the R Project should now be displayed in the top right corner of RStudio where it previously displayed “Project: (None)”. Once opened, .RProj files do not need to be saved. Double-clicking .Rproj files in the directory is now the best way to open RStudio. This will allow for the concurrent use of multiple R sessions and ensure the portability of file paths. Once an RStudio project is open, scripts can be opened by double-clicking individual files in the computer directory or clicking files in the “Files” tab in the top right of RStudio.</p>
+<p>R Projects make code highly portable because of the way they handle file paths. Here are a few rules:</p>
+<section id="filepaths" class="level4">
+<h4 class="anchored" data-anchor-id="filepaths">Filepaths</h4>
+<p>Never use <code>\</code> in file paths in R. <code>\</code> is a regular expression and will complicate an analysis. Fortunately, RStudio understands <code>/</code> in file paths regardless of operating system.</p>
+<p>Never use <code>setwd()</code> in R. It is unnecessary, it makes code unreproducible across machines, and it is rude to collaborators. R Projects create a better framework for file paths. Simply treat the directory where the R Project lives as the working directory and directories inside of that directory as sub-directories.</p>
+<p>For example, say there’s a <code>.Rproj</code> called <code>starwars-analysis.Rproj</code> in a directory called <code>starwars-analysis</code>. If there is a .csv in that folder called <code>jedi.csv</code>, the file can be loaded with <code>read_csv("jedi.csv")</code> instead of <code>read_csv("H:/ibp/analyses/starwars-analysis/diamonds.csv")</code>. If that file is in a sub-directory of <code>starwars-analysis</code> called <code>data</code>, it can be loaded with <code>read_csv("data/jedi.csv")</code>. The same concepts hold for writing data and graphics.</p>
+<p>This simplifies code and makes it portable because all relative filepaths will be identical on all computers. To share an analysis, simply send the entire directory to a collaborator or share it with GitHub.</p>
+<p>Here’s an example directory:</p>
+<center>
+<img src="intro-to-r/images/directory.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>It isn’t always possible to avoid absolute file paths because of the many different ways the Urban Institute stores data. Avoid absolute paths when possible and be deliberate about where analyses live in relation to where data live.</p>
+<p>Finally, it’s good practice to include a README in the same directory as the .Rproj. The README should outline the purpose and the directories and can include information about how to contribute, licenses, dependencies, and acknowledgements. This <a href="https://gist.github.com/PurpleBooth/109311bb0361f32d87a2">GitHub page</a> is a good README template.</p>
+<p>Check out <a href="http://r4ds.had.co.nz/workflow-projects.html">R for Data Science</a> by Hadley Wickham and Garrett Grolemund for a more thorough explanation of this workflow. Jenny Bryan also has a good <a href="https://www.tidyverse.org/articles/2017/12/workflow-vs-script/">blogpost</a> about avoiding <code>setwd()</code>.</p>
+</section>
+</section>
+<section id="naming-conventions" class="level3">
+<h3 class="anchored" data-anchor-id="naming-conventions">Naming Conventions</h3>
+<p>Naming functions, objects, variables, files, and scripts is one of the toughest and least-taught dimensions of computer programming. Better names can add clarity to code, save time and effort, and minimize errors caused by accidentally overwriting existing functions or other objects.</p>
+<blockquote class="blockquote">
+<p>There are only two hard things in Computer Science: cache invalidation and naming things. ~ <a href="http://www.meerkat.com/2017/12/naming-things-hard/">Phil Karlton</a></p>
+</blockquote>
+<section id="functions-and-other-objects" class="level4">
+<h4 class="anchored" data-anchor-id="functions-and-other-objects">Functions and Other Objects</h4>
+<p>R is case-sensitive.</p>
+<p>Objects in R can be named anything - <a href="https://www.r-bloggers.com/rules-for-naming-objects-in-r/">even unicode characters</a>. But just because something <em>can</em> be named anything doesn’t mean it should.</p>
+<p>Most functions and objects in R are lowerCamelCase, period.separated, or underscore_separated. As an individual or team, it’s important to pick a style and stick with it, but as <a href="https://journal.r-project.org/archive/2012-2/RJournal_2012-2_Baaaath.pdf">this article</a> from 2012 shows, there isn’t much consistency across the R community. Hadley Wickham’s tidyverse uses underscores, so expect to see some consolidation into this style.</p>
+<p>In general, it’s good practice to name functions with verbs and other objects with nouns.</p>
+<p>Variable and object names that start with numbers, have spaces, or use peculiar syntax require back-ticks.</p>
+<blockquote class="blockquote">
+<p>select(urban, `R Users Group`)</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>urban$`R Users Group`)</p>
+</blockquote>
+<p>Finally, it’s possible to overwrite existing functions and other objects in R with the assignment operator. Don’t give vectors or data frames the same names as exisiting functions and don’t overwrite existing functions with custom functions.</p>
+</section>
+<section id="files" class="level4">
+<h4 class="anchored" data-anchor-id="files">Files</h4>
+<p>Naming conventions for scripts and files is probably the most overlooked dimension in programming and analysis. The first three bullets from this section come from this <a href="http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf">rich slide deck</a> by Jenny Bryan. This may seem pedantic, but picking a file naming convention now can save a bunch of time and headaches in the future.</p>
+<p><strong>1) Machine readable</strong></p>
+<p>Create file names that are easily machine readable. Use all lower case letters and skip punctuation other than delimiters. Use underscores as characters for splitting the file name. For example, <code>stringr::str_split_fixed("2018-01-10_r-introduction_machine-readable-example_01.csv", "[_\\.]", 5)</code> splits the file name on underscores and periods and returns date, project, file name, file number, and file type. This information can then be stored and sorted in a data frame.</p>
+<p><strong>2) Human readable</strong></p>
+<p>Create file names that are human readable. The example from above is informative without any machine interpretation.</p>
+<p><strong>3) Plays well with default ordering</strong></p>
+<p>It is often useful to include date or sequence numbers in script and file names. For example, include 2018-10-01 for data collected on January 10th, 2018 or include 3 for the third script a sequence of five <code>.R</code> programs. Starting file names with the date or sequence numbers means files will show up in a logical order by default. Be sure to use ISO 8601 standard for dates (YYYY-MM-DD).</p>
+<p><strong>4) Don’t Use File Names for Version Control</strong></p>
+<p>Version control with file names is unwieldy and usually results in names that are barely human readable and definitely not machine readable.</p>
+<blockquote class="blockquote">
+<p>“2018-01-10_r-introduction_machine-readable-example_01_v2_for-aaron_after-review_before-submission.R”</p>
+</blockquote>
+<p>Iterations usually don’t iterate sensibly. For example, what was “v1”, “v2” abandoned for “for-aaron”, “after-review”, “before-submission”. Furthermore, version control with file names is poor for concurrent work and merging.</p>
+<p>The next section will outline the optimal tool for version control.</p>
+</section>
+</section>
+<section id="version-control" class="level3">
+<h3 class="anchored" data-anchor-id="version-control">Version Control</h3>
+<p>The workflow outlined above integrates perfectly with version control like Git and distributed version control repository hosting services like GitHub.</p>
+<p>Version control is a system for recording changes to files over time. Version control is built around repositories. In this case, the folder containing the <code>.Rproj</code> is the perfect directory to use as a repository. A handful of simple commands are used to track and commit changes to text files (.R, .Rmd, etc.) and data. This record is valuable for testing alternatives, communicating with others and your future self, and documenting progress on projects.</p>
+<p>GitHub is a distributed repository system built on top of Git. GitHub has a number of valuable tools for collaboration and project management. In particular, it makes concurrent collaboration on code simpler with branches and has a slick system for issues. Here are the <a href="https://github.com/UrbanInstitute/urban_R_theme/branches">branches</a> and <a href="https://github.com/UrbanInstitute/urban_R_theme/issues">issues</a> for the Urban Institute R Graphics Guide. It also has free web hosting for websites like the website you are reading right now. <a href="https://try.github.io/levels/1/challenges/1">GitHub has a quick guide that is a good place to start learning Git</a>.</p>
+<p>The Urban Institute has a number of legacy models and code bases that span years and have been touched by scores of brilliant researchers. The future value of a record of all code changes and development is borderline unthinkable.</p>
+</section>
+<section id="coding-style" class="level3">
+<h3 class="anchored" data-anchor-id="coding-style">Coding Style</h3>
+<blockquote class="blockquote">
+<p>“Good coding style is like using correct punctuation. You can manage without it, but it sure makes things easier to read.” ~Hadley Wickham (2014)</p>
+</blockquote>
+<p>good coding style is like using correct punctuation you can manage without it but it sure makes thing easier to read</p>
+<p>The details of a coding style are less important than consistently sticking to that style. Be flexible when working with collaborators so the style doesn’t change inside an analysis.</p>
+<p>Here are three good sources for inspiration:</p>
+<ul>
+<li><a href="http://style.tidyverse.org/">Tidyverse Style Guide</a></li>
+<li><a href="https://google.github.io/styleguide/Rguide.xml">Google’s R Style Guide</a></li>
+<li><a href="http://adv-r.had.co.nz/Style.html">Hadley Wickham’s R Style Guide</a></li>
+</ul>
+</section>
+</section>
+<section id="putting-it-all-together" class="level2">
+<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting it All Together</h2>
+<hr>
+<p>R can augment or replace a traditional proprietary statistical packages like SAS or Stata with a few extra bells and whistles, but hopefully this guide and other resources show a fuller vision for developing reproducible, accurate, and collaborative analyses.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>This research pipeline, to use the phrase by Roger Peng, Jeff Leek, and Brian Caffo, combines the best of traditional economic and social policy research, computer science/software development, and statistics.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Here are the rules:</p>
+<section id="no-steps-in-an-analysis-are-done-by-hand-and-all-steps-are-recorded-with-executable-scripts." class="level4">
+<h4 class="anchored" data-anchor-id="no-steps-in-an-analysis-are-done-by-hand-and-all-steps-are-recorded-with-executable-scripts.">1) No steps in an analysis are done by hand and all steps are recorded with executable scripts.</h4>
+<p>It is common to use executable scripts to estimate a regression equation or to tabulate weighted summary statistics. But for some reason, other steps like file management, data munging, and visualization are often done “by hand”. Good science demands that every step of an analysis is recorded - and if possible - with executable scripts.</p>
+<p>Fortunately, it is possible to script most steps in R from downloading data from the Internet and accessing APIs to visualizations and drafting manuscripts. This may be challenging at first, but it will save time and result in better research in the long run.</p>
+</section>
+<section id="all-code-is-entirely-reproducible-and-portable." class="level4">
+<h4 class="anchored" data-anchor-id="all-code-is-entirely-reproducible-and-portable.">2) All code is entirely reproducible and portable.</h4>
+<p>Executable scripts are for communicating with other researchers and our future selves. Scripts lose value if they aren’t portable and can’t be reproduced in the future or by others. Recording every step with execuatble scripts is a start, but scripts aren’t valuable if they require expensive proprietary software,or if researchers have to significantly alter scripts to run an analysis.</p>
+<p>Open source software, like R, promotes accessibility, portability, and reproducibility. Also, be sure to avoid <code>setwd()</code> and use relative filepaths.</p>
+</section>
+<section id="local-and-collaborative-version-control-is-used-and-all-repositories-include-all-code-and-a-readme." class="level4">
+<h4 class="anchored" data-anchor-id="local-and-collaborative-version-control-is-used-and-all-repositories-include-all-code-and-a-readme.">3) Local and collaborative version control is used and all repositories include all code and a README.</h4>
+<p>Use local version control like Git and a distributed version control repository hosting service like GitHub to track changes and share analyses. The version control should include all scripts and meta information about the analysis in a README.</p>
+</section>
+<section id="raw-data-and-tidy-analytic-data-are-stored-in-a-collaborative-location-with-a-code-book." class="level4">
+<h4 class="anchored" data-anchor-id="raw-data-and-tidy-analytic-data-are-stored-in-a-collaborative-location-with-a-code-book.">4) Raw data and tidy analytic data are stored in a collaborative location with a code book.</h4>
+<p>Many raw data are already stored in collaborative locations like BLS.gov and don’t need to be duplicated. Tidy analytic data, like the data used to estimate a regression equation, should be stored in a collaborative location. This is good practice, but is less essential if executable scripts are flawless and reproducible. Researcher-entered data and data from less-stable sources should be stored in raw and analytic forms.</p>
+<p>Small data sets can be stored on GitHub without issue. Larger data sets should be stored in collaborative locations accessible by scripting languages. This is only possible for public data and best-practices for private data are less established.</p>
+<p>Save codebooks for data sets as text files or PDFs in repositories. Creating codebooks for user-entered data or variables created in executable scripts is often worth the time.</p>
+</section>
+<section id="code-review-and-issue-tracking-are-used-to-improve-accuracy-and-computational-efficiency." class="level4">
+<h4 class="anchored" data-anchor-id="code-review-and-issue-tracking-are-used-to-improve-accuracy-and-computational-efficiency.">5) Code review and issue tracking are used to improve accuracy and computational efficiency.</h4>
+<p>Getting stronger programmers and/or methodologists to review code is valuable for limiting programming and analytic mistakes, improving computational efficiency, and learning.</p>
+<p><a href="https://guides.github.com/features/issues/">GitHub issues</a> is a powerful tool for managing, discussing, and collaborating on code.</p>
+</section>
+<section id="projects-rely-heavily-on-literate-statistical-programming-and-standard-means-of-distribution-for-execution-validation-and-publishing." class="level4">
+<h4 class="anchored" data-anchor-id="projects-rely-heavily-on-literate-statistical-programming-and-standard-means-of-distribution-for-execution-validation-and-publishing.">6) Projects rely heavily on literate statistical programming and standard means of distribution for execution, validation, and publishing.</h4>
+<p>Literate statistical programming is the combination of natural language explanations for humans and executable code in one document. The idea was created by Donald Knuth and is embodied by R Markdown.</p>
+<p>R Markdown combines text chunks, code chunks, and output chunks in one script that can be “knitted” using <code>library(knitr)</code> to created PDFs, books, .htmls, and websites like the website where this guide lives.</p>
+<p>This workflow combines the analytic and narrative process in a tool that is flexible, scalable, reproducible, and less error-prone. R Markdown documents can be used for executing programs, validating models and analyses, and publishing. These documents can be submitted to many academic journals and shared easily with <a href="https://pages.github.com/">GitHub pages</a>.</p>
+</section>
+<section id="software-versions-and-dependencies-are-recorded-and-all-software-is-cited-in-publications." class="level4">
+<h4 class="anchored" data-anchor-id="software-versions-and-dependencies-are-recorded-and-all-software-is-cited-in-publications.">7) Software versions and dependencies are recorded and all software is cited in publications.</h4>
+<p><code>sessionInfo()</code> reports the R version, locale, packages used, and other important information about an R session. <code>citation()</code> creates a text and BibTex entry of the citation for R. <code>citation(&lt;package-name&gt;)</code> creates a text and BibTex entry for R packages. <code>library(packrat)</code> (outlined <a href="https://rstudio.github.io/packrat/">here</a>) is a tool for saving R dependencies.</p>
+</section>
+</section>
+<section id="bibliography-and-references" class="level2">
+<h2 class="anchored" data-anchor-id="bibliography-and-references">Bibliography and References</h2>
+<hr>
+<p>Hadley Wickham (2017). tidyverse: Easily Install and Load the ‘Tidyverse’. R package version 1.2.1. https://CRAN.R-project.org/package=tidyverse</p>
+<p>Hadley Wickham and Garrett Grolemund (2017). R For Data Science http://r4ds.had.co.nz/</p>
+<p>Hadley Wickham (2014). Advanced R http://adv-r.had.co.nz/Style.html</p>
+<p>Hilary S. Parker (2017. Opinionated Analysis Development https://www.rstudio.com/resources/videos/opinionated-analysis-development/</p>
+<p>Jenny Bryan (2017).<br>
+Project-oriented workflow https://www.tidyverse.org/articles/2017/12/workflow-vs-script/</p>
+<p>Jenny Bryan (2015). naming things. http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf</p>
+<p>JJ Allaire, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng and Winston Chang (2017). rmarkdown: Dynamic Documents for R. R package version 1.8. https://CRAN.R-project.org/package=rmarkdown</p>
+<p>Justin M. Shea (2017). wooldridge: 105 Data Sets from “Introductory Econometrics: A Modern Approach” by Jeffrey M. Wooldridge. R package version 1.2.0. https://CRAN.R-project.org/package=wooldridge</p>
+<p>Roger Peng Reproducible Research Part 2 https://www.coursera.org/learn/reproducible-research/lecture/abevs/reproducible-research-concepts-and-ideas-part-2</p>
+<p>Yihui Xie (2017). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.18.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] RXKCD_1.9.2      wooldridge_1.4-2 urbnthemes_0.0.2 forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.8      purrr_0.3.4      readr_2.1.1     
+ [9] tidyr_1.2.0      tibble_3.1.6     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.2        bit64_4.0.5       vroom_1.5.7       jsonlite_1.7.2   
+ [5] modelr_0.1.8      assertthat_0.2.1  cellranger_1.1.0  yaml_2.2.1       
+ [9] ggrepel_0.9.1     Rttf2pt1_1.3.9    pillar_1.7.0      backports_1.4.0  
+[13] glue_1.6.2        extrafontdb_1.0   digest_0.6.29     rvest_1.0.2      
+[17] colorspace_2.0-2  htmltools_0.5.2   plyr_1.8.6        pkgconfig_2.0.3  
+[21] broom_0.7.10      haven_2.4.3       scales_1.1.1      jpeg_0.1-9       
+[25] tzdb_0.2.0        generics_0.1.2    farver_2.1.0      ellipsis_0.3.2   
+[29] withr_2.4.3       cli_3.2.0         RJSONIO_1.3-1.6   magrittr_2.0.3   
+[33] crayon_1.5.1      readxl_1.4.0.9000 evaluate_0.14     fs_1.5.1         
+[37] fansi_1.0.3       xml2_1.3.3        tools_4.1.2       hms_1.1.1        
+[41] lifecycle_1.0.1   munsell_0.5.0     reprex_2.0.1      compiler_4.1.2   
+[45] rlang_1.0.2       grid_4.1.2        rstudioapi_0.13   htmlwidgets_1.5.4
+[49] labeling_0.4.2    rmarkdown_2.11    gtable_0.3.0      DBI_1.1.1        
+[53] R6_2.5.1          gridExtra_2.3     lubridate_1.8.0   knitr_1.36       
+[57] fastmap_1.1.0     bit_4.0.4         extrafont_0.17    utf8_1.2.2       
+[61] stringi_1.7.6     parallel_4.1.2    Rcpp_1.0.8        vctrs_0.4.1      
+[65] png_0.1-7         dbplyr_2.1.1      tidyselect_1.1.2  xfun_0.28        </code></pre>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1" role="doc-endnote"><p>The language “reproducible, accurate, and collaborative analyses” comes from <a href="https://www.rstudio.com/resources/videos/opinionated-analysis-development/">Hilary S. Parker’s talk</a> at rstudio::conf 2017 about opinionated analysis development.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>The basis for <a href="https://www.coursera.org/learn/reproducible-research/lecture/abevs/reproducible-research-concepts-and-ideas-part-2">this section</a> comes from this Coursera talk by Roger Peng.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,69 @@
+---
+output: 
+  html_document:
+    includes:
+      in_header: analytics.html  	
+    css: styles.css
+    #code_folding: hide
+    toc: TRUE
+    toc_float: TRUE
+    pandoc_args:
+      "--tab-stop=2" 
+---
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+<div id="header">
+<img src="graphics-guide/www/images/urban-institute-logo.png" width="350">
+</div>
+
+# Free Books
+
+### Intro
+
+* [R for Data Science](https://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham
+
+### Data Viz
+
+* [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/) by Hadley Wickham
+* [Data Visualization - A practical introduction](http://socviz.co/index.html#preface) by Kieran Healy
+
+### *down
+
+* [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/) by Yihui Xie, J. J. Allaire, and Garrett Grolemund
+* [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/) by Yihui Xie, Amber Thomas, and Alison Presmanes Hill
+* [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) by Yihui Xie
+
+### Statistics
+
+* [Learning Statistics with R](https://learningstatisticswithr.com/) by Danielle Navarro
+* [Introduction to Econometrics with R](https://www.econometrics-with-r.org/) by Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer
+* [An Introduction to Bayesian Thinking](https://statswithr.github.io/book/) by Merlise Clyde et. al.
+* [Statistical Inference via Data Science](https://moderndive.com/index.html) by Chester Ismay and Albert Y. Kim
+
+### Machine Learning
+
+* [Hands-On Machine Learning with R](https://bradleyboehmke.github.io/HOML/) by Bradley Boehmke & Brandon Greenwell
+* [Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/) by Max Kuhn and Kjell Johnson
+
+### Mapping and Geospatial Analysis
+
+* [Geocomputation with R](https://geocompr.robinlovelace.net/) by Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+
+### Text Analysis
+
+* [Text Mining with R A Tidy Approach](https://www.tidytextmining.com/) by Julia Silge and David Robinson
+
+### Programming
+
+* [Advanced R](https://adv-r.hadley.nz/) by Hadley Wickham
+* [R Packages](https://r-pkgs.org/) by Hadley Wickham
+* [Master Spark with R](https://therinspark.com/) by Javier Luraschi, Kevin Kuo, and Edgar Ruiz
+* [Functional programming and unit testing for data munging with R](https://b-rodrigues.github.io/fput/) by Bruno Rodrigues
+
+# Websites
+
+* [RStudio Essentials](https://resources.rstudio.com/)
+* [RStudio Education](https://education.rstudio.com/)
+* [R Cheat Sheets](https://rstudio.com/resources/cheatsheets/)
+* Andrew Heiss' free [Data Viz Course](https://datavizm20.classes.andrewheiss.com/)
