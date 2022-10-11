@@ -11,12 +11,11 @@ output:
       "--tab-stop=2"
 ---
 
-
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
-<div id="header">
-<img src="intro-to-r/images/urban-institute-logo.png" width="350">
-</div>
+::: {#header}
+<img src="intro-to-r/images/urban-institute-logo.png" width="350"/>
+:::
 
 ```{r echo = FALSE}
 # source(here::here("getting-data", "census_api_key.R"))
@@ -35,13 +34,13 @@ options(scipen = 999)
 
 ## Introduction
 
-This guide outlines some useful workflows for pulling data sets commonly used by the Urban Institute. 
+This guide outlines some useful workflows for pulling data sets commonly used by the Urban Institute.
 
 ## `library(tidycensus)`
 
-`library(tidycensus)` by Kyle Walker ([complete intro here](https://walkerke.github.io/tidycensus/)) is the best tool for accessing some Census data sets in R from the Census Bureau API. The package returns tidy data frames and can easily pull shapefiles by adding `geometry = TRUE`.  
+`library(tidycensus)` by Kyle Walker ([complete intro here](https://walkerke.github.io/tidycensus/)) is the best tool for accessing some Census data sets in R from the Census Bureau API. The package returns tidy data frames and can easily pull shapefiles by adding `geometry = TRUE`.
 
-You will need to [apply for a Census API key](https://api.census.gov/data/key_signup.html) and [add it to your R session](https://walkerke.github.io/tidycensus/articles/basic-usage.html). Don't add your API key to your script and don't add it to a GitHub repository! 
+You will need to [apply for a Census API key](https://api.census.gov/data/key_signup.html) and [add it to your R session](https://walkerke.github.io/tidycensus/articles/basic-usage.html). Don't add your API key to your script and don't add it to a GitHub repository!
 
 Here is a simple example for one state with shapefiles:
 
@@ -61,12 +60,12 @@ get_acs(geography = "tract",
 
 Smaller geographies like Census tracts can only be pulled state-by-state. This example demonstrates how to iterate across FIPS codes to pull Census tracts for multiple states. The process is as follows:
 
-1. Pick the variables of interest
-2. Create a vector of state FIPS codes for the states of interest
-3. Create a custom function that works on a single state FIPS code
-4. Iterate the function along the vector of state FIPS codes with `map_df()` from `library(purrr)`
+1.  Pick the variables of interest
+2.  Create a vector of state FIPS codes for the states of interest
+3.  Create a custom function that works on a single state FIPS code
+4.  Iterate the function along the vector of state FIPS codes with `map_df()` from `library(purrr)`
 
-Here is an example that pulls median household income at the Census tract level for multiple states: 
+Here is an example that pulls median household income at the Census tract level for multiple states:
 
 ```{r tidycensus-iteration}
 # variables of interest
@@ -94,7 +93,7 @@ map_df(.x = state_fips, # iterate along the vector of state fips codes
 			 .f = get_income) # apply get_income() to each fips_code  
 ```
 
-`library(tidycensus)` works well with `library(tidyverse)` and enables access to geospatial data, but it is limited to only some Census Bureau data sets. The next package has less functionality but allows for accessing any data available on the Census API. 
+`library(tidycensus)` works well with `library(tidyverse)` and enables access to geospatial data, but it is limited to only some Census Bureau data sets. The next package has less functionality but allows for accessing any data available on the Census API.
 
 <br>
 
@@ -102,7 +101,7 @@ map_df(.x = state_fips, # iterate along the vector of state fips codes
 
 `library(censusapi)` by Hannah Recht ([complete intro here](https://cran.r-project.org/web/packages/censusapi/vignettes/getting-started.html)) can access any published table that is accessible through the Census Bureau API. A full listing is available [here](https://api.census.gov/data.html).
 
-You will need to [apply for a Census API key](https://api.census.gov/data/key_signup.html) and [add it to your R session](https://cran.r-project.org/web/packages/censusapi/vignettes/getting-started.html). Don't add your API key to your script and don't add it to a GitHub repository! 
+You will need to [apply for a Census API key](https://api.census.gov/data/key_signup.html) and [add it to your R session](https://cran.r-project.org/web/packages/censusapi/vignettes/getting-started.html). Don't add your API key to your script and don't add it to a GitHub repository!
 
 Here is a simple example that pulls median household income and its margin of error for Census tracts in Alabama:
 
@@ -116,6 +115,7 @@ vars <- c(
 )
 
 getCensus(name = "acs/acs5",
+					key = Sys.getenv("CENSUS_API_KEY"),
 					vars = vars, 
 					region = "tract:*",
 					regionin = "state:01",
@@ -125,12 +125,12 @@ getCensus(name = "acs/acs5",
 
 Smaller geographies like Census tracts can only be pulled state-by-state. This example demonstrates how to iterate across FIPS codes to pull Census tracts for multiple states. The process is as follows:
 
-1. Pick the variables of interest
-2. Create a vector of state FIPS codes for the states of interest
-3. Create a custom function that works on a single state FIPS code
-4. Iterate the function along the vector of state FIPS codes with `map_df()` from `library(purrr)`
+1.  Pick the variables of interest
+2.  Create a vector of state FIPS codes for the states of interest
+3.  Create a custom function that works on a single state FIPS code
+4.  Iterate the function along the vector of state FIPS codes with `map_df()` from `library(purrr)`
 
-Here is an example that pulls median household income at the Census tract level for multiple states: 
+Here is an example that pulls median household income at the Census tract level for multiple states:
 
 ```{r censusapi-iteration}
 # variables of interest
@@ -145,7 +145,8 @@ state_fips <- c("01", "02", "04")
 # create a custom function that works for one state
 get_income <- function(state_fips) {
 	
-	income_data <- getCensus(name = "acs/acs5",
+	income_data <- getCensus(name = "acs/acs5", 
+													 key = Sys.getenv("CENSUS_API_KEY"),
 													 vars = vars, 
 													 region = "tract:*",
 													 regionin = paste0("state:", state_fips),

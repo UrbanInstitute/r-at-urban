@@ -1,6 +1,6 @@
 project: 
    type: website
-   output-dir: "."
+   output-dir: docs
 include-in-header: analytics.html
 
 website:
