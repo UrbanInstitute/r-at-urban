@@ -37,7 +37,7 @@ R doesn't come in a box. R was never wrapped in cellophane and it definitely isn
 
 This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-gap guide for existing R Users. It starts with the most basic question, "what is R?" and progresses to advanced topics like organizing analyses. Along the way it even demonstrates how to read XKCD comics in R. 
 
-R boasts a strong community in the world and inside the Urban Institute. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org) with thoughts or questions about R.  
+R boasts a strong community in the world and inside the Urban Institute. Please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Amy Rogin (arogin@urban.org) with thoughts or questions about R.  
 
 ## What is R?
 
@@ -201,7 +201,7 @@ When Googling, set the search range to the last year to avoid out-of-date soluti
 
 [RStudio Community](https://community.rstudio.com/) is a new forum for R Users. It has a smaller back catalog than Stack Overflow but users are friendlier than on Stack Overflow. 
 
-Finally, Aaron Williams (awilliams@urban.org) from IBP and Kyle Ueyama (kueyama@urban.org) from IT are available to solve problems, offer guidance, and share R enthusiasm. 
+Finally, Aaron Williams (awilliams@urban.org) from IBP and Amy Rogin (arogin@urban.org) from METRO are available to solve problems, offer guidance, and share R enthusiasm. 
 
 ### CRAN Task Views
 
