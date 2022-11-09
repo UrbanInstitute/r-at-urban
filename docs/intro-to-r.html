@@ -82,7 +82,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -181,8 +180,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#what-is-r" id="toc-what-is-r" class="nav-link" data-scroll-target="#what-is-r">What is R?</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"># Introduction</a></li>
+  <li><a href="#what-is-r" id="toc-what-is-r" class="nav-link" data-scroll-target="#what-is-r">## What is R?</a></li>
   <li><a href="#installation-and-updates" id="toc-installation-and-updates" class="nav-link" data-scroll-target="#installation-and-updates">Installation and Updates</a>
   <ul class="collapse">
   <li><a href="#when-should-you-update" id="toc-when-should-you-update" class="nav-link" data-scroll-target="#when-should-you-update">When should you update?</a></li>
@@ -231,16 +230,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
 </div>
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<hr>
+<h2 class="anchored" data-anchor-id="introduction"># Introduction</h2>
 <p>R is one of two premier programming languages for data science and one of the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">fastest growing programming languages.</a> Created by researchers for researchers (with some help from software engineers), R offers rich, intuitive tools that make it perfect for visualization, public policy analysis, econometrics, geospatial analysis, and statistics.</p>
 <p>R doesn’t come in a box. R was never wrapped in cellophane and it definitely isn’t purchased at a store. R’s pricelessness and open-source development are two of its greatest strengths, but it can often leave new users without the anchor of the box and booklet often provided with proprietary software.</p>
 <p>This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-gap guide for existing R Users. It starts with the most basic question, “what is R?” and progresses to advanced topics like organizing analyses. Along the way it even demonstrates how to read XKCD comics in R.</p>
-<p>R boasts a strong community in the world and inside the Urban Institute. Please don’t hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org) with thoughts or questions about R.</p>
+<p>R boasts a strong community in the world and inside the Urban Institute. Please don’t hesitate to contact Aaron Williams (awilliams@urban.org) or Amy Rogin (arogin@urban.org) with thoughts or questions about R.</p>
 </section>
 <section id="what-is-r" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-r">What is R?</h2>
-<hr>
+<h2 class="anchored" data-anchor-id="what-is-r">## What is R?</h2>
 <p><img src="intro-to-r/images/r-logo.png" class="img-fluid" style="width:15.0%"></p>
 <p><a href="https://www.r-project.org/logo/">Source</a></p>
 <p>R is a free, open-source software for statistical computing. It is known for intuitive, crisp graphics and an extensive, growing library of statistical and analytic methods. Above all, R boasts an enthusiastic community of developers, instructors, and users.</p>
@@ -386,7 +383,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>When Googling, set the search range to the last year to avoid out-of-date solutions and to focus on up-to-date practices.</p>
 <p><a href="https://stackoverflow.com/">Stack Overflow</a> contains numerous solutions. Add <code>[r]</code> to any search to limit results to R. If a problem is particularly perplexing, it is simple to submit questions. Exercise caution when submitting questions because the Stack Overflow community has strict norms about questions and loose norms about respecting novices.</p>
 <p><a href="https://community.rstudio.com/">RStudio Community</a> is a new forum for R Users. It has a smaller back catalog than Stack Overflow but users are friendlier than on Stack Overflow.</p>
-<p>Finally, Aaron Williams (awilliams@urban.org) from IBP and Kyle Ueyama (kueyama@urban.org) from IT are available to solve problems, offer guidance, and share R enthusiasm.</p>
+<p>Finally, Aaron Williams (awilliams@urban.org) from IBP and Amy Rogin (arogin@urban.org) from METRO are available to solve problems, offer guidance, and share R enthusiasm.</p>
 </section>
 <section id="cran-task-views" class="level3">
 <h3 class="anchored" data-anchor-id="cran-task-views">CRAN Task Views</h3>
@@ -440,36 +437,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="vectors" class="level3">
 <h3 class="anchored" data-anchor-id="vectors">Vectors</h3>
-<p>Vectors are the fundamental piece of data in R. They are one-dimensional</p>
-<p>Most vectors are one-dimensional collections of logicals, integers, doubles, characters, factors, dates, or date-times. Vectors can’t mix types</p>
-<p>R has six commonl</p>
-<p>Scalars don’t exist in R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">&gt;</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
-</div>
-</div>
-<p>todo(aaron): link to Hadley Wickham talk</p>
+<p>Vectors are the fundamental piece of data in R. R has six vector types (you can’t mix vector types): logical, integer, double, character, complex, and raw. . You can check the type of a vector with <code>typeof()</code> and the length with <code>length()</code></p>
 </section>
 <section id="data-frames" class="level3">
 <h3 class="anchored" data-anchor-id="data-frames">Data frames</h3>
-<p>Data frames are combinations of equally lengthed vectors.</p>
-<p>Data analysis in R is built around the data fra</p>
-<p>each observation forms a row each variables forms a column each observational forms a table</p>
+<p>Data frames are combinations of equal length vectors. Data analysis in R is built around the data frames. As a guiding principle working with data frames, you want to have “tidy data” whenever possible. A tidy data frame means that :</p>
+<ol type="1">
+<li><p>Each variable has its own column.</p></li>
+<li><p>Each observation has its own row.</p></li>
+<li><p>Each value has its own cell.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://r4ds.had.co.nz/tidy-data.html"><img src="intro-to-r/images/tidy-data.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">[Source](https://r4ds.had.co.nz/tidy-data.html)</figcaption><p></p>
+</figure>
+</div>
+<p>Having data in a tidy format allows R’s vectorized nature to shine and many of the <code>tidyverse</code> functions are designed for tidy data.</p>
 </section>
 <section id="missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="missing-values">Missing values</h3>
 <p>R stores missing values as <code>NA</code>. A single <code>NA</code> in a calculation can cause the entire result to return as <code>NA</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
 <p>The contagiousness of <code>NA</code> is good, it makes users explicitly acknowledge dropping missing values with <code>na.rm = TRUE</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4</code></pre>
 </div>
@@ -487,9 +484,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Notice how the other three arguments were skipped. Most arguments in functions have default values. The best way to see default values is to submit the function name with a question mark, like <code>?mean</code>. In this case, <code>trim = 0</code>, <code>na.rm = FALSE</code>, and no further arguments were passed through with <code>...</code>.</p>
 <p>In the previous example, the <code>c()</code> function was nested inside of the <code>mean()</code> function. It is also possible to assign a vector of 1, 2, and 3 to a name and pass the name to the mean function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>apples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(apples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>apples <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(apples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>R is a <a href="http://adv-r.had.co.nz/Functional-programming.html">functional programming language</a>. In addition to having many pre-made functions like <code>mean()</code>, R has powerful tools for creating and manipulating custom functions. This is useful because:</p>
 <ul>
@@ -508,9 +505,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Note:</strong> <code>install.packages()</code> uses quoted package names and <code>library()</code> uses unquoted package names.</p>
 <p>For practice, submit the following three lines of code to install <code>RXKCD</code>, load <code>library(RXKCD)</code>, and get a random <a href="https://www.xkcd.com/">XKCD comic</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RXKCD"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RXKCD)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getXKCD</span>(<span class="st">"random"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RXKCD"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RXKCD)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getXKCD</span>(<span class="st">"random"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -703,7 +700,7 @@ Project-oriented workflow https://www.tidyverse.org/articles/2017/12/workflow-vs
 <p>Roger Peng Reproducible Research Part 2 https://www.coursera.org/learn/reproducible-research/lecture/abevs/reproducible-research-concepts-and-ideas-part-2</p>
 <p>Yihui Xie (2017). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.18.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.1.2 (2021-11-01)
 Platform: x86_64-apple-darwin17.0 (64-bit)
@@ -717,31 +714,38 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
- [1] RXKCD_1.9.2      wooldridge_1.4-2 urbnthemes_0.0.2 forcats_0.5.1   
- [5] stringr_1.4.0    dplyr_1.0.8      purrr_0.3.4      readr_2.1.1     
- [9] tidyr_1.2.0      tibble_3.1.6     ggplot2_3.3.5    tidyverse_1.3.1 
+ [1] RXKCD_1.9.2      wooldridge_1.4-2 urbnthemes_0.0.2 forcats_0.5.2   
+ [5] stringr_1.4.1    dplyr_1.0.10     purrr_0.3.5      readr_2.1.3     
+ [9] tidyr_1.2.1      tibble_3.1.8     ggplot2_3.3.6    tidyverse_1.3.2 
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.2        bit64_4.0.5       vroom_1.5.7       jsonlite_1.7.2   
- [5] modelr_0.1.8      assertthat_0.2.1  cellranger_1.1.0  yaml_2.2.1       
- [9] ggrepel_0.9.1     Rttf2pt1_1.3.9    pillar_1.7.0      backports_1.4.0  
-[13] glue_1.6.2        extrafontdb_1.0   digest_0.6.29     rvest_1.0.2      
-[17] colorspace_2.0-2  htmltools_0.5.2   plyr_1.8.6        pkgconfig_2.0.3  
-[21] broom_0.7.10      haven_2.4.3       scales_1.1.1      jpeg_0.1-9       
-[25] tzdb_0.2.0        generics_0.1.2    farver_2.1.0      ellipsis_0.3.2   
-[29] withr_2.4.3       cli_3.2.0         RJSONIO_1.3-1.6   magrittr_2.0.3   
-[33] crayon_1.5.1      readxl_1.4.0.9000 evaluate_0.14     fs_1.5.1         
-[37] fansi_1.0.3       xml2_1.3.3        tools_4.1.2       hms_1.1.1        
-[41] lifecycle_1.0.1   munsell_0.5.0     reprex_2.0.1      compiler_4.1.2   
-[45] rlang_1.0.2       grid_4.1.2        rstudioapi_0.13   htmlwidgets_1.5.4
-[49] labeling_0.4.2    rmarkdown_2.11    gtable_0.3.0      DBI_1.1.1        
-[53] R6_2.5.1          gridExtra_2.3     lubridate_1.8.0   knitr_1.36       
-[57] fastmap_1.1.0     bit_4.0.4         extrafont_0.17    utf8_1.2.2       
-[61] stringi_1.7.6     parallel_4.1.2    Rcpp_1.0.8        vctrs_0.4.1      
-[65] png_0.1-7         dbplyr_2.1.1      tidyselect_1.1.2  xfun_0.28        </code></pre>
+ [1] httr_1.4.4          bit64_4.0.5         vroom_1.6.0        
+ [4] jsonlite_1.8.3      modelr_0.1.9        assertthat_0.2.1   
+ [7] renv_0.16.0         googlesheets4_1.0.1 cellranger_1.1.0   
+[10] yaml_2.3.6          ggrepel_0.9.1       Rttf2pt1_1.3.11    
+[13] pillar_1.8.1        backports_1.4.1     glue_1.6.2         
+[16] extrafontdb_1.0     digest_0.6.30       rvest_1.0.3        
+[19] colorspace_2.0-3    plyr_1.8.7          htmltools_0.5.3    
+[22] pkgconfig_2.0.3     broom_1.0.1         haven_2.5.1        
+[25] scales_1.2.1        jpeg_0.1-9          tzdb_0.3.0         
+[28] googledrive_2.0.0   generics_0.1.3      farver_2.1.1       
+[31] ellipsis_0.3.2      withr_2.5.0         cli_3.4.1          
+[34] RJSONIO_1.3-1.6     magrittr_2.0.3      crayon_1.5.2       
+[37] readxl_1.4.1        evaluate_0.17       fs_1.5.2           
+[40] fansi_1.0.3         xml2_1.3.3          tools_4.1.2        
+[43] hms_1.1.2           gargle_1.2.1        lifecycle_1.0.3    
+[46] munsell_0.5.0       reprex_2.0.2        compiler_4.1.2     
+[49] rlang_1.0.6         grid_4.1.2          rstudioapi_0.14    
+[52] htmlwidgets_1.5.4   labeling_0.4.2      rmarkdown_2.17     
+[55] gtable_0.3.1        DBI_1.1.3           R6_2.5.1           
+[58] gridExtra_2.3       lubridate_1.8.0     knitr_1.40         
+[61] fastmap_1.1.0       bit_4.0.4           extrafont_0.18     
+[64] utf8_1.2.2          stringi_1.7.8       parallel_4.1.2     
+[67] Rcpp_1.0.9          png_0.1-7           vctrs_0.5.0        
+[70] dbplyr_2.2.1        tidyselect_1.2.0    xfun_0.34          </code></pre>
 </div>
 </div>
 

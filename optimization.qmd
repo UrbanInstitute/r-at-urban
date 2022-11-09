@@ -25,9 +25,8 @@ knitr::opts_chunk$set(warning = FALSE)
 options(scipen = 999)
 ```
 
-------------------------------------------------------------------------
-
 # Introduction
+------------------------------------------------------------------------
 
 This guide outlines tools and tips for improving the speed and execution
 of R code.

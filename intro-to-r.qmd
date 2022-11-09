@@ -28,7 +28,6 @@ options(scipen = 999)
 ```
 
 # Introduction
-
 ------------------------------------------------------------------------
 
 R is one of two premier programming languages for data science and one of the [fastest growing programming languages.](https://stackoverflow.blog/2017/10/10/impressive-growth-r/) Created by researchers for researchers (with some help from software engineers), R offers rich, intuitive tools that make it perfect for visualization, public policy analysis, econometrics, geospatial analysis, and statistics.
@@ -40,7 +39,6 @@ This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-ga
 R boasts a strong community in the world and inside the Urban Institute. Please don't hesitate to contact Aaron Williams (awilliams\@urban.org) or Amy Rogin (arogin\@urban.org) with thoughts or questions about R.
 
 ## What is R?
-
 ------------------------------------------------------------------------
 
 ![](intro-to-r/images/r-logo.png){width="15%"}

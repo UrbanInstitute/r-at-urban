@@ -82,7 +82,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -1688,7 +1687,7 @@ ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = ca
 <span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ncol =</span> <span class="dv">1</span>, </span>
 <span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">30</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="graphics-guide/www/images/unnamed-chunk-2-1.png" class="img-fluid" width="624"></p>
+<p><img src="graphics-guide/www/images/unnamed-chunk-1-1.png" class="img-fluid" width="624"></p>
 </div>
 </div>
 </section>
@@ -1778,40 +1777,42 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
- [1] AmesHousing_0.0.4     gghighlight_0.3.2     fivethirtyeight_0.6.2
- [4] ggridges_0.5.3        ggrepel_0.9.1         gapminder_0.3.0      
- [7] urbnthemes_0.0.2      forcats_0.5.1         stringr_1.4.0        
-[10] dplyr_1.0.8           purrr_0.3.4           readr_2.1.1          
-[13] tidyr_1.2.0           tibble_3.1.6          ggplot2_3.3.5        
-[16] tidyverse_1.3.1       knitr_1.36           
+ [1] AmesHousing_0.0.4     gghighlight_0.4.0     fivethirtyeight_0.6.2
+ [4] ggridges_0.5.4        ggrepel_0.9.1         gapminder_0.3.0      
+ [7] urbnthemes_0.0.2      forcats_0.5.2         stringr_1.4.1        
+[10] dplyr_1.0.10          purrr_0.3.5           readr_2.1.3          
+[13] tidyr_1.2.1           tibble_3.1.8          ggplot2_3.3.6        
+[16] tidyverse_1.3.2       knitr_1.40           
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.2          splines_4.1.2       bit64_4.0.5        
- [4] vroom_1.5.7         jsonlite_1.7.2      modelr_0.1.8       
- [7] assertthat_0.2.1    cellranger_1.1.0    yaml_2.2.1         
-[10] lattice_0.20-45     urbnmapr_0.0.0.9002 Rttf2pt1_1.3.9     
-[13] pillar_1.7.0        backports_1.4.0     glue_1.6.2         
-[16] extrafontdb_1.0     digest_0.6.29       rvest_1.0.2        
-[19] colorspace_2.0-2    Matrix_1.3-4        htmltools_0.5.2    
-[22] plyr_1.8.6          pkgconfig_2.0.3     broom_0.7.10       
-[25] haven_2.4.3         scales_1.1.1        tzdb_0.2.0         
-[28] mgcv_1.8-38         generics_0.1.2      farver_2.1.0       
-[31] ellipsis_0.3.2      withr_2.4.3         cli_3.2.0          
-[34] magrittr_2.0.3      crayon_1.5.1        readxl_1.4.0.9000  
-[37] evaluate_0.14       fs_1.5.1            fansi_1.0.3        
-[40] nlme_3.1-153        xml2_1.3.3          tools_4.1.2        
-[43] hms_1.1.1           lifecycle_1.0.1     munsell_0.5.0      
-[46] reprex_2.0.1        compiler_4.1.2      rlang_1.0.2        
-[49] grid_4.1.2          rstudioapi_0.13     htmlwidgets_1.5.4  
-[52] labeling_0.4.2      rmarkdown_2.11      gtable_0.3.0       
-[55] DBI_1.1.1           R6_2.5.1            gridExtra_2.3      
-[58] lubridate_1.8.0     fastmap_1.1.0       bit_4.0.4          
-[61] extrafont_0.17      utf8_1.2.2          stringi_1.7.6      
-[64] parallel_4.1.2      Rcpp_1.0.8          vctrs_0.4.1        
-[67] dbplyr_2.1.1        tidyselect_1.1.2    xfun_0.28          </code></pre>
+ [1] httr_1.4.4          splines_4.1.2       bit64_4.0.5        
+ [4] vroom_1.6.0         jsonlite_1.8.3      modelr_0.1.9       
+ [7] assertthat_0.2.1    renv_0.16.0         googlesheets4_1.0.1
+[10] cellranger_1.1.0    yaml_2.3.6          urbnmapr_0.0.0.9002
+[13] Rttf2pt1_1.3.11     pillar_1.8.1        backports_1.4.1    
+[16] lattice_0.20-45     glue_1.6.2          extrafontdb_1.0    
+[19] digest_0.6.30       rvest_1.0.3         colorspace_2.0-3   
+[22] Matrix_1.5-1        htmltools_0.5.3     pkgconfig_2.0.3    
+[25] broom_1.0.1         haven_2.5.1         scales_1.2.1       
+[28] tzdb_0.3.0          googledrive_2.0.0   mgcv_1.8-41        
+[31] generics_0.1.3      farver_2.1.1        ellipsis_0.3.2     
+[34] withr_2.5.0         hexbin_1.28.2       cli_3.4.1          
+[37] magrittr_2.0.3      crayon_1.5.2        readxl_1.4.1       
+[40] evaluate_0.17       fs_1.5.2            fansi_1.0.3        
+[43] nlme_3.1-160        xml2_1.3.3          tools_4.1.2        
+[46] hms_1.1.2           gargle_1.2.1        lifecycle_1.0.3    
+[49] munsell_0.5.0       reprex_2.0.2        compiler_4.1.2     
+[52] rlang_1.0.6         grid_4.1.2          rstudioapi_0.14    
+[55] htmlwidgets_1.5.4   labeling_0.4.2      rmarkdown_2.17     
+[58] gtable_0.3.1        DBI_1.1.3           R6_2.5.1           
+[61] gridExtra_2.3       lubridate_1.8.0     bit_4.0.4          
+[64] fastmap_1.1.0       extrafont_0.18      utf8_1.2.2         
+[67] stringi_1.7.8       parallel_4.1.2      Rcpp_1.0.9         
+[70] vctrs_0.5.0         dbplyr_2.2.1        tidyselect_1.2.0   
+[73] xfun_0.34          </code></pre>
 </div>
 </div>
 

@@ -180,9 +180,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
   <li><a href="#librarytidycensus" id="toc-librarytidycensus" class="nav-link" data-scroll-target="#librarytidycensus"><code>library(tidycensus)</code></a></li>
   <li><a href="#librarycensusapi" id="toc-librarycensusapi" class="nav-link" data-scroll-target="#librarycensusapi"><code>library(censusapi)</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -198,10 +200,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 
 </div>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <p>This guide outlines some useful workflows for pulling data sets commonly used by the Urban Institute.</p>
-</section>
 <section id="librarytidycensus" class="level2">
 <h2 class="anchored" data-anchor-id="librarytidycensus"><code>library(tidycensus)</code></h2>
 <p><code>library(tidycensus)</code> by Kyle Walker (<a href="https://walkerke.github.io/tidycensus/">complete intro here</a>) is the best tool for accessing some Census data sets in R from the Census Bureau API. The package returns tidy data frames and can easily pull shapefiles by adding <code>geometry = TRUE</code>.</p>
@@ -284,19 +285,19 @@ First 10 features:
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>             <span class="at">.f =</span> get_income) <span class="co"># apply get_income() to each fips_code  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2,874 × 5
-   GEOID       NAME                                      variable estimate   moe
-   &lt;chr&gt;       &lt;chr&gt;                                     &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
- 1 01001020100 Census Tract 201, Autauga County, Alabama B19013_…    61838 11900
- 2 01001020200 Census Tract 202, Autauga County, Alabama B19013_…    32303 13538
- 3 01001020300 Census Tract 203, Autauga County, Alabama B19013_…    44922  5629
- 4 01001020400 Census Tract 204, Autauga County, Alabama B19013_…    54329  7003
- 5 01001020500 Census Tract 205, Autauga County, Alabama B19013_…    51965  6935
- 6 01001020600 Census Tract 206, Autauga County, Alabama B19013_…    63092  9585
- 7 01001020700 Census Tract 207, Autauga County, Alabama B19013_…    34821  7867
- 8 01001020801 Census Tract 208.01, Autauga County, Ala… B19013_…    73728  2447
- 9 01001020802 Census Tract 208.02, Autauga County, Ala… B19013_…    60063  8602
-10 01001020900 Census Tract 209, Autauga County, Alabama B19013_…    41287  7857
-# … with 2,864 more rows</code></pre>
+   GEOID       NAME                                        varia…¹ estim…²   moe
+   &lt;chr&gt;       &lt;chr&gt;                                       &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 01001020100 Census Tract 201, Autauga County, Alabama   B19013…   61838 11900
+ 2 01001020200 Census Tract 202, Autauga County, Alabama   B19013…   32303 13538
+ 3 01001020300 Census Tract 203, Autauga County, Alabama   B19013…   44922  5629
+ 4 01001020400 Census Tract 204, Autauga County, Alabama   B19013…   54329  7003
+ 5 01001020500 Census Tract 205, Autauga County, Alabama   B19013…   51965  6935
+ 6 01001020600 Census Tract 206, Autauga County, Alabama   B19013…   63092  9585
+ 7 01001020700 Census Tract 207, Autauga County, Alabama   B19013…   34821  7867
+ 8 01001020801 Census Tract 208.01, Autauga County, Alaba… B19013…   73728  2447
+ 9 01001020802 Census Tract 208.02, Autauga County, Alaba… B19013…   60063  8602
+10 01001020900 Census Tract 209, Autauga County, Alabama   B19013…   41287  7857
+# … with 2,864 more rows, and abbreviated variable names ¹​variable, ²​estimate</code></pre>
 </div>
 </div>
 <p><code>library(tidycensus)</code> works well with <code>library(tidyverse)</code> and enables access to geospatial data, but it is limited to only some Census Bureau data sets. The next package has less functionality but allows for accessing any data available on the Census API.</p>
@@ -395,6 +396,7 @@ First 10 features:
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
