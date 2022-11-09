@@ -227,8 +227,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
 </div>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <p>This guide outlines tools and tips for improving the speed and execution of R code.</p>
 <p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term.</p>
 <p>An important lesson to learn when it comes to optimising an R (or any) program is knowing both if to start and when to stop. You most likely want to optimize your code because it is “too slow”, but what that means will vary from project to project. Be sure to consider what “fast enough” is for your project and how much needs to be optimized. If your program takes an hour to complete, spending 5 hours trying to make it faster can be time well spent if the script will be run regularly, and a complete waste of time if it’s an ad-hoc analysis.</p>
@@ -264,8 +264,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-1da261c31ec0ab799f21" style="width:100%;height:600px;" class="profvis html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1da261c31ec0ab799f21">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,30,31,31,32,32,33,33,34,34,35,35,36,36,37,37,38,38,39,39,40,40,41,41,42,42,43,43,44,44],"depth":[1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1],"label":[".main",".main",".main",".main",".main",".main",".main",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main","lazyLoadDBfetch",".main","lazyLoadDBfetch",".main","names",".main","lazyLoadDBfetch",".main","mean.default",".main","mean.default",".main","mean.default",".main","mean.default",".main"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[13.5860061645508,14.8162307739258,17.2699890136719,17.2972640991211,17.3156356811523,22.1999359130859,22.2039184570312,22.2103271484375,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,26.7415161132812,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,28.3887634277344,29.0063400268555,29.0063400268555,29.0063400268555,29.0063400268555,29.0063400268555,29.0063400268555,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,29.6241989135742,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.0360107421875,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.4478225708008,30.5807571411133,30.5807571411133,31.8560256958008,31.8560256958008,33.879997253418,33.879997253418,35.3083953857422,35.3083953857422,36.2215347290039,36.2215347290039,36.6354370117188,36.6354370117188,37.2575531005859,37.2575531005859,38.0855178833008,38.0855178833008],"meminc":[0,1.230224609375,2.45375823974609,0.0272750854492188,0.01837158203125,4.88430023193359,0.0039825439453125,0.00640869140625,4.53118896484375,0,0,0,0,0,0,0,0,0,1.64724731445312,0,0,0,0,0,0,0,0,0,0.617576599121094,0,0,0,0,0,0.61785888671875,0,0,0,0,0,0,0,0,0,0.411811828613281,0,0,0,0,0,0,0,0,0,0.411811828613281,0,0,0,0,0,0,0,0,0,0.1329345703125,0,1.2752685546875,0,2.02397155761719,0,1.42839813232422,0,0.913139343261719,0,0.413902282714844,0,0.622116088867188,0,0.827964782714844,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/2n/lprv9vh13js_c6gfvhgl13s00000gn/T//RtmpfxPwPg/file12471499e16e7.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-62befa291742e534fa1d" style="width:100%;height:600px;" class="profvis html-widget"></div>
+<script type="application/json" data-for="htmlwidget-62befa291742e534fa1d">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,30,31,31,32,32,33,33,34,34,35,35,36,36,37,37,38,38,39,39,39,39,39,39,39,39,39,39,39,40,40,41,41,42,42],"depth":[1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,11,10,9,8,7,6,5,4,3,2,1,2,1,2,1,2,1],"label":[".main",".main",".main",".main",".main",".main",".main",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main",".External2",".main","lazyLoadDBfetch",".main","as.list.default","add_handler","withr::defer","local_vars","tidyselect::vars_pull","pull.data.frame","tbl_if_vars","tbl_if_syms","manip_if","summarise_if",".main",".Call",".main","<Anonymous>",".main","c",".main"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[13.5869140625,14.8177337646484,17.2751541137695,17.3061370849609,20.24560546875,22.2010192871094,22.2061538696289,22.2137908935547,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,26.7416381835938,28.3888854980469,28.3888854980469,28.3888854980469,28.3888854980469,28.3888854980469,28.3888854980469,28.3888854980469,28.3888854980469,29.006462097168,29.006462097168,29.006462097168,29.006462097168,29.006462097168,29.006462097168,29.006462097168,29.006462097168,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,29.6243209838867,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.0361328125,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,30.4479446411133,31.9496307373047,31.9496307373047,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,33.970100402832,35.7874603271484,35.7874603271484,36.6372833251953,36.6372833251953,37.6730270385742,37.6730270385742],"meminc":[0,1.23081970214844,2.45742034912109,0.0309829711914062,2.93946838378906,1.95541381835938,0.00513458251953125,0.00763702392578125,4.52784729003906,0,0,0,0,0,0,0,0,0,1.64724731445312,0,0,0,0,0,0,0,0.617576599121094,0,0,0,0,0,0,0,0.61785888671875,0,0,0,0,0,0,0,0,0,0.411811828613281,0,0,0,0,0,0,0,0,0,0.411811828613281,0,0,0,0,0,0,0,0,0,0,0,1.50168609619141,0,2.02046966552734,0,0,0,0,0,0,0,0,0,0,1.81735992431641,0,0.849822998046875,0,1.03574371337891,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/2n/lprv9vh13js_c6gfvhgl13s00000gn/T//RtmpMmHvNc/file12b555c4d26a5.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so</p>
@@ -288,11 +288,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
                                               expr       min        lq
-        read.csv("optimization/data/diamonds.csv") 367.79742 371.78296
- readr::read_csv("optimization/data/diamonds.csv")  54.89263  58.09675
+        read.csv("optimization/data/diamonds.csv") 367.58879 375.28352
+ readr::read_csv("optimization/data/diamonds.csv")  55.54708  58.51813
       mean    median        uq      max neval
- 383.29327 376.69567 384.58721 492.1318   100
-  67.64904  60.43738  64.19125 360.6187   100</code></pre>
+ 393.37071 379.96338 390.60163 722.4702   100
+  68.51566  61.91698  66.82794 266.2897   100</code></pre>
 </div>
 </div>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
@@ -410,12 +410,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: seconds
-       expr         min           lq          mean      median          uq
- sequential 0.000001709 0.0000018965 0.00000290857 0.000002126 0.000003418
-   parallel 0.022940667 0.0237002090 0.02720319064 0.024060397 0.026218501
-      max neval
- 0.000030   100
- 0.264104   100</code></pre>
+       expr         min          lq          mean      median          uq
+ sequential 0.000001709 0.000001917 0.00000364232 0.000003459 0.000004272
+   parallel 0.022733667 0.024236376 0.02959728231 0.026193771 0.027871730
+         max neval
+ 0.000051917   100
+ 0.327295167   100</code></pre>
 </div>
 </div>
 <p>Parallelization was actually slower. In this case, the overhead of</p>
@@ -445,7 +445,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 26.922   0.184  27.170 </code></pre>
+ 27.309   0.473  28.323 </code></pre>
 </div>
 </div>
 <p>A now running the same code in parallel:</p>
@@ -465,7 +465,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-  0.635   0.134  13.321 </code></pre>
+  0.674   0.180  13.977 </code></pre>
 </div>
 </div>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution</p>
@@ -709,8 +709,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: microseconds
          expr     min       lq       mean   median       uq      max neval
-  bad_loop(x) 667.959 694.2920 1124.87693 775.8340 1092.272 4751.001   100
- good_loop(x)   9.500   9.7715   39.91936  10.7505   14.063 2750.459   100</code></pre>
+  bad_loop(x) 662.917 687.0840 1283.55733 731.4590 967.1050 7864.959   100
+ good_loop(x)   9.709  10.0215   34.88943  11.0425  16.0215 2156.209   100</code></pre>
 </div>
 </div>
 <p>And note how performance of the “bad” loop degrades as the loop size grows.</p>
@@ -726,12 +726,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: microseconds
-         expr      min        lq        mean     median       uq       max
-  bad_loop(y) 9435.125 11439.001 12496.36358 11474.0840 11552.38 60387.667
- good_loop(y)   22.501    22.918    30.60446    25.8545    36.73    60.792
- neval
-   100
-   100</code></pre>
+         expr      min        lq        mean   median        uq       max neval
+  bad_loop(y) 9454.209 11446.542 12351.19895 11482.19 11592.917 65848.459   100
+ good_loop(y)   22.542    23.125    31.15316    24.23    37.563    57.043   100</code></pre>
 </div>
 </div>
 </section>
@@ -763,9 +760,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: nanoseconds
-            expr   min      lq     mean median    uq   max neval
- lapply(x, sqrt) 21125 21500.5 23026.50  22000 22459 87126   100
-         sqrt(x)   459   459.0   856.95    501   855  5709   100</code></pre>
+            expr   min    lq     mean median    uq   max neval
+ lapply(x, sqrt) 20625 20959 21475.61  21084 21292 38000   100
+         sqrt(x)   375   417   469.79    417   459  2834   100</code></pre>
 </div>
 </div>
 
