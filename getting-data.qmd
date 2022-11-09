@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 options(scipen = 999)
 ```
 
-## Introduction
+# Introduction
 
 This guide outlines some useful workflows for pulling data sets commonly used by the Urban Institute.
 
