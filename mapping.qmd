@@ -38,7 +38,6 @@ library(sf)
 ```
 
 # Introduction
-------------------------------------------------------------------------
 
 This guide will teach you the concepts and code you will need for
 mapping and geospatial analysis in R. **This is a long guide, so if you
@@ -1380,182 +1379,187 @@ column]{style="background-color: #FFFF00;  font-weight: bold"} in the
 CSV before doing further analysis to check the accuracy of the geocoding
 process.</p>
 
-+---------------+-----------------------------------------------+
-| Column        | Description                                   |
-+:==============+:==============================================+
-| Match_addr    | The actual address that the inputted address  |
-|               | was matched to. This is the address that the  |
-|               | geocoder used to get Latitudes / Longitudes.  |
-|               | If there are potentially many typos or non    |
-|               | standard address formats in your data file,   |
-|               | you will want to take a close look at this    |
-|               | column to confirm that the matched address    |
-|               | correctly handled typos and badly formatted   |
-|               | addresses.                                    |
-+---------------+-----------------------------------------------+
-| Longitude     | The WGS 84 datum Longitude (EPSG code 4326)   |
-+---------------+-----------------------------------------------+
-| Latitude      | The WGS 84 datum Latitude (EPSG code 4326)    |
-+---------------+-----------------------------------------------+
-| Addr_type     | The match level for a geocode request. This   |
-|               | should be used as an indicator of the         |
-|               | precision of geocode results. Generally,      |
-|               | Subaddress, PointAddress, StreetAddress, and  |
-|               | StreetInt represent accurate matches. The     |
-|               | list below contains all possible values for   |
-|               | this field. **Green values represent High     |
-|               | accuracy matches, yellow represents Medium    |
-|               | accuracy matches and red represents Low       |
-|               | accuracy/inaccurate matches**. If you have    |
-|               | many yellow and red values in your data, you  |
-|               | should manually check the results before      |
-|               | proceeding with analysis. All possible        |
-|               | values:\                                      |
-|               | \                                             |
-|               | **Subaddress:** A subset of a PointAddress    |
-|               | that represents a house or building           |
-|               | subaddress location, such as an apartment     |
-|               | unit, floor, or individual building within a  |
-|               | complex. The UnitName, UnitType, LevelName,   |
-|               | LevelType, BldgName, and BldgType field       |
-|               | values help to distinguish subaddresses which |
-|               | may be associated with the same PointAddress. |
-|               | Reference data consists of point features     |
-|               | with associated house number, street name,    |
-|               | and subaddress elements, along with           |
-|               | administrative divisions and optional postal  |
-|               | code; for example, 3836 Emerald Ave, Suite C, |
-|               | La Verne, CA, 91750.\                         |
-|               | \                                             |
-|               | **PointAddress:** A street address based on   |
-|               | points that represent house and building      |
-|               | locations. Typically, this is the most        |
-|               | spatially accurate match level. Reference     |
-|               | data contains address points with associated  |
-|               | house numbers and street names, along with    |
-|               | administrative divisions and optional postal  |
-|               | code. The X / Y (`Longitude`/`Latitude`) and  |
-|               | `geometry` output values for a PointAddress   |
-|               | match represent the street entry location for |
-|               | the address; this is the location used for    |
-|               | routing operations. The `DisplayX` and        |
-|               | `DisplayY` values represent the rooftop, or   |
-|               | actual, location of the address. Example: 380 |
-|               | New York St, Redlands, CA, 92373.\            |
-|               | \                                             |
-|               | **StreetAddress** --- A street address that   |
-|               | differs from PointAddress because the house   |
-|               | number is interpolated from a range of        |
-|               | numbers. Reference data contains street       |
-|               | center lines with house number ranges, along  |
-|               | with administrative divisions and optional    |
-|               | postal code information, for example, 647     |
-|               | Haight St, San Francisco, CA, 94117.\         |
-|               | \                                             |
-|               | **StreetInt:** A street address consisting of |
-|               | a street intersection along with city and     |
-|               | optional state and postal code information.   |
-|               | This is derived from StreetAddress reference  |
-|               | data, for example, Redlands Blvd & New York   |
-|               | St, Redlands, CA, 92373.\                     |
-|               | \                                             |
-|               | **StreetName:** Similar to a street address   |
-|               | but without the house number. Reference data  |
-|               | contains street centerlines with associated   |
-|               | street names (no numbered address ranges),    |
-|               | along with administrative divisions and       |
-|               | optional postal code, for example, W Olive    |
-|               | Ave, Redlands, CA, 92373.\                    |
-|               | \                                             |
-|               | **StreetAddressExt:** An interpolated street  |
-|               | address match that is returned when parameter |
-|               | matchOutOfRange=true and the input house      |
-|               | number exceeds the house number range for the |
-|               | matched street segment.\                      |
-|               | \                                             |
-|               | **DistanceMarker:** A street address that     |
-|               | represents the linear distance along a        |
-|               | street, typically in kilometers or miles,     |
-|               | from a designated origin location. Example:   |
-|               | Carr 682 KM 4, Barceloneta, 00617.\           |
-|               | \                                             |
-|               | **PostalExt:** A postal code with an          |
-|               | additional extension, such as the United      |
-|               | States Postal Service ZIP+4. Reference data   |
-|               | is postal code points with extensions, for    |
-|               | example, 90210-3841.\                         |
-|               | \                                             |
-|               | **POI:** ---Points of interest. Reference     |
-|               | data consists of administrative division      |
-|               | place-names, businesses, landmarks, and       |
-|               | geographic features, for example, Golden Gate |
-|               | Bridge.\                                      |
-|               | \                                             |
-|               | **Locality:** A place-name representing a     |
-|               | populated place. The Type output field        |
-|               | provides more detailed information about the  |
-|               | type of populated place. Possible Type values |
-|               | for Locality matches include Block, Sector,   |
-|               | Neighborhood, District, City, MetroArea,      |
-|               | County, State or Province, Territory,         |
-|               | Country, and Zone. Example: Bogotá, COL,\     |
-|               | \                                             |
-|               | **PostalLoc:** A combination of postal code   |
-|               | and city name. Reference data is typically a  |
-|               | union of postal boundaries and administrative |
-|               | (locality) boundaries, for example, 7132      |
-|               | Frauenkirchen.\                               |
-|               | \                                             |
-|               | **Postal:** Postal code. Reference data is    |
-|               | postal code points, for example, 90210 USA.   |
-+---------------+-----------------------------------------------+
-| Score         | A number from 1--100 indicating the degree to |
-|               | which the input tokens in a geocoding request |
-|               | match the address components in a candidate   |
-|               | record. A score of 100 represents a perfect   |
-|               | match, while lower scores represent           |
-|               | decreasing match accuracy.                    |
-+---------------+-----------------------------------------------+
-| Status        | Indicates whether a batch geocode request     |
-|               | results in a match, tie, or unmatched.        |
-|               | Possible values include\                      |
-|               | \                                             |
-|               | M - Match. The returned address matches the   |
-|               | input address and is the highest scoring      |
-|               | candidate.\                                   |
-|               | \                                             |
-|               | T - Tied. The returned address matches the    |
-|               | input address but has the same score as one   |
-|               | or more additional candidates.\               |
-|               | \                                             |
-|               | U - Unmatched. No addresses match the         |
-|               | inputted address.                             |
-+---------------+-----------------------------------------------+
-| geometry      | The WKT (Well-known text) representation of   |
-|               | the latitudes and longitudes. This column may |
-|               | be useful if you're reading the CSV into R,   |
-|               | Python, or ArcGIS                             |
-+---------------+-----------------------------------------------+
-| Region        | The state that `Match_addr` is located in     |
-+---------------+-----------------------------------------------+
-| RegionAbbr    | Abbreviated State Name. For example, CA for   |
-|               | California                                    |
-+---------------+-----------------------------------------------+
-| Subregion     | The county that the input address is located  |
-|               | in                                            |
-+---------------+-----------------------------------------------+
-| MetroArea     | The name of the Metropolitan area that        |
-|               | `Match_addr` is located in. This field may be |
-|               | blank if the input address is not located     |
-|               | within a metro area.                          |
-+---------------+-----------------------------------------------+
-| City          | The city that `Match_addr` is located in      |
-+---------------+-----------------------------------------------+
-| Nbrhd         | The Neighborhood that `Match_addr` is located |
-|               | in. Note these are ESRI defined neighborhoods |
-|               | which may or may not align with other sources |
-|               | neighborhood definitions                      |
-+---------------+-----------------------------------------------+
++---------------+---------------------------------------------+
+| Column        | Description                                 |
++:==============+:============================================+
+| Match_addr    | The actual address that the inputted        |
+|               | address was matched to. This is the address |
+|               | that the geocoder used to get Latitudes /   |
+|               | Longitudes. If there are potentially many   |
+|               | typos or non standard address formats in    |
+|               | your data file, you will want to take a     |
+|               | close look at this column to confirm that   |
+|               | the matched address correctly handled typos |
+|               | and badly formatted addresses.              |
++---------------+---------------------------------------------+
+| Longitude     | The WGS 84 datum Longitude (EPSG code 4326) |
++---------------+---------------------------------------------+
+| Latitude      | The WGS 84 datum Latitude (EPSG code 4326)  |
++---------------+---------------------------------------------+
+| Addr_type     | The match level for a geocode request. This |
+|               | should be used as an indicator of the       |
+|               | precision of geocode results. Generally,    |
+|               | Subaddress, PointAddress, StreetAddress,    |
+|               | and StreetInt represent accurate matches.   |
+|               | The list below contains all possible values |
+|               | for this field. **Green values represent    |
+|               | High accuracy matches, yellow represents    |
+|               | Medium accuracy matches and red represents  |
+|               | Low accuracy/inaccurate matches**. If you   |
+|               | have many yellow and red values in your     |
+|               | data, you should manually check the results |
+|               | before proceeding with analysis. All        |
+|               | possible values:\                           |
+|               | \                                           |
+|               | **Subaddress:** A subset of a PointAddress  |
+|               | that represents a house or building         |
+|               | subaddress location, such as an apartment   |
+|               | unit, floor, or individual building within  |
+|               | a complex. The UnitName, UnitType,          |
+|               | LevelName, LevelType, BldgName, and         |
+|               | BldgType field values help to distinguish   |
+|               | subaddresses which may be associated with   |
+|               | the same PointAddress. Reference data       |
+|               | consists of point features with associated  |
+|               | house number, street name, and subaddress   |
+|               | elements, along with administrative         |
+|               | divisions and optional postal code; for     |
+|               | example, 3836 Emerald Ave, Suite C, La      |
+|               | Verne, CA, 91750.\                          |
+|               | \                                           |
+|               | **PointAddress:** A street address based on |
+|               | points that represent house and building    |
+|               | locations. Typically, this is the most      |
+|               | spatially accurate match level. Reference   |
+|               | data contains address points with           |
+|               | associated house numbers and street names,  |
+|               | along with administrative divisions and     |
+|               | optional postal code. The X / Y             |
+|               | (`Longitude`/`Latitude`) and `geometry`     |
+|               | output values for a PointAddress match      |
+|               | represent the street entry location for the |
+|               | address; this is the location used for      |
+|               | routing operations. The `DisplayX` and      |
+|               | `DisplayY` values represent the rooftop, or |
+|               | actual, location of the address. Example:   |
+|               | 380 New York St, Redlands, CA, 92373.\      |
+|               | \                                           |
+|               | **StreetAddress** --- A street address that |
+|               | differs from PointAddress because the house |
+|               | number is interpolated from a range of      |
+|               | numbers. Reference data contains street     |
+|               | center lines with house number ranges,      |
+|               | along with administrative divisions and     |
+|               | optional postal code information, for       |
+|               | example, 647 Haight St, San Francisco, CA,  |
+|               | 94117.\                                     |
+|               | \                                           |
+|               | **StreetInt:** A street address consisting  |
+|               | of a street intersection along with city    |
+|               | and optional state and postal code          |
+|               | information. This is derived from           |
+|               | StreetAddress reference data, for example,  |
+|               | Redlands Blvd & New York St, Redlands, CA,  |
+|               | 92373.\                                     |
+|               | \                                           |
+|               | **StreetName:** Similar to a street address |
+|               | but without the house number. Reference     |
+|               | data contains street centerlines with       |
+|               | associated street names (no numbered        |
+|               | address ranges), along with administrative  |
+|               | divisions and optional postal code, for     |
+|               | example, W Olive Ave, Redlands, CA, 92373.\ |
+|               | \                                           |
+|               | **StreetAddressExt:** An interpolated       |
+|               | street address match that is returned when  |
+|               | parameter matchOutOfRange=true and the      |
+|               | input house number exceeds the house number |
+|               | range for the matched street segment.\      |
+|               | \                                           |
+|               | **DistanceMarker:** A street address that   |
+|               | represents the linear distance along a      |
+|               | street, typically in kilometers or miles,   |
+|               | from a designated origin location. Example: |
+|               | Carr 682 KM 4, Barceloneta, 00617.\         |
+|               | \                                           |
+|               | **PostalExt:** A postal code with an        |
+|               | additional extension, such as the United    |
+|               | States Postal Service ZIP+4. Reference data |
+|               | is postal code points with extensions, for  |
+|               | example, 90210-3841.\                       |
+|               | \                                           |
+|               | **POI:** ---Points of interest. Reference   |
+|               | data consists of administrative division    |
+|               | place-names, businesses, landmarks, and     |
+|               | geographic features, for example, Golden    |
+|               | Gate Bridge.\                               |
+|               | \                                           |
+|               | **Locality:** A place-name representing a   |
+|               | populated place. The Type output field      |
+|               | provides more detailed information about    |
+|               | the type of populated place. Possible Type  |
+|               | values for Locality matches include Block,  |
+|               | Sector, Neighborhood, District, City,       |
+|               | MetroArea, County, State or Province,       |
+|               | Territory, Country, and Zone. Example:      |
+|               | Bogotá, COL,\                               |
+|               | \                                           |
+|               | **PostalLoc:** A combination of postal code |
+|               | and city name. Reference data is typically  |
+|               | a union of postal boundaries and            |
+|               | administrative (locality) boundaries, for   |
+|               | example, 7132 Frauenkirchen.\               |
+|               | \                                           |
+|               | **Postal:** Postal code. Reference data is  |
+|               | postal code points, for example, 90210 USA. |
++---------------+---------------------------------------------+
+| Score         | A number from 1--100 indicating the degree  |
+|               | to which the input tokens in a geocoding    |
+|               | request match the address components in a   |
+|               | candidate record. A score of 100 represents |
+|               | a perfect match, while lower scores         |
+|               | represent decreasing match accuracy.        |
++---------------+---------------------------------------------+
+| Status        | Indicates whether a batch geocode request   |
+|               | results in a match, tie, or unmatched.      |
+|               | Possible values include\                    |
+|               | \                                           |
+|               | M - Match. The returned address matches the |
+|               | input address and is the highest scoring    |
+|               | candidate.\                                 |
+|               | \                                           |
+|               | T - Tied. The returned address matches the  |
+|               | input address but has the same score as one |
+|               | or more additional candidates.\             |
+|               | \                                           |
+|               | U - Unmatched. No addresses match the       |
+|               | inputted address.                           |
++---------------+---------------------------------------------+
+| geometry      | The WKT (Well-known text) representation of |
+|               | the latitudes and longitudes. This column   |
+|               | may be useful if you're reading the CSV     |
+|               | into R, Python, or ArcGIS                   |
++---------------+---------------------------------------------+
+| Region        | The state that `Match_addr` is located in   |
++---------------+---------------------------------------------+
+| RegionAbbr    | Abbreviated State Name. For example, CA for |
+|               | California                                  |
++---------------+---------------------------------------------+
+| Subregion     | The county that the input address is        |
+|               | located in                                  |
++---------------+---------------------------------------------+
+| MetroArea     | The name of the Metropolitan area that      |
+|               | `Match_addr` is located in. This field may  |
+|               | be blank if the input address is not        |
+|               | located within a metro area.                |
++---------------+---------------------------------------------+
+| City          | The city that `Match_addr` is located in    |
++---------------+---------------------------------------------+
+| Nbrhd         | The Neighborhood that `Match_addr` is       |
+|               | located in. Note these are ESRI defined     |
+|               | neighborhoods which may or may not align    |
+|               | with other sources neighborhood definitions |
++---------------+---------------------------------------------+
 
 \
 

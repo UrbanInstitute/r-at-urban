@@ -8,7 +8,6 @@ output:
     toc: TRUE
     toc_float: TRUE
     pandoc_args: "--tab-stop=2"
-
 ---
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
@@ -25,46 +24,25 @@ knitr::opts_chunk$set(warning = FALSE)
 options(scipen = 999)
 ```
 
-# Introduction
-------------------------------------------------------------------------
+## Introduction
 
-This guide outlines tools and tips for improving the speed and execution
-of R code.
+This guide outlines tools and tips for improving the speed and execution of R code.
 
-Sometimes, simply tweaking a few lines of code can lead to large
-performance gains in the execution of a program. Other issues may take
-more time to work through but can be a huge benefit to a project in the
-long term.
+Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term.
 
-An important lesson to learn when it comes to optimising an R (or any)
-program is knowing both if to start and when to stop. You most likely
-want to optimize your code because it is "too slow", but what that means
-will vary from project to project. Be sure to consider what "fast
-enough" is for your project and how much needs to be optimized. If your
-program takes an hour to complete, spending 5 hours trying to make it
-faster can be time well spent if the script will be run regularly, and a
-complete waste of time if it's an ad-hoc analysis.
+An important lesson to learn when it comes to optimising an R (or any) program is knowing both if to start and when to stop. You most likely want to optimize your code because it is "too slow", but what that means will vary from project to project. Be sure to consider what "fast enough" is for your project and how much needs to be optimized. If your program takes an hour to complete, spending 5 hours trying to make it faster can be time well spent if the script will be run regularly, and a complete waste of time if it's an ad-hoc analysis.
 
-For more information, see the CRAN Task View [High-Performance and
-Parallel Computing with
-R](https://CRAN.R-project.org/view=HighPerformanceComputing).
+For more information, see the CRAN Task View [High-Performance and Parallel Computing with R](https://CRAN.R-project.org/view=HighPerformanceComputing).
 
-The "Performant Code" section of Hadley Wickham's [Advanced
-R](http://adv-r.had.co.nz/) is another great resource and provides
-a deeper dive into what is covered in this guide.
+The "Performant Code" section of Hadley Wickham's [Advanced R](http://adv-r.had.co.nz/) is another great resource and provides a deeper dive into what is covered in this guide.
 
 ------------------------------------------------------------------------
 
 # Update Your Installation
 
-One of the easiest ways to improve the performance of R is to update R.
-In general, R will have a big annual release (i.e., 3.5.0) in the spring
-and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest
-of the year. If the middle digit of your installation is behind the
-current release, you should consider updating.
+One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.
 
-For instance, R 3.5.0 implemented an improved read from text files. A
-5GB file took over 5 minutes to read in 3.4.4:
+For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:
 
 ![](optimization/images/data-load-3-4.png){width="75%"}
 
@@ -72,17 +50,13 @@ While 3.5.0 took less than half the time:
 
 ![](optimization/images/data-load-3-5.png){width="75%"}
 
-To see what the R-core development team is up to, check out the
-[NEWS](https://cran.r-project.org/doc/manuals/r-devel/NEWS.html)
-file from the R project.
+To see what the R-core development team is up to, check out the [NEWS](https://cran.r-project.org/doc/manuals/r-devel/NEWS.html) file from the R project.
 
 ------------------------------------------------------------------------
 
 # Profiling & Benchmarking
 
-In order to efficiently optimize your code, you'll first need to know
-where it's running slowest. The `profvis` package provides a nice way of
-visualizing the execution time and memory useage of your program.
+In order to efficiently optimize your code, you'll first need to know where it's running slowest. The `profvis` package provides a nice way of visualizing the execution time and memory useage of your program.
 
 ```{r profile-01}
 library(profvis)
@@ -101,22 +75,17 @@ profvis({
 
 ```
 
-In this toy example it looks like the `read.csv` function is the
-bottleneck, so
+In this toy example it looks like the `read.csv` function is the bottleneck, so
 
 work on optimizing that first.
 
-Once you find the bottleneck that needs to be optimized, it can be
-useful to
+Once you find the bottleneck that needs to be optimized, it can be useful to
 
-benchmark different potential solutions. The `microbenchmark` package
-can help
+benchmark different potential solutions. The `microbenchmark` package can help
 
-you choose between different options. Continuing with the simple example
-with
+you choose between different options. Continuing with the simple example with
 
-the `diamonds` dataset, compare the base `read.csv` function with
-`read_csv`
+the `diamonds` dataset, compare the base `read.csv` function with `read_csv`
 
 from the `readr` package.
 
@@ -134,25 +103,19 @@ microbenchmark(
 
 ```
 
-In this case, `read_csv` is about twice as fast as the base R
-implementations.
+In this case, `read_csv` is about twice as fast as the base R implementations.
 
 # Parallel Computing
 
 Often, time-intensive R code can be sped up by breaking the execution of
 
-the job across additional cores of your computer. This is called
-parallel computing.
+the job across additional cores of your computer. This is called parallel computing.
 
 ## Learn `lapply`/`purrr::map`
 
-Learning the `lapply` (and variants) function from Base R or the `map`
-(and variants) function from the `purrr` package is the first step in
-learning to run R code in parallel. Once you understand how `lapply` and
-`map` work, running your code in parallel will be simple.
+Learning the `lapply` (and variants) function from Base R or the `map` (and variants) function from the `purrr` package is the first step in learning to run R code in parallel. Once you understand how `lapply` and `map` work, running your code in parallel will be simple.
 
-Say you have a vector of numbers and want to find the square root of
-each one
+Say you have a vector of numbers and want to find the square root of each one
 
 (ignore for now that `sqrt` is vectorized, which will be covered later).
 
@@ -174,8 +137,7 @@ unlist(out)
 
 ```
 
-The `lapply` function essentially handles the overhead of constructing a
-for
+The `lapply` function essentially handles the overhead of constructing a for
 
 loop for you. The syntax is:
 
@@ -185,8 +147,7 @@ lapply(X, FUN, ...)
 
 ```
 
-`lapply` will then take each element of `X` and apply the `FUN`ction to
-it.
+`lapply` will then take each element of `X` and apply the `FUN`ction to it.
 
 Our simple example then becomes:
 
@@ -200,8 +161,7 @@ unlist(out)
 
 ```
 
-Those working within the `tidyverse` may use `map` from the `purrr`
-package equivalently:
+Those working within the `tidyverse` may use `map` from the `purrr` package equivalently:
 
 ```{r apply-04}
 
@@ -217,15 +177,13 @@ unlist(out)
 
 ## Motivating Example
 
-Once you are comfortable with `lapply` and/or `map`, running the same
-code in
+Once you are comfortable with `lapply` and/or `map`, running the same code in
 
 parallel takes just an additional line of code.
 
 For `lapply` users, the `future.apply` package contains an equivalent
 
-`future_lapply` function. Just be sure to call `plan(multiprocess)`
-beforehand,
+`future_lapply` function. Just be sure to call `plan(multiprocess)` beforehand,
 
 which will handle the back-end orchestration needed to run in parallel.
 
@@ -285,19 +243,15 @@ microbenchmark::microbenchmark(
 
 Parallelization was actually slower. In this case, the overhead of
 
-setting the code to run in parallel far outweighed any performance gain.
-In
+setting the code to run in parallel far outweighed any performance gain. In
 
-general, parallelization works well on long-running & compute intensive
-jobs.
+general, parallelization works well on long-running & compute intensive jobs.
 
 ## A (somewhat) More Complex Example
 
-In this example we'll use the `diamonds` dataset from `ggplot2` and
-perform a
+In this example we'll use the `diamonds` dataset from `ggplot2` and perform a
 
-kmeans cluster. We'll use `lapply` to iterate the number of clusters
-from 2 to
+kmeans cluster. We'll use `lapply` to iterate the number of clusters from 2 to
 
 5:
 
@@ -341,25 +295,21 @@ system.time(
 
 ```
 
-While we didn't achieve perfect scaling, we still get a nice bump in
-execution
+While we didn't achieve perfect scaling, we still get a nice bump in execution
 
 time.
 
 ## Additional Packages
 
-For the sake of ease and brevity, this guide focused on the `futures`
-framework
+For the sake of ease and brevity, this guide focused on the `futures` framework
 
-for parallelization. However, you should be aware that there are a
-number of
+for parallelization. However, you should be aware that there are a number of
 
 other ways to parallelize your code.
 
 ### The `parallel` Package
 
-The `parallel` package is included in your base R installation. It
-includes
+The `parallel` package is included in your base R installation. It includes
 
 analogues of the various `apply` functions:
 
@@ -367,26 +317,21 @@ analogues of the various `apply` functions:
 
 -   `mclapply` - not available on Windows
 
-These functions generally require more setup, especially on Windows
-machines.
+These functions generally require more setup, especially on Windows machines.
 
 ### The `doParallel` Package
 
 The `doParallel` package builds off of `parallel` and is
 
-useful for code that uses for loops instead of `lapply`. Like the
-parallel
+useful for code that uses for loops instead of `lapply`. Like the parallel
 
-package, it generally requires more setup, especially on Windows
-machines.
+package, it generally requires more setup, especially on Windows machines.
 
 ### Machine Learning - `caret`
 
-For those running machine learning models, the `caret` package can
-easily
+For those running machine learning models, the `caret` package can easily
 
-leverage `doParallel` to speed up the execution of multiple models.
-Lifting
+leverage `doParallel` to speed up the execution of multiple models. Lifting
 
 the example from the package documentation:
 
@@ -418,24 +363,19 @@ for more detail.
 
 # Big Data
 
-As data collection and storage becomes easier and cheaper, it is
-relatively
+As data collection and storage becomes easier and cheaper, it is relatively
 
-simple to obtain relatively large data files. An important point to keep
-in
+simple to obtain relatively large data files. An important point to keep in
 
 mind is that the size of your data will generally expand when it is read
 
-from a storage device into R. A general rule of thumb is that a file
-will take
+from a storage device into R. A general rule of thumb is that a file will take
 
 somewhere around 3-4 times more space in memory than it does on disk.
 
-For instance, compare the size of the `iris` data set when it is saved
-as a
+For instance, compare the size of the `iris` data set when it is saved as a
 
-.csv file locally vs the size of the object when it is read in to an R
-session:
+.csv file locally vs the size of the object when it is read in to an R session:
 
 ```{r size-01, message = FALSE}
 
@@ -447,18 +387,15 @@ pryr::object_size(df)
 
 ```
 
-This means that on a standard Urban Institute desktop, you may have
-issues
+This means that on a standard Urban Institute desktop, you may have issues
 
 reading in files that are larger than 4 GB.
 
 ## Object Size
 
-The type of your data can have a big impact on the size of your data
-frame
+The type of your data can have a big impact on the size of your data frame
 
-when you are dealing with larger files. There are four main types of
-atomic
+when you are dealing with larger files. There are four main types of atomic
 
 vectors in R:
 
@@ -472,11 +409,9 @@ vectors in R:
 
 ## Each of these data types occupies a different amount of space in memory
 
-`logical` and `integer` vectors use 4 bytes per element, while a
-`double` will
+`logical` and `integer` vectors use 4 bytes per element, while a `double` will
 
-occupy 8 bytes. R uses a global string pool, so `character` vectors are
-hard
+occupy 8 bytes. R uses a global string pool, so `character` vectors are hard
 
 to estimate, but will generally take up more space for element.
 
@@ -494,24 +429,19 @@ pryr::object_size(as.character(x))
 
 ```
 
-An incorrect data type can easily cost you a lot of space in memory,
-especially
+An incorrect data type can easily cost you a lot of space in memory, especially
 
-at scale. This often happens when reading data from a text or csv file -
-data
+at scale. This often happens when reading data from a text or csv file - data
 
-may have a format such as `c(1.0, 2.0, 3.0)` and will be read in as a
-`numeric`
+may have a format such as `c(1.0, 2.0, 3.0)` and will be read in as a `numeric`
 
 column, when `integer` is more appropriate and compact.
 
 You may also be familiar with `factor` variables within R. Essentially a
 
-`factor` will represent your data as integers, and map them back to
-their
+`factor` will represent your data as integers, and map them back to their
 
-character representation. This can save memory when you have a compact
-and
+character representation. This can save memory when you have a compact and
 
 unique level of factors:
 
@@ -525,8 +455,7 @@ pryr::object_size(as.factor(x))
 
 ```
 
-However if each element is unique, or if there is not a lot of overlap
-among
+However if each element is unique, or if there is not a lot of overlap among
 
 elements, than the overhead will make a factor larger than its character
 
@@ -542,20 +471,15 @@ pryr::object_size(as.character(letters))
 
 ## Cloud Computing
 
-Sometimes, you will have data that are simply too large to ever fit on
-your
+Sometimes, you will have data that are simply too large to ever fit on your
 
-local desktop machine. If that is the case, then the Elastic Cloud
-Computing
+local desktop machine. If that is the case, then the Elastic Cloud Computing
 
-Environment from the Office of Technology and Data Science can provide
-you with
+Environment from the Office of Technology and Data Science can provide you with
 
-easy access to powerful analytic tools for computationally intensive
-project.
+easy access to powerful analytic tools for computationally intensive project.
 
-The Elastic Cloud Computing Environment allows researchers to quickly
-spin-up
+The Elastic Cloud Computing Environment allows researchers to quickly spin-up
 
 an Amazon Web Services (AWS) Elastic Cloud Compute (EC2) instance. These
 
@@ -581,8 +505,7 @@ impressive scale.
 
 | x1e.16xlarge \| 64 \| 1952 \|
 
-Feel free to contact Erika Tyagi (etyagi\@urban.org) if this would be
-useful
+Feel free to contact Erika Tyagi (etyagi\@urban.org) if this would be useful
 
 for your project.
 
@@ -592,11 +515,9 @@ for your project.
 
 ## For Loops and Vector Allocation
 
-A refrain you will often hear is that for loops in R are slow and need
-to be
+A refrain you will often hear is that for loops in R are slow and need to be
 
-avoided at all costs. This is not true! Rather, an improperly
-constructed loop
+avoided at all costs. This is not true! Rather, an improperly constructed loop
 
 in R can bring the execution of your program to a near standstill.
 
@@ -616,19 +537,15 @@ for (i in x) {
 
 ```
 
-The bottleneck in this loop is with the allocation of the vector `out`.
-Every
+The bottleneck in this loop is with the allocation of the vector `out`. Every
 
-time we iterate over an item in `x` and append it to `out`, R makes a
-copy
+time we iterate over an item in `x` and append it to `out`, R makes a copy
 
-of all the items already in `out`. As the size of the loop grows, your
-code
+of all the items already in `out`. As the size of the loop grows, your code
 
 will take longer and longer to run.
 
-A better practice is to pre-allocate `out` to be the correct length, and
-then
+A better practice is to pre-allocate `out` to be the correct length, and then
 
 insert the results as the loop runs.
 
@@ -646,8 +563,7 @@ for (i in seq_along(x)) {
 
 ```
 
-A quick benchmark shows how much more efficient a loop with a
-pre-allocated
+A quick benchmark shows how much more efficient a loop with a pre-allocated
 
 results vector is:
 
@@ -689,8 +605,7 @@ microbenchmark::microbenchmark(
 
 ```
 
-And note how performance of the "bad" loop degrades as the loop size
-grows.
+And note how performance of the "bad" loop degrades as the loop size grows.
 
 ```{r loop-05}
 
@@ -708,8 +623,7 @@ microbenchmark::microbenchmark(
 
 ## Vectorized Functions
 
-Many functions in R are vectorized, meaning they can accept an entire
-vector
+Many functions in R are vectorized, meaning they can accept an entire vector
 
 (and not just a single value) as input. The `sqrt` function from the
 
@@ -723,11 +637,9 @@ sqrt(x)
 
 ```
 
-This removes the need to use `lapply` or a for loop. Vectorized
-functions in
+This removes the need to use `lapply` or a for loop. Vectorized functions in
 
-R are generally written in a compiled language like C, C++, or FORTRAN,
-which
+R are generally written in a compiled language like C, C++, or FORTRAN, which
 
 makes their implementation faster.
 
