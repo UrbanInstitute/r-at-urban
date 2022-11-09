@@ -1,0 +1,32 @@
+{
+    "id": "B451B315",
+    "path": "~/Documents/GitHub/r-at-urban/quarto/mapping.qmd",
+    "project_path": "quarto/mapping.qmd",
+    "type": "quarto_markdown",
+    "hash": "3579312466",
+    "contents": "",
+    "dirty": false,
+    "created": 1664398284552.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "523,1",
+        "scrollLine": "0",
+        "last_setup_crc32": "",
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "5477:4540"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1664565600,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1664565600216,
+    "read_only": false,
+    "read_only_alternatives": []
+}

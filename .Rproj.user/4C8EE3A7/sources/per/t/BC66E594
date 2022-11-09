@@ -1,0 +1,31 @@
+{
+    "id": "BC66E594",
+    "path": "~/Documents/GitHub/r-at-urban/quarto/getting-data.qmd",
+    "project_path": "quarto/getting-data.qmd",
+    "type": "quarto_markdown",
+    "hash": "117369124",
+    "contents": "",
+    "dirty": false,
+    "created": 1665505082352.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "148,14",
+        "scrollLine": "0",
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "rmdVisualModeLocation": "199:2606.39990234375",
+        "rmdVisualCollapsedChunks": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1665507728,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1665507728271,
+    "read_only": false,
+    "read_only_alternatives": []
+}

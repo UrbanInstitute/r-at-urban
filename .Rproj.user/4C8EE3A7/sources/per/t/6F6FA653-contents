@@ -1,0 +1,702 @@
+---
+output: 
+  html_document:
+    includes:
+      in_header: analytics.html  	
+    css: styles.css
+    self_contained: TRUE  
+    code_folding: hide
+    toc: TRUE
+    toc_float: TRUE
+---
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+<div id="header">
+![](tables/images/urban-institute-logo.png)
+</div>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+library(urbnthemes)
+
+set_urbn_defaults(style = "print")
+```
+
+##
+
+## Getting started
+
+There are two important steps to building a useful table in R:
+
+1) Get the data frame into the correct shape. 
+2) Decide on the output format. 
+
+The section "Tidy Data" addresses the first step by outlining `library(broom)` and `library(dplyr)`. Both are powerful tools with uses well beyond making tables.  
+
+The rest of this document is dedicated to outlining the strengths, weaknesses, uses, and methods of different tools for building tables in R. The following subsections link output formats to tools:
+
+### R Markdown
+
+todo(aaron): add image
+
+R Markdown is one of the most powerful parts of R. It combines "text chunks", "code chunks", and "output chunks" to create [a range of documents](http://rmarkdown.rstudio.com/gallery.html) including .PDF, .html, Microsoft Word, websites, books, and more (this guide was built using R Markdown!). It is best for creating *entire* documents instead of pieces of larger documents. 
+
+Most of the tools in this document are optimized for creating tables using R Markdown. This is fortunate if R Markdown is the tool of choice for a publication and unfortunate if R is just one piece of a heterogeneous workflow.  
+
+### html
+
+This guide is an html document. Any table in this document can be easily replicated as-is in .html. `kable()`, `library(kableExtra)`, `library(formattable)`, and `library(stargazer)` are the best tools for .html documents. 
+
+Here's an example .html table:
+
+```{r optimal-rmarkdown}
+library(formattable)
+library(kableExtra)
+library(tidyverse)
+library(knitr)
+
+diamonds %>%
+  top_n(5, price) %>%
+  arrange(desc(price)) %>%
+  select(Carat = carat, Cut = cut, Price = price) %>%
+  mutate(Price = currency(Price, digits = 0)) %>%
+  kable(caption = "Top Diamond Prices", align = "rlrr", format = "html") %>%
+  kable_styling(full_width = FALSE, position = "left") %>%
+  add_footnote("Urban Institute analysis of diamond data", notation = "alphabet")
+```
+
+### PDF
+
+R Markdown is great for "knitting" straight to PDF. Many of the tables in this document can be "knitted" to PDF with little to no change to the code but the output will look a little different than .html. `kable()`, `library(kableExtra)`, `library(formattable)`, and `library(stargazer)` are the best tools for PDFs. 
+
+Here's a great example of a PDF table by Bhargavi Ganesh (HFPC):
+
+![](tables/images/ganesh.png)
+
+todo(aaron): update Bhargavi example
+
+### LaTeX
+
+LaTeX (pronounced "lay-tech") is a syntax/micro-language for typesetting technical and scientific documents. `kable()`, `library(kableExtra)`, and `library(stargazer)` can all write to LaTeX which can then be implemented elsewhere.  
+
+Here's an example of raw LaTeX output by `kable()`:
+
+```{r, out.width = "500px", echo=FALSE}
+knitr::include_graphics("tables/images/latex.png")
+```
+
+### Text
+
+`library(stargazer)` is the only real option for printing ASCII tables. 
+
+```{r, out.width = "500px", echo=FALSE}
+knitr::include_graphics("tables/images/ascii.png")
+```
+
+### Microsoft Word
+
+The appealing but dense formatting of the Urban Institute's Microsoft Word template makes it effectively impossible right now to "knit" or write straight to Microsoft Word for publications. R Markdown and `library(WordR)` can both "knit" or write straight to Microsoft Word documents. 
+
+### Microsoft Excel
+
+R tools for interacting with Microsoft Excel have never been more powerful. `library(readr)`, `library(writexl)`, and `library(openxlsx)` can write to .csv, .xls, .xlsx without formats, and .xlsx with formats. All three tools are outlined under "Export to Excel". 
+
+If Excel is necessary, programmatically write the data to one sheet in a workbook and then use cell references to build Urban Institute-compliant tables in another sheet. This way, the data can be updated without deleting the tables or formatting. 
+
+![](tables/images/borough.png)
+
+*An early table in "A Discours of the Variation of the Cumpas, or Magneticall Needle" by William Borough (1581)*
+
+## kable()
+
+The `kable()` function from `library(knitr)` is the simplest way to build tables in R Markdown. 
+
+`kable()`'s tables are ugly in the R console, but their default is appealing in R Markdown. Add `css: styles.css` to the R Markdown YAML header before using `kable()` so styles and fonts are Urban Institute compliant.
+
+```{r eval=FALSE}
+---
+output: 
+  html_document:
+    css: styles.css
+---
+```
+
+```{r kable}
+library(tidyverse)
+library(knitr)
+
+mtcars_subset <- mtcars %>%
+	rownames_to_column(var = "Model") %>%
+	select(Model, MPG = mpg, Cylinders = cyl, Weight = wt) %>%
+	arrange(-MPG) %>%
+	top_n(5, MPG)
+
+mtcars_subset %>%
+	kable(caption = "Cars with the best fuel economy")
+```
+
+### caption
+
+`caption =` adds a title to the R Markdown table. 
+
+Titles can also be added with `##`, `###`, `####`, etc. in R Markdown documents. This is advantageous because the table title will be added to the table of contents based on where it falls in the hierarchy of html/R Markdown headers. R Markdown table titles default to the same size as headers with ####.
+
+`#### Cars with the best fuel economy`
+
+#### Cars with the best fuel economy
+
+### digits
+
+`digits =` controls the maximum number of digits for each number in a table. 
+
+```{r kable digits}
+library(tidyverse)
+library(knitr)
+
+mtcars_subset %>%
+	kable(digits = 0)
+```
+
+### col.names
+
+The first `kable()` example in the `library(kable)` subsection renamed variables with `select()` before making the table. This is often necessary because lower case names with underscores are more common in analyses than Urban Institute-compliant column names (sentence case).
+
+Another option is to specify a vector of column names when using `kable()`. `col.names =` specifies a vector with which to replace column names. 
+
+```{r kable col.names}
+library(tidyverse)
+library(knitr)
+
+mtcars_subset %>%
+	kable(col.names = c("Car model", "Fuel Economy", "Cylinders", "Weight (Tons)"))
+```
+
+### align
+
+`align =` changes the column alignment. Numeric columns are right-aligned by default and all other columns are left-aligned by default. The arguments for `align =` differ by output type. 
+
+Alignment options for PDF are `"left"`, `"center"`, and `"right"` and the options for .html are `"l"`, `"c"`, and `"r"`. Individual columns can be formatted by concatenating options into one vector (ex. `align = c("right", "left", "right", "center"`) for PDF and one character string (ex. `align = "rlrc"`) for .html. 
+
+```{r alignment}
+library(tidyverse)
+library(knitr)
+
+mtcars_subset %>%
+	select(MPG, Cylinders, Weight, Model) %>%
+	kable(align = "rlrr")
+```
+
+### additional arguments
+
+* `trim = FALSE`
+* `nsmall = 0L`
+* `justify = c("left", "right", "centre", "none")`
+* `width = NULL`
+* `na.encode = TRUE`
+* `scientific = NA`
+* `big.mark   = ""`  
+* `big.interval = 3L`
+* `small.mark = ""`
+* `small.interval = 5L`
+* `decimal.mark = getOption("OutDec")`
+* `zero.print = NULL`
+* `drop0trailing = FALSE, ...)`
+
+## library(kableExtra)
+
+`library(kableExtra)` extends the power and customization of `library(kable)`.
+
+[This article](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) outlines many of the following capabilities. 
+
+### full_width
+
+"kables" stretch to the full width of a document by default. `full_width = FALSE` turns off this default. 
+
+```{r kableextra full_width}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+kable(x = head(mtcars), format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+### position
+
+Using `full_width = F` opens up the possibility of changing the alignment of the table on the page. 
+
+For example, `position = "left"`
+
+```{r kableextra position left}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+kable(x = head(mtcars), format = "html", caption = "mtcars with position = 'left'") %>%
+  kable_styling(full_width = FALSE, position = "left")
+```
+
+#### mtcars with float_right
+
+```{r kableextra position float right}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+kable(x = head(mtcars), format = "html") %>%
+  kable_styling(full_width = FALSE, position = "float_right")
+```
+
+Body text can be set to the side of a table using `float_right` or `float_left`. The text that appears next to the table goes after the function call in R Markdown documents. 
+
+### column_spec
+
+Individual columns can be formatted with `column_spec()`. The arguments are `width`, `bold`, `italic`, `monospace`, `color` (text color), `background` (column color), `border_left`, and `border_right`. If the paragraph next to a table with `position = "float_right"` is too short, the head and text of the subsequent section will appear next to the table. 
+
+```{r kableextra column_spec}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+kable(x = head(mtcars), format = "html", caption = "Highlight an important column") %>%
+  kable_styling(full_width = FALSE) %>%
+	column_spec(3, background = "#1696d2")
+```
+
+### row_spec
+
+Individual rows can be formatted with `row_spec()`. The arguments are `bold`, `italic`, `monospace`, `color` (text color), and `background` (row color). 
+
+```{r kableextra row_spec}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+kable(x = head(mtcars), format = "html", caption = "Highlight an important row") %>%
+  kable_styling(full_width = FALSE, position = "left") %>%
+	row_spec(3, color = "#ffffff", background = "#1696d2", bold = TRUE)
+```
+
+### add_header_above
+
+`library(kableExtra)` can add a second tier of column labels with `add_header_above`.
+
+```{r kableextra add_header_above}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+diamonds %>%
+	filter(row_number() < 10) %>%
+	select(price, carat, cut, color, clarity) %>%
+	kable(format = "html", caption = "Diamond features") %>%
+  kable_styling(full_width = FALSE) %>%
+	add_header_above(c(" " = 1, "Shape and size" = 2, "Stone color" = 2))
+```
+
+### group_rows
+  
+Similarly, `group_rows()` can be used to add an extra tier of row labels. 
+
+```{r group rows}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+diamonds %>%
+	filter(cut %in% c("Ideal", "Premium")) %>%
+	filter(row_number() <= 10) %>%
+	arrange(cut, desc(price)) %>%
+	select(carat, color, price) %>%
+	kable(format = "html", caption = "Diamond prices") %>%
+	kable_styling(full_width = FALSE) %>%
+  kableExtra::group_rows("Premium", 1, 6) %>%
+  kableExtra::group_rows("Ideal", 7, 10)
+```
+
+### add_footnote()
+
+Adding footnotes to tables is simple with `add_footnote()`. `notation =` can be set to "number", "alphabet", or "symbol".
+
+```{r simple footnote}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+diamonds %>%
+	filter(cut %in% c("Ideal", "Premium")) %>%
+	filter(row_number() <= 10) %>%
+	arrange(cut, desc(price)) %>%
+	select(carat, color, price) %>%
+	kable(format = "html", caption = "Diamond prices") %>%
+	kable_styling(full_width = FALSE) %>%
+  group_rows("Premium", 1, 6) %>%
+  group_rows("Ideal", 7, 10) %>%
+	add_footnote(c("All prices are in 2017 dollars", "Urban Institute analysis of diamond data"), notation = "alphabet")
+```  
+  
+Footnotes can also reference titles and column headings.   
+  
+```{r complex footnote}  
+library(tidyverse)
+library(knitr)
+library(kableExtra)  
+
+diamonds %>%
+	filter(cut %in% c("Ideal", "Premium")) %>%
+	filter(row_number() <= 10) %>%
+	arrange(cut, desc(price)) %>%
+	select(carat, color, price) %>%
+	kable(format = "html", caption = "Diamond prices[note]") %>%
+	kable_styling(full_width = FALSE) %>%
+  group_rows("Premium [note]", 1, 6) %>%
+  group_rows("Ideal", 7, 10) %>%
+	add_footnote(c("Could include blood diamonds", "All prices are in 2017 dollars", "Urban Institute analysis of diamond data"), notation = "alphabet") 
+```
+
+## library(formattable)
+
+`library(formattable)` has two distinct applications. The first is formatting vectors that can be used in any table or output in R. The second is building highly-formatted tables that go beyond `library(kable)` + `library(kableExtra)`. 
+
+### Pre-defined Formats
+
+Percentages are usually stored as decimals in R for ease of computation. But it is often desirable to present those decimals as percentages in tables. The function `percent()` quickly converts a vector of decimals like `0.068` into percentages like `6.8%`. The argument `digits =` controls the number of decimal places to be shown.  
+
+```{r formattable::percent()}
+library(tidyverse)
+library(formattable)
+
+unemployment <- tibble(
+	State = c("Alabama", "Alaska", "Arizona", "Arkansas", "California"),
+  `2000` = percent(c(.068, .05, .05, .04, .09), digits = 1),
+  `2013` = percent(c(.064, .062, .05, .06, .065), digits = 1),
+  Change = percent(c(-.004, .012, 0, .02, -.025), digits = 1)
+	)
+
+formattable(unemployment)
+```
+
+`library(formattable)` comes with useful pre-defined formats for `percent()`, `comma()`, `currency()`, `accounting()`, and `scientific()`.
+
+```{r formattable-formats}
+library(tidyverse)
+library(formattable)
+
+formats <- tibble(
+  Percent = percent(c(.068, .05, .05, .04, .09), digits = 1),
+	Comma = comma(c(1000, 10000, 100000, 1000000, 10000000), digits = 0),
+	Currency = currency(c(1, 1, 1, 1, 1)),
+	Accounting = accounting(c(1, 1, 1, 1, 1)),
+	Scientific = scientific(c(0.0001, 100000, 100000000000, 1, 1))
+)
+	
+formattable(formats)
+```
+
+`library(formattable)` can be combined with any of the tools outlined in this document. All of the format functions can be used on individual vectors and passed to other table functions. 
+
+In this example, `currency()` is used with `kable()` to add a dollar sign and two decimals to price.  
+
+```{r}
+library(tidyverse)
+library(knitr)
+
+diamonds %>%
+	mutate(price = currency(price)) %>%
+	head() %>%
+	kable(full_width = FALSE)
+```
+
+### formattable tables
+
+`library(formattable)` can add formatting to tables that blurs the line between table and plot. 
+
+*Note:* `library(formattable)` creates objects of class `formattable` so it isn't necessary possible to combine all of the features of `library(formattable)` with the packages described elsewhere in this document. 
+
+```{r}
+library(tidyverse)
+library(formattable)
+
+unemployment <- tibble(
+	State = c("Alabama", "Alaska", "Arizona", "Arkansas", "California"),
+  unemployment2000 = c(6.8, 5, 5, 4, 9),
+  unemployment2013 = c(6.4, 6.2, 5, 6, 6.5),
+  Change = c(-0.4, 1.2, 0, 2.0, -2.5)
+	)
+
+sign_formatter <- formatter("span", 
+  style = x ~ style(color = ifelse(x > 0, "green", 
+    ifelse(x < 0, "red", "black"))))
+
+formattable(unemployment, list(Change = sign_formatter))
+```
+
+The following example outlines advanced features:
+
+* `color_tile()` creates a colored tile under each observation of a variable
+* `formatter()` establishes rules for a custom format
+* `normalize_bar()` adds colored bars of varying size to each observation of a variable
+* `icontext()` adds glyphs to each observation of variable
+
+```{r formattable-extended}
+library(tidyverse)
+library(formattable)
+
+employees <- tibble(Tenure = c(27, 8, 6, 5, 4),
+										Performance = c("B", "F", "A", "A", "C"),
+										`IT Training` = c(TRUE, FALSE, TRUE, TRUE, TRUE),
+										`Accrued PTO` = c(98, 2, 8, 38, 6))
+
+formattable(employees, 
+	list(Tenure = color_tile("white", "#1696d2"),
+			 Performance = formatter("span", 
+			 		style = x ~ ifelse(x == "F", style(color = "red", font.weight = "bold"), NA)),
+			 `IT Training` = formatter("span", style = x ~ style(color = ifelse(x, "green", "red")),
+    			x ~ icontext(ifelse(x, "ok", "remove"), ifelse(x, "Yes", "No"))),
+			 `Accrued PTO` = normalize_bar("#fdbf11", 0.2)
+	), caption = "Employees"
+)
+```
+
+## library(stargazer)
+
+`library(stargazer)` is the best package for exporting "untidy", but well-formatted regression tables in .html, LaTeX, and ASCII. These tables can be included in R Markdown documents by adding the argument `results = "asis"` to the header of a "code chunk". 
+
+They can also be exported as .html code, LaTeX code, and formatted ASCII. 
+
+`library(stargazer)` has an abundance of formatting options. [This vignette](https://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf) and [this cheatsheet](https://www.jakeruss.com/cheatsheets/stargazer/) outline most of what can be done with the package. This example shows how a little code can go a long way. Simply build as many models as desired, adjust some of the labels, and add a title. 
+
+```{r stargazer, results = "asis"}
+library(tidyverse)
+library(stargazer)
+
+linear1 <- lm(price ~ carat + x + y + z + depth, data = diamonds)
+linear2 <- lm(price ~ carat + x + y + z, data = diamonds)
+
+diamonds_indicator <- diamonds %>%
+  mutate(price_indicator = price > 5324)
+
+probit1 <- glm(price_indicator ~ carat + x + y + z, data = diamonds_indicator, family = binomial(link = "probit"))
+
+stargazer(linear1, linear2, probit1, 
+          type = "html",
+          title = "Regression Results",
+          align = TRUE, 
+          dep.var.labels = c("Overall Prices", "High Prices"),
+          covariate.labels = c("Carats", "X", "Y", "Z", "Cut"),
+          no.space = TRUE,
+          digits = 2)
+```
+
+##### Be sure to cite `library(stargazer)`:
+
+> Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics
+> Tables. R package version 5.2. http://CRAN.R-project.org/package=stargazer
+
+## library(DT)
+
+`library(DT)` is an R interface for the DataTables library in JavaScript. This [vignette](https://rstudio.github.io/DT/) for the package outlines many ways output can be customized. 
+
+This example displays an augmented data frame used for a regression. That is, it displays the independent and dependent variables with fitted values, standard-errors of the fitted values, residuals, etc. 
+
+The example shows how columns can be renamed using `colnames = c("Price" = "price")`. It's also possible to pass an entire vector of new columns like `colnames = c("Price", "Carat", ...)`.
+
+```{r library(DT)}
+library(tidyverse)
+library(DT)
+library(broom)
+
+model1 <- lm(formula = mpg ~ wt, data = mtcars)
+
+augment(model1) %>%
+  mutate_at(vars(mpg:.std.resid), round, 2) %>%
+  datatable(colnames = c("Miles Per Gallon" = "mpg", "Weight" = "wt"), options = list(pageLength = 5), style = "bootstrap")
+```
+
+## Export to Excel
+
+Exporting to Microsoft Excel abandons many of the advantages, like reproducibility, automation and interactivity, of the other tools outlined in this document, but Excel is often a part of Urban Institute researchers' workflows.  
+
+### write_csv()
+
+```{r, out.width = "300px", echo=FALSE}
+knitr::include_graphics("tables/images/csv.png")
+```
+
+The simplest option is to use `write_csv()` from `library(readr)` (loaded in `library(tidyverse)`) to create a .csv that can be opened in Microsoft Excel. Before writing to .csv, be sure to use `library(broom)` to put untidy information into data frames, `library(dplyr)` to select desired rows and columns, and `library(formattable)` to put individual columns into desired formats. 
+
+#### Example code
+
+```{r write_csv(), eval=FALSE}
+library(tidyverse)
+
+diamonds %>%
+	# select and rename columns
+	select(Carat = carat, Price = price) %>%
+	# filter to the first ten rows
+	filter(row_number() <= 10) %>%
+	# save as .csv
+	write_csv("diamonds.csv")
+```
+
+`write_excel_csv()` is a close alternative to `write_csv()` that includes a UTF-8 Byte order mark that indicates to Excel the csv is UTF-8 encoded. All other syntax should be identical. 
+
+### library(writexl)
+
+```{r, out.width = "300px", echo=FALSE}
+knitr::include_graphics("tables/images/excel.png")
+```
+
+`library(writexl)` is a new package that mimics the light-weight design of `library(readxl)`. It doesn't require JAVA or Microsoft Excel to create and write to a .xlsx document. The package is slim now but more development is expected in the near future. 
+
+#### Example code
+
+```{r writexl, eval=FALSE}
+library(tidyverse)
+library(writexl)
+
+diamonds %>%
+	# select and rename columns
+	select(Carat = carat, Price = price) %>%
+	# filter to the first ten rows
+	filter(row_number() <= 10) %>%
+	# save as .csv
+	write_xlsx("diamonds.xlsx")
+```
+
+### library(openxlsx)
+
+`library(openxlsx)` ([CRAN](https://cran.r-project.org/web/packages/openxlsx/openxlsx.pdf), [GitHub](https://github.com/awalker89/openxlsx)) allows for the creation, writing, and styling of Microsoft Excel documents. It doesn't require JAVA, which is a huge improvement over its predecessors `library(xlsx)` and `library(XLConnect)`. 
+
+For Windows computers, `library(openxlsx)` will require a little extra setup which is outlined in this [GitHub README](https://github.com/awalker89/openxlsx)). Linux and Mac computers don't require any additional setup. 
+
+Submit `vignette("Introduction", package = "openxlsx")` in R for a complete introduction to `library(openxlsx)`. 
+
+#### Example code
+
+The biggest advantage of `library(openxlsx)` is the ability to specify workbook, sheet number of name, starting row, and starting column. 
+
+```{r openxlsx, eval=FALSE}
+library(tidyverse)
+library(openxlsx)
+
+writeData(wb, 1, df, startRow = 2, startCol = 2)
+
+diamonds_subset <- diamonds %>%
+	# select and rename columns
+	select(Carat = carat, Price = price) %>%
+	# filter to the first ten rows
+	filter(row_number() <= 10) %>%
+	# save as .csv
+	write_xlsx("diamonds.xlsx")
+
+writeData(wb = "diamonds.xlsx", 
+					sheet = "price", 
+					x = diamonds_subset, 
+					startRow = 2, 
+					startCol = 2)
+```
+
+`library(openxlsx)` also contains scores of options for controlling the destination format. `?writeData()` is good place to get started with formatting. 
+
+## Tidy Data
+
+Most tools for building tables in R require tidy data frames or tibbles. [Tidy data](https://www.jstatsoft.org/article/view/v059i10) has three principles:
+
+1) Each variable forms a column
+2) Each observation forms a row
+3) Each type of observational unit forms a table
+
+Not all R output is tidy. For example, regression output isn't tidy by default: 
+
+```{r untidy regression}
+library(tidyverse)
+
+model1 <- lm(dist ~ speed, data = cars)
+
+summary(model1)
+```
+
+It's easy to print the above output, as-is, to an R Markdown document or send it to a Microsoft Word file. But the above information isn't attractive and it can't be formatted. It also isn't machine readable!
+
+Fortunately, R has a suite of packages that make easy tidying data. 
+
+```{r tidy regression}
+library(tidyverse)
+library(broom)
+tidy(model1)
+```
+
+Now the regression is in a tidy format with each variable as a column, each observation as a row, and the observational unit is coefficients. It is easy to put data into tables once data are "tidy".
+
+### library(broom)
+
+`library(broom)` is useful for converting statistical analysis objects from R into data frames.
+
+Regressions in R are stored in clunky hierarchical data structures. 
+
+```{r model 1}
+library(tidyverse)
+
+model1 <- lm(dist~speed, data = cars)
+summary(model1)
+```
+
+#### glance()
+
+`glance()` returns a tidy data frame with one observation for each model. Each column gives a model summary: either a measure of model quality or complexity, or a combination of the two.
+
+```{r glance}
+library(broom)
+
+glance(model1)
+```
+
+#### tidy()
+
+`tidy()` returns a tidy data frame with one observation for each coefficient in a model. Each column gives information about the estimate or its variability.
+
+```{r tidy}
+library(broom)
+
+tidy(model1)
+```
+
+#### augment()
+
+`augment()` returns a tidy data frame with one observation for each observation in the input data set. 
+
+```{r augment}
+library(broom)
+
+augment(model1) %>%
+	top_n(5)
+```
+
+### library(dplyr)
+
+`library(dplyr)` is a powerful tool for data manipulation. The following "verbs" control the most common data manipulations:
+
+1) `select()`: select columns from a data frame
+2) `filter()`: filter rows in a data frame based on a condition or conditions
+3) `arrange()`: change the order of observations in a data frame
+4) `mutate()`: create or alter variables in a data frame
+5) `rename()`: change the name of a variable in a data frame
+6) `summarize()`: summarize values in a data frame into one row or multiple rows for grouped observations
+7) `group_by()`: group observations based on the levels of a variable or levels of variables
+
+These verbs are useful for changing data frames before converting them into publishable tables.
+
+## Putting it all together
+
+The code examples above highlight the marginal changes of different functions or arguments. The examples do not put all of the tools together into publication-ready tables. This section will be a repository for tables made for Urban Institute publications in R. 
+
+## Appendix
+
+```{r session-info}
+sessionInfo()
+```
