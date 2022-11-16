@@ -37,7 +37,7 @@ This guide is meant to be an on-ramp for soon-to-be R Users and a fill-in-the-ga
 
 R boasts a strong community in the world and inside the Urban Institute. Please don't hesitate to contact Aaron Williams (awilliams\@urban.org) or Amy Rogin (arogin\@urban.org) with thoughts or questions about R.
 
-## \## What is R?
+## What is R?
 
 ![](intro-to-r/images/r-logo.png){width="15%"}
 
