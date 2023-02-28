@@ -117,7 +117,7 @@ mtcars %>%
   ggplot(mapping = aes(x = factor(cyl), y = n)) +
   geom_col() +
   geom_text(mapping = aes(label = n), vjust = -1) +    
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Cylinders",
        y = NULL) +
   remove_ticks() +
@@ -134,7 +134,7 @@ mtcars %>%
   ggplot(mapping = aes(x = factor(cyl), y = n)) +
   geom_col() +
   geom_text(mapping = aes(label = n), hjust = -1) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Cylinders",
        y = NULL) +  
   coord_flip() +
@@ -152,7 +152,7 @@ mtcars %>%
   ggplot(mapping = aes(x = cyl, y = n, fill = cyl)) +
   geom_col() +
   geom_text(mapping = aes(label = n), vjust = -1) +    
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Cylinders",
        y = NULL) +
   remove_ticks() +
@@ -176,12 +176,12 @@ mtcars %>%
   geom_col(mapping = aes(x = cyl, y = n, fill = am)) +
   geom_text(aes(x = cyl, y = label_height - 0.5, label = n, color = am)) +
   scale_color_manual(values = c("white", "black")) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Cylinders",
        y = NULL) +  
   remove_ticks() +
   remove_axis() +
-  guides(color = FALSE)
+  guides(color = "none")
 ```
 
 ### Stacked Bar Plot With Position = Fill
@@ -194,11 +194,11 @@ mtcars %>%
          cyl = factor(cyl)) %>%  
   ggplot() +
   geom_bar(mapping = aes(x = cyl, fill = am), position = "fill") +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1)), labels = scales::percent) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), labels = scales::percent) +
   labs(x = "Cylinders",
        y = NULL) +  
   remove_ticks() +
-  guides(color = FALSE)
+  guides(color = "none")
 ```
 
 ### Dodged Bar Plot
@@ -214,7 +214,7 @@ mtcars %>%
   ggplot(mapping = aes(cyl, y = n, fill = factor(am))) +
   geom_col(position = "dodge") +
   geom_text(aes(label = n), position = position_dodge(width = 0.7), vjust = -1) +    
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Cylinders",
        y = NULL) +  
   remove_ticks() +
@@ -235,7 +235,7 @@ mtcars %>%
 	ggplot(aes(mpg, model)) +
 		geom_segment(aes(x = 0, xend = mpg, y = model, yend = model)) +	
 		geom_point() +
-		scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
+		scale_x_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, 40)) +
 		labs(x = NULL, 
 				 y = "Miles Per Gallon")
 ```
@@ -249,7 +249,7 @@ mtcars %>%
 	mutate(model = factor(model, levels = .$model)) %>%
 	ggplot(aes(mpg, model)) +
 		geom_point() +
-		scale_x_continuous(expand = expand_scale(mult = c(0, 0)), limits = c(0, 40)) +
+		scale_x_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, 40)) +
 		labs(x = NULL, 
 				 y = "Miles Per Gallon")
 ```
@@ -270,10 +270,10 @@ Scatter plots are useful for showing relationships between two or more variables
 mtcars %>%
   ggplot(mapping = aes(x = wt, y = mpg)) +
   geom_point() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 6),
                      breaks = 0:6) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 40),
                      breaks = 0:8 * 5) +
   labs(x = "Weight (thousands of pounds)",
@@ -289,10 +289,10 @@ Large numbers of observations can sometimes make scatter plots tough to interpre
 diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
   geom_point(alpha = 0.05) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 6),
                      breaks = 0:6) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 20000),
                      breaks = 0:4 * 5000,
                      labels = scales::dollar) +
@@ -308,11 +308,11 @@ Sometimes transparency isn't enough to bring clarity to a scatter plot with many
 ``` {r scatter-plot-hex}
 diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
-  geom_hex(mapping = aes(fill = ..count..)) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  geom_hex(mapping = aes(fill = after_stat(count))) +
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 6),
                      breaks = 0:6) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 20000),
                      breaks = 0:4 * 5000,
                      labels = scales::dollar) +
@@ -334,10 +334,10 @@ Sometimes scatter plots have many overlapping points but a reasonable number of 
 mpg %>%
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_point() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 8),
                      breaks = 0:8) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 40),
                      breaks = 0:4 * 10) +
   labs(x = "Displacement",
@@ -351,10 +351,10 @@ set.seed(2017)
 mpg %>%
   ggplot(mapping = aes(x = displ, y = cty)) +
   geom_jitter() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 8),
                      breaks = 0:8) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 40),
                      breaks = 0:4 * 10) +
   labs(x = "Displacement",
@@ -371,11 +371,11 @@ Weights and populations can be mapped in scatter plots to the size of the points
 urbnmapr::statedata %>%
   ggplot(mapping = aes(x = medhhincome, y = horate)) +
   ggplot2::geom_point(mapping = aes(size = hhpop), alpha = 0.3) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(30000, 80000),
                      breaks = 3:8 * 10000,
                      labels = scales::dollar) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 0.8),
                      breaks = 0:4 * 0.2) +
   scale_radius(range = c(3, 15),
@@ -396,10 +396,10 @@ mtcars %>%
   mutate(cyl = paste(cyl, "cylinders")) %>%
   ggplot(aes(x = wt, y = mpg, color = cyl)) +
   geom_point() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 6),
                      breaks = 0:6) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 40),
                      breaks = 0:8 * 5) +
   labs(x = "Weight (thousands of pounds)",
@@ -415,11 +415,11 @@ mtcars %>%
 economics %>%
   ggplot(mapping = aes(x = date, y = unemploy)) +
   geom_line() +
-  scale_x_date(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_date(expand = expansion(mult = c(0.002, 0)), 
                breaks = "10 years",
                limits = c(as.Date("1961-01-01"), as.Date("2020-01-01")),
                date_labels = "%Y") +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      breaks = 0:4 * 4000,
                      limits = c(0, 16000),
                      labels = scales::comma) +
@@ -437,10 +437,10 @@ gapminder %>%
   mutate(country = factor(country, levels = c("Canada", "Australia", "New Zealand"))) %>%
   ggplot(aes(year, gdpPercap, color = country)) +
   geom_line() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      breaks = c(1952 + 0:12 * 5), 
                      limits = c(1952, 2007)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      breaks = 0:8 * 5000,
                      labels = scales::dollar, 
                      limits = c(0, 40000)) +
@@ -458,10 +458,10 @@ as_tibble(EuStockMarkets) %>%
 	gather(key = "key", value = "value", -date) %>%
 	ggplot(mapping = aes(x = date, y = value, color = key)) +
 	geom_line() +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(1991, 1999), 
                      breaks = c(1991, 1993, 1995, 1997, 1999)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      breaks = 0:4 * 2500,
                      labels = scales::dollar, 
                      limits = c(0, 10000)) +  
@@ -494,11 +494,11 @@ fed_fund_rate <- read_csv(
 fed_fund_rate %>%
   ggplot(mapping = aes(x = date, y = fed_funds_rate)) + 
   geom_step() +
-  scale_x_date(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_date(expand = expansion(mult = c(0.002, 0)), 
                breaks = "1 year",
                limits = c(as.Date("2014-01-01"), as.Date("2019-01-01")),
                date_labels = "%Y") +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      breaks = c(0, 0.01, 0.02, 0.03),
                      limits = c(0, 0.03),
                      labels = scales::percent) +  
@@ -578,10 +578,10 @@ beveridge %>%
 	geom_path(mapping = aes(x = unempoyment_rate, y = vacanacy_rate), alpha = 0.5) +
   geom_point(data = labels, mapping = aes(x = unempoyment_rate, y = vacanacy_rate)) +
   geom_text_repel(data = labels, mapping = aes(x = unempoyment_rate, y = vacanacy_rate, label = lubridate::year(quarter))) +  
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0.04, 0.1),
                      labels = scales::percent) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
                      breaks = c(0, 0.01, 0.02, 0.03, 0.04, 0.05),
                      limits = c(0, 0.05),
                      labels = scales::percent) +  
@@ -641,7 +641,7 @@ msleep %>%
   ggplot(aes(x = sleep_total, y = factor(1))) +
   geom_point(alpha = 0.2, size = 5) +
   labs(y = NULL) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 25), 
                      breaks = 0:5 * 5) +
   scale_y_discrete(labels = NULL) +
@@ -669,7 +669,7 @@ ggplot() +
                  color = name),
              alpha = 0.8,
              size = 5) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 25), 
                      breaks = 0:5 * 5) +  
   scale_y_discrete(labels = NULL) +
@@ -698,7 +698,7 @@ msleep %>%
                             )) %>%
   ggplot(aes(x = sleep_total, y = vore)) +
   geom_point(alpha = 0.2, size = 5) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 25), 
                      breaks = 0:5 * 5) +  
   labs(title = "Total Sleep Time of Different Mammals by Diet",
@@ -714,9 +714,9 @@ Histograms divide the distribution of a variable into n equal-sized bins and the
 ```{r histogram}
 ggplot(data = diamonds, mapping = aes(x = depth)) + 
   geom_histogram(bins = 100) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, 100)) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), labels = scales::comma) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2)), labels = scales::comma) +
   labs(x = "Depth",
        y = "Count")
 ```
@@ -729,7 +729,7 @@ Boxplots were invented in the 1970s by John Tukey[^1]. Instead of showing the un
 InsectSprays %>%
   ggplot(mapping =  aes(x = spray, y = count)) +
   geom_boxplot() +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
   labs(x = "Type of insect spray",
        y = "Number of dead insects") +
   remove_ticks()
@@ -743,9 +743,9 @@ Continuous variables with smooth distributions are sometimes better represented 
 diamonds %>%
   ggplot(mapping = aes(carat)) +
   geom_density(color = NA) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, NA)) +
-	scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
+	scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
   labs(x = "Carat",
        y = "Density")
 ```
@@ -755,9 +755,9 @@ diamonds %>%
   mutate(cost = ifelse(price > 5500, "More than $5,500 +", "$0 to $5,500")) %>%
   ggplot(mapping = aes(carat, fill = cost)) +
   geom_density(alpha = 0.25, color = NA) +
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
                      limits = c(0, NA)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Carat",
        y = "Density")
 ```
@@ -783,7 +783,7 @@ Violin plots are symmetrical displays of smooth kernel density plots.
 InsectSprays %>%
   ggplot(mapping = aes(x = spray, y = count, fill = spray)) +
   geom_violin(color = NA) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
   labs(x = "Type of insect spray",
        y = "Number of dead insects") +
   remove_ticks()
@@ -803,7 +803,7 @@ msleep %>%
                             "Carnivore" = "carni"
                             )) %>%
   ggplot(aes(x = vore, y = sleep_total, fill = vore)) +
-  stat_summary(fun.y = "mean",
+  stat_summary(fun = "mean",
                colour = "black", 
                size = 30,
                shape = 95,
@@ -815,7 +815,7 @@ msleep %>%
               shape = "-",
               size = 10,
   						color = "grey50") +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2))) +  
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +  
     labs(x = NULL,
          y = "Total sleep time (hours)") +
   theme(legend.position = "none") +
@@ -834,10 +834,10 @@ txhousing %>%
   summarize(sales = sum(sales)) %>%
   ggplot(aes(x = year, y = sales, fill = city)) +
   geom_area(position = "stack") +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(2000, 2015),
                      breaks = 2000 + 0:15) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2)), 
                      labels = scales::comma) +
   labs(x = "Year",
        y = "Home sales")
@@ -851,10 +851,10 @@ txhousing %>%
   summarize(sales = sum(sales)) %>%
   ggplot(aes(x = year, y = sales, fill = city)) +
   geom_area(position = "fill") +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(2000, 2015),
                      breaks = 2000 + 0:15) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.02)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.02)),
                      breaks = c(0, 0.25, 0.5, 0.75, 1),
                      labels = scales::percent) +
   labs(x = "Year",
@@ -907,9 +907,9 @@ diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
   geom_point(alpha = 0.05) +
   facet_wrap(~cut, ncol = 5) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(0, 6)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(0, 20000), 
                      labels = scales::dollar) +
   labs(x = "Carat",
@@ -925,9 +925,9 @@ diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
   geom_point(alpha = 0.05) +
   facet_grid(color ~ cut) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(0, 4)) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
                      limits = c(0, 20000), 
                      labels = scales::dollar) +
   labs(x = "Carat",
@@ -953,10 +953,10 @@ diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
 	geom_point(alpha = 0.05) +
 	geom_smooth(color =  "#ec008b") +
-	scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+	scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
 	                   limits = c(0, 5),
 	                   breaks = 0:5) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      limits = c(0, 20000), 
                      labels = scales::dollar) +  
   labs(x = "Carat",
@@ -972,10 +972,10 @@ This example uses Loess with MPG = displacement.
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
 	geom_point(alpha = 0.2) +
 	geom_smooth() +
-	scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+	scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
 	                   limits = c(0, 7),
 	                   breaks = 0:7) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      limits = c(0, 60)) +  
 	labs(x = "Engine displacement",
 			 y = "Highway MPG") +
@@ -988,10 +988,10 @@ This example uses linear models with MPG = displacement.
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
 	geom_point(alpha = 0.2) +
 	geom_smooth(method = "lm") +
-	scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)), 
+	scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
 	                   limits = c(0, 7),
 	                   breaks = 0:7) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      limits = c(0, 60)) +  
 	labs(x = "Engine displacement",
 			 y = "Highway MPG") +
@@ -1027,10 +1027,10 @@ data %>%
   ggplot(aes(year, pcgpd_change, group = country, color = country)) +
   geom_line() +
   gghighlight(max(pcgpd_change) > 35000, use_direct_label = FALSE) +  
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)),
                      breaks = c(seq(1950, 2010, 10)),
                      limits = c(1950, 2010)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      breaks = 0:8 * 5000,
                      labels = scales::dollar,
                      limits = c(0, 40000)) +
@@ -1047,10 +1047,10 @@ data %>%
   ggplot(aes(year, pcgpd_change, group = country, color = country)) +
   geom_line() +
   gghighlight(max(pcgpd_change), max_highlight = 5, use_direct_label = FALSE) +  
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)),
                      breaks = c(seq(1950, 2010, 10)),
                      limits = c(1950, 2010)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      breaks = 0:8 * 5000,
                      labels = scales::dollar,
                      limits = c(0, 40000)) +
@@ -1067,10 +1067,10 @@ data %>%
   ggplot(aes(year, pcgpd_change, group = country)) +
   geom_line() +
   gghighlight(max(pcgpd_change), max_highlight = 4, use_direct_label = FALSE) +  
-  scale_x_continuous(expand = expand_scale(mult = c(0.002, 0)),
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)),
                      breaks = c(seq(1950, 2010, 10)),
                      limits = c(1950, 2010)) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
                      breaks = 0:8 * 5000,
                      labels = scales::dollar,
                      limits = c(0, 40000)) +
@@ -1099,7 +1099,7 @@ diamonds %>%
   ggplot(aes(cut, price)) +
   geom_bar(stat = "identity") +
   geom_text(aes(label = scales::dollar(price)), vjust = -1) +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2)),
   									 labels = scales::dollar) +
   labs(title = "Average Diamond Price by Diamond Cut",
        x = "Cut",
@@ -1120,9 +1120,9 @@ mtcars %>%
 	ggplot() +
 	geom_point(mapping = aes(x = wt, y = mpg)) +
 	geom_text(data = labels, mapping = aes(x = wt, y = mpg, label = model), nudge_x = 0.38) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 6)) + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 40)) +  
   labs(x = "Weight (Tons)",
        y = "Miles per gallon (MPG)") +
@@ -1146,9 +1146,9 @@ mtcars %>%
 	geom_text_repel(data = labels, 
 	                mapping = aes(label = model), 
 	                nudge_x = 0.38) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 6)) + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 40)) +  
   labs(x = "Weight (Tons)",
        y = "Miles per gallon (MPG)") +
@@ -1164,10 +1164,10 @@ msleep %>%
   filter(bodywt <= 1000) %>%
   ggplot(aes(bodywt, sleep_total)) +
   geom_point() +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(-10, 1000),
   									 labels = scales::comma) + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 25)) +  
   annotate("text", x = 500, y = 12, label = "These data suggest that heavy \n animals sleep less than light animals") +
   labs(x = "Body weight (pounds)",
@@ -1185,10 +1185,10 @@ ames %>%
   mutate(Sale_Price = Sale_Price / 1000) %>%  
   ggplot(aes(square_footage, Sale_Price)) +
   geom_point(alpha = 0.2) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_x_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(-10, 12000),
   									 labels = scales::comma) + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.002)),
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)),
   									 limits = c(0, 800),
   									 labels = scales::dollar) +  
   annotate("rect", xmin = 6800, xmax = 11500, ymin = 145, ymax = 210, alpha = 0.1) +
@@ -1214,7 +1214,7 @@ table1 %>%
 	ggplot(aes(x = year, y = cases)) +
 		geom_line(aes(color = country)) +
 		geom_point(aes(color = country)) +
-		scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
+		scale_y_continuous(expand = expansion(mult = c(0, 0.2)), 
 		                   labels = scales::comma) +
 		scale_x_continuous(breaks = c(1999, 2000)) +
 		labs(title = "Changes in Tuberculosis Cases in Three Countries")
@@ -1226,18 +1226,10 @@ table1 %>%
 	ggplot(aes(year, cases)) +
 		geom_line(aes(group = country), color = "grey50") +
 		geom_point(aes(color = country)) +
-		scale_y_continuous(expand = expand_scale(mult = c(0, 0.2)), 
+		scale_y_continuous(expand = expansion(mult = c(0, 0.2)), 
 		                   labels = scales::comma) +
 		scale_x_continuous(breaks = c(1999, 2000)) +
 		labs(title = "Changes in Tuberculosis Cases in Three Countries")
-```
-
-Layering geoms is also useful for adding trend lines and centroids to scatter plots. 
-
-```{r layers}
-# Simple line
-# Regression model
-# Centroids
 ```
 
 ### Centroids
@@ -1252,9 +1244,9 @@ mpg %>%
 	geom_point(aes(x = displ, y = cty, color = factor(cyl)), alpha = 0.5) +
 	geom_point(data = mpg_summary, aes(x = displ, y = cty), size = 5, color = "#ec008b") +
 	geom_text(data = mpg_summary, aes(x = displ, y = cty, label = cyl)) +
-  scale_x_continuous(expand = expand_scale(mult = c(0, 0.002)), 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.002)), 
                      limits = c(0, 8)) +  
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0)), 
+  scale_y_continuous(expand = expansion(mult = c(0, 0)), 
                      limits = c(0, 40)) +
 	labs(x = "Displacement",
 	     y = "City MPG") +
@@ -1314,7 +1306,7 @@ set_urbn_defaults(style = "print")
 
 ggplot(data = mtcars, mapping = aes(factor(cyl))) +
   geom_bar() + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Number of Cylinders",
        y = "Count") +
   remove_ticks()
@@ -1339,7 +1331,7 @@ set_urbn_defaults(style = "print")
 
 plot <- ggplot(data = mtcars, mapping = aes(factor(cyl))) +
   geom_bar() + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   labs(x = "Number of Cylinders",
        y = "Count") +
   remove_ticks()
