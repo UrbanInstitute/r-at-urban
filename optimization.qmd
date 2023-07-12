@@ -194,12 +194,11 @@ which will handle the back-end orchestration needed to run in parallel.
 
 library(future.apply)
 
-plan(multiprocess)
+plan(multisession)
 
 out <- future_lapply(x, sqrt)
 
 unlist(out)
-
 ```
 
 For `purrr` users, the `furrr` (i.e., future purrr) package includes an
@@ -212,7 +211,7 @@ equivalent `future_map` function:
 
 library(furrr)
 
-plan(multiprocess)
+plan(multisession)
 
 y <- future_map(x, sqrt)
 
@@ -226,7 +225,7 @@ How much faster did this simple example run in parallel?
 
 library(future.apply)
 
-plan(multiprocess)
+plan(multisession)
 
 x <- c(1, 4, 9, 16)
 
@@ -282,7 +281,7 @@ A now running the same code in parallel:
 
 library(future.apply)
 
-plan(multiprocess)
+plan(multisession)
 
 system.time(
 

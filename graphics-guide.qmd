@@ -707,6 +707,25 @@ msleep %>%
   theme(axis.ticks.y = element_blank())
 ```
 
+### Beeswarm Plots
+
+Beesward plots are a variation of strip charts that shows the distribution of data, but without the points overlaping.
+
+```{r beeswarm}
+library(ggbeeswarm)
+
+txhousing %>%
+	filter(city %in% c("Austin","Houston","Dallas","San Antonio","Fort Worth")) %>% 
+  ggplot(aes(x = median, y = city)) +
+  geom_beeswarm(alpha = 0.2, size = 5) + 
+	scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Household Sale Price by City",
+       x = "Sale Price",
+       y = NULL) +
+  theme(axis.ticks.y = element_blank())
+
+```
+
 ### Histograms
 
 Histograms divide the distribution of a variable into n equal-sized bins and then count and display the number of observations in each bin. Histograms are sensitive to bin width. As `?geom_histogram` notes, "You should always override [the default binwidth] value, exploring multiple widths to find the best to illustrate the stories in your data."
