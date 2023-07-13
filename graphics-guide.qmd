@@ -15,12 +15,11 @@ editor_options:
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
-<div id="header">
-<img src="graphics-guide/www/images/urban-institute-logo.png" width="350">
-</div>
+::: {#header}
+<img src="graphics-guide/www/images/urban-institute-logo.png" width="350"/>
+:::
 
 # Urban Institute R Graphics Guide
-
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -40,13 +39,13 @@ opts_chunk$set(fig.retina = 3)
 options(scipen = 999)
 ```
 
-R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using `urbnthemes`, the Urban Institute's R package for creating near-publication-ready plots with `ggplot2`. If you have any questions, please don't hesitate to contact Aaron Williams (awilliams@urban.org) or Kyle Ueyama (kueyama@urban.org). 
+R is a powerful, open-source programming language and environment. R excels at data management and munging, traditional statistical analysis, machine learning, and reproducible research, but it is probably best known for its graphics. This guide contains examples and instructions for popular and lesser-known plotting techniques in R. It also includes instructions for using `urbnthemes`, the Urban Institute's R package for creating near-publication-ready plots with `ggplot2`. If you have any questions, please don't hesitate to contact Aaron Williams (awilliams\@urban.org) or Kyle Ueyama (kueyama\@urban.org).
 
 ### Background
 
 `library(urbnthemes)` makes `ggplot2` output align more closely with [the Urban Institute's Data Visualization style guide](http://urbaninstitute.github.io/graphics-styleguide/). This package does **not produce publication ready graphics**. Visual styles must still be edited using your project/paper's normal editing workflow.
 
-Exporting charts as a pdf will allow them to be more easily edited. See the Saving Plots section for more information. 
+Exporting charts as a pdf will allow them to be more easily edited. See the Saving Plots section for more information.
 
 The theme has been tested against `ggplot2 version 3.0.0`. It will not function properly with older versions of `ggplot2`
 
@@ -54,60 +53,55 @@ The theme has been tested against `ggplot2 version 3.0.0`. It will not function 
 
 Run the following code to install or update `urbnthemes`:
 
-```
-install.packages("remotes")
-remotes::install_github("UrbanInstitute/urbnthemes")
-```
+    install.packages("remotes")
+    remotes::install_github("UrbanInstitute/urbnthemes")
 
 Run the following code at the top of each script:
 
-```
-library(tidyverse)
-library(urbnthemes)
+    library(tidyverse)
+    library(urbnthemes)
 
-set_urbn_defaults(style = "print")
-```
+    set_urbn_defaults(style = "print")
 
 ### Installing Lato {#installing_lato}
 
 Your Urban computer may not have the Lato font installed. If it is not installed, please install the free [Lato font from Google](https://www.google.com/fonts/specimen/Lato). Below are step by step instructions:
 
-1) Download the [Lato font](https://www.google.com/fonts/specimen/Lato) (as a zip file).
-2) Unzip the file on your computer.
-3) For each `.ttf` file in the unzipped `Lato/` folder, double click the file and click `Install` (on Windows) or `Install Font` (on Mac).
-4) Import and register Lato into R by running `urbnthemes::lato_import()` in the console once. Be patient as this may take a few minutes!
-5) To confirm installation, run `urbnthemes::lato_test()`. If this is successful you're done and Lato will automatically be used when creating plots with `library(urbnthemes)`. You only need to install Lato once per computer.
-
+1)  Download the [Lato font](https://www.google.com/fonts/specimen/Lato) (as a zip file).
+2)  Unzip the file on your computer.
+3)  For each `.ttf` file in the unzipped `Lato/` folder, double click the file and click `Install` (on Windows) or `Install Font` (on Mac).
+4)  Import and register Lato into R by running `urbnthemes::lato_import()` in the console once. Be patient as this may take a few minutes!
+5)  To confirm installation, run `urbnthemes::lato_test()`. If this is successful you're done and Lato will automatically be used when creating plots with `library(urbnthemes)`. You only need to install Lato once per computer.
 
 Waffle charts with glyphs require fontawesome. `fontawesome_test()` and `fontawesome_install()` are the fontawesome versions of the above functions. Be sure to install fontawesome from [here](https://github.com/hrbrmstr/waffle/tree/master/inst/fonts) first.
 
 ### Grammar of Graphics and Conventions
 
-Hadley Wickham's ggplot2 is based on Leland Wilkinson's [*The Grammar of Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448) and Wickham's [*A Layered Grammar of Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2. 
+Hadley Wickham's ggplot2 is based on Leland Wilkinson's [*The Grammar of Graphics*](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448) and Wickham's [*A Layered Grammar of Graphics*](http://vita.had.co.nz/papers/layered-grammar.html). The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2.
 
-* **Data** are what are visualizaed in a plot and **mappings** are directions for how data are mapped in a plot in a way that can be perceived by humans.  
-* **Geoms** are representations of the actual data like points, lines, and bars. 
-* **Stats** are statistical transformations that represent summaries of the data like histograms. 
-* **Scales** map values in the data space to values in the aesthetic space. Scales draw legends and axes.
-* **Coordinate Systems** describe how geoms are mapped to the plane of the graphic.  
-* **Facets** break the data into meaningful subsets like small multiples. 
-* **Themes** control the finer points of a plot such as fonts, font sizes, and background colors. 
+-   **Data** are what are visualizaed in a plot and **mappings** are directions for how data are mapped in a plot in a way that can be perceived by humans.\
+-   **Geoms** are representations of the actual data like points, lines, and bars.
+-   **Stats** are statistical transformations that represent summaries of the data like histograms.
+-   **Scales** map values in the data space to values in the aesthetic space. Scales draw legends and axes.
+-   **Coordinate Systems** describe how geoms are mapped to the plane of the graphic.\
+-   **Facets** break the data into meaningful subsets like small multiples.
+-   **Themes** control the finer points of a plot such as fonts, font sizes, and background colors.
 
-More information: [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) 
+More information: [ggplot2: Elegant Graphics for Data Analysis](https://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403)
 
 ### Tips and Tricks
 
-* `ggplot2` expects data to be in data frames or tibbles. It is preferable for the data frames to be "tidy" with each variable as a column, each obseravtion as a row, and each observational unit as a separate table. `dplyr` and `tidyr` contain concise and effective tools for "tidying" data.
+-   `ggplot2` expects data to be in data frames or tibbles. It is preferable for the data frames to be "tidy" with each variable as a column, each obseravtion as a row, and each observational unit as a separate table. `dplyr` and `tidyr` contain concise and effective tools for "tidying" data.
 
-* R allows function arguments to be called explicitly by name and implicitly by position. The coding examples in this guide only contain named arguments for clarity.
+-   R allows function arguments to be called explicitly by name and implicitly by position. The coding examples in this guide only contain named arguments for clarity.
 
-* Graphics will sometimes render differently on different operating systems. This is because anti-aliasing is activated in R on Mac and Linux but not activated in R on Windows. This won't be an issue once graphics are saved. 
+-   Graphics will sometimes render differently on different operating systems. This is because anti-aliasing is activated in R on Mac and Linux but not activated in R on Windows. This won't be an issue once graphics are saved.
 
-* Continuous x-axes have ticks. Discrete x-axes do not have ticks. Use `remove_ticks()` to remove ticks.
+-   Continuous x-axes have ticks. Discrete x-axes do not have ticks. Use `remove_ticks()` to remove ticks.
 
 ## Bar Plots
 
-------
+------------------------------------------------------------------------
 
 ### One Color
 
@@ -126,7 +120,7 @@ mtcars %>%
 
 ### One Color (Rotated)
 
-This example introduces `coord_flip()` and `remove_axis(axis = "x", flip = TRUE)`. `remove_axis()` is from `library(urbnthemes)` and creates a custom theme for rotated bar plots. 
+This example introduces `coord_flip()` and `remove_axis(axis = "x", flip = TRUE)`. `remove_axis()` is from `library(urbnthemes)` and creates a custom theme for rotated bar plots.
 
 ```{r barplot-rotated}
 mtcars %>%
@@ -141,11 +135,11 @@ mtcars %>%
   remove_axis(axis = "x", flip = TRUE)
 ```
 
-### Three Colors 
+### Three Colors
 
-This is identical to the previous plot except colors and a legend are added with `fill = cyl`. Turning `x` into a factor with `factor(cyl)` skips 5 and 7 on the `x-axis`. Adding `fill = cyl` without `factor()` would have created a continuous color scheme and legend.   
+This is identical to the previous plot except colors and a legend are added with `fill = cyl`. Turning `x` into a factor with `factor(cyl)` skips 5 and 7 on the `x-axis`. Adding `fill = cyl` without `factor()` would have created a continuous color scheme and legend.
 
-``` {r 3-color-barplot}
+```{r 3-color-barplot}
 mtcars %>%
   mutate(cyl = factor(cyl)) %>%
   count(cyl) %>%
@@ -161,7 +155,7 @@ mtcars %>%
 
 ### Stacked Bar Plot
 
-An additional aesthetic can easily be added to bar plots by adding `fill = categorical variable` to the mapping. Here, transmission type subsets each bar showing the count of cars with different numbers of cylinders. 
+An additional aesthetic can easily be added to bar plots by adding `fill = categorical variable` to the mapping. Here, transmission type subsets each bar showing the count of cars with different numbers of cylinders.
 
 ```{r stacked-bar-plot}
 mtcars %>%
@@ -186,7 +180,7 @@ mtcars %>%
 
 ### Stacked Bar Plot With Position = Fill
 
-The previous examples used `geom_col()`, which takes a y value for bar height. This example uses `geom_bar()` which sums the values and generates a value for bar heights. In this example, `position = "fill"` in `geom_bar()` changes the y-axis from count to the proportion of each bar. 
+The previous examples used `geom_col()`, which takes a y value for bar height. This example uses `geom_bar()` which sums the values and generates a value for bar heights. In this example, `position = "fill"` in `geom_bar()` changes the y-axis from count to the proportion of each bar.
 
 ```{r stacked-bar-plot-fill}
 mtcars %>%
@@ -221,9 +215,9 @@ mtcars %>%
   remove_axis()
 ```
 
-### Lollipop plot/Cleveland dot plot{.tabset}
+### Lollipop plot/Cleveland dot plot {.tabset}
 
-Lollipop plots and Cleveland dot plots are minimalist alternatives to bar plots. The key to both plots is to order the data based on the continuous variable using `arrange()` and then turn the discrete variable into a factor with the ordered levels of the continuous variable using `mutate()`. This step "stores" the order of the data. 
+Lollipop plots and Cleveland dot plots are minimalist alternatives to bar plots. The key to both plots is to order the data based on the continuous variable using `arrange()` and then turn the discrete variable into a factor with the ordered levels of the continuous variable using `mutate()`. This step "stores" the order of the data.
 
 #### Lollipop plot
 
@@ -256,15 +250,13 @@ mtcars %>%
 
 ### Dumbell plot
 
-
-
 ## Scatter Plots
 
-------
+------------------------------------------------------------------------
 
 ### One Color Scatter Plot
 
-Scatter plots are useful for showing relationships between two or more variables. Use `scatter_grid()` from `library(urbnthemes)` to easily add vertical grid lines for scatter plots. 
+Scatter plots are useful for showing relationships between two or more variables. Use `scatter_grid()` from `library(urbnthemes)` to easily add vertical grid lines for scatter plots.
 
 ```{r one-color-scatter-plot}
 mtcars %>%
@@ -283,7 +275,7 @@ mtcars %>%
 
 ### High-Density Scatter Plot with Transparency
 
-Large numbers of observations can sometimes make scatter plots tough to interpret because points overlap. Adding `alpha = ` with a number between 0 and 1 adds transparency to points and clarity to plots. Now it's easy to see that jewelry stores are probably rounding up but not rounding down carats!
+Large numbers of observations can sometimes make scatter plots tough to interpret because points overlap. Adding `alpha =` with a number between 0 and 1 adds transparency to points and clarity to plots. Now it's easy to see that jewelry stores are probably rounding up but not rounding down carats!
 
 ```{r alpha-scatter-plot}
 diamonds %>%
@@ -303,9 +295,9 @@ diamonds %>%
 
 ### Hex Scatter Plot
 
-Sometimes transparency isn't enough to bring clarity to a scatter plot with many observations. As n increases into the hundreds of thousands and even millions, `geom_hex` can be one of the best ways to display relationships between two variables. 
+Sometimes transparency isn't enough to bring clarity to a scatter plot with many observations. As n increases into the hundreds of thousands and even millions, `geom_hex` can be one of the best ways to display relationships between two variables.
 
-``` {r scatter-plot-hex}
+```{r scatter-plot-hex}
 diamonds %>%
   ggplot(mapping = aes(x = carat, y = price)) +
   geom_hex(mapping = aes(fill = after_stat(count))) +
@@ -324,12 +316,12 @@ diamonds %>%
         legend.direction = "vertical")
 ```
 
-
-### Scatter Plots With Random Noise{.tabset}
+### Scatter Plots With Random Noise {.tabset}
 
 Sometimes scatter plots have many overlapping points but a reasonable number of observations. `geom_jitter` adds a small amount of random noise so points are less likely to overlap. `width` and `height` control the amount of noise that is added. In the following before-and-after, notice how many more points are visible after adding jitter.
 
 #### Before
+
 ```{r before-scatter-plot}
 mpg %>%
   ggplot(mapping = aes(x = displ, y = cty)) +
@@ -346,6 +338,7 @@ mpg %>%
 ```
 
 #### After
+
 ```{r jitter-plot}
 set.seed(2017)
 mpg %>%
@@ -365,7 +358,6 @@ mpg %>%
 ### Scatter Plots with Varying Point Size
 
 Weights and populations can be mapped in scatter plots to the size of the points. Here, the number of households in each state is mapped to the size of each point using `aes(size = hhpop)`. Note: `ggplot2::geom_point()` is used instead of `geom_point()`.
-
 
 ```{r geom_point-size, fig.height = 5}
 urbnmapr::statedata %>%
@@ -391,7 +383,7 @@ urbnmapr::statedata %>%
 
 A third aesthetic can be added to scatter plots. Here, color signifies the number of cylinders in each car. Before `ggplot()` is called, Cylinders is created using `library(dplyr)` and the piping operator `%>%`.
 
-``` {r filled-scatter-plot}
+```{r filled-scatter-plot}
 mtcars %>%
   mutate(cyl = paste(cyl, "cylinders")) %>%
   ggplot(aes(x = wt, y = mpg, color = cyl)) +
@@ -409,7 +401,7 @@ mtcars %>%
 
 ## Line Plots
 
-------
+------------------------------------------------------------------------
 
 ```{r line-plots}
 economics %>%
@@ -448,9 +440,9 @@ gapminder %>%
        y = "Per capita GDP (US dollars)")
 ```
 
-Plotting more than one variable can be useful for seeing the relationship of variables over time, but it takes a small amount of data munging. 
+Plotting more than one variable can be useful for seeing the relationship of variables over time, but it takes a small amount of data munging.
 
-This is because `ggplot2` wants data in a "long" format instead of a "wide" format for line plots with multiple lines. `gather()` and `spread()` from the `tidyr` package make switching back-and-forth between "long" and "wide" painless. Essentially, variable titles go into "key" and variable values go into "value". Then ggplot2, turns the different levels of the key variable (population, unemployment) into colors. 
+This is because `ggplot2` wants data in a "long" format instead of a "wide" format for line plots with multiple lines. `gather()` and `spread()` from the `tidyr` package make switching back-and-forth between "long" and "wide" painless. Essentially, variable titles go into "key" and variable values go into "value". Then ggplot2, turns the different levels of the key variable (population, unemployment) into colors.
 
 ```{r multiple-line-charts2}
 as_tibble(EuStockMarkets) %>%
@@ -471,7 +463,7 @@ as_tibble(EuStockMarkets) %>%
 
 ### Step plot
 
-`geom_line()` connects coordinates with the shortest possible straight line. Sometimes step plots are necessary because y values don't change between coordinates. For example, the upper-bound of the Federal Funds Rate is set at regular intervals and remains constant until it is changed. 
+`geom_line()` connects coordinates with the shortest possible straight line. Sometimes step plots are necessary because y values don't change between coordinates. For example, the upper-bound of the Federal Funds Rate is set at regular intervals and remains constant until it is changed.
 
 ```{r step-plot}
 # downloaded from FRED on 2018-12-06
@@ -510,7 +502,7 @@ fed_fund_rate %>%
 
 The Beveridge curve is a macroeconomic plot that displays a relationship between the unemployment rate and the vacancy rate. Movements along the curve indicate changes in the business cyle and horizontal shifts of the curve suggest structural changes in the labor market.
 
-Lines in Beveridge curves do not monotonically move from left to right. Therefore, it is necessary to use `geom_path()`. 
+Lines in Beveridge curves do not monotonically move from left to right. Therefore, it is necessary to use `geom_path()`.
 
 ```{r, path-plot}
 # seasonally-adjusted, quarterly vacancy rate - JOLTS # seasonally-adjusted, quarterly unemployment rate - CPS
@@ -628,13 +620,13 @@ unemployment %>%
 
 ## Univariate
 
-------
+------------------------------------------------------------------------
 
 There are a number of ways to explore the distributions of univariate data in R. Some methods, like strip charts, show all data points. Other methods, like the box and whisker plot, show selected data points that communicate key values like the median and 25th percentile. Finally, some methods don't show any of the underlying data but calculate density estimates. Each method has advantages and disadvantages, so it is worthwhile to understand the different forms. For more information, read [40 years of boxplots](http://vita.had.co.nz/papers/boxplots.pdf) by Hadley Wickham and Lisa Stryjewski.
 
 ### Strip Chart
 
-Strip charts, the simplest univariate plot, show the distribution of values along one axis. Strip charts work best with variables that have plenty of variation. If not, the points tend to cluster on top of each other. Even if the variable has plenty of variation, it is often important to add transparency to the points with `alpha = ` so overlapping values are visible. 
+Strip charts, the simplest univariate plot, show the distribution of values along one axis. Strip charts work best with variables that have plenty of variation. If not, the points tend to cluster on top of each other. Even if the variable has plenty of variation, it is often important to add transparency to the points with `alpha =` so overlapping values are visible.
 
 ```{r stripchart, fig.height=2}
 msleep %>%
@@ -653,7 +645,7 @@ msleep %>%
 
 ### Strip Chart with Highlighting
 
-Because strip charts show all values, they are useful for showing where selected points lie in the distribution of a variable. The clearest way to do this is by adding `geom_point()` twice with `filter()` in the data argument. This way, the highlighted values show up on top of unhighlighted values. 
+Because strip charts show all values, they are useful for showing where selected points lie in the distribution of a variable. The clearest way to do this is by adding `geom_point()` twice with `filter()` in the data argument. This way, the highlighted values show up on top of unhighlighted values.
 
 ```{r stripchart-with-highlighting, fig.height=2}
 ggplot() +
@@ -681,9 +673,9 @@ ggplot() +
   theme(axis.ticks.y = element_blank())
 ```
 
-### Subsetted Strip Chart 
+### Subsetted Strip Chart
 
-Add a y variable to see the distributions of the continuous variable in subsets of a categorical variable. 
+Add a y variable to see the distributions of the continuous variable in subsets of a categorical variable.
 
 ```{r subsetted-stripchart, fig.height=3}
 library(forcats)
@@ -728,7 +720,7 @@ txhousing %>%
 
 ### Histograms
 
-Histograms divide the distribution of a variable into n equal-sized bins and then count and display the number of observations in each bin. Histograms are sensitive to bin width. As `?geom_histogram` notes, "You should always override [the default binwidth] value, exploring multiple widths to find the best to illustrate the stories in your data."
+Histograms divide the distribution of a variable into n equal-sized bins and then count and display the number of observations in each bin. Histograms are sensitive to bin width. As `?geom_histogram` notes, "You should always override \[the default binwidth\] value, exploring multiple widths to find the best to illustrate the stories in your data."
 
 ```{r histogram}
 ggplot(data = diamonds, mapping = aes(x = depth)) + 
@@ -742,7 +734,9 @@ ggplot(data = diamonds, mapping = aes(x = depth)) +
 
 ### Boxplots
 
-Boxplots were invented in the 1970s by John Tukey[^1]. Instead of showing the underlying data or binned counts of the underlying data, they focus on important values like the 25th percentile, median, and 75th percentile. 
+Boxplots were invented in the 1970s by John Tukey[^1]. Instead of showing the underlying data or binned counts of the underlying data, they focus on important values like the 25th percentile, median, and 75th percentile.
+
+[^1]: Wickham, H., & Stryjewski, L. (2011). 40 years of boxplots.
 
 ```{r box-plot}
 InsectSprays %>%
@@ -756,7 +750,7 @@ InsectSprays %>%
 
 ### Smoothed Kernel Density Plots
 
-Continuous variables with smooth distributions are sometimes better represented with smoothed kernel density estimates than histograms or boxplots. `geom_density()` computes and plots a kernel density estimate. Notice the lumps around integers and halves in the following distribution because of rounding. 
+Continuous variables with smooth distributions are sometimes better represented with smoothed kernel density estimates than histograms or boxplots. `geom_density()` computes and plots a kernel density estimate. Notice the lumps around integers and halves in the following distribution because of rounding.
 
 ```{r kernel-density-plot}
 diamonds %>%
@@ -783,7 +777,7 @@ diamonds %>%
 
 ### Ridgeline Plots
 
-Ridgeline plots are partially overlapping smoothed kernel density plots faceted by a categorical variable that pack a lot of information into one elegant plot. 
+Ridgeline plots are partially overlapping smoothed kernel density plots faceted by a categorical variable that pack a lot of information into one elegant plot.
 
 ```{r ridgeline-plots}
 library(ggridges)
@@ -796,7 +790,7 @@ ggplot(diamonds, mapping = aes(x = price, y = cut)) +
 
 ### Violin Plots
 
-Violin plots are symmetrical displays of smooth kernel density plots. 
+Violin plots are symmetrical displays of smooth kernel density plots.
 
 ```{r violin-plot}
 InsectSprays %>%
@@ -810,7 +804,7 @@ InsectSprays %>%
 
 ### Bean Plot
 
-Individual outliers and important summary values are not visible in violin plots or smoothed kernel density plots. Bean plots, [created by Peter Kampstra in 2008](https://www.jstatsoft.org/article/view/v028c01), are violin plots with data shown as small lines in a one-dimensional sstrip plot and larger lines for the mean. 
+Individual outliers and important summary values are not visible in violin plots or smoothed kernel density plots. Bean plots, [created by Peter Kampstra in 2008](https://www.jstatsoft.org/article/view/v028c01), are violin plots with data shown as small lines in a one-dimensional sstrip plot and larger lines for the mean.
 
 ```{r beanplot}
 msleep %>%
@@ -843,9 +837,10 @@ msleep %>%
 
 ## Area Plot
 
-------
+------------------------------------------------------------------------
 
 ### Stacked Area
+
 ```{r area-plot-stack}
 txhousing %>%
   filter(city %in% c("Austin","Houston","Dallas","San Antonio","Fort Worth")) %>%
@@ -863,6 +858,7 @@ txhousing %>%
 ```
 
 ### Filled Area
+
 ```{r area-plot-fill}
 txhousing %>%
   filter(city %in% c("Austin","Houston","Dallas","San Antonio","Fort Worth")) %>%
@@ -880,9 +876,43 @@ txhousing %>%
        y = "Home sales")
 ```
 
-## Heat map
+## Sankey Plot
 
-------
+------------------------------------------------------------------------
+
+Sankey plots visualize flows from one set of variables to another. This can be useful for showing outcomes from the start of a program to the end. You'll need to install the `ggsankey` package to create Sankey plots in R. In this example I make a dummy data set of housing status prior to program start and at exit to show the flow of people between outcomes. A key step is to transform your data set using the `make_long` function from the package. This creates a data frame that specifies each of the initial nodes and how they flow into the next stage.
+
+```{r}
+# load ggsankey package
+remotes::install_github("davidsjoberg/ggsankey")
+library(ggsankey)
+
+# create a dummy dataset of housing status
+df <- data_frame(entry_status = c(rep("Housed", 7), rep("Unhoused", 15), rep("Staying w/ Family", 8)), 
+                 exit_status = c(rep("Housed", 15), rep("Unhoused", 2), rep("Staying w/ Family", 13))) %>% 
+	# transform the data frame into the proper format for the sankey plot
+  make_long(entry_status, exit_status) %>% 
+	# recode the labels to be cleaner in the plot 
+  mutate(x = recode(x, entry_status = "Prior Housing Status", exit_status = "Exit Housing Status"),
+         next_x = recode(next_x, entry_status = "Prior Housing Status", exit_status = "Exit Housing Status"))
+
+# create sankey plot
+ggplot(df, aes(x = x, 
+               next_x = next_x, 
+               node = node, 
+               next_node = next_node,
+               fill = factor(node), 
+               label = node)) +
+  geom_sankey(flow.alpha = 0.5, node.color = 1, show.legend = FALSE) +
+  # add labels to plot and style
+  geom_sankey_label(size = 3.5, color = 1, fill = "white") +
+  theme_sankey(base_size = 16)+
+  labs(x = NULL)
+```
+
+## Heat Map
+
+------------------------------------------------------------------------
 
 ```{r heat-map}
 library(fivethirtyeight)
@@ -913,13 +943,13 @@ bad_drivers %>%
 
 ## Faceting and Small Multiples
 
-------
+------------------------------------------------------------------------
 
 ### facet_wrap()
 
 R's faceting system is a powerful way to make "small multiples".
 
-Some edits to the theme may be necessary depending upon how many rows and columns are in the plot. 
+Some edits to the theme may be necessary depending upon how many rows and columns are in the plot.
 
 ```{r small-multiples, fig.height=2}
 diamonds %>%
@@ -938,7 +968,7 @@ diamonds %>%
 
 ### facet_grid()
 
-``` {r faceting, fig.height=7}
+```{r faceting, fig.height=7}
 diamonds %>%
   filter(color %in% c("D", "E", "F", "G")) %>%
   ggplot(mapping = aes(x = carat, y = price)) +
@@ -957,15 +987,15 @@ diamonds %>%
 
 ## Smoothers
 
-------
+------------------------------------------------------------------------
 
-`geom_smooth()` fits and plots models to data with two or more dimensions. 
+`geom_smooth()` fits and plots models to data with two or more dimensions.
 
-Understanding and manipulating defaults is more important for `geom_smooth()` than other geoms because it contains a number of assumptions. `geom_smooth()` automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with `formula = y ~ s(x, bs = "cs")` for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed. 
+Understanding and manipulating defaults is more important for `geom_smooth()` than other geoms because it contains a number of assumptions. `geom_smooth()` automatically uses loess for datasets with fewer than 1,000 observations and a generalized additive model with `formula = y ~ s(x, bs = "cs")` for datasets with greater than 1,000 observations. Both default to a 95% confidence interval with the confidence interval displayed.
 
-Models are chosen with `method = ` and can be set to lm(), glm(), gam(), loess(), rlm(), and more. Formulas can be specified with `formula = ` and `y ~ x` syntax. Plotting the standard error is toggled with `se = TRUE` and `se = FALSE`, and level is specificed with `level = `. As always, more information can be seen in RStudio with `?geom_smooth()`.
+Models are chosen with `method =` and can be set to lm(), glm(), gam(), loess(), rlm(), and more. Formulas can be specified with `formula =` and `y ~ x` syntax. Plotting the standard error is toggled with `se = TRUE` and `se = FALSE`, and level is specificed with `level =`. As always, more information can be seen in RStudio with `?geom_smooth()`.
 
-`geom_point()` adds a scatterplot to `geom_smooth()`. The order of the function calls is important. The function called second will be layed on top of the function called first. 
+`geom_point()` adds a scatterplot to `geom_smooth()`. The order of the function calls is important. The function called second will be layed on top of the function called first.
 
 ```{r geom_smooth}
 diamonds %>%
@@ -983,7 +1013,7 @@ diamonds %>%
   scatter_grid()
 ```
 
-`geom_smooth` can be subset by categorical and factor variables. This requires subgroups to have a decent number of observations and and a fair amount of variability across the x-axis. Confidence intervals often widen at the ends so special care is needed for the chart to be meaningful and readable. 
+`geom_smooth` can be subset by categorical and factor variables. This requires subgroups to have a decent number of observations and and a fair amount of variability across the x-axis. Confidence intervals often widen at the ends so special care is needed for the chart to be meaningful and readable.
 
 This example uses Loess with MPG = displacement.
 
@@ -1001,7 +1031,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
   scatter_grid()
 ```
 
-This example uses linear models with MPG = displacement. 
+This example uses linear models with MPG = displacement.
 
 ```{r subset-geom-smooth-lm}
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
@@ -1017,20 +1047,19 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = factor(cyl))) +
   scatter_grid()
 ```
 
-
 ## Highlighting
 
-------
+------------------------------------------------------------------------
 
-[`library(gghighlight)`](https://yutannihilation.github.io/gghighlight/) enables the intuitive highlighting of ggplot2 plots. `gghighlight` modifies existing ggplot2 objects, so no other code should change. All of the highlighting is handled by the function `gghighlight()`, which can handle all types of geoms. 
+[`library(gghighlight)`](https://yutannihilation.github.io/gghighlight/) enables the intuitive highlighting of ggplot2 plots. `gghighlight` modifies existing ggplot2 objects, so no other code should change. All of the highlighting is handled by the function `gghighlight()`, which can handle all types of geoms.
 
-*Warning:* R will throw an error if too many colors are highlighted because of the design of `urbnthemes`. Simply decrease the number of highlighted geoms to solve this issue. 
+*Warning:* R will throw an error if too many colors are highlighted because of the design of `urbnthemes`. Simply decrease the number of highlighted geoms to solve this issue.
 
-There are two main ways to highlight. 
+There are two main ways to highlight.
 
 ### Threshold
 
-The first way to highlight is with a threshold. Add a logical test to `gghighlight()` to describe which lines should be highlighted. Here, lines with maximum change in per-capita Gross Domestic Product greater than $35,000 are highlighted by `gghighlight(max(pcgpd_change) > 35000, use_direct_label = FALSE)`. 
+The first way to highlight is with a threshold. Add a logical test to `gghighlight()` to describe which lines should be highlighted. Here, lines with maximum change in per-capita Gross Domestic Product greater than \$35,000 are highlighted by `gghighlight(max(pcgpd_change) > 35000, use_direct_label = FALSE)`.
 
 ```{r gghighlight-threshold}
 library(gghighlight)
@@ -1079,7 +1108,7 @@ data %>%
 
 ### Faceting
 
-`gghighlight()` works well with ggplot2's faceting system. 
+`gghighlight()` works well with ggplot2's faceting system.
 
 ```{r gghighlight-faceting}
 data %>%
@@ -1101,15 +1130,15 @@ data %>%
 
 ## Text and Annotation
 
-------
+------------------------------------------------------------------------
 
-Several functions can be used to annotate, label, and highlight different parts of plots. `geom_text()` and `geom_text_repel()` both display variables from data frames. `annotate()`, which has several different uses, displays variables and values included in the function call. 
+Several functions can be used to annotate, label, and highlight different parts of plots. `geom_text()` and `geom_text_repel()` both display variables from data frames. `annotate()`, which has several different uses, displays variables and values included in the function call.
 
 ### geom_text()
 
-`geom_text()` turns text variables in data sets into geometric objects. This is useful for labeling data in plots. Both functions need `x` values and `y` values to determine placement on the coordinate plane, and a text vector of labels. 
+`geom_text()` turns text variables in data sets into geometric objects. This is useful for labeling data in plots. Both functions need `x` values and `y` values to determine placement on the coordinate plane, and a text vector of labels.
 
-This can be used to label `geom_bar()`. 
+This can be used to label `geom_bar()`.
 
 ```{r bar-geom_text}
 diamonds %>%
@@ -1126,9 +1155,9 @@ diamonds %>%
   remove_ticks()
 ```
 
-It can also be used to label points in a scatter plot. 
+It can also be used to label points in a scatter plot.
 
-It's rarely useful to label every point in a scatter plot. Use `filter()` to create a second data set that is subsetted and pass it into the labelling function. 
+It's rarely useful to label every point in a scatter plot. Use `filter()` to create a second data set that is subsetted and pass it into the labelling function.
 
 ```{r scatterplot-geom_text}
 labels <- mtcars %>%
@@ -1148,7 +1177,7 @@ mtcars %>%
   scatter_grid()
 ```
 
-Text too often overlaps with other text or geoms when using `geom_text()`. `library(ggrepel)` is a `library(ggplot2)` add-on that automatically positions text so it doesn't overlap with geoms or other text. To add this functionality, install and load `library(ggrepel)` and then use `geom_text_repel()` with the same syntax as `geom_text()`. 
+Text too often overlaps with other text or geoms when using `geom_text()`. `library(ggrepel)` is a `library(ggplot2)` add-on that automatically positions text so it doesn't overlap with geoms or other text. To add this functionality, install and load `library(ggrepel)` and then use `geom_text_repel()` with the same syntax as `geom_text()`.
 
 ### geom_text_repel()
 
@@ -1176,7 +1205,7 @@ mtcars %>%
 
 ### annotate()
 
-`annotate()` doesn't use data frames. Instead, it takes values for `x =` and `y =`. It can add text, rectangles, segments, and pointrange. 
+`annotate()` doesn't use data frames. Instead, it takes values for `x =` and `y =`. It can add text, rectangles, segments, and pointrange.
 
 ```{r annotate-point}
 msleep %>%
@@ -1219,15 +1248,16 @@ ames %>%
 
 ## Layered Geoms
 
-------
+------------------------------------------------------------------------
 
-Geoms can be layered in `ggplot2`. This is useful for design and analysis. 
+Geoms can be layered in `ggplot2`. This is useful for design and analysis.
 
-It is often useful to add points to line plots with a small number of values across the x-axis. This example from [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) shows how changing the line to grey can be appealing. 
+It is often useful to add points to line plots with a small number of values across the x-axis. This example from [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) shows how changing the line to grey can be appealing.
 
-### Design{.tabset}
+### Design {.tabset}
 
 #### Before
+
 ```{r layering-geoms-design}
 table1 %>%
 	ggplot(aes(x = year, y = cases)) +
@@ -1240,6 +1270,7 @@ table1 %>%
 ```
 
 #### After
+
 ```{r layering-geoms-design-gray}
 table1 %>%
 	ggplot(aes(year, cases)) +
@@ -1274,48 +1305,43 @@ mpg %>%
 
 ## Saving Plots
 
-------
+------------------------------------------------------------------------
 
-`ggsave()` exports ggplot2 plots. The function can be used in two ways. If `plot =` isn't specified in the function call, then `ggsave()` automatically saves the plot that was last displayed in the Viewer window. Second, if `plot =` is specified, then `ggsave()` saves the specified plot. `ggsave()` guesses the type of graphics device to use in export (.png, .pdf, .svg, etc.) from the file extension in the filename. 
+`ggsave()` exports ggplot2 plots. The function can be used in two ways. If `plot =` isn't specified in the function call, then `ggsave()` automatically saves the plot that was last displayed in the Viewer window. Second, if `plot =` is specified, then `ggsave()` saves the specified plot. `ggsave()` guesses the type of graphics device to use in export (.png, .pdf, .svg, etc.) from the file extension in the filename.
 
-```
-mtcars %>%
-  ggplot(aes(x = wt, y = mpg)) +
-  geom_point()
+    mtcars %>%
+      ggplot(aes(x = wt, y = mpg)) +
+      geom_point()
 
-ggsave(filename = "cars.png")
+    ggsave(filename = "cars.png")
 
-plot2 <- mtcars %>%
-  ggplot(aes(x = wt, y = mpg)) +
-  geom_point()
+    plot2 <- mtcars %>%
+      ggplot(aes(x = wt, y = mpg)) +
+      geom_point()
 
-ggsave(filename = "cars.png", plot = plot2)
-```
+    ggsave(filename = "cars.png", plot = plot2)
 
-Exported plots rarely look identical to the plots that show up in the Viewer window in RStudio because the overall size and aspect ratio of the Viewer is often different than the defaults for `ggsave()`. Specific sizes, aspect ratios, and resolutions can be controlled with arguments in `ggsave()`. RStudio has a useful [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) called "How Big is Your Graph?" that should help with choosing the best size, aspect ratio, and resolution. 
+Exported plots rarely look identical to the plots that show up in the Viewer window in RStudio because the overall size and aspect ratio of the Viewer is often different than the defaults for `ggsave()`. Specific sizes, aspect ratios, and resolutions can be controlled with arguments in `ggsave()`. RStudio has a useful [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) called "How Big is Your Graph?" that should help with choosing the best size, aspect ratio, and resolution.
 
-Fonts are not embedded in PDFs by default. To embed fonts in PDFs, include `device = cairo_pdf` in `ggsave()`. 
+Fonts are not embedded in PDFs by default. To embed fonts in PDFs, include `device = cairo_pdf` in `ggsave()`.
 
+    plot <- mtcars %>%
+      ggplot(aes(x = wt, y = mpg)) +
+      geom_point()
 
-```
-plot <- mtcars %>%
-  ggplot(aes(x = wt, y = mpg)) +
-  geom_point()
-
-ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
-```
+    ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
 
 ## urbnthemes
 
 ### Overview
 
-`urbnthemes` is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends `ggplot2` with print and map themes as well as tools that make plotting easier at the Urban Institute. `urbnthemes` replaces the [urban_R_theme](https://github.com/UrbanInstitute/urban_R_theme).
+`urbnthemes` is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends `ggplot2` with print and map themes as well as tools that make plotting easier at the Urban Institute. `urbnthemes` replaces the [urban_R\_theme](https://github.com/UrbanInstitute/urban_R_theme).
 
 Always load `library(urbnthemes)` after `library(ggplot2)` or `library(tidyverse)`.
 
 ### Usage
 
-Use `set_urbn_defaults(style = "print")` to set the default styles. `scatter_grid()`, `remove_ticks()`, `add_axis()`, and `remove_axis()` can all be used to improve graphics. 
+Use `set_urbn_defaults(style = "print")` to set the default styles. `scatter_grid()`, `remove_ticks()`, `add_axis()`, and `remove_axis()` can all be used to improve graphics.
 
 ```{r example, message=FALSE}
 library(ggplot2)
@@ -1333,14 +1359,14 @@ ggplot(data = mtcars, mapping = aes(factor(cyl))) +
 
 ### Combining elements
 
-`library(urbnthemes)` contains functions for combining plot elements into graphics. `urbn_plot()` brings all of the elements together. 
+`library(urbnthemes)` contains functions for combining plot elements into graphics. `urbn_plot()` brings all of the elements together.
 
-* `urbn_logo_text()`
-* `remove_ticks()`
-* `remove_axis()`
-* `scatter_grid()`
-* `add_axis()`
-* `urbn_geofacet`
+-   `urbn_logo_text()`
+-   `remove_ticks()`
+-   `remove_axis()`
+-   `scatter_grid()`
+-   `add_axis()`
+-   `urbn_geofacet`
 
 ```{r example2}
 library(ggplot2)
@@ -1358,7 +1384,7 @@ plot <- ggplot(data = mtcars, mapping = aes(factor(cyl))) +
 urbn_plot(plot, urbn_logo_text(), ncol = 1, heights = c(30, 1))
 ```
 
-Sometimes it's important to horizontally add the y-axis title above the plot. `urbn_y_title()` can be sued for this task. The following example goes one step further and adds the title between the legend and the plot. 
+Sometimes it's important to horizontally add the y-axis title above the plot. `urbn_y_title()` can be sued for this task. The following example goes one step further and adds the title between the legend and the plot.
 
 ```{r}
 library(ggplot2)
@@ -1388,20 +1414,20 @@ urbn_plot(get_legend(plot),
 
 `urbnthemes` contains many quick-access color palettes from the [Urban Institute Data Visualization Style Guide](http://urbaninstitute.github.io/graphics-styleguide/). These palettes can be used to quickly overwrite default color palettes from `urbnthemes`.
 
-* `palette_urbn_main` is the eight color discrete palette of the Urban Institute with cyan, yellow, black, gray, magenta, green, space gray, and red. 
-* `palette_urbn_diverging` is an eight color diverging palette. 
-* `palette_urbn_quintile` is a five color blue palette that is good for quintiles. 
-* `palette_urbn_politics` is a two color palette with blue for Democrats and red for Republicans. 
+-   `palette_urbn_main` is the eight color discrete palette of the Urban Institute with cyan, yellow, black, gray, magenta, green, space gray, and red.
+-   `palette_urbn_diverging` is an eight color diverging palette.
+-   `palette_urbn_quintile` is a five color blue palette that is good for quintiles.
+-   `palette_urbn_politics` is a two color palette with blue for Democrats and red for Republicans.
 
 There are seven palettes that are continuous palettes of the seven unique colors in the discrete Urban Institute color palette:
 
-* `palette_urbn_cyan`
-* `palette_urbn_gray`
-* `palette_urbn_yellow`
-* `palette_urbn_magenta`
-* `palette_urbn_green`
-* `palette_urbn_spacegray`
-* `palette_urbn_red`
+-   `palette_urbn_cyan`
+-   `palette_urbn_gray`
+-   `palette_urbn_yellow`
+-   `palette_urbn_magenta`
+-   `palette_urbn_green`
+-   `palette_urbn_spacegray`
+-   `palette_urbn_red`
 
 Use `view_palette()` to see the palette:
 
@@ -1409,7 +1435,7 @@ Use `view_palette()` to see the palette:
 view_palette(palette_urbn_magenta)
 ```
 
-The vectors can be subset using base R syntax. This allows for the quick selection of specific colors from a palette. 
+The vectors can be subset using base R syntax. This allows for the quick selection of specific colors from a palette.
 
 ```{r palette-subset1}
 palette_urbn_main[1:4]
@@ -1423,14 +1449,14 @@ palette_urbn_spacegray[1:5]
 
 `library(urbnthemes)` contains four functions that are helpful with managing font instalations:
 
-* `lato_test()`
-* `lato_install()`
-* `fontawesome_test()`
-* `fontawesome_install()`
+-   `lato_test()`
+-   `lato_install()`
+-   `fontawesome_test()`
+-   `fontawesome_install()`
 
 ## Bibliography and Session Information
 
-------
+------------------------------------------------------------------------
 
 *Note:* Examples present in [this document](https://awunderground.github.io/ggplot2-themes/) by Aaron Williams were created during personal time.
 
@@ -1450,15 +1476,13 @@ Kamil Slowikowski (2017). ggrepel: Repulsive Text and Label Geoms for 'ggplot2'.
 
 Max Kuhn (2017). AmesHousing: The Ames Iowa Housing Data. R package version 0.0.3. https://CRAN.R-project.org/package=AmesHousing
 
-Peter Kampstra (2008).	Beanplot: A Boxplot Alternative for Visual Comparison of Distributions, Journal of Statistical Software, 2008. https://www.jstatsoft.org/article/view/v028c01
+Peter Kampstra (2008). Beanplot: A Boxplot Alternative for Visual Comparison of Distributions, Journal of Statistical Software, 2008. https://www.jstatsoft.org/article/view/v028c01
 
 R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
 
 Winston Chang, (2014). extrafont: Tools for using fonts. R package version 0.17. https://CRAN.R-project.org/package=extrafont
 
 Yihui Xie (2018). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.19.
-
-[^1]: Wickham, H., & Stryjewski, L. (2011). 40 years of boxplots.
 
 ```{r System Info and Package Versioning}
 sessionInfo()
