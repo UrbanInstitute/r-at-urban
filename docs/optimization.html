@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>R@URBAN – optimization</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-114294141-1"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'UA-114294141-1');
+</script>
+			
+<script src="site_libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<script src="site_libs/d3-3.5.6/d3.min.js"></script>
+<link href="site_libs/profvis-0.3.6.9000/profvis.css" rel="stylesheet">
+<script src="site_libs/profvis-0.3.6.9000/profvis.js"></script>
+<script src="site_libs/profvis-0.3.6.9000/scroll.js"></script>
+<link href="site_libs/highlight-6.2.0/textmate.css" rel="stylesheet">
+<script src="site_libs/highlight-6.2.0/highlight.js"></script>
+<script src="site_libs/profvis-binding-0.3.7/profvis.js"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R@URBAN</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">HOME</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./intro-to-r.html">INTRO TO R</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./graphics-guide.html">DATA VIZ</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./mapping.html">MAPPING</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./getting-data.html">GETTING DATA</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./optimization.html" aria-current="page">OPTIMIZATION</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources.html">RESOURCES</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#update-your-installation" id="toc-update-your-installation" class="nav-link" data-scroll-target="#update-your-installation">Update Your Installation</a></li>
+  <li><a href="#profiling-benchmarking" id="toc-profiling-benchmarking" class="nav-link" data-scroll-target="#profiling-benchmarking">Profiling &amp; Benchmarking</a></li>
+  <li><a href="#parallel-computing" id="toc-parallel-computing" class="nav-link" data-scroll-target="#parallel-computing">Parallel Computing</a>
+  <ul class="collapse">
+  <li><a href="#learn-lapplypurrrmap" id="toc-learn-lapplypurrrmap" class="nav-link" data-scroll-target="#learn-lapplypurrrmap">Learn <code>lapply</code>/<code>purrr::map</code></a></li>
+  <li><a href="#motivating-example" id="toc-motivating-example" class="nav-link" data-scroll-target="#motivating-example">Motivating Example</a></li>
+  <li><a href="#a-somewhat-more-complex-example" id="toc-a-somewhat-more-complex-example" class="nav-link" data-scroll-target="#a-somewhat-more-complex-example">A (somewhat) More Complex Example</a></li>
+  <li><a href="#additional-packages" id="toc-additional-packages" class="nav-link" data-scroll-target="#additional-packages">Additional Packages</a>
+  <ul class="collapse">
+  <li><a href="#the-parallel-package" id="toc-the-parallel-package" class="nav-link" data-scroll-target="#the-parallel-package">The <code>parallel</code> Package</a></li>
+  <li><a href="#the-doparallel-package" id="toc-the-doparallel-package" class="nav-link" data-scroll-target="#the-doparallel-package">The <code>doParallel</code> Package</a></li>
+  <li><a href="#machine-learning---caret" id="toc-machine-learning---caret" class="nav-link" data-scroll-target="#machine-learning---caret">Machine Learning - <code>caret</code></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#big-data" id="toc-big-data" class="nav-link" data-scroll-target="#big-data">Big Data</a>
+  <ul class="collapse">
+  <li><a href="#object-size" id="toc-object-size" class="nav-link" data-scroll-target="#object-size">Object Size</a></li>
+  <li><a href="#each-of-these-data-types-occupies-a-different-amount-of-space-in-memory" id="toc-each-of-these-data-types-occupies-a-different-amount-of-space-in-memory" class="nav-link" data-scroll-target="#each-of-these-data-types-occupies-a-different-amount-of-space-in-memory">Each of these data types occupies a different amount of space in memory</a></li>
+  <li><a href="#cloud-computing" id="toc-cloud-computing" class="nav-link" data-scroll-target="#cloud-computing">Cloud Computing</a></li>
+  </ul></li>
+  <li><a href="#common-pitfalls" id="toc-common-pitfalls" class="nav-link" data-scroll-target="#common-pitfalls">Common Pitfalls</a>
+  <ul class="collapse">
+  <li><a href="#for-loops-and-vector-allocation" id="toc-for-loops-and-vector-allocation" class="nav-link" data-scroll-target="#for-loops-and-vector-allocation">For Loops and Vector Allocation</a></li>
+  <li><a href="#vectorized-functions" id="toc-vectorized-functions" class="nav-link" data-scroll-target="#vectorized-functions">Vectorized Functions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<p><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato"></p>
+<div id="header">
+<p><img src="graphics-guide/www/images/urban-institute-logo.png" width="350"></p>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This guide outlines tools and tips for improving the speed and execution of R code.</p>
+<p>Sometimes, simply tweaking a few lines of code can lead to large performance gains in the execution of a program. Other issues may take more time to work through but can be a huge benefit to a project in the long term.</p>
+<p>An important lesson to learn when it comes to optimising an R (or any) program is knowing both if to start and when to stop. You most likely want to optimize your code because it is “too slow”, but what that means will vary from project to project. Be sure to consider what “fast enough” is for your project and how much needs to be optimized. If your program takes an hour to complete, spending 5 hours trying to make it faster can be time well spent if the script will be run regularly, and a complete waste of time if it’s an ad-hoc analysis.</p>
+<p>For more information, see the CRAN Task View <a href="https://CRAN.R-project.org/view=HighPerformanceComputing">High-Performance and Parallel Computing with R</a>.</p>
+<p>The “Performant Code” section of Hadley Wickham’s <a href="http://adv-r.had.co.nz/">Advanced R</a> is another great resource and provides a deeper dive into what is covered in this guide.</p>
+<hr>
+</section>
+<section id="update-your-installation" class="level1">
+<h1>Update Your Installation</h1>
+<p>One of the easiest ways to improve the performance of R is to update R. In general, R will have a big annual release (i.e., 3.5.0) in the spring and around 3-4 smaller patch releases (i.e., 3.5.1) throughout the rest of the year. If the middle digit of your installation is behind the current release, you should consider updating.</p>
+<p>For instance, R 3.5.0 implemented an improved read from text files. A 5GB file took over 5 minutes to read in 3.4.4:</p>
+<p><img src="optimization/images/data-load-3-4.png" class="img-fluid" style="width:75.0%"></p>
+<p>While 3.5.0 took less than half the time:</p>
+<p><img src="optimization/images/data-load-3-5.png" class="img-fluid" style="width:75.0%"></p>
+<p>To see what the R-core development team is up to, check out the <a href="https://cran.r-project.org/doc/manuals/r-devel/NEWS.html">NEWS</a> file from the R project.</p>
+<hr>
+</section>
+<section id="profiling-benchmarking" class="level1">
+<h1>Profiling &amp; Benchmarking</h1>
+<p>In order to efficiently optimize your code, you’ll first need to know where it’s running slowest. The <code>profvis</code> package provides a nice way of visualizing the execution time and memory useage of your program.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(profvis)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">profvis</span>({</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    diamonds <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"optimization/data/diamonds.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    diamonds_by_cut <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(cut) <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarise_if</span>(is.numeric, mean)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(diamonds_by_cut, <span class="at">file =</span> <span class="st">"optimization/data/diamonds_by_cut.csv"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="profvis html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3ed46cc57d28ccdefc22" style="width:100%;height:600px;"></div>
+<script type="application/json" data-for="htmlwidget-3ed46cc57d28ccdefc22">{"x":{"message":{"prof":{"time":[1,2,3,4,5,5,5,5,6,6,7,7,8,8],"depth":[1,1,1,1,4,3,2,1,2,1,2,1,2,1],"label":[".main",".main",".main",".main","type.convert","read.table","read.csv",".main",".External2",".main","lazyLoadDBfetch",".main","lazyLoadDBfetch",".main"],"filenum":[null,null,null,null,null,null,1,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,5,null,null,null,null,null,null,null],"memalloc":[14.9473190307617,17.4241333007812,22.3312377929688,22.3385620117188,27.2855529785156,27.2855529785156,27.2855529785156,27.2855529785156,29.7564010620117,29.7564010620117,31.7927322387695,31.7927322387695,35.0383453369141,35.0383453369141],"meminc":[0,2.47681427001953,4.9071044921875,0.00732421875,4.94699096679688,0,0,0,2.47084808349609,0,2.03633117675781,0,3.24561309814453,0],"filename":[null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,null]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\n\n})\n","normpath":"<expr>"}],"prof_output":"/var/folders/2n/lprv9vh13js_c6gfvhgl13s00000gn/T//RtmpMrfheE/file18b53936ab84.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so</p>
+<p>work on optimizing that first.</p>
+<p>Once you find the bottleneck that needs to be optimized, it can be useful to</p>
+<p>benchmark different potential solutions. The <code>microbenchmark</code> package can help</p>
+<p>you choose between different options. Continuing with the simple example with</p>
+<p>the <code>diamonds</code> dataset, compare the base <code>read.csv</code> function with <code>read_csv</code></p>
+<p>from the <code>readr</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbenchmark)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">microbenchmark</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">read.csv</span>(<span class="st">"optimization/data/diamonds.csv"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"optimization/data/diamonds.csv"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+                                              expr      min       lq     mean
+        read.csv("optimization/data/diamonds.csv") 64.77053 66.14555 71.04118
+ readr::read_csv("optimization/data/diamonds.csv") 32.04847 33.20362 37.12877
+   median       uq      max neval
+ 68.25725 69.80660 134.2046   100
+ 34.07731 35.69267 158.6962   100</code></pre>
+</div>
+</div>
+<p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
+</section>
+<section id="parallel-computing" class="level1">
+<h1>Parallel Computing</h1>
+<p>Often, time-intensive R code can be sped up by breaking the execution of</p>
+<p>the job across additional cores of your computer. This is called parallel computing.</p>
+<section id="learn-lapplypurrrmap" class="level2">
+<h2 class="anchored" data-anchor-id="learn-lapplypurrrmap">Learn <code>lapply</code>/<code>purrr::map</code></h2>
+<p>Learning the <code>lapply</code> (and variants) function from Base R or the <code>map</code> (and variants) function from the <code>purrr</code> package is the first step in learning to run R code in parallel. Once you understand how <code>lapply</code> and <code>map</code> work, running your code in parallel will be simple.</p>
+<p>Say you have a vector of numbers and want to find the square root of each one</p>
+<p>(ignore for now that <code>sqrt</code> is vectorized, which will be covered later).</p>
+<p>You could write a for loop and iterate over each element of the vector:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(x))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   out[[i]] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(x[[i]])</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p>The <code>lapply</code> function essentially handles the overhead of constructing a for</p>
+<p>loop for you. The syntax is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(X, FUN, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>lapply</code> will then take each element of <code>X</code> and apply the <code>FUN</code>ction to it.</p>
+<p>Our simple example then becomes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x, sqrt)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p>Those working within the <code>tidyverse</code> may use <code>map</code> from the <code>purrr</code> package equivalently:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">map</span>(x, sqrt)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+</section>
+<section id="motivating-example" class="level2">
+<h2 class="anchored" data-anchor-id="motivating-example">Motivating Example</h2>
+<p>Once you are comfortable with <code>lapply</code> and/or <code>map</code>, running the same code in</p>
+<p>parallel takes just an additional line of code.</p>
+<p>For <code>lapply</code> users, the <code>future.apply</code> package contains an equivalent</p>
+<p><code>future_lapply</code> function. Just be sure to call <code>plan(multiprocess)</code> beforehand,</p>
+<p>which will handle the back-end orchestration needed to run in parallel.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("future.apply")</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">future_lapply</span>(x, sqrt)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p>For <code>purrr</code> users, the <code>furrr</code> (i.e., future purrr) package includes an</p>
+<p>equivalent <code>future_map</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("furrr")</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">future_map</span>(x, sqrt)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p>How much faster did this simple example run in parallel?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">sequential =</span> <span class="fu">lapply</span>(x, sqrt),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">parallel =</span> <span class="fu">future_lapply</span>(x, sqrt),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>   <span class="at">unit =</span> <span class="st">"s"</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: seconds
+       expr         min         lq          mean       median          uq
+ sequential 0.000001066 0.00000123 0.00000177858 0.0000016195 0.000002132
+   parallel 0.014658443 0.01518220 0.01828126942 0.0157106875 0.017450646
+         max neval
+ 0.000006847   100
+ 0.198878864   100</code></pre>
+</div>
+</div>
+<p>Parallelization was actually slower. In this case, the overhead of</p>
+<p>setting the code to run in parallel far outweighed any performance gain. In</p>
+<p>general, parallelization works well on long-running &amp; compute intensive jobs.</p>
+</section>
+<section id="a-somewhat-more-complex-example" class="level2">
+<h2 class="anchored" data-anchor-id="a-somewhat-more-complex-example">A (somewhat) More Complex Example</h2>
+<p>In this example we’ll use the <code>diamonds</code> dataset from <code>ggplot2</code> and perform a</p>
+<p>kmeans cluster. We’ll use <code>lapply</code> to iterate the number of clusters from 2 to</p>
+<p>5:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span>diamonds</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(df, <span class="sc">-</span><span class="fu">c</span>(cut, color, clarity))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>centers <span class="ot">=</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>   <span class="fu">lapply</span>(centers,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">function</span>(x) <span class="fu">kmeans</span>(df, <span class="at">centers =</span> x, <span class="at">nstart =</span> <span class="dv">500</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+ 21.846   0.663  22.535 </code></pre>
+</div>
+</div>
+<p>A now running the same code in parallel:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">future_lapply</span>(centers,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                               <span class="cf">function</span>(x) <span class="fu">kmeans</span>(df, <span class="at">centers =</span> x, <span class="at">nstart =</span> <span class="dv">500</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                               )</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+  0.376   0.121  11.164 </code></pre>
+</div>
+</div>
+<p>While we didn’t achieve perfect scaling, we still get a nice bump in execution</p>
+<p>time.</p>
+</section>
+<section id="additional-packages" class="level2">
+<h2 class="anchored" data-anchor-id="additional-packages">Additional Packages</h2>
+<p>For the sake of ease and brevity, this guide focused on the <code>futures</code> framework</p>
+<p>for parallelization. However, you should be aware that there are a number of</p>
+<p>other ways to parallelize your code.</p>
+<section id="the-parallel-package" class="level3">
+<h3 class="anchored" data-anchor-id="the-parallel-package">The <code>parallel</code> Package</h3>
+<p>The <code>parallel</code> package is included in your base R installation. It includes</p>
+<p>analogues of the various <code>apply</code> functions:</p>
+<ul>
+<li><p><code>parLapply</code></p></li>
+<li><p><code>mclapply</code> - not available on Windows</p></li>
+</ul>
+<p>These functions generally require more setup, especially on Windows machines.</p>
+</section>
+<section id="the-doparallel-package" class="level3">
+<h3 class="anchored" data-anchor-id="the-doparallel-package">The <code>doParallel</code> Package</h3>
+<p>The <code>doParallel</code> package builds off of <code>parallel</code> and is</p>
+<p>useful for code that uses for loops instead of <code>lapply</code>. Like the parallel</p>
+<p>package, it generally requires more setup, especially on Windows machines.</p>
+</section>
+<section id="machine-learning---caret" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning---caret">Machine Learning - <code>caret</code></h3>
+<p>For those running machine learning models, the <code>caret</code> package can easily</p>
+<p>leverage <code>doParallel</code> to speed up the execution of multiple models. Lifting</p>
+<p>the example from the package documentation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makePSOCKcluster</span>(<span class="dv">5</span>) <span class="co"># number of cores to use</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="do">## All subsequent models are then run in parallel</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">train</span>(y <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">method =</span> <span class="st">"rf"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="do">## When you are done:</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Be sure to check out the full</p>
+<p><a href="http://topepo.github.io/caret/parallel-processing.html">documentation</a></p>
+<p>for more detail.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="big-data" class="level1">
+<h1>Big Data</h1>
+<p>As data collection and storage becomes easier and cheaper, it is relatively</p>
+<p>simple to obtain relatively large data files. An important point to keep in</p>
+<p>mind is that the size of your data will generally expand when it is read</p>
+<p>from a storage device into R. A general rule of thumb is that a file will take</p>
+<p>somewhere around 3-4 times more space in memory than it does on disk.</p>
+<p>For instance, compare the size of the <code>iris</code> data set when it is saved as a</p>
+<p>.csv file locally vs the size of the object when it is read in to an R session:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.size</span>(<span class="st">"optimization/data/iris.csv"</span>) <span class="sc">/</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.716</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"optimization/data/iris.csv"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10.14 kB</code></pre>
+</div>
+</div>
+<p>This means that on a standard Urban Institute desktop, you may have issues</p>
+<p>reading in files that are larger than 4 GB.</p>
+<section id="object-size" class="level2">
+<h2 class="anchored" data-anchor-id="object-size">Object Size</h2>
+<p>The type of your data can have a big impact on the size of your data frame</p>
+<p>when you are dealing with larger files. There are four main types of atomic</p>
+<p>vectors in R:</p>
+<ol type="1">
+<li><p><code>logical</code></p></li>
+<li><p><code>integer</code></p></li>
+<li><p><code>double</code> (also called <code>numeric</code>)</p></li>
+<li><p><code>character</code></p></li>
+</ol>
+</section>
+<section id="each-of-these-data-types-occupies-a-different-amount-of-space-in-memory" class="level2">
+<h2 class="anchored" data-anchor-id="each-of-these-data-types-occupies-a-different-amount-of-space-in-memory">Each of these data types occupies a different amount of space in memory</h2>
+<p><code>logical</code> and <code>integer</code> vectors use 4 bytes per element, while a <code>double</code> will</p>
+<p>occupy 8 bytes. R uses a global string pool, so <code>character</code> vectors are hard</p>
+<p>to estimate, but will generally take up more space for element.</p>
+<p>Consider the following example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>680 B</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.double</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>680 B</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.character</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.32 kB</code></pre>
+</div>
+</div>
+<p>An incorrect data type can easily cost you a lot of space in memory, especially</p>
+<p>at scale. This often happens when reading data from a text or csv file - data</p>
+<p>may have a format such as <code>c(1.0, 2.0, 3.0)</code> and will be read in as a <code>numeric</code></p>
+<p>column, when <code>integer</code> is more appropriate and compact.</p>
+<p>You may also be familiar with <code>factor</code> variables within R. Essentially a</p>
+<p><code>factor</code> will represent your data as integers, and map them back to their</p>
+<p>character representation. This can save memory when you have a compact and</p>
+<p>unique level of factors:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(letters, <span class="dv">10000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.character</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>81.50 kB</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.factor</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>42.10 kB</code></pre>
+</div>
+</div>
+<p>However if each element is unique, or if there is not a lot of overlap among</p>
+<p>elements, than the overhead will make a factor larger than its character</p>
+<p>representation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.factor</span>(letters))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.22 kB</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pryr<span class="sc">::</span><span class="fu">object_size</span>(<span class="fu">as.character</span>(letters))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.71 kB</code></pre>
+</div>
+</div>
+</section>
+<section id="cloud-computing" class="level2">
+<h2 class="anchored" data-anchor-id="cloud-computing">Cloud Computing</h2>
+<p>Sometimes, you will have data that are simply too large to ever fit on your</p>
+<p>local desktop machine. If that is the case, then the Elastic Cloud Computing</p>
+<p>Environment from the Office of Technology and Data Science can provide you with</p>
+<p>easy access to powerful analytic tools for computationally intensive project.</p>
+<p>The Elastic Cloud Computing Environment allows researchers to quickly spin-up</p>
+<p>an Amazon Web Services (AWS) Elastic Cloud Compute (EC2) instance. These</p>
+<p>instances offer increased memory to read in large datasets, along with</p>
+<p>additional CPUs to provide the ability to process data in parallel at an</p>
+<p>impressive scale.</p>
+<p>Instance | CPU | Memory (GB) |</p>
+<p>|———-|—–|——–|</p>
+<p>Desktop | 8 | 16 |</p>
+<p>c5.4xlarge | 16 | 32 |</p>
+<p>c5.9xlarge | 36 | 72 |</p>
+<p>c5.18xlarge | 72 | 144 |</p>
+<p>x1e.8xlarge | 32 | 976 |</p>
+<p>x1e.16xlarge | 64 | 1952 |</p>
+<p>Feel free to contact Erika Tyagi (etyagi@urban.org) if this would be useful</p>
+<p>for your project.</p>
+<hr>
+</section>
+</section>
+<section id="common-pitfalls" class="level1">
+<h1>Common Pitfalls</h1>
+<section id="for-loops-and-vector-allocation" class="level2">
+<h2 class="anchored" data-anchor-id="for-loops-and-vector-allocation">For Loops and Vector Allocation</h2>
+<p>A refrain you will often hear is that for loops in R are slow and need to be</p>
+<p>avoided at all costs. This is not true! Rather, an improperly constructed loop</p>
+<p>in R can bring the execution of your program to a near standstill.</p>
+<p>A common for loop structure may look something like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>   out <span class="ot">&lt;-</span> <span class="fu">c</span>(out, <span class="fu">sqrt</span>(x))</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>   }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The bottleneck in this loop is with the allocation of the vector <code>out</code>. Every</p>
+<p>time we iterate over an item in <code>x</code> and append it to <code>out</code>, R makes a copy</p>
+<p>of all the items already in <code>out</code>. As the size of the loop grows, your code</p>
+<p>will take longer and longer to run.</p>
+<p>A better practice is to pre-allocate <code>out</code> to be the correct length, and then</p>
+<p>insert the results as the loop runs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(x))</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>       out[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(x[i])</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A quick benchmark shows how much more efficient a loop with a pre-allocated</p>
+<p>results vector is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>bad_loop <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>   out <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>       out <span class="ot">&lt;-</span> <span class="fu">c</span>(out, <span class="fu">sqrt</span>(x))</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>good_loop <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>   out <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(x))</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>       out[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(x[i])</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>   <span class="fu">bad_loop</span>(x),</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>   <span class="fu">good_loop</span>(x)</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+         expr     min       lq       mean    median        uq       max neval
+  bad_loop(x) 896.465 967.5590 2027.18719 1054.7250 1132.6660 55959.588   100
+ good_loop(x)   4.346   4.7355   21.39134    5.8425    7.9745  1437.009   100</code></pre>
+</div>
+</div>
+<p>And note how performance of the “bad” loop degrades as the loop size grows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">250</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">bad_loop</span>(y),</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">good_loop</span>(y)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+         expr       min         lq        mean     median         uq       max
+  bad_loop(y) 13175.473 17043.3310 18404.84383 17790.6995 18655.1230 65857.726
+ good_loop(y)     9.717    10.2705    14.36558    11.3775    16.7485    35.711
+ neval
+   100
+   100</code></pre>
+</div>
+</div>
+</section>
+<section id="vectorized-functions" class="level2">
+<h2 class="anchored" data-anchor-id="vectorized-functions">Vectorized Functions</h2>
+<p>Many functions in R are vectorized, meaning they can accept an entire vector</p>
+<p>(and not just a single value) as input. The <code>sqrt</code> function from the</p>
+<p>prior examples is one:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p>This removes the need to use <code>lapply</code> or a for loop. Vectorized functions in</p>
+<p>R are generally written in a compiled language like C, C++, or FORTRAN, which</p>
+<p>makes their implementation faster.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">lapply</span>(x, sqrt),</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sqrt</span>(x)</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: nanoseconds
+            expr   min    lq     mean median    uq   max neval
+ lapply(x, sqrt) 14801 15047 15325.39  15170 15334 21279   100
+         sqrt(x)   205   246   341.53    287   369  1107   100</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
