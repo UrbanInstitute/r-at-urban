@@ -53,15 +53,19 @@ The theme has been tested against `ggplot2 version 3.0.0`. It will not function 
 
 Run the following code to install or update `urbnthemes`:
 
-    install.packages("remotes")
-    remotes::install_github("UrbanInstitute/urbnthemes")
+```         
+install.packages("remotes")
+remotes::install_github("UrbanInstitute/urbnthemes")
+```
 
 Run the following code at the top of each script:
 
-    library(tidyverse)
-    library(urbnthemes)
+```         
+library(tidyverse)
+library(urbnthemes)
 
-    set_urbn_defaults(style = "print")
+set_urbn_defaults(style = "print")
+```
 
 ### Installing Lato {#installing_lato}
 
@@ -1309,33 +1313,74 @@ mpg %>%
 
 `ggsave()` exports ggplot2 plots. The function can be used in two ways. If `plot =` isn't specified in the function call, then `ggsave()` automatically saves the plot that was last displayed in the Viewer window. Second, if `plot =` is specified, then `ggsave()` saves the specified plot. `ggsave()` guesses the type of graphics device to use in export (.png, .pdf, .svg, etc.) from the file extension in the filename.
 
-    mtcars %>%
-      ggplot(aes(x = wt, y = mpg)) +
-      geom_point()
+```         
+mtcars %>%
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point()
 
-    ggsave(filename = "cars.png")
+ggsave(filename = "cars.png")
 
-    plot2 <- mtcars %>%
-      ggplot(aes(x = wt, y = mpg)) +
-      geom_point()
+plot2 <- mtcars %>%
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point()
 
-    ggsave(filename = "cars.png", plot = plot2)
+ggsave(filename = "cars.png", plot = plot2)
+```
 
 Exported plots rarely look identical to the plots that show up in the Viewer window in RStudio because the overall size and aspect ratio of the Viewer is often different than the defaults for `ggsave()`. Specific sizes, aspect ratios, and resolutions can be controlled with arguments in `ggsave()`. RStudio has a useful [cheatsheet](https://www.rstudio.com/resources/cheatsheets/) called "How Big is Your Graph?" that should help with choosing the best size, aspect ratio, and resolution.
 
 Fonts are not embedded in PDFs by default. To embed fonts in PDFs, include `device = cairo_pdf` in `ggsave()`.
 
-    plot <- mtcars %>%
-      ggplot(aes(x = wt, y = mpg)) +
-      geom_point()
+```         
+plot <- mtcars %>%
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point()
 
-    ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
+ggsave(filename = "cars.pdf", plot = plot2, width = 6.5, height = 4, device = cairo_pdf)
+```
+
+## Interactive Plots
+
+We can make any of the previous plots interactive with the powerful and easy `plotly` library. All we have to do is wrap a ggplot object in the `ggplotly` function. *Note:* You can't add `ggplotly` to the end of a ggplot object, but have to actually save the ggplot as a variable and then wrap that in the function call as shown below.
+
+You can customize the tooltip text by adding a value to `text` in `aes()` and then specifying `tooltip = "text"` in the `ggplotly` call.
+
+```{r}
+library(plotly)
+
+stock_plot <- as_tibble(EuStockMarkets) %>% 
+    mutate(date = time(EuStockMarkets)) %>% 
+    gather(key = "key", value = "value", -date) %>% 
+    ggplot(mapping = aes(x = date, y = value, color = key,
+    										 # sometimes ggplotly messes with line charts,
+    										 # adding a group value usually helps with that
+    										 group = key,
+    										 # customize the tooltip with the text aes
+    										 text = paste0("Value: ", round(value, 2), "<br>",
+    										 							"Date: ", round(date, 3), "<br>",
+    										 							"Key: ", key))
+    										 ) +
+    geom_line() +
+  scale_x_continuous(expand = expansion(mult = c(0.002, 0)), 
+                     limits = c(1991, 1999), 
+                     breaks = c(1991, 1993, 1995, 1997, 1999)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.002)), 
+                     breaks = 0:4 * 2500,
+                     labels = scales::dollar, 
+                     limits = c(0, 10000)) +  
+    labs(x = "Date",
+             y = "Value")
+
+# make interactive with gggplotly
+# Uncomment pipe to hide the interative toolbar in the top right 
+ggplotly(stock_plot, tooltip = "text")  # %>%  config(displayModeBar = FALSE)
+```
 
 ## urbnthemes
 
 ### Overview
 
-`urbnthemes` is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends `ggplot2` with print and map themes as well as tools that make plotting easier at the Urban Institute. `urbnthemes` replaces the [urban_R\_theme](https://github.com/UrbanInstitute/urban_R_theme).
+`urbnthemes` is a set of tools for creating Urban Institute-themed plots and maps in R. The package extends `ggplot2` with print and map themes as well as tools that make plotting easier at the Urban Institute. `urbnthemes` replaces the [urban_R_theme](https://github.com/UrbanInstitute/urban_R_theme).
 
 Always load `library(urbnthemes)` after `library(ggplot2)` or `library(tidyverse)`.
 
