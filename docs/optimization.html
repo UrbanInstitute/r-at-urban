@@ -264,9 +264,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
-<div class="profvis html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3ed46cc57d28ccdefc22" style="width:100%;height:600px;"></div>
-<script type="application/json" data-for="htmlwidget-3ed46cc57d28ccdefc22">{"x":{"message":{"prof":{"time":[1,2,3,4,5,5,5,5,6,6,7,7,8,8],"depth":[1,1,1,1,4,3,2,1,2,1,2,1,2,1],"label":[".main",".main",".main",".main","type.convert","read.table","read.csv",".main",".External2",".main","lazyLoadDBfetch",".main","lazyLoadDBfetch",".main"],"filenum":[null,null,null,null,null,null,1,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,5,null,null,null,null,null,null,null],"memalloc":[14.9473190307617,17.4241333007812,22.3312377929688,22.3385620117188,27.2855529785156,27.2855529785156,27.2855529785156,27.2855529785156,29.7564010620117,29.7564010620117,31.7927322387695,31.7927322387695,35.0383453369141,35.0383453369141],"meminc":[0,2.47681427001953,4.9071044921875,0.00732421875,4.94699096679688,0,0,0,2.47084808349609,0,2.03633117675781,0,3.24561309814453,0],"filename":[null,null,null,null,null,null,"<expr>",null,null,null,null,null,null,null]},"interval":10,"files":[{"filename":"<expr>","content":"library(profvis)\nlibrary(dplyr)\n\nprofvis({\n\tdiamonds <- read.csv(\"optimization/data/diamonds.csv\")\n\n\tdiamonds_by_cut <- diamonds %>%\n\t\tgroup_by(cut) %>%\n\t\tsummarise_if(is.numeric, mean)\n\n\twrite.csv(diamonds_by_cut, file = \"optimization/data/diamonds_by_cut.csv\")\n\n})\n","normpath":"<expr>"}],"prof_output":"/var/folders/2n/lprv9vh13js_c6gfvhgl13s00000gn/T//RtmpMrfheE/file18b53936ab84.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
+<div class="profvis html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-0eacf91ef9b714655f3a" style="width:100%;height:600px;"></div>
+<script type="application/json" data-for="htmlwidget-0eacf91ef9b714655f3a">{"x":{"message":{"prof":{"time":[1,2,3,4,5,6,7,8,8,9,9,10,10,11,11,12,12,12,12,12,12,12,13,13,14,14],"depth":[1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,7,6,5,4,3,2,1,2,1,2,1],"label":[".main",".main",".main",".main",".main",".main",".main",".External2",".main",".External2",".main",".External2",".main","lazyLoadDBfetch",".main","recycle_columns","lst_to_tibble","as_tibble.data.frame","compute_groups","grouped_df","group_by.data.frame",".main","lazyLoadDBfetch",".main","lazyLoadDBfetch",".main"],"filenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"linenum":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"memalloc":[13.7194595336914,14.9509124755859,17.4117736816406,17.4468078613281,22.3312835693359,22.3343963623047,22.3413238525391,26.8737335205078,26.8737335205078,29.138557434082,29.138557434082,29.7564163208008,29.7564163208008,30.8174438476562,30.8174438476562,32.3637466430664,32.3637466430664,32.3637466430664,32.3637466430664,32.3637466430664,32.3637466430664,32.3637466430664,34.3424301147461,34.3424301147461,38.5276412963867,38.5276412963867],"meminc":[0,1.23145294189453,2.46086120605469,0.0350341796875,4.88447570800781,0.00311279296875,0.006927490234375,4.53240966796875,0,2.26482391357422,0,0.61785888671875,0,1.06102752685547,0,1.54630279541016,0,0,0,0,0,0,1.97868347167969,0,4.18521118164062,0],"filename":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},"interval":10,"files":[],"prof_output":"/var/folders/2n/lprv9vh13js_c6gfvhgl13s00000gn/T//RtmpnOZfCD/file16547c7a94c9.prof","highlight":{"output":["^output\\$"],"gc":["^<GC>$"],"stacktrace":["^\\.\\.stacktraceo(n|ff)\\.\\.$"]},"split":"h"}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>In this toy example it looks like the <code>read.csv</code> function is the bottleneck, so</p>
@@ -288,12 +287,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
-                                              expr      min       lq     mean
-        read.csv("optimization/data/diamonds.csv") 64.77053 66.14555 71.04118
- readr::read_csv("optimization/data/diamonds.csv") 32.04847 33.20362 37.12877
-   median       uq      max neval
- 68.25725 69.80660 134.2046   100
- 34.07731 35.69267 158.6962   100</code></pre>
+                                              expr       min        lq
+        read.csv("optimization/data/diamonds.csv") 103.14624 111.61502
+ readr::read_csv("optimization/data/diamonds.csv")  55.57689  59.80873
+      mean    median        uq      max neval
+ 135.10956 115.71928 127.93492 453.5855   100
+  75.97688  63.64992  71.88532 372.4557   100</code></pre>
 </div>
 </div>
 <p>In this case, <code>read_csv</code> is about twice as fast as the base R implementations.</p>
@@ -411,12 +410,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: seconds
-       expr         min         lq          mean       median          uq
- sequential 0.000001066 0.00000123 0.00000177858 0.0000016195 0.000002132
-   parallel 0.014658443 0.01518220 0.01828126942 0.0157106875 0.017450646
+       expr         min           lq         mean       median          uq
+ sequential 0.000001763 0.0000020705 0.0000029848 0.0000029315 0.000003772
+   parallel 0.026585548 0.0282111980 0.0333569452 0.0291357070 0.030628517
          max neval
- 0.000006847   100
- 0.198878864   100</code></pre>
+ 0.000009799   100
+ 0.337903181   100</code></pre>
 </div>
 </div>
 <p>Parallelization was actually slower. In this case, the overhead of</p>
@@ -446,7 +445,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 21.846   0.663  22.535 </code></pre>
+ 35.229   2.688  42.309 </code></pre>
 </div>
 </div>
 <p>A now running the same code in parallel:</p>
@@ -466,7 +465,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-  0.376   0.121  11.164 </code></pre>
+  0.876   0.210  21.655 </code></pre>
 </div>
 </div>
 <p>While we didn’t achieve perfect scaling, we still get a nice bump in execution</p>
@@ -709,9 +708,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: microseconds
-         expr     min       lq       mean    median        uq       max neval
-  bad_loop(x) 896.465 967.5590 2027.18719 1054.7250 1132.6660 55959.588   100
- good_loop(x)   4.346   4.7355   21.39134    5.8425    7.9745  1437.009   100</code></pre>
+         expr      min       lq       mean    median        uq       max neval
+  bad_loop(x) 1042.179 1267.577 1891.78264 1328.5640 1446.9720 10173.125   100
+ good_loop(x)    6.191    6.437   32.23338    6.7035   11.2545  2366.725   100</code></pre>
 </div>
 </div>
 <p>And note how performance of the “bad” loop degrades as the loop size grows.</p>
@@ -727,9 +726,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: microseconds
-         expr       min         lq        mean     median         uq       max
-  bad_loop(y) 13175.473 17043.3310 18404.84383 17790.6995 18655.1230 65857.726
- good_loop(y)     9.717    10.2705    14.36558    11.3775    16.7485    35.711
+         expr       min         lq       mean    median        uq       max
+  bad_loop(y) 19249.582 22663.9595 24695.7231 23492.774 24909.407 81335.882
+ good_loop(y)    14.022    14.5345    21.2626    23.329    26.486    64.616
  neval
    100
    100</code></pre>
@@ -764,9 +763,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: nanoseconds
-            expr   min    lq     mean median    uq   max neval
- lapply(x, sqrt) 14801 15047 15325.39  15170 15334 21279   100
-         sqrt(x)   205   246   341.53    287   369  1107   100</code></pre>
+            expr   min    lq     mean median      uq   max neval
+ lapply(x, sqrt) 20172 20418 20847.27  20541 20725.5 37228   100
+         sqrt(x)   287   328   397.70    369   369.0  2296   100</code></pre>
 </div>
 </div>
 
